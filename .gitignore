@@ -1,4 +1,31 @@
-.claude/
+# Python
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Test / tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Editor / OS / 本地设置
+.claude/
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Plugin runtime / local state
+state.json
+*.tmp
+*.tmp.*
+
+# Stale data backups (do not re-commit editing artifacts)
+data/*.json.bak
+data/*.json.bak[0-9]
+data/*.json.bak_*

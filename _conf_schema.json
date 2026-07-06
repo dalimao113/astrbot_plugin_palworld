@@ -198,6 +198,18 @@
     "description": "存档解析缓存秒数",
     "hint": "/帕鲁我·背包·队伍 共用。每次拉档会先强制存盘，过于频繁影响服务器，建议≥60秒。"
   },
+  "force_save_min_interval": {
+    "type": "int",
+    "default": 15,
+    "description": "两次强制存盘的最小间隔(秒)",
+    "hint": "拉存档前会先让服务器强制存盘。此值限制强制存盘频率，避免频繁存盘影响服务器。硬下限 0。"
+  },
+  "save_neg_ttl": {
+    "type": "int",
+    "default": 45,
+    "description": "存档拉取失败的负缓存秒数",
+    "hint": "拉/解析存档失败后，此时间内不再重试(负缓存)，避免反复失败拖慢。硬下限 10。"
+  },
   "local_render": {
     "type": "bool",
     "default": false,

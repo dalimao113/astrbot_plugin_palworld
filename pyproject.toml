@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "astrbot_plugin_palworld"
+version = "1.1.2"
+description = "AstrBot 帕鲁(Palworld)服务器查询与管理插件，输出精美卡片图片"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "AGPL-3.0-or-later" }
+authors = [{ name = "dalimao113" }]
+dependencies = [
+    "aiohttp",
+    "jinja2",
+    # 存档解析必须锁 0.24.0（palwork/palsave.py 针对其内部结构做了 monkey-patch）
+    "palworld-save-tools==0.24.0",
+]
+
+[project.optional-dependencies]
+# 本地 Playwright 渲染（可选；默认走 AstrBot 内置 t2i，见 local_render 配置）
+local-render = ["playwright"]
+dev = ["pytest", "ruff"]
+
+[project.urls]
+Homepage = "https://github.com/dalimao113/astrbot_plugin_palworld"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+# palwork 内含针对第三方库的 monkey-patch（单行多 import、重复别名 import），不纳入 lint。
+extend-exclude = ["palwork", "bg*.jpg"]
+
+[tool.ruff.lint]
+# 聚焦高价值、可稳定通过的规则：语法错误 + 未用/重复/前引 import。
+# 风格类(行长/空格)不强制；star import 是模板/常量回注的有意用法，豁免。
+select = ["E9", "F401", "F811", "F823"]
+ignore = ["F403", "F405"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

@@ -10,7 +10,7 @@
 图鉴配种攻略随手查；管理员可公告 / 踢封 / 存档 / 关服。<br>
 **所有回复一律输出精美卡片图片**，附一键部署脚本。
 
-![version](https://img.shields.io/badge/version-1.1.3-6366F1?style=flat-square)
+![version](https://img.shields.io/badge/version-1.2.0-6366F1?style=flat-square)
 ![AstrBot](https://img.shields.io/badge/AstrBot-4.25%2B-8B5CF6?style=flat-square)
 ![OneBot](https://img.shields.io/badge/OneBot-v11-4ade80?style=flat-square)
 ![NapCat](https://img.shields.io/badge/adapter-NapCat-22c55e?style=flat-square)
@@ -380,3 +380,32 @@ curl -fsSL https://raw.githubusercontent.com/dalimao113/astrbot_plugin_palworld/
 > 装完发一条 **`/帕鲁自检`**（管理员）即可逐项确认：docker.sock / 帕鲁容器 / REST 密码 / 存档目录 / save-tools / 解析库 / 渲染 / 管理员白名单——每项 ✅⚠️❌ 带修复指引，配置对不对一目了然。
 
 > 不需要存档功能（仅状态/在线/图鉴/配方/地图/竞技场等）时,不挂 docker.sock、不配存档也能用,存档类指令会提示未启用。
+
+## 🔐 安全与权限
+
+完整说明见 [SECURITY.md](SECURITY.md)。要点：
+
+- **管理员白名单 `admin_qq`**：公告/踢/封/解封/存档/关服/重启/回档/重置/恢复/解绑/审计/自检/地图 等仅限白名单 QQ；查询类对所有群友开放。
+- **二次确认**：封禁/关服/重启/回档/重置存档/恢复存档 发起后需管理员回复「帕鲁 确认」，超时作废。
+
+### ⚠️ Docker socket 权限风险
+
+> 挂载 `docker.sock` ≈ 赋予该容器近乎宿主机 **root** 的能力。请确保 AstrBot 本身可信、`admin_qq` 白名单配置正确。所有经 socket 的操作集中在 `api/docker_api.py`，高危写操作（关服/重启/删档/回档/exec/helper 容器）有 `[高危]` 注释并受白名单 + 二次确认保护。
+
+### 普通模式 vs 运维模式
+
+| 模式 | docker.sock | 能力 |
+|---|---|---|
+| **普通模式**（推荐，最小权限） | 不挂载 | 状态/在线/设置/图鉴/配种/公告/踢/封 等（走 REST API）。容器负载、存档解析、关服/重启/回档/删档 **不可用** |
+| **运维模式** | 只读 `:ro` 挂载 | 额外启用 容器负载、存档解析（背包/队伍/我/公会）、关服/重启/回档/重置/恢复 |
+
+内网红线：帕鲁 REST 端口（默认 8212）**只在内网**开放，切勿暴露公网。
+
+## 📄 资源版权与授权说明
+
+- **本项目代码**（`main.py` 及 `constants.py`/`config.py`/`commands/`/`services/`/`api/`/`render/`/`utils/`/`palwork/palsave.py` 等）以 **AGPL-3.0-or-later** 授权，见 [LICENSE](LICENSE)。
+- **`palwork/liboo2core.so`**：Oodle 数据压缩库（RAD Game Tools / Epic Games 专有），**非本项目开源范围**。随插件提供仅为解析你本地服务器存档之便；版权归原厂商所有，请勿单独分发或作未授权用途。
+- **`data/images/`（帕鲁/物品/建筑图标）、`bg*.jpg`**：来源于游戏《幻兽帕鲁 / Palworld》，版权归 **Pocketpair, Inc.**。仅用于非商业的信息展示（图鉴/卡片）。本项目**不主张对这些素材的任何权利，也不以开源协议授权它们**。
+- **`data/*.json`（图鉴/配方/掉落等数值）**：整理自游戏数据，相关版权归 Pocketpair, Inc.；此处仅为便于查询的结构化整理。
+
+> 若你是相关权利方并认为某资源不宜随仓库分发，请通过 issue/私信联系，我们会及时处理。以上第三方资源不因随本仓库分发而进入 AGPL 授权范围。
