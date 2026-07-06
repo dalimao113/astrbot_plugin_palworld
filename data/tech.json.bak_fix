@@ -1,0 +1,4520 @@
+[
+ {
+  "id": "Workbench",
+  "name": "原始的作业台",
+  "description": "用来制作简单道具的「原始的作业台」。\r\n如有具备「手工作业」适应性的帕鲁，\r\n它就会前来协助。",
+  "level": 1,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_WorkBench"
+ },
+ {
+  "id": "Product_Axe_Grade_01",
+  "name": "石头斧",
+  "description": "砍树用的斧子。\r\n因为是石头做的，感觉不怎么锋利。",
+  "level": 1,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_Axe_Tier_00"
+ },
+ {
+  "id": "Product_Pickaxe_Grade_01",
+  "name": "石制十字镐",
+  "description": "采矿用的十字镐。\r\n因为是石头做的，效率不怎么样。",
+  "level": 1,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_Pickaxe_Tier_00"
+ },
+ {
+  "id": "HandTorch",
+  "name": "携带火把",
+  "description": "照亮夜晚的黑暗，为人驱逐寒意。\r\n可勉强用于近战。\r\n可在「原始的作业台」制作。",
+  "level": 1,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_Torch"
+ },
+ {
+  "id": "Battle_MeleeWeapon_Bat",
+  "name": "木棒",
+  "description": "用于近距离战斗的木棒。\r\n也许能够用来打倒小型帕鲁。",
+  "level": 1,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_Bat"
+ },
+ {
+  "id": "SkinChange",
+  "name": "帕鲁装扮机",
+  "description": "用于改变外观的设施。\r\n可以为帕鲁更换特别的外观。\r\n通过游戏外的其他方式获得的外观也能使用。",
+  "level": 1,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_SkinChange"
+ },
+ {
+  "id": "GlobalPalStorage",
+  "name": "跨界帕鲁终端",
+  "description": "具有保存帕鲁的基因序列，\r\n以及通过基因序列复原帕鲁的功能的设施。\r\n保存的基因序列能够带到其他世界使用。",
+  "level": 1,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_GlobalPalStorage"
+ },
+ {
+  "id": "PALBOX",
+  "name": "帕鲁终端",
+  "description": "用来存放抓到的帕鲁的设施。\r\n箱子里的帕鲁会逐渐恢复生命值。\r\n此设施周围的区域即为据点。",
+  "level": 2,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_PalBoxV2"
+ },
+ {
+  "id": "Special_PalSphere_Grade_01",
+  "name": "帕鲁球",
+  "description": "可扔出并捕捉帕鲁的道具。\r\n此为量产款式，只对低等级的帕鲁有效。",
+  "level": 2,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_PalSphere"
+ },
+ {
+  "id": "Product_Cooking_Grade_01",
+  "name": "篝火",
+  "description": "可烹饪简单的料理，\r\n并带来一些温暖及照明效果。",
+  "level": 2,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_CampFire"
+ },
+ {
+  "id": "Infra_ItemChest_Grade_01",
+  "name": "木箱",
+  "description": "可用于收纳道具。将之设置在据点后，\r\n具备「搬运」适应性的帕鲁便会自动搬运道具。",
+  "level": 2,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_ItemChest"
+ },
+ {
+  "id": "RepairBench",
+  "name": "修理台",
+  "description": "可以修理损坏的武器或道具。",
+  "level": 2,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_RepairBench"
+ },
+ {
+  "id": "Wooden_houseset",
+  "name": "木质建筑套组",
+  "description": "解锁此套组即可用木材建筑建造据点。\r\n可建造木制地基、墙壁、屋顶、楼梯等\r\n建造房屋时所需的构造。",
+  "level": 2,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Battle_RangeWeapon_Bow1",
+  "name": "陈旧的弓",
+  "description": "原始的远距离攻击武器。\r\n因为是东拼西凑而成的，威力较弱。\r\n可在「原始的作业台」制作。",
+  "level": 3,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_Bow"
+ },
+ {
+  "id": "Arrow",
+  "name": "箭",
+  "description": "弓专用的箭。\r\n可在「原始的作业台」制作。",
+  "level": 3,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_Arrow"
+ },
+ {
+  "id": "Infra_PlayerBed_Grade_01",
+  "name": "劣质的床",
+  "description": "专供人类使用的床铺，可回复生命值。\r\n晚上入睡后，就会一觉睡到早上。\r\n必须建造在有屋顶的地方才能让人安眠。",
+  "level": 3,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_PlayerBed_02"
+ },
+ {
+  "id": "Infra_PalBed_Grade_01",
+  "name": "稻草帕鲁床",
+  "description": "据点里的帕鲁晚上若能睡在床上，便可恢复SAN值。\r\n没有床的话会因睡不舒服而无法恢复SAN值。",
+  "level": 3,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_MedicalPalBed_02"
+ },
+ {
+  "id": "RepairKit",
+  "name": "修理套装",
+  "description": "用于修理建筑物的道具。\r\n可用于修补损坏的建筑物。",
+  "level": 3,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Battle_Cloth",
+  "name": "布",
+  "description": "编织羊毛制成的布。\r\n是制作防具时必不可少的。",
+  "level": 3,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Material_Cloth"
+ },
+ {
+  "id": "Shield_01",
+  "name": "普通护盾",
+  "description": "以帕鲁矿技术制成的神奇护盾。\r\n一定时间不受攻击时可自动修复。",
+  "level": 4,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_Shield_01"
+ },
+ {
+  "id": "Spear",
+  "name": "石头长矛",
+  "description": "可在近战时发挥作用的石头长矛。\r\n射程很长，可在战斗时保持一定距离。",
+  "level": 4,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Battle_Armor_Grade_01_Cloth",
+  "name": "布衣服",
+  "description": "以「布」制成的服装。\r\n可以抵御夜间的寒意。\r\n可在「原始的作业台」制作。",
+  "level": 4,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_ClothArmor"
+ },
+ {
+  "id": "PalFoodBox",
+  "name": "饲料箱",
+  "description": "将食物放进来，\r\n据点的帕鲁们就会来这里进食。",
+  "level": 4,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_PalFoodBox"
+ },
+ {
+  "id": "BaseCampBattleDirector",
+  "name": "警钟",
+  "description": "用于更改据点内帕鲁警戒状态的钟。\r\n可随时于「迎击外敌」及「专心工作」之间切换。",
+  "level": 4,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_BaseCampBattleDirector"
+ },
+ {
+  "id": "Trap_Noose",
+  "name": "套索陷阱",
+  "description": "可以抓住途经的帕鲁。\r\n只对小型帕鲁和人类有效。",
+  "level": 4,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Trap_Noose"
+ },
+ {
+  "id": "Product_Farm_Berries",
+  "name": "野莓园",
+  "description": "能够生产野莓的农园。\r\n需要有具备「播种」、「浇水」和「采集」适应性的帕鲁才能进行作业。",
+  "level": 5,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_FarmBlockV2_Berries"
+ },
+ {
+  "id": "MonsterFarm",
+  "name": "家畜牧场",
+  "description": "可以放牧羊或鸡等类型帕鲁的牧场。\r\n如将具备适应性的帕鲁分派到牧场，\r\n即可自动生产道具。",
+  "level": 5,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_MonsterFarm"
+ },
+ {
+  "id": "Battle_Glider_Grade_01",
+  "name": "普通滑翔伞",
+  "description": "展开后即可在空中滑翔的滑翔伞。\r\n构造简单，无法高速飞行。",
+  "level": 5,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Glider_Glider_Old"
+ },
+ {
+  "id": "Battle_RangeWeapon_Bow_Fire",
+  "name": "火之弓",
+  "description": "可造成火属性伤害的弓。\r\n利用火箭让帕鲁着火，变得更容易捕捉。\r\n需要「火箭」才能使用。",
+  "level": 5,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_Bow_Fire"
+ },
+ {
+  "id": "Arrow_Fire",
+  "name": "火箭",
+  "description": "「火之弓」与「火箭十字弓」等用的箭。\r\n可对目标造成火属性伤害。\r\n可在「原始的作业台」制作。",
+  "level": 5,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_Arrow_Fire"
+ },
+ {
+  "id": "Product_WorkBench_SkillUnlock",
+  "name": "帕鲁装备制作台",
+  "description": "可制作帕鲁使用伙伴技能时\r\n所需的道具。",
+  "level": 6,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_WorkBench_SkillUnlock"
+ },
+ {
+  "id": "BuildableGoddessStatue",
+  "name": "力量石像",
+  "description": "只要献上供品，\r\n就能强化玩家和帕鲁。",
+  "level": 6,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_BuildableGoddessStatue"
+ },
+ {
+  "id": "Torch",
+  "name": "固定式火把",
+  "description": "设置在据点即可照亮四周。",
+  "level": 6,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_TorchStand"
+ },
+ {
+  "id": "SkillUnlock_Boar",
+  "name": "草莽猪的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘草莽猪。",
+  "level": 6,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_Boar_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Kitsunebi",
+  "name": "火绒狐的背带",
+  "description": "用来抱住火绒狐的背带。\r\n发动伙伴技能后，即可将火绒狐\r\n抱在身上当作火焰喷射器进行攻击。",
+  "level": 6,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_Kitsunebi_icon_normal"
+ },
+ {
+  "id": "Product_StationDeforest",
+  "name": "伐木场",
+  "description": "可在据点内生产木材。\r\n需要有具备「伐木」适应性的帕鲁才能进行作业。",
+  "level": 7,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_StationDeforest2"
+ },
+ {
+  "id": "Product_StonePit",
+  "name": "采石场",
+  "description": "可在据点内生产石材。\r\n需要有具备「采矿」适应性的帕鲁才能进行作业。",
+  "level": 7,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_StonePit"
+ },
+ {
+  "id": "Signboard",
+  "name": "告示牌",
+  "description": "可以在上面输入文字。",
+  "level": 7,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Signboard"
+ },
+ {
+  "id": "Battle_MeleeWeapon_Bat2",
+  "name": "棒球棒",
+  "description": "这根棒球棒也能用于近距离战斗。\r\n但拿帕鲁当球可能有点太大了。",
+  "level": 7,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_Spear_Bat2"
+ },
+ {
+  "id": "SkillUnlock_Alpaca",
+  "name": "美露帕的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘美露帕。",
+  "level": 7,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_Alpaca_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_FlyingManta",
+  "name": "鲁米儿的手套",
+  "description": "持有此道具且鲁米儿在队伍中时，\r\n会改变滑翔伞的性能。",
+  "level": 7,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_FlyingManta_icon_normal"
+ },
+ {
+  "id": "Special_HatchingPalEgg",
+  "name": "帕鲁蛋孵化器",
+  "description": "设置帕鲁蛋后，\r\n便可使之孵化。",
+  "level": 7,
+  "points": 1,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_HatchingPalEgg"
+ },
+ {
+  "id": "Crusher",
+  "name": "粉碎机",
+  "description": "可以将石头或木材粉碎之后\r\n转换成其他素材的设施。\r\n需要有具备「浇水」适应性的帕鲁来使水车转动。",
+  "level": 8,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Crusher"
+ },
+ {
+  "id": "Battle_RangeWeapon_Bow_Poison",
+  "name": "毒之弓",
+  "description": "可让攻击对象中毒的可怕毒弓。\r\n帕鲁中毒以后，会变得更容易捕捉。\r\n需要「毒箭」才能使用。",
+  "level": 8,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_Bow_Poison"
+ },
+ {
+  "id": "Arrow_Poison",
+  "name": "毒箭",
+  "description": "「毒之弓」与「毒箭十字弓」等用的箭。\r\n可以让被射中的目标中毒。\r\n可在「原始的作业台」制作。",
+  "level": 8,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_Arrow_Poison"
+ },
+ {
+  "id": "SkillUnlock_Hedgehog",
+  "name": "电棘鼠的手套",
+  "description": "用来抓住電棘鼠的橡胶手套。\r\n发动伙伴技能后，即可将電棘鼠\r\n当作电击型手榴弹投掷出去。",
+  "level": 8,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_Hedgehog_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_DreamDemon",
+  "name": "寐魔的项圈",
+  "description": "寐魔的项圈。\r\n持有此道具时，队伍中的寐魔会\r\n一直待在场上，并配合玩家的攻击发动额外攻击。",
+  "level": 8,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_DreamDemon_icon_normal"
+ },
+ {
+  "id": "Battle_Armor_Grade_01_Cloth_Heat",
+  "name": "热带地区民族服饰",
+  "description": "在炎热地区生产的「布衣服」。\r\n具备傲人的耐热性能。\r\n可在「原始的作业台」制作。",
+  "level": 9,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_ClothArmorHeat"
+ },
+ {
+  "id": "Battle_Armor_Grade_01_Cloth_Cold",
+  "name": "寒冷地区民族服饰",
+  "description": "在寒冷地区生产的「布衣服」。\r\n能够抵御让身体都冻僵的寒意。\r\n可在「原始的作业台」制作。",
+  "level": 9,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_ClothArmorCold"
+ },
+ {
+  "id": "Spa",
+  "name": "温泉",
+  "description": "帕鲁进入「温泉」即可恢复SAN值。",
+  "level": 9,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Spa"
+ },
+ {
+  "id": "DefenseWait",
+  "name": "沙袋",
+  "description": "被分派到这里的帕鲁，\r\n会负责防范外敌的哨兵工作。",
+  "level": 9,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_DefenseWait"
+ },
+ {
+  "id": "SkillUnlock_Garm",
+  "name": "猎狼的挽具鞍具组合",
+  "description": "持有此道具时，\r\n即可骑乘猎狼。",
+  "level": 9,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_Garm_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_NegativeOctopus",
+  "name": "勾魂鱿的手套",
+  "description": "持有此道具且勾魂鱿在队伍中时，\r\n会改变滑翔伞的性能。",
+  "level": 9,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_NegativeOctopus_icon_normal"
+ },
+ {
+  "id": "Battle_RangeWeapon_Bow3",
+  "name": "三连弓",
+  "description": "改良后的弓，可同时发射3支箭。\r\n拥有不可思议的力量，每次射击只消耗1支箭。",
+  "level": 10,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Product_Ingot_Grade_01_Copper",
+  "name": "原始的炉子",
+  "description": "能冶炼「金属矿石」，\r\n并制作成金属锭。",
+  "level": 10,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_BlastFurnace"
+ },
+ {
+  "id": "Battle_Helm_Grade_02_Fur",
+  "name": "羽毛发饰",
+  "description": "美丽的羽毛发饰。\r\n不知为何，总觉得它能保护头部不受致命伤害。\r\n可在「Workbench」制作。",
+  "level": 10,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_FurHelmet"
+ },
+ {
+  "id": "Wooden_ladder",
+  "name": "梯子",
+  "description": "可以用来爬上高处的梯子。",
+  "level": 10,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Wooden_Ladder"
+ },
+ {
+  "id": "Trap_LegHold",
+  "name": "捕兽夹（小）",
+  "description": "能让踩到的目标被困住。\r\n只对小型帕鲁或人类有效。",
+  "level": 10,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Trap_LegHold"
+ },
+ {
+  "id": "Infra_MachineParts",
+  "name": "钉子",
+  "description": "建造大量设施时必不可少的部件。\r\n可在原始的作业台制作。",
+  "level": 10,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Material_MachineParts"
+ },
+ {
+  "id": "SkillUnlock_Serpent",
+  "name": "滑水蛇的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘滑水蛇。",
+  "level": 10,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_Serpent_icon_normal"
+ },
+ {
+  "id": "AutoMealPouch_Tier1",
+  "name": "小饲料袋",
+  "description": "装食物的小口袋。\r\n可开放1个自动进食装备槽。\r\n饥饿时可自动消耗槽内的食物。",
+  "level": 10,
+  "points": 1,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_AutoMealPouch_Tier1"
+ },
+ {
+  "id": "Product_Axe_Grade_02",
+  "name": "金属斧头",
+  "description": "砍树用的斧子。\r\n以金属制成，耐久度与锋利度都得到了提升。\r\n可在「优质作业台」制作。",
+  "level": 11,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Product_Pickaxe_Grade_02",
+  "name": "金属十字镐",
+  "description": "采矿用的十字镐。\r\n以金属制成，耐久度和效率都得到了提升。\r\n可在「优质作业台」制作。",
+  "level": 11,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Product_Factory_Hard_Grade_01",
+  "name": "优质作业台",
+  "description": "生产速度比「原始的作业台」更快。\r\n需要有具备「手工作业」适应性的帕鲁才能进行作业。",
+  "level": 11,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Factory_Hard_01"
+ },
+ {
+  "id": "SphereModule_Heavy",
+  "name": "重量模块",
+  "description": "装备后会增加帕鲁球的重量，\r\n虽然投掷距离会缩短，但能提高捕获力。",
+  "level": 11,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_SphereModule_Heavy"
+ },
+ {
+  "id": "Wood_Gate",
+  "name": "木制大门",
+  "description": "稍大体型的帕鲁也能通过的木制大门。",
+  "level": 11,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Wood_Gate"
+ },
+ {
+  "id": "SkillUnlock_Carbunclo",
+  "name": "翠叶鼠的冲锋枪",
+  "description": "翠叶鼠专用的小型冲锋枪。\r\n发动伙伴技能后，它会坐在玩家的头上，\r\n配合玩家的攻击进行额外射击。",
+  "level": 11,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_Carbunclo_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Hedgehog_Ice",
+  "name": "冰刺鼠的手套",
+  "description": "用来抓住冰刺鼠的隔热手套。\r\n发动伙伴技能后，即可将冰刺鼠\r\n当作冷冻型手榴弹投掷出去。",
+  "level": 11,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_Hedgehog_Ice_icon_normal"
+ },
+ {
+  "id": "Battle_Armor_Grade_02_Fur",
+  "name": "毛皮盔甲",
+  "description": "以「皮革」制成的盔甲。\r\n耐久度和防御力都得到了提升。\r\n可在「优质作业台」制作。",
+  "level": 12,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_FurArmor"
+ },
+ {
+  "id": "MeatCutterKnife",
+  "name": "切肉刀",
+  "description": "可用于肢解召唤出的帕鲁的菜刀。\r\n装备此道具时「抚摸」选项会转变为「肢解」。\r\n帕鲁一经解体后将无法再度复生。",
+  "level": 12,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_MeatCutterKnife"
+ },
+ {
+  "id": "Product_Medicine_Grade_01",
+  "name": "中世纪制药台",
+  "description": "可制作简单的药物。\r\n需要有具备「制药」适应性的帕鲁才能进行作业。",
+  "level": 12,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_MedicineFacility_01"
+ },
+ {
+  "id": "SkillUnlock_Monkey",
+  "name": "新叶猿的突击步枪",
+  "description": "新叶猿专用的小型突击步枪。\r\n发动伙伴技能后，新叶猿会进入射击模式，\r\n猛烈扫射周围的敌人。",
+  "level": 12,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_Monkey_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Deer",
+  "name": "紫霞鹿的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘紫霞鹿。",
+  "level": 12,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_Deer_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_NaughtyCat",
+  "name": "笑魇猫的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘笑魇猫。",
+  "level": 12,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_NaughtyCat_icon_normal"
+ },
+ {
+  "id": "GrapplingGun",
+  "name": "GrapplingGun",
+  "description": "",
+  "level": 12,
+  "points": 1,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Weapon_GrapplingGun"
+ },
+ {
+  "id": "Battle_RangeWeapon_BowGun",
+  "name": "十字弓",
+  "description": "无须用力即可射出「箭」。\r\n装箭需要花些时间，但攻击威力强大。\r\n必须有「优质作业台」才能制作。",
+  "level": 13,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_BowGun"
+ },
+ {
+  "id": "Spear_2",
+  "name": "金属长矛",
+  "description": "利于近距离战斗的矛。\r\n以金属制成，攻击力有所提升。\r\n可在「优质作业台」制作。",
+  "level": 13,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "ManualElectricGenerator",
+  "name": "人力发电机",
+  "description": "利用旋转动能转换为电能的设施。\r\n效率不佳，而且工作的帕鲁会降低SAN值，\r\n但可以获得经验值。",
+  "level": 13,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_ManualElectricGenerator"
+ },
+ {
+  "id": "DamagedScarecrow",
+  "name": "受损的稻草人",
+  "description": "模仿企丸丸制作的训练用稻草人。",
+  "level": 13,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_DamagedScarecrow"
+ },
+ {
+  "id": "CoolerBox",
+  "name": "保冷箱",
+  "description": "小型食物储存库。\r\n将冰系帕鲁指派到这里工作时，\r\n可以使里面的食物不会轻易腐败。",
+  "level": 13,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_CoolerBox"
+ },
+ {
+  "id": "SkillUnlock_WeaselDragon",
+  "name": "疾旋鼬的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘疾旋鼬。",
+  "level": 13,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_WeaselDragon_icon_normal"
+ },
+ {
+  "id": "Special_PalSphere_Grade_02",
+  "name": "高级帕鲁球",
+  "description": "可扔出并捕捉帕鲁的道具。\r\n此款式性能得到提升，可捕捉的帕鲁范围更广。\r\n可在「帕鲁球制作台」制作。",
+  "level": 14,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_PalSphere_Mega"
+ },
+ {
+  "id": "Special_SphereFactory_Black_Grade_01",
+  "name": "帕鲁球制作台",
+  "description": "捕捉帕鲁用的帕鲁球制作台。\r\n需要有具备「手工作业」适应性的帕鲁才能进行作业。",
+  "level": 14,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_SphereFactory_Black_01"
+ },
+ {
+  "id": "BaseCampWorkHard",
+  "name": "监控台",
+  "description": "可对据点内的帕鲁下达工作指示。\r\n请注意不要让它们劳动过度了。",
+  "level": 14,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_BaseCampWorkHard"
+ },
+ {
+  "id": "WallTorch",
+  "name": "壁挂火把",
+  "description": "可安装在墙壁上。",
+  "level": 14,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "SkillUnlock_MopKing",
+  "name": "毛老爹的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘毛老爹。",
+  "level": 14,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_MopKing_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Kirin",
+  "name": "雷角马的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘雷角马。",
+  "level": 14,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_Kirin_icon_normal"
+ },
+ {
+  "id": "Special_PalRankUp",
+  "name": "帕鲁浓缩机",
+  "description": "将多只同种帕鲁浓缩后合成，\r\n便可将该帕鲁强化为更高阶级的个体。",
+  "level": 14,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_CharacterRankUp"
+ },
+ {
+  "id": "FishingSet1",
+  "name": "初级垂钓套组",
+  "description": "适合初级者使用的钓竿与钓饵套组。\r\n制作钓竿和钓饵后，即可在水边钓帕鲁。",
+  "level": 15,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_FishingRod_1"
+ },
+ {
+  "id": "Battle_RangeWeapon_BowGun_Fire",
+  "name": "火箭十字弓",
+  "description": "可造成火属性伤害的十字弓。\r\n需要火箭才能使用。\r\n可在「优质作业台」制作。",
+  "level": 15,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_BowGun_Fire"
+ },
+ {
+  "id": "Expedition",
+  "name": "帕鲁远征所",
+  "description": "可以派遣帕鲁到地下城等地方远征的设施。\r\n被派遣的帕鲁会在各地寻找物品或进行战斗，\r\n并将资源带回据点。",
+  "level": 15,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Expedition"
+ },
+ {
+  "id": "Product_Farm_wheat",
+  "name": "小麦园",
+  "description": "能够生产制作「面包」所需的小麦的农园。\r\n需要有具备「播种」、「浇水」和「采集」适应性的帕鲁才能进行作业。",
+  "level": 15,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_FarmBlockV2_wheet"
+ },
+ {
+  "id": "FlourMill",
+  "name": "磨粉机",
+  "description": "可以将小麦磨碎之后\r\n生产出面粉的设施。\r\n需要有具备「浇水」适应性的帕鲁来使水车转动。",
+  "level": 15,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_FlourMill"
+ },
+ {
+  "id": "DisplayCharacter",
+  "name": "观赏笼",
+  "description": "放置抓来的帕鲁的观赏用笼子。\r\n在里头的帕鲁无法战斗或进行作业，\r\n但也不会肚子饿。",
+  "level": 15,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_DisplayCharacter"
+ },
+ {
+  "id": "SkillUnlock_HawkBird",
+  "name": "疾风隼的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘疾风隼。",
+  "level": 15,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_HawkBird_icon_normal"
+ },
+ {
+  "id": "Lantern",
+  "name": "腰挂提灯",
+  "description": "挂在腰上的提灯。 \r\n到了夜晚会自动点亮。 \r\n也可以切换照明模式使它常亮。\r\n带1个在身上就够用了。",
+  "level": 15,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_Lantern"
+ },
+ {
+  "id": "Shield_02",
+  "name": "高级护盾",
+  "description": "以帕鲁矿技术制成的神奇护盾。\r\n改良原型设计，提高了防御力。\r\n可在「优质作业台」制作。",
+  "level": 16,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_Shield_02"
+ },
+ {
+  "id": "Battle_Armor_Grade_02_Fur_Heat",
+  "name": "耐热毛皮盔甲",
+  "description": "在炎热地区生产的「毛皮盔甲」。\r\n具备傲人的耐热性能。\r\n可在「优质作业台」制作。",
+  "level": 16,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_FurArmorHeat"
+ },
+ {
+  "id": "Infra_ItemChest_Grade_02",
+  "name": "金属箱",
+  "description": "可收纳更多道具，耐久度也有所提升。\r\n具备「搬运」适应性的帕鲁会自动搬运道具。",
+  "level": 16,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_ItemChest_02"
+ },
+ {
+  "id": "DefenseWall_Wood",
+  "name": "木制防御墙",
+  "description": "防止外敌入侵的巨大防御墙。\r\n因为是木制的，所以很脆弱。",
+  "level": 16,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_DefenseWall_Wood"
+ },
+ {
+  "id": "SkillUnlock_FlameBuffalo",
+  "name": "炽焰牛的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘炽焰牛。",
+  "level": 16,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_FlameBuffalo_icon_normal"
+ },
+ {
+  "id": "Unlock_Picking_Tier1",
+  "name": "简易开锁工具",
+  "description": "持有此道具时，能够通过撬锁打开\r\n需要铜钥匙才能打开的宝箱。\r\n即使多次使用也不会坏。",
+  "level": 16,
+  "points": 1,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_Unlock_Picking"
+ },
+ {
+  "id": "Battle_RangeWeapon_BowGun_Poison",
+  "name": "毒箭十字弓",
+  "description": "可让攻击对象中毒的可怕十字弓。\r\n需要「毒箭」才能使用。\r\n可在「优质作业台」制作。",
+  "level": 17,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_BowGun_Poison"
+ },
+ {
+  "id": "Product_Cooking_Grade_02",
+  "name": "料理锅",
+  "description": "能烹饪的料理种类更多，\r\n制作餐点会更有效率。",
+  "level": 17,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_CookingStove"
+ },
+ {
+  "id": "Heater",
+  "name": "取暖器",
+  "description": "可让周围暖和起来，抵御寒意。",
+  "level": 17,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Headstone",
+  "name": "墓碑",
+  "description": "可以书写文字的墓碑。\r\n用作留下记录。",
+  "level": 17,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Headstone"
+ },
+ {
+  "id": "SkillUnlock_Penguin",
+  "name": "企丸丸的火箭发射器",
+  "description": "用来发射企丸丸的炮筒。\r\n发动伙伴技能后，即可将企丸丸射出\r\n对敌人进行攻击。随后，企丸丸会进入濒死状态。",
+  "level": 17,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_Penguin_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_FlowerRabbit",
+  "name": "波娜兔的项圈",
+  "description": "波娜兔的项圈。\r\n持有此道具时，队伍中的波娜兔会\r\n一直待在场上，并自动拾取附近的道具。",
+  "level": 17,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_FlowerRabbit_icon_normal"
+ },
+ {
+  "id": "GrapplingGun2",
+  "name": "GrapplingGun2",
+  "description": "",
+  "level": 17,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Weapon_GrapplingGun"
+ },
+ {
+  "id": "Battle_Glider_Grade_02",
+  "name": "高级滑翔伞",
+  "description": "展开后即可在空中滑翔的滑翔伞。\r\n此为量产款式，有一定的飞行速度。\r\n可在「优质作业台」制作。",
+  "level": 18,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Glider_Glider_Good"
+ },
+ {
+  "id": "Battle_Armor_Grade_02_Fur_Cold",
+  "name": "耐寒毛皮盔甲",
+  "description": "在寒冷地区生产的「毛皮盔甲」。\r\n能够抵御让身体都冻僵的寒意。\r\n可在「优质作业台」制作。",
+  "level": 18,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_FurArmorCold"
+ },
+ {
+  "id": "Stone_houseset",
+  "name": "石头建筑套组",
+  "description": "解锁此套组即可用石材建筑建造据点。\r\n可以建造石制的地基、墙壁、屋顶和楼梯等\r\n建造房屋时所需的构造。",
+  "level": 18,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Stone_Foundation"
+ },
+ {
+  "id": "Cooler",
+  "name": "降温器",
+  "description": "可让周围凉快起来，消除暑气。",
+  "level": 18,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "SkillUnlock_ColorfulBird",
+  "name": "炸蛋鸟的手套",
+  "description": "用来轻轻抓住炸蛋鸟的手套。\r\n发动伙伴技能后，即可抱着炸蛋鸟，\r\n发射爆炸蛋来进行攻击。",
+  "level": 18,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_ColorfulBird_icon_normal"
+ },
+ {
+  "id": "Accessory_Nonkilling",
+  "name": "慈悲戒指",
+  "description": "和平主义者的戒指。\r\n装备该戒指者无法将攻击对象的生命值降低到1以下。",
+  "level": 18,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Accessory_Nonkilling"
+ },
+ {
+  "id": "BreedFarm",
+  "name": "配种牧场",
+  "description": "分派♂♀帕鲁各一只，\r\n即可让它们产下帕鲁蛋。\r\n需在设施中放入「蛋糕」才会顺利生蛋。",
+  "level": 19,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_BreedFarm"
+ },
+ {
+  "id": "Cement",
+  "name": "水泥",
+  "description": "可成为建筑物素材的水泥。\r\n可在优质作业台制作。",
+  "level": 19,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Material_Cement"
+ },
+ {
+  "id": "WallSignboard",
+  "name": "壁挂看板",
+  "description": "可以输入文字的告示牌。\r\n可以悬挂在墙壁上。",
+  "level": 19,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_WallSignboard"
+ },
+ {
+  "id": "SkillUnlock_FlowerDinosaur",
+  "name": "花冠龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘花冠龙。",
+  "level": 19,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_FlowerDinosaur_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_SakuraSaurus",
+  "name": "连理龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘连理龙。",
+  "level": 19,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_SakuraSaurus_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_DrillGame",
+  "name": "碎岩龟的头巾",
+  "description": "碎岩龟的决胜头带。\r\n发动伙伴技能后，碎岩龟会进入高速旋转状态，\r\n能够高效率钻凿岩石。",
+  "level": 19,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_DrillGame_icon_normal"
+ },
+ {
+  "id": "AutoMealPouch_Tier2",
+  "name": "普通饲料袋",
+  "description": "装食物的中型口袋。\r\n可开放2个自动进食装备槽。\r\n饥饿时可自动消耗槽内的食物。",
+  "level": 19,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_AutoMealPouch_Tier2"
+ },
+ {
+  "id": "Special_PalSphere_Grade_03",
+  "name": "优质帕鲁球",
+  "description": "可扔出并捕捉帕鲁的道具。\r\n此款式可捕捉有一定强度的帕鲁。\r\n可在「帕鲁球制作台」制作。",
+  "level": 20,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_PalSphere_Giga"
+ },
+ {
+  "id": "Product_WeaponFactory_Dirty_Grade_01",
+  "name": "武器制作台",
+  "description": "可以制作具有简易机关的武器的设施。\r\n需要有具备「手工作业」适应性的帕鲁才能进行作业。",
+  "level": 20,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_WeaponFactory_Dirty_01"
+ },
+ {
+  "id": "Lab",
+  "name": "帕鲁工作研究所",
+  "description": "对帕鲁的各种工作进行研究的设施。\r\n在这个设施中让帕鲁工作，\r\n可以进行研究，获得各种效果。",
+  "level": 20,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Lab"
+ },
+ {
+  "id": "ToolBoxV1",
+  "name": "大型工具箱",
+  "description": "如配置在据点，\r\n可以提升「手工作业」的工作速度。\r\n即使配置复数个，其效果也不会叠加。",
+  "level": 20,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_ToolBoxV1"
+ },
+ {
+  "id": "SkillUnlock_WindChimes",
+  "name": "吊缚灵的手套",
+  "description": "持有此道具且WindChimes在队伍中时，\r\n会改变滑翔伞的性能。",
+  "level": 20,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_WindChimes_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_FairyDragon",
+  "name": "精灵龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘精灵龙。",
+  "level": 20,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_FairyDragon_icon_normal"
+ },
+ {
+  "id": "DimensionPalStorage",
+  "name": "帕鲁次元仓库",
+  "description": "可以大量存放捕获帕鲁的设施。\r\n只要是公会成员，谁都可以进行帕鲁的存取。\r\n改为私密锁定时，则只能存放自己的帕鲁。",
+  "level": 20,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_DimensionPalStorage"
+ },
+ {
+  "id": "Musket",
+  "name": "鸟枪",
+  "description": "古旧又简朴的枪。\r\n每一发均威力惊人，但装填子弹较花时间。\r\n可在「武器制作台」制作。",
+  "level": 21,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_Musket"
+ },
+ {
+  "id": "Battle_GunPowder_Grade_02",
+  "name": "火药",
+  "description": "用于发射炮弹的「火药」。\r\n制作子弹时会用到。\r\n可在「优质作业台」制作。",
+  "level": 21,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Material_Gunpowder2"
+ },
+ {
+  "id": "RoughBullet",
+  "name": "劣质弹药",
+  "description": "「鸟枪」和「劣质手枪」等使用的子弹。\r\n可在「武器制作台」制作。",
+  "level": 21,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_RoughBullet"
+ },
+ {
+  "id": "Product_Farm_tomato",
+  "name": "番茄园",
+  "description": "能够生产番茄的农园。\r\n需要有具备「播种」、「浇水」和「采集」适应性的帕鲁才能进行作业。",
+  "level": 21,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_FarmBlockV2_tomato"
+ },
+ {
+  "id": "OlympicCauldron",
+  "name": "圣火台",
+  "description": "如配置在据点，\r\n可以提升「生火」的工作速度。\r\n即使配置复数个，其效果也不会叠加。",
+  "level": 21,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_OlympicCauldron"
+ },
+ {
+  "id": "SkillUnlock_BirdDragon",
+  "name": "烽歌龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘烽歌龙。",
+  "level": 21,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_BirdDragon_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_KingAlpaca",
+  "name": "君王美露帕的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘君王美露帕。",
+  "level": 21,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_KingAlpaca_icon_normal"
+ },
+ {
+  "id": "TableDresser01_Stone",
+  "name": "古典式化妆台",
+  "description": "装饰用的古典式化妆台。",
+  "level": 21,
+  "points": 1,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_TableDresser01_Stone"
+ },
+ {
+  "id": "ElecBaton",
+  "name": "电棍",
+  "description": "敲下去就会触电的近战武器。\r\n帕鲁在触电状态下比较容易捕获。\r\n可在「优质作业台」制作。",
+  "level": 22,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_ElecBaton"
+ },
+ {
+  "id": "FishingBait_2",
+  "name": "优质钓饵",
+  "description": "用来吸引帕鲁上钩的钓饵。\r\n经过改良，更容易诱导帕鲁咬钩。",
+  "level": 22,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Consume_FishingBait_2"
+ },
+ {
+  "id": "ItemBooth",
+  "name": "跳蚤市场（道具）",
+  "description": "出售物品的设施。\r\n可以将物品出售给其他玩家。\r\n将冰系帕鲁指派到这里工作时，\r\n可以使里面的食物不会轻易腐败。",
+  "level": 22,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_ItemBooth"
+ },
+ {
+  "id": "PalBooth",
+  "name": "跳蚤市场（帕鲁）",
+  "description": "出售帕鲁的设施。\r\n可以将帕鲁出售给其他玩家。\r\n将冰系帕鲁指派到这里工作时，\r\n可以使里面的食物不会轻易腐败。",
+  "level": 22,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_PalBooth"
+ },
+ {
+  "id": "Trap_LegHold_Big",
+  "name": "捕兽夹（大）",
+  "description": "能让踩到的目标被困住。\r\n只对大型帕鲁有效。",
+  "level": 22,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Trap_LegHold"
+ },
+ {
+  "id": "SkillUnlock_RaijinDaughter",
+  "name": "雷鸣童子的项圈",
+  "description": "雷鸣童子的项圈。\r\n持有此道具时，队伍中的雷鸣童子会\r\n一直待在场上，并配合玩家的攻击发动额外攻击。",
+  "level": 22,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_RaijinDaughter_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_FeatherOstrich",
+  "name": "战冠雀的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘战冠雀。",
+  "level": 22,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_FeatherOstrich_icon_normal"
+ },
+ {
+  "id": "Homeward",
+  "name": "归途雷云",
+  "description": "使用后可以移动至最近的据点。\r\n无法在地下城里使用。",
+  "level": 22,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Consume_Homeward"
+ },
+ {
+  "id": "Battle_Armor_Grade_03_Copper",
+  "name": "金属盔甲",
+  "description": "以金属制成的盔甲。\r\n有一定防御力，也有一定重量。\r\n可在「优质作业台」制作。",
+  "level": 23,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_CopperArmor"
+ },
+ {
+  "id": "Battle_Helm_Grade_03_Copper",
+  "name": "金属头盔",
+  "description": "以金属制成的头盔。\r\n安全可靠，能守护你的大脑。\r\n可在「优质作业台」制作。",
+  "level": 23,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_CopperHelmet"
+ },
+ {
+  "id": "SphereModule_Curve",
+  "name": "曲线模块",
+  "description": "装备后能在帕鲁球上增添曲线旋转。\r\n容易从死角命中帕鲁，并提高捕获力。",
+  "level": 23,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_SphereModule_Curve"
+ },
+ {
+  "id": "Fountain",
+  "name": "喷泉",
+  "description": "如配置在据点，\r\n可以提升「浇水」的工作速度。\r\n即使配置复数个，其效果也不会叠加。",
+  "level": 23,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Fountain"
+ },
+ {
+  "id": "SkillUnlock_GhostBeast",
+  "name": "噬魂兽的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘噬魂兽。",
+  "level": 23,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_GhostBeast_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Eagle",
+  "name": "天擒鸟的手套",
+  "description": "持有此道具且天擒鸟在队伍中时，\r\n会改变滑翔伞的性能。",
+  "level": 23,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_Eagle_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_NegativeOctopus_Neutral",
+  "name": "蚀魂鱿的手套",
+  "description": "持有此道具，且蚀魂鱿在队伍中时，\r\n会改变滑翔伞的性能。",
+  "level": 23,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_NegativeOctopus_Neutral_icon_normal"
+ },
+ {
+  "id": "AutoMealPouch_Tier3",
+  "name": "大饲料袋",
+  "description": "装食物的大口袋。\r\n可开放3个自动进食装备槽。\r\n饥饿时可自动消耗槽内的食物。",
+  "level": 23,
+  "points": 3,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_AutoMealPouch_Tier3"
+ },
+ {
+  "id": "MakeshiftHandgun",
+  "name": "劣质手枪",
+  "description": "手工制造的破旧手枪。\r\n较适合用于近距离战斗，但每次只能射出一发子弹。\r\n可在「武器制作台」制作。",
+  "level": 24,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_MakeshiftHandgun"
+ },
+ {
+  "id": "Infra_PalBed_Grade_02",
+  "name": "松软帕鲁床",
+  "description": "让帕鲁们睡得更加舒适，\r\n提高睡觉时生命值和SAN值的恢复效率。",
+  "level": 24,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_MedicalPalBed_03"
+ },
+ {
+  "id": "PalMedicineBox",
+  "name": "药品柜",
+  "description": "用来存放帕鲁的药物的柜子。\r\n生病的帕鲁会来这里吃药。\r\n记得随时补充药物，别让柜子空了。",
+  "level": 24,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_PalMedicineBox"
+ },
+ {
+  "id": "FlowerBed",
+  "name": "花坛",
+  "description": "如配置在据点，\r\n可以提升「采集」的工作速度。\r\n即使配置复数个，其效果也不会叠加。",
+  "level": 24,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_FlowerBed"
+ },
+ {
+  "id": "SkillUnlock_Kitsunebi_Ice",
+  "name": "雪绒狐的背带",
+  "description": "用来抱住雪绒狐的背带。\r\n发动伙伴技能后，即可将雪绒狐\r\n抱在身上当作冷冻喷射器进行攻击。",
+  "level": 24,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_Kitsunebi_Ice_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_GrassPanda",
+  "name": "叶胖达的榴弹发射器",
+  "description": "持有此道具时，\r\n即可骑乘叶胖达，并用榴弹发射器进行猛烈射击。",
+  "level": 24,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_GrassPanda_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_BlueDragon",
+  "name": "碧海龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘碧海龙。",
+  "level": 24,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_BlueDragon_icon_normal"
+ },
+ {
+  "id": "Product_CopperPit",
+  "name": "金属采矿场",
+  "description": "生产金属矿石的设施。\r\n挖掘金属矿石的工作需要大量体力，相当严苛。\r\n把这些工作交给擅长挖掘的帕鲁吧。",
+  "level": 24,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_CopperPit"
+ },
+ {
+  "id": "PalDopingShot",
+  "name": "强化枪",
+  "description": "向伙伴帕鲁射击，\r\n会在一定时间内强化该帕鲁的攻击力和防御力。\r\n向敌人射击则会造成伤害。",
+  "level": 25,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_PalDopingShot"
+ },
+ {
+  "id": "PalDopingShotBullet",
+  "name": "强化枪子弹",
+  "description": "用于强化枪等武器的弹药。",
+  "level": 25,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_PalDopingShotBullet"
+ },
+ {
+  "id": "FragGrenade",
+  "name": "破片手榴弹",
+  "description": "可在中距离战斗时发挥作用的破片手榴弹。\r\n投掷数秒后引爆，给敌人造成伤害。",
+  "level": 25,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_FragGrenade"
+ },
+ {
+  "id": "Battle_Armor_Grade_03_Copper_Heat",
+  "name": "耐热金属盔甲",
+  "description": "经过改良的「金属盔甲」。\r\n具备傲人的耐热功能。\r\n可在「优质作业台」制作。",
+  "level": 25,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_CopperArmorHeat"
+ },
+ {
+  "id": "Product_Farm_Lettuce",
+  "name": "生菜园",
+  "description": "能够生产生菜的农园。\r\n需要有具备「播种」、「浇水」和「采集」适应性的帕鲁才能进行作业。",
+  "level": 25,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_FarmBlockV2_Lettuce"
+ },
+ {
+  "id": "Silo",
+  "name": "筒仓",
+  "description": "如配置在据点，\r\n可以提升「播种」的工作速度。\r\n即使配置复数个，其效果也不会叠加。",
+  "level": 25,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Silo"
+ },
+ {
+  "id": "SkillUnlock_Serpent_Ground",
+  "name": "流沙蛇的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘流沙蛇。",
+  "level": 25,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_Serpent_Ground_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Deer_Ground",
+  "name": "祇岳鹿的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘祇岳鹿。",
+  "level": 25,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_Deer_Ground_icon_normal"
+ },
+ {
+  "id": "Unlock_Picking_Tier2",
+  "name": "高级开锁工具",
+  "description": "持有此道具时，能够通过撬锁打开\r\n需要银钥匙才能打开的宝箱。\r\n即使多次使用也不会坏。",
+  "level": 25,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_Unlock_Picking_Tier2"
+ },
+ {
+  "id": "MakeshiftSubmachineGun",
+  "name": "破旧的冲锋枪",
+  "description": "用废料手工制作的冲锋枪。\r\n连射能力佳，但单发威力较低。",
+  "level": 26,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_MakeshiftSubmachineGun"
+ },
+ {
+  "id": "Infra_ElectricGenerator_Grade_01",
+  "name": "发电机",
+  "description": "能让据点的雷系帕鲁储存电力，\r\n供应给需要用电的设施。",
+  "level": 26,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_ElectricGenerator"
+ },
+ {
+  "id": "Lamp",
+  "name": "固定式电灯",
+  "description": "使用电力让据点更加明亮。",
+  "level": 26,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Battle_Defense_BowGun",
+  "name": "固定式十字弓",
+  "description": "将具备「手工作业」适应性的帕鲁分派到这里，\r\n它就会操控十字弓坚守据点。",
+  "level": 26,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "SkillUnlock_FengyunDeeper",
+  "name": "云海鹿的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘云海鹿。",
+  "level": 26,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_FengyunDeeper_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_GrassPanda_Electric",
+  "name": "雷胖达的榴弹发射器",
+  "description": "持有此道具时，\r\n即可骑乘雷胖达，并用榴弹发射器进行猛烈轰炸。",
+  "level": 26,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_GrassPanda_Electric_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_FlyingManta_Thunder",
+  "name": "雷米儿的手套",
+  "description": "持有此道具，且雷米儿在队伍中时，\r\n会改变滑翔伞的性能。",
+  "level": 26,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_FlyingManta_Thunder_icon_normal"
+ },
+ {
+  "id": "Battle_RangeWeapon_SphereLauncher_Once",
+  "name": "单发型帕鲁球发射器",
+  "description": "用于发射帕鲁球的发射器。\r\n用它就能捕捉到更远处的帕鲁。\r\n可在「武器制作台」制作。",
+  "level": 26,
+  "points": 4,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Weapon_SphereLauncher_Once"
+ },
+ {
+  "id": "Special_PalSphere_Grade_04",
+  "name": "特级帕鲁球",
+  "description": "可扔出并捕捉帕鲁的道具。\r\n此款式可捕捉相当强大的帕鲁。\r\n可在「帕鲁球流水线工厂」制作。",
+  "level": 27,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_PalSphere_Tera"
+ },
+ {
+  "id": "Special_SphereFactory_Black_Grade_02",
+  "name": "帕鲁球流水线工厂",
+  "description": "生产「帕鲁球」的速度较为快速。\r\n需要有具备「手工作业」适应性的帕鲁才能进行作业。",
+  "level": 27,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_SphereFactory_Black_02"
+ },
+ {
+  "id": "FragGrenade_Elec",
+  "name": "电击手榴弹",
+  "description": "利于中等距离战斗的电击手榴弹。\r\n投掷数秒后引爆，对附近放出电击。",
+  "level": 27,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_FragGrenade_Elec"
+ },
+ {
+  "id": "Battle_Armor_Grade_03_Copper_Cold",
+  "name": "耐寒金属盔甲",
+  "description": "经过改良的「金属盔甲」。\r\n能够抵御使身体冻僵的寒意。\r\n可在「优质作业台」制作。",
+  "level": 27,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_CopperArmorCold"
+ },
+ {
+  "id": "CeilingLamp",
+  "name": "天花板吊灯",
+  "description": "可安装在天花板上。",
+  "level": 27,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "SkillUnlock_SakuraSaurus_Water",
+  "name": "海誓龙的鞍具",
+  "description": "",
+  "level": 27,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_SakuraSaurus_Water_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_ThunderDog",
+  "name": "霹雳犬的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘霹雳犬。",
+  "level": 27,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_ThunderDog_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_LeafMomonga",
+  "name": "达鼠泥的背带",
+  "description": "达鼠泥的背带。\r\n持有此道具时，达鼠泥会在玩家陷入濒死状态时\r\n通过疗愈能力让玩家复活。",
+  "level": 27,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_LeafMomonga_icon_normal"
+ },
+ {
+  "id": "AdditionalInventory_001",
+  "name": "小型扩展背包",
+  "description": "能夠额外携带物品的小型背包。\r\n持有此道具时，可增加背包栏位。",
+  "level": 27,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_AdditionalInventory_001"
+ },
+ {
+  "id": "Battle_RangeWeapon_HandGun",
+  "name": "手枪",
+  "description": "子弹容纳量及连射能力经过强化的手枪。\r\n每秒火力比劣质手枪更强。\r\n可在「武器制作台」制作。",
+  "level": 28,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_HandGun_Default"
+ },
+ {
+  "id": "HandgunBullet",
+  "name": "手枪子弹",
+  "description": "「手枪」等使用的子弹。\r\n可在「武器制作台」制作。",
+  "level": 28,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_HandgunBullet"
+ },
+ {
+  "id": "Shield_03",
+  "name": "优质护盾",
+  "description": "以帕鲁矿技术制成的神奇护盾。\r\n经过改良，进一步提升了性能。\r\n可在「作业流水线工厂」制作。",
+  "level": 28,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_Shield_03"
+ },
+ {
+  "id": "Product_Factory_Hard_Grade_02",
+  "name": "作业流水线工厂",
+  "description": "虽需使用电力，但生产各种道具的速度较为快速。\r\n需要有具备「手工作业」适应性的帕鲁才能进行作业。",
+  "level": 28,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Factory_Hard_02"
+ },
+ {
+  "id": "Stump",
+  "name": "树桩和斧头",
+  "description": "如配置在据点，\r\n可以提升「采伐」的工作速度。\r\n即使配置复数个，其效果也不会叠加。",
+  "level": 28,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Stump"
+ },
+ {
+  "id": "DefenseWall",
+  "name": "石制防御墙",
+  "description": "防止外敌入侵的巨大防御墙。",
+  "level": 28,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_DefenseWall"
+ },
+ {
+  "id": "SkillUnlock_FairyDragon_Water",
+  "name": "水灵龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘水灵龙。",
+  "level": 28,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_FairyDragon_Water_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_PurpleSpider",
+  "name": "桃蛛娘的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘桃蛛娘。",
+  "level": 28,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_PurpleSpider_icon_normal"
+ },
+ {
+  "id": "Accessory_JumpPower_Increase",
+  "name": "反重力腰带",
+  "description": "装备后可提升玩家跳跃力的饰品。",
+  "level": 28,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Accessory_JumpPower_Increase"
+ },
+ {
+  "id": "FishingRod_02_1",
+  "name": "中级钓竿（捣蛋猫）",
+  "description": "用来钓帕鲁的钓竿。\r\n在携带钓饵的状态下前往有鱼影的水边使用钓竿即可开始垂钓。\r\n性能进一步提升，垂钓成功率稍微上升。",
+  "level": 29,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_FishingRod_3"
+ },
+ {
+  "id": "Battle_MeleeWeapon_Sword",
+  "name": "剑",
+  "description": "近距离战斗用的「剑」。\r\n锋利无比！但需要靠近敌人攻击，相当危险。\r\n可在「武器制作台」制作。",
+  "level": 29,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_Sword"
+ },
+ {
+  "id": "FragGrenade_Ice",
+  "name": "冷冻手榴弹",
+  "description": "利于中等距离战斗的冷冻手榴弹。\r\n投掷数秒后引爆，冻结周围一切。",
+  "level": 29,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_FragGrenade_Ice"
+ },
+ {
+  "id": "Product_Farm_Potato",
+  "name": "土豆园",
+  "description": "可培育土豆的农园。\r\n此作物播种至收成所需时间较长，但可让料理更加丰富多元。\r\n需有数名帕鲁负责播种、灌溉及收获。",
+  "level": 29,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_FarmBlockV2_Potato"
+ },
+ {
+  "id": "Infra_PlayerBed_Grade_02",
+  "name": "优质的床",
+  "description": "柔软蓬松的床铺，恢复效率有所改善。\r\n必须建造在有屋顶的地方才能让人安眠。",
+  "level": 29,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_PlayerBed_03"
+ },
+ {
+  "id": "SkillUnlock_GrassMammoth",
+  "name": "森猛犸的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘森猛犸。",
+  "level": 29,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_GrassMammoth_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_IceDeer",
+  "name": "严冬鹿的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘严冬鹿。",
+  "level": 29,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_IceDeer_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_BlueDragon_Ice",
+  "name": "碧月龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘碧月龙。",
+  "level": 29,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_BlueDragon_Ice_icon_normal"
+ },
+ {
+  "id": "Lantern_High",
+  "name": "强化腰挂提灯",
+  "description": "挂在腰间的大范围照明提灯。\r\n到了夜晚会自动点亮。 \r\n也可以切换照明模式使它常亮。\r\n带1个在身上就够用了。",
+  "level": 29,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_Lantern"
+ },
+ {
+  "id": "MakeshiftShotgun",
+  "name": "破旧的霰弹枪",
+  "description": "用废料手工制作的霰弹枪。\r\n射程短，但近距离战斗能力强。",
+  "level": 30,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_MakeshiftShotgun"
+ },
+ {
+  "id": "Trap_MineAttack",
+  "name": "地雷",
+  "description": "敌人踩上去就会自动爆炸。",
+  "level": 30,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Trap_MineAttack"
+ },
+ {
+  "id": "Metal_houseset",
+  "name": "金属建筑套组",
+  "description": "解锁此套组即可用金属建筑建造据点。\r\n可以建造金属制的地基、墙壁、屋顶和楼梯等\r\n建造房屋时所需的构造。",
+  "level": 30,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Metal_Foundation"
+ },
+ {
+  "id": "MiningTool",
+  "name": "矿车",
+  "description": "如配置在据点，\r\n可以提升「挖掘」的工作速度。\r\n即使配置复数个，其效果也不会叠加。",
+  "level": 30,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_MiningTool"
+ },
+ {
+  "id": "SkillUnlock_AmaterasuWolf",
+  "name": "苍焰狼的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘苍焰狼。",
+  "level": 30,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_AmaterasuWolf_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_BirdDragon_Ice",
+  "name": "霜歌龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘霜歌龙。",
+  "level": 30,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_BirdDragon_Ice_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_FlowerDinosaur_Electric",
+  "name": "雷冠龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘雷冠龙。",
+  "level": 30,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_FlowerDinosaur_Electric_icon_normal"
+ },
+ {
+  "id": "YakushimaBlade",
+  "name": "彩虹猫之刃",
+  "description": "【泰拉瑞亚联动】\r\n传说这把剑是武道蛙从遥远的国度带回来的。\r\n至于原因嘛，我们完全不知道……\r\n每次挥舞都会射出弹跳的猫咪弹攻击敌人。",
+  "level": 30,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Weapon_YakushimaBlade"
+ },
+ {
+  "id": "MakeshiftAssaultRifle",
+  "name": "破旧的突击步枪",
+  "description": "用废料手工制作的突击步枪。\r\n连射能力优秀且射程远，但单发威力较低。",
+  "level": 31,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_MakeshiftAssaultRifle"
+ },
+ {
+  "id": "FragGrenade_Fire",
+  "name": "烧夷手榴弹",
+  "description": "利于中等距离战斗的烧夷手榴弹。\r\n投掷数秒后引爆，在周围燃起烈火。",
+  "level": 31,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_FragGrenade_Fire"
+ },
+ {
+  "id": "SphereModule_Sniper",
+  "name": "狙击模块",
+  "description": "装备后会帕鲁球的投掷距离会增加，\r\n能够精准锁定帕鲁，并提高捕获力。",
+  "level": 31,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "FishingPond1",
+  "name": "垂钓池",
+  "description": "配备垂钓工具的垂钓池。\r\n分派帕鲁后，它会悠闲地帮你垂钓。\r\n需有可手工作业的帕鲁。",
+  "level": 31,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_FishingPond1"
+ },
+ {
+  "id": "Spa2",
+  "name": "优质温泉",
+  "description": "进入此设施的帕鲁能够恢复更多SAN值。",
+  "level": 31,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Stone_Gate",
+  "name": "石制大门",
+  "description": "稍大体型的帕鲁也能通过的石制大门。",
+  "level": 31,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Stone_Gate"
+ },
+ {
+  "id": "SkillUnlock_FireKirin",
+  "name": "火麒麟的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘火麒麟。",
+  "level": 31,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_FireKirin_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_WindChimes_Ice",
+  "name": "冰缚灵的手套",
+  "description": "持有此道具且WindChimes_Ice在队伍中时，\r\n会改变滑翔伞的性能。",
+  "level": 31,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_WindChimes_Ice_icon_normal"
+ },
+ {
+  "id": "GrapplingGun3",
+  "name": "GrapplingGun3",
+  "description": "",
+  "level": 31,
+  "points": 3,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Weapon_GrapplingGun"
+ },
+ {
+  "id": "OctaviaSet01",
+  "name": "ULTRAKILL 联动套组1",
+  "description": "【ULTRAKILL 联动】\r\nV1盔甲与神射左轮手枪的套组。",
+  "level": 32,
+  "points": 3,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Armor_Octavia001_Armor"
+ },
+ {
+  "id": "Battle_RangeWeapon_CompoundBow",
+  "name": "复合弓",
+  "description": "经过现代化改良的弓。\r\n能够射出威力更强大的箭矢。",
+  "level": 32,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_CompoundBow"
+ },
+ {
+  "id": "ReinforcedArrow",
+  "name": "强化箭矢",
+  "description": "复合弓专用的强化箭矢。",
+  "level": 32,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_ReinforcedArrow"
+ },
+ {
+  "id": "PalHealingGrenade",
+  "name": "帕鲁恢复手榴弹",
+  "description": "具有恢复效果的破片手榴弹。\r\n命中后会立即爆裂，\r\n为伙伴帕鲁恢复生命值。",
+  "level": 32,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_PalHealingGrenade"
+ },
+ {
+  "id": "Product_WeaponFactory_Dirty_Grade_02",
+  "name": "武器流水线工厂",
+  "description": "虽需使用电力，但生产武器及弹药的速度较为快速。\r\n需要有具备「手工作业」适应性的帕鲁才能进行作业。",
+  "level": 32,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_WeaponFactory_Dirty_02"
+ },
+ {
+  "id": "Product_Farm_Carrot",
+  "name": "胡萝卜园",
+  "description": "可培育胡萝卜的农园。\r\n此作物播种至收成所需时间较长，但可让料理更加丰富多元。\r\n需有数名帕鲁负责播种、灌溉及收获。",
+  "level": 32,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_FarmBlockV2_Carrot"
+ },
+ {
+  "id": "Cauldron",
+  "name": "魔女之釜",
+  "description": "如配置在据点，\r\n可以提升「制药」的工作速度。\r\n即使配置复数个，其效果也不会叠加。",
+  "level": 32,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Cauldron"
+ },
+ {
+  "id": "BaseCampWorkerExtraStation",
+  "name": "帕鲁终端控制台",
+  "description": "可远程操作帕鲁终端的设备。\r\n将它配置在你想要部署帕鲁的位置，自由地打造据点吧。",
+  "level": 32,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_BaseCampWorkerExtraStation"
+ },
+ {
+  "id": "SkillUnlock_VolcanicMonster",
+  "name": "熔岩兽的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘熔岩兽。",
+  "level": 32,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_VolcanicMonster_icon_normal"
+ },
+ {
+  "id": "Altar",
+  "name": "召唤的祭坛",
+  "description": "通过献上画着帕鲁的石板，\r\n就能在据点召唤强大的帕鲁。\r\n做好充分的战斗准备吧。",
+  "level": 33,
+  "points": 3,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_Altar"
+ },
+ {
+  "id": "Battle_RangeWeapon_OldRevolver",
+  "name": "古旧左轮手枪",
+  "description": "略显陈旧的左轮手枪。\r\n单发威力优于手枪。",
+  "level": 33,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_OldRevolver"
+ },
+ {
+  "id": "FragGrenade_Water",
+  "name": "水流手榴弹",
+  "description": "利于中等距离战斗的水流手榴弹。\r\n投掷数秒后引爆，给敌人造成水属性伤害。",
+  "level": 33,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_FragGrenade_Water"
+ },
+ {
+  "id": "Polymer",
+  "name": "聚合物",
+  "description": "加工油脂后制成的聚合物。\r\n是制作枪支时必须用到的素材。",
+  "level": 33,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Material_Polymer"
+ },
+ {
+  "id": "Trap_MineElecShock",
+  "name": "电击地雷",
+  "description": "能让踩到的目标遭受电击。\r\n帕鲁在遭受电击时会比较容易捕获。",
+  "level": 33,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Trap_MineElecShock"
+ },
+ {
+  "id": "Snowman",
+  "name": "雪人",
+  "description": "如配置在据点，\r\n可以提升「冷却」的工作速度。\r\n即使配置复数个，其效果也不会叠加。",
+  "level": 33,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Snowman"
+ },
+ {
+  "id": "SkillUnlock_HadesBird",
+  "name": "雷冥鸟的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘雷冥鸟。",
+  "level": 33,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_HadesBird_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Manticore",
+  "name": "狱焰王的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘狱焰王。",
+  "level": 33,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_Manticore_icon_normal"
+ },
+ {
+  "id": "Accessory_TalentChecker",
+  "name": "伯乐眼镜",
+  "description": "能够确认帕鲁隐藏才能的眼镜。\r\n生命值，攻击力和防御力的潜力会以满分100分显示出来。",
+  "level": 34,
+  "points": 4,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Accessory_TalentChecker"
+ },
+ {
+  "id": "Product_Ingot_Grade_02_Iron",
+  "name": "改善后的炉子",
+  "description": "可冶炼「精炼金属锭」。",
+  "level": 34,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Product_Axe_Grade_03",
+  "name": "精炼金属斧头",
+  "description": "砍树用的斧子。\r\n耐久度与锋利度均有更进一步的提升。\r\n可在「作业流水线工厂」制作。",
+  "level": 34,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Product_Pickaxe_Grade_03",
+  "name": "精炼金属十字镐",
+  "description": "采矿用的十字镐。\r\n耐久度和效率均有更进一步的提升。\r\n可在「作业流水线工厂」制作。",
+  "level": 34,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Spear_3",
+  "name": "精炼金属长矛",
+  "description": "利于近距离战斗的矛。\r\n以优质金属制成，攻击力有所提升。\r\n可在「作业流水线工厂」制作。",
+  "level": 34,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "SkillUnlock_ThunderBird",
+  "name": "迅雷鸟的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘迅雷鸟。",
+  "level": 34,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_ThunderBird_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_FireKirin_Dark",
+  "name": "邪麒麟的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘邪麒麟。",
+  "level": 34,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_FireKirin_Dark_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_IceSeal",
+  "name": "香草豹冰的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘香草豹冰。",
+  "level": 34,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_IceSeal_icon_normal"
+ },
+ {
+  "id": "Accessory_AirDash1",
+  "name": "空中冲刺靴",
+  "description": "装备后可使玩家获得空中冲刺能力的饰品。",
+  "level": 35,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": ""
+ },
+ {
+  "id": "Special_PalSphere_Grade_05",
+  "name": "大师帕鲁球",
+  "description": "可扔出并捕捉帕鲁的道具。\r\n此款式性能相当好，没多少帕鲁能逃得掉。\r\n可在「帕鲁球流水线工厂II」制作。",
+  "level": 35,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_PalSphere_Master"
+ },
+ {
+  "id": "Special_SphereFactory_Black_Grade_03",
+  "name": "帕鲁球流水线工厂II",
+  "description": "生产「帕鲁球」的速度更为快速。\r\n需要有具备「手工作业」适应性的帕鲁才能进行作业。",
+  "level": 35,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_SphereFactory_Black_03"
+ },
+ {
+  "id": "FragGrenade_Leaf",
+  "name": "草木手榴弹",
+  "description": "利于中等距离战斗的草木手榴弹。\r\n投掷数秒后引爆，给敌人造成草属性伤害。",
+  "level": 35,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_FragGrenade_Leaf"
+ },
+ {
+  "id": "Infra_ElectronicCircuit",
+  "name": "电路板",
+  "description": "制作精密机械时会用到的「电路板」。\r\n可在「作业流水线工厂」制作。",
+  "level": 35,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Material_ElectronicCircuit"
+ },
+ {
+  "id": "CarbonFiber",
+  "name": "碳纤维",
+  "description": "轻盈坚硬的优质素材。\r\n可用于制作防具等。",
+  "level": 35,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Material_CarbonFiber"
+ },
+ {
+  "id": "SkillUnlock_IceNarwhal",
+  "name": "凉晶鲸的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘凉晶鲸。",
+  "level": 35,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_IceNarwhal_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Manticore_Dark",
+  "name": "狱阎王的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘狱阎王。",
+  "level": 35,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_Manticore_Dark_icon_normal"
+ },
+ {
+  "id": "AutoMealPouch_Tier4",
+  "name": "巨大饲料袋",
+  "description": "装食物的特大口袋。\r\n可开放4个自动进食装备槽。\r\n饥饿时可自动消耗槽内的食物。",
+  "level": 36,
+  "points": 4,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_AutoMealPouch_Tier4"
+ },
+ {
+  "id": "Battle_RangeWeapon_Rifle",
+  "name": "单发步枪",
+  "description": "单发型来福枪，得花费时间装填子弹。\r\n填装数量少，但单发火力强劲。\r\n可在「武器流水线工厂」制作。",
+  "level": 36,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_SingleShotRifle"
+ },
+ {
+  "id": "RifleBullet",
+  "name": "步枪子弹",
+  "description": "步枪等使用的子弹。\r\n可在「武器制作台」制作。",
+  "level": 36,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_RifleBullet"
+ },
+ {
+  "id": "OperatingTable",
+  "name": "帕鲁手术台",
+  "description": "可以对帕鲁进行手术，\r\n改变帕鲁的性别和被动技能的设施。",
+  "level": 36,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_OperatingTable"
+ },
+ {
+  "id": "Product_Farm_Onion",
+  "name": "洋葱园",
+  "description": "可培育洋葱的农园。\r\n此作物播种至收成所需时间较长，但可让料理更加丰富多元。\r\n需有数名帕鲁负责播种、灌溉及收获。",
+  "level": 36,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_FarmBlockV2_Onion"
+ },
+ {
+  "id": "Cloth2",
+  "name": "优质的布",
+  "description": "编织大量羊毛制成的优质的布。\r\n是制作优质防具时必不可少的。",
+  "level": 36,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Material_Cloth"
+ },
+ {
+  "id": "MedicalPalBed_04",
+  "name": "大型帕鲁床",
+  "description": "帕鲁用的大床，可睡一个好觉。\r\n可供帕鲁在受伤时或夜晚睡觉。\r\n即使是大型帕鲁也能在这张大床上睡个好觉。",
+  "level": 36,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_MedicalPalBed_04"
+ },
+ {
+  "id": "SkillUnlock_SkyDragon",
+  "name": "天羽龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘天羽龙。",
+  "level": 36,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_SkyDragon_icon_normal"
+ },
+ {
+  "id": "Special_ElectricHatchingPalEgg",
+  "name": "电能帕鲁蛋孵化器",
+  "description": "用于孵化帕鲁蛋的装置。\r\n需要电力供应才能运作，\r\n但可自动将该孵化器的内部保持在最佳温度。",
+  "level": 37,
+  "points": 5,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_ElectricHatchingPalEgg"
+ },
+ {
+  "id": "Battle_RangeWeapon_SubmachineGun",
+  "name": "冲锋枪",
+  "description": "连射能力优异的冲锋枪。\r\n轻巧灵活，适合近距离战斗。",
+  "level": 37,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_SubmachineGun"
+ },
+ {
+  "id": "Battle_Armor_Grade_03_Iron",
+  "name": "精炼金属盔甲",
+  "description": "以优质金属制成的盔甲。\r\n防御力极优，但也相当沉重。\r\n可在「作业流水线工厂」制作。",
+  "level": 37,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_IronArmor"
+ },
+ {
+  "id": "Battle_Helm_Grade_04_Iron",
+  "name": "精炼金属头盔",
+  "description": "以优质金属制成的头盔。\r\n精心打磨后耀眼的金属光泽提高了它的价值。\r\n可在「作业流水线工厂」制作。",
+  "level": 37,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_IronHelmet"
+ },
+ {
+  "id": "EnergyStorage_Electric",
+  "name": "蓄电器",
+  "description": "可以储存发电机发电的多余电力的设施。",
+  "level": 37,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_EnergyStorage_Electric"
+ },
+ {
+  "id": "SkillUnlock_RedArmorBird",
+  "name": "燧火鸟的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘燧火鸟。",
+  "level": 37,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_RedArmorBird_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_GhostAnglerfish",
+  "name": "冥灯鱼的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘冥灯鱼。",
+  "level": 37,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_GhostAnglerfish_icon_normal"
+ },
+ {
+  "id": "Battle_RangeWeapon_SphereLauncher",
+  "name": "扩散型帕鲁球发射器",
+  "description": "可同时发射大量帕鲁球的新型发射器。\r\n可用来捕捉成群的帕鲁。\r\n可在「武器流水线工厂」制作。",
+  "level": 38,
+  "points": 5,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Weapon_SphereLauncher"
+ },
+ {
+  "id": "Launcher_Meteor",
+  "name": "陨石发射器",
+  "description": "加工陨石制作而成的发射器。\r\n命中时会像陨石一样引发爆炸。\r\n可在「武器流水线工厂」制作。",
+  "level": 38,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_Launcher_Meteor"
+ },
+ {
+  "id": "FragGrenade_Ground",
+  "name": "大地手榴弹",
+  "description": "利于中等距离战斗的大地手榴弹。\r\n投掷数秒后引爆，给敌人造成地属性伤害。",
+  "level": 38,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_FragGrenade_Ground"
+ },
+ {
+  "id": "FishingBait_3",
+  "name": "奢华钓饵",
+  "description": "用来吸引帕鲁上钩的钓饵。\r\n经过改良，能使小游戏的判定条稍微变大。",
+  "level": 38,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Consume_FishingBait_3"
+ },
+ {
+  "id": "Refrigerator",
+  "name": "冰箱",
+  "description": "大型食物储存库。\r\n将冰系帕鲁指派到这里工作时，\r\n可以使里面的食物不会轻易腐败。",
+  "level": 38,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Refrigerator"
+ },
+ {
+  "id": "Trap_MineFreeze",
+  "name": "结冰地雷",
+  "description": "能让踩到的目标冻结。\r\n帕鲁被冻结时会比较容易捕获。",
+  "level": 38,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Trap_MineFreeze"
+ },
+ {
+  "id": "SkillUnlock_VolcanicMonster_Ice",
+  "name": "寒霜兽的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘寒霜兽。",
+  "level": 38,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_VolcanicMonster_Ice_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Horus",
+  "name": "荷鲁斯的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘荷鲁斯。",
+  "level": 38,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_Horus_icon_normal"
+ },
+ {
+  "id": "Product_CopperPit_2",
+  "name": "金属采矿场Ⅱ",
+  "description": "可大量生产金属矿石的设施。\r\n挖掘金属矿石的工作需要大量体力，相当严苛。\r\n把这些工作交给擅长挖掘的帕鲁吧。",
+  "level": 39,
+  "points": 3,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_CopperPit_2"
+ },
+ {
+  "id": "Battle_RangeWeapon_ShotGun",
+  "name": "双管霰弹枪",
+  "description": "近距离战斗能力强劲的霰弹枪，可以连射2发。\r\n弹容量虽少，但火力很强。\r\n可在「武器流水线工厂」制作。",
+  "level": 39,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_DoubleBarrelShotgun"
+ },
+ {
+  "id": "ShotGunBullet",
+  "name": "霰弹枪子弹",
+  "description": "霰弹枪等使用的子弹。\r\n可在「武器制作台」制作。",
+  "level": 39,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_ShotgunBullet"
+ },
+ {
+  "id": "SphereModule_Curve2",
+  "name": "滑球模块",
+  "description": "装备后能在帕鲁球上增添滑球旋转。\r\n帕鲁球能以较大角度急剧弯曲，\r\n更容易出其不意，并提高捕获力。",
+  "level": 39,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_SphereModule_Curve2"
+ },
+ {
+  "id": "Glass_houseset",
+  "name": "玻璃建筑套组",
+  "description": "解锁此套组即可用玻璃建筑建造据点。\r\n可以建造玻璃制的地基、墙壁、屋顶和楼梯等\r\n建造房屋时所需的构造。",
+  "level": 39,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Glass_foundation"
+ },
+ {
+  "id": "Infra_ItemChest_Grade_03",
+  "name": "精炼金属箱",
+  "description": "可进一步收纳更多道具，耐久度也有所提升。\r\n具备「搬运」适应性的帕鲁会自动搬运道具。",
+  "level": 39,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_ItemChest_03"
+ },
+ {
+  "id": "SkillUnlock_Penguin_Electric",
+  "name": "闪丸丸的火箭发射器",
+  "description": "用来发射闪丸丸的炮筒。\r\n发动伙伴技能后，即可将闪丸丸射出，\r\n对敌人进行攻击。随后，闪丸丸会进入濒死状态。",
+  "level": 39,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_Penguin_Electric_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Umihebi",
+  "name": "覆海龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘覆海龙。",
+  "level": 39,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_Umihebi_icon_normal"
+ },
+ {
+  "id": "Accessory_JumpCount_Increase1",
+  "name": "二段跳靴",
+  "description": "装备后可使玩家获得二段跳跃能力的饰品。",
+  "level": 40,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": ""
+ },
+ {
+  "id": "FragGrenade_Dark",
+  "name": "暗黑手榴弹",
+  "description": "利于中等距离战斗的暗黑手榴弹。\r\n投掷数秒后引爆，给敌人造成暗属性伤害。",
+  "level": 40,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_FragGrenade_Dark"
+ },
+ {
+  "id": "Battle_Armor_Grade_03_Iron_Heat",
+  "name": "耐热精炼金属盔甲",
+  "description": "经过改良的「精炼金属盔甲」。\r\n具备傲人的耐热功能。\r\n可在「作业流水线工厂」制作。",
+  "level": 40,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_IronArmorHeat"
+ },
+ {
+  "id": "Battle_Glider_Grade_03",
+  "name": "优质滑翔伞",
+  "description": "展开后即可在空中滑翔的滑翔伞。\r\n此款式性能有所提升，能以相当快的速度飞行。\r\n可在「作业流水线工厂」制作。",
+  "level": 40,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Glider_Glider_Super"
+ },
+ {
+  "id": "Battle_Defense_MachineGun",
+  "name": "固定式机关枪",
+  "description": "将具备「手工作业」适应性的帕鲁分派到这里，\r\n它就会操控机关枪坚守据点。",
+  "level": 40,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_DefenseMachinegun"
+ },
+ {
+  "id": "SkillUnlock_KingBahamut",
+  "name": "焰煌的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘焰煌。",
+  "level": 40,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_KingBahamut_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_ElecPanda",
+  "name": "暴电熊的机关枪",
+  "description": "持有此道具时，即可骑乘暴电熊，\r\n并用机关枪进行猛烈射击。",
+  "level": 40,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_ElecPanda_icon_normal"
+ },
+ {
+  "id": "GuildChest",
+  "name": "公会箱子",
+  "description": "可以瞬间透过亚空间传送箱子内容的箱子。\r\n这个箱子内的道具会在各据点之间共享。",
+  "level": 41,
+  "points": 4,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_GuildChest"
+ },
+ {
+  "id": "Battle_RangeWeapon_SemiAutoRifle",
+  "name": "半自动步枪",
+  "description": "具备一定连射能力的步枪。\r\n易于瞄准且火力强大，适合中距离战斗。",
+  "level": 41,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_SemiAutoRifle"
+ },
+ {
+  "id": "Battle_Armor_Grade_03_Iron_Cold",
+  "name": "耐寒精炼金属盔甲",
+  "description": "经过改良的「精炼金属盔甲」。\r\n能够抵御使身体冻僵的寒意。\r\n可在「作业流水线工厂」制作。",
+  "level": 41,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_IronArmorCold"
+ },
+ {
+  "id": "Product_Cooking_Grade_03",
+  "name": "电气厨房",
+  "description": "虽需使用电力，但可应对更复杂、更有效率的烹饪需求。\r\n需要有具备「生火」适应性的帕鲁才能进行作业。",
+  "level": 41,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_ElectricKitchen"
+ },
+ {
+  "id": "SanityDecrease1",
+  "name": "α波发生器",
+  "description": "发出α波让帕鲁放松的装置。\r\n减缓据点内帕鲁的SAN值下降速度。\r\n即使配置复数个，其效果也不会叠加。",
+  "level": 41,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_SanityDecrease1"
+ },
+ {
+  "id": "ElectricHeater",
+  "name": "电气取暖器",
+  "description": "使用电力，效果更强的暖炉，范围广且输出功率高。",
+  "level": 41,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "SkillUnlock_Suzaku",
+  "name": "朱雀的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘朱雀。",
+  "level": 41,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_Suzaku_icon_normal"
+ },
+ {
+  "id": "Product_CoalPit",
+  "name": "石炭采矿场",
+  "description": "生产石炭的设施。\r\n挖掘石炭的工作需要大量体力，相当严苛。\r\n把这些工作交给擅长挖掘的帕鲁吧。",
+  "level": 42,
+  "points": 5,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_CoalPit"
+ },
+ {
+  "id": "FragGrenade_Dragon",
+  "name": "龙击手榴弹",
+  "description": "利于中等距离战斗的龙击手榴弹。\r\n投掷数秒后引爆，给敌人造成龙属性伤害。",
+  "level": 42,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_FragGrenade_Dragon"
+ },
+ {
+  "id": "Product_Factory_Hard_Grade_03",
+  "name": "作业流水线工厂 II",
+  "description": "虽需使用电力，但生产各种道具的速度更为快速。\r\n需要有具备「手工作业」适应性的帕鲁才能进行作业。",
+  "level": 42,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Factory_Hard_03"
+ },
+ {
+  "id": "ElectricCooler",
+  "name": "电气降温器",
+  "description": "使用电力，效果更强的冷气，范围广且输出功率高。",
+  "level": 42,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Metal_Gate",
+  "name": "金属大门",
+  "description": "稍大体型的帕鲁也能通过的金属大门。",
+  "level": 42,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Metal_Gate"
+ },
+ {
+  "id": "SkillUnlock_KingAlpaca_Ice",
+  "name": "冰帝美露帕的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘冰帝美露帕。",
+  "level": 42,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_KingAlpaca_Ice_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_TropicalOstrich",
+  "name": "咕咕桑葩的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘咕咕桑葩。",
+  "level": 42,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_TropicalOstrich_icon_normal"
+ },
+ {
+  "id": "AdditionalInventory_002",
+  "name": "中型扩展背包",
+  "description": "能夠额外携带物品的普通背包。\r\n持有此道具时，可增加背包栏位。",
+  "level": 43,
+  "points": 2,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_AdditionalInventory_002"
+ },
+ {
+  "id": "Battle_RangeWeapon_ShotGun_Multi",
+  "name": "泵动式霰弹枪",
+  "description": "增加填装数量，更加强劲的霰弹枪。\r\n拥有屈指可数的近距离DPS能力。\r\n可在「武器流水线工厂」制作。",
+  "level": 43,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_PumpActionShotgun"
+ },
+ {
+  "id": "Shield_04",
+  "name": "特级护盾",
+  "description": "以帕鲁矿技术制成的神奇护盾。\r\n经过多次实验，实现了最高峰的品质。\r\n可在「作业流水线工厂 II」制作。",
+  "level": 43,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_Shield_04"
+ },
+ {
+  "id": "Product_Medicine_Grade_02",
+  "name": "电气制药台",
+  "description": "虽需使用电力，但可制作更高级的药物。\r\n需要有具备「制药」适应性的帕鲁才能进行作业。",
+  "level": 43,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_MedicineFacility_02"
+ },
+ {
+  "id": "DefenseWall_Metal",
+  "name": "金属防御墙",
+  "description": "防止外敌入侵的巨大防御墙。\r\n因为是金属制的，所以非常坚固。",
+  "level": 43,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_DefenseWall_Metal"
+ },
+ {
+  "id": "SkillUnlock_Suzaku_Water",
+  "name": "清雀的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘清雀。",
+  "level": 43,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_Suzaku_Water_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Umihebi_Fire",
+  "name": "腾炎龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘腾炎龙。",
+  "level": 43,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_Umihebi_Fire_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_GuardianDog",
+  "name": "八云犬的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘八云犬。",
+  "level": 43,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_GuardianDog_icon_normal"
+ },
+ {
+  "id": "Spear_ForestBoss",
+  "name": "莉莉之矛",
+  "description": "莉莉爱用的长矛。\r\n她会用它来制裁蔑视帕鲁的人。",
+  "level": 44,
+  "points": 3,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Weapon_Spear_ForestBoss"
+ },
+ {
+  "id": "Special_PalSphere_Grade_06",
+  "name": "传奇帕鲁球",
+  "description": "可扔出并捕捉帕鲁的道具。\r\n此款式性能极高，几乎没有帕鲁能逃得掉。\r\n可在「帕鲁球流水线工厂II」制作。",
+  "level": 44,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_PalSphere_Legend"
+ },
+ {
+  "id": "Product_Ingot_Grade_03_Steal",
+  "name": "电气炉",
+  "description": "可冶炼「帕鲁金属锭」。",
+  "level": 44,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_BlastFurnace3"
+ },
+ {
+  "id": "Katana",
+  "name": "太刀",
+  "description": "近战用的太刀。\r\n刀锋凌厉，斩断一切。",
+  "level": 44,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_Katana"
+ },
+ {
+  "id": "Battle_MeleeWeapon_Pickaxe_Steal",
+  "name": "帕鲁金属十字镐",
+  "description": "采矿用的十字镐。\r\n以帕鲁金属制造使其獲得惊人的效率。",
+  "level": 44,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Battle_MeleeWeapon_Axe_Steal",
+  "name": "帕鲁金属斧",
+  "description": "砍树用的斧子。\r\n以帕鲁金属制造使其獲得惊人的锋利度。",
+  "level": 44,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "SkillUnlock_LazyDragon",
+  "name": "佩克龙的导弹发射器",
+  "description": "持有此道具时，即可骑乘佩克龙，\r\n并用导弹发射器进行猛烈射击。",
+  "level": 44,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_LazyDragon_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Yeti",
+  "name": "白绒雪怪的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘白绒雪怪。",
+  "level": 44,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_Yeti_icon_normal"
+ },
+ {
+  "id": "DecalGunSet",
+  "name": "印花枪套装",
+  "description": "印花枪套组。\r\n解锁此套组，即可制作能在命中处留下帕鲁图案\r\n的奇妙枪支与其专用子弹。",
+  "level": 45,
+  "points": 1,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Ammo_InkBullet"
+ },
+ {
+  "id": "Battle_RangeWeapon_AssaultRifle",
+  "name": "突击步枪",
+  "description": "以压倒性的连射能力镇压敌人的突击步枪。\r\n火力优秀，是与强敌对战时的首选。\r\n可在「武器流水线工厂」制作。",
+  "level": 45,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_AssaultRifle_Default1"
+ },
+ {
+  "id": "AssaultRifleBullet",
+  "name": "突击步枪子弹",
+  "description": "「突击步枪」等使用的子弹。\r\n可在「武器流水线工厂」制作。",
+  "level": 45,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_AssaultRifleBullet"
+ },
+ {
+  "id": "FishingRod_03_1",
+  "name": "高级钓竿（企丸丸）",
+  "description": "用来钓帕鲁的钓竿。\r\n在携带钓饵的状态下前往有鱼影的水边使用钓竿即可开始垂钓。\r\n性能进一步提升，垂钓成功率明显上升。",
+  "level": 45,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_FishingRod_5"
+ },
+ {
+  "id": "CompositeDesk",
+  "name": "制图桌",
+  "description": "通过组合复数设计图，\r\n可以制成更高等级设计图的设施。",
+  "level": 45,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_CompositeDesk"
+ },
+ {
+  "id": "SkillUnlock_Yeti_Grass",
+  "name": "绿苔绒怪的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘绿苔绒怪。",
+  "level": 45,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_Yeti_Grass_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_GrassMammoth_Ice",
+  "name": "雪猛犸的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘雪猛犸。",
+  "level": 45,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_GrassMammoth_Ice_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_WeaselDragon_Fire",
+  "name": "桃旋鼬的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘桃旋鼬。",
+  "level": 45,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_WeaselDragon_Fire_icon_normal"
+ },
+ {
+  "id": "Product_SulfurPit",
+  "name": "硫磺采矿场",
+  "description": "生产硫磺的设施。\r\n挖掘硫磺的工作需要大量体力，相当严苛。\r\n把这些工作交给擅长挖掘的帕鲁吧。",
+  "level": 46,
+  "points": 5,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_SulfurPit"
+ },
+ {
+  "id": "Battle_Armor_Grade_04_Steal",
+  "name": "帕鲁金属盔甲",
+  "description": "以帕鲁金属锭制成的盔甲。\r\n有着惊人的防御力，但是十分沉重。\r\n可在「作业流水线工厂 II」制作。",
+  "level": 46,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_StealArmor"
+ },
+ {
+  "id": "Battle_Helm_Grade_05_Steal",
+  "name": "帕鲁金属头盔",
+  "description": "以帕鲁金属锭制成的头盔。\r\n拥有人人都会羡慕的绝佳品质，是会选择其穿戴者的战士证明。\r\n可在「作业流水线工厂 II」制作。",
+  "level": 46,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_StealHelmet"
+ },
+ {
+  "id": "WorkSpeedIncrease1",
+  "name": "β波发生器",
+  "description": "发出β波让帕鲁活动更活跃的装置。\r\n提升据点内帕鲁的工作速度。\r\n即使配置复数个，其效果也不会叠加。",
+  "level": 46,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_WorkSpeedIncrease1"
+ },
+ {
+  "id": "LargeLamp",
+  "name": "大型固定式灯具",
+  "description": "外型加大，能照亮更广阔的范围。",
+  "level": 46,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "SkillUnlock_LazyDragon_Electric",
+  "name": "派克龙的导弹发射器",
+  "description": "持有此道具时，\r\n即可骑乘派克龙，并用导弹发射器进行猛烈轰炸。",
+  "level": 46,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_LazyDragon_Electric_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_MushroomDragon",
+  "name": "菇咚的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘菇咚。",
+  "level": 46,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_MushroomDragon_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Plesiosaur",
+  "name": "梁叶龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘梁叶龙。",
+  "level": 46,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_Plesiosaur_icon_normal"
+ },
+ {
+  "id": "AutoMealPouch_Tier5",
+  "name": "特大饲料袋",
+  "description": "用来装食物的最大号袋子。\r\n可解锁5个自动进食专用的装备栏位。\r\n帕鲁肚子饿了就会自动吃掉该栏位内的食物。",
+  "level": 47,
+  "points": 5,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_AutoMealPouch_Tier5"
+ },
+ {
+  "id": "Battle_RangeWeapon_SemiAutoShotgun",
+  "name": "半自动霰弹枪",
+  "description": "连射能力优异的霰弹枪。\r\n拥有首屈一指的近距离DPS能力。",
+  "level": 47,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_SemiAutoShotgun"
+ },
+ {
+  "id": "Product_WeaponFactory_Dirty_Grade_03",
+  "name": "武器流水线工厂II",
+  "description": "虽需使用电力，但生产武器及弹药的速度更为快速。\r\n需要有具备「手工作业」适应性的帕鲁才能进行作业。",
+  "level": 47,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_WeaponFactory_Dirty_03"
+ },
+ {
+  "id": "SphereModule_Sniper2",
+  "name": "狙击模块Ⅱ",
+  "description": "装备后会帕鲁球的投掷距离会大幅增加，\r\n能够精准锁定帕鲁，并提高捕获力。",
+  "level": 47,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_SphereModule_Sniper2"
+ },
+ {
+  "id": "LargeCeilingLamp",
+  "name": "大型天花板吊灯",
+  "description": "可安装在天花板上，照亮广阔的范围。",
+  "level": 47,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "SkillUnlock_BlackMetalDragon",
+  "name": "魔渊龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘魔渊龙。",
+  "level": 47,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_BlackMetalDragon_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_BlackGriffon",
+  "name": "异构格里芬的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘异构格里芬。",
+  "level": 47,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_BlackGriffon_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_MushroomDragon_Dark",
+  "name": "菇波的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘菇波。",
+  "level": 47,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_MushroomDragon_Dark_icon_normal"
+ },
+ {
+  "id": "MultiHatchingPalEgg",
+  "name": "大型帕鲁蛋孵化器",
+  "description": "用于孵化帕鲁蛋的装置。\r\n可自动维持大致适宜的温度，\r\n并同时孵化多个蛋。",
+  "level": 48,
+  "points": 5,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_MultiHatchingPalEgg"
+ },
+ {
+  "id": "Battle_Armor_Grade_04_Steal_Heat",
+  "name": "耐热帕鲁金属盔甲",
+  "description": "经过改良的「帕鲁金属盔甲」。\r\n具备傲人的耐热性能。\r\n可在「作业流水线工厂 II」制作。",
+  "level": 48,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_StealArmorHeat"
+ },
+ {
+  "id": "Farm_SkillFruits",
+  "name": "技能果树园",
+  "description": "可以种植技能果实的农园。\r\n将果实作为原种植入地面，\r\n就可以收获多个相同种类的果实。",
+  "level": 48,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Farm_SkillFruits"
+ },
+ {
+  "id": "Factory_Money",
+  "name": "金币制造工厂",
+  "description": "生产金币的工厂。\r\n因为精神负担大，工作时SAN值会降低。\r\n需有能进行手工作业的帕鲁。",
+  "level": 48,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Factory_Money"
+ },
+ {
+  "id": "TransmissionTower",
+  "name": "输电塔",
+  "description": "如配置在据点，\r\n可以提升「发电」的工作速度。\r\n即使配置复数个，其效果也不会叠加。",
+  "level": 48,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_TransmissionTower"
+ },
+ {
+  "id": "SkillUnlock_IceHorse",
+  "name": "唤冬兽的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘唤冬兽。",
+  "level": 48,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_IceHorse_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_IceHorse_Dark",
+  "name": "唤夜兽的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘唤夜兽。",
+  "level": 48,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_IceHorse_Dark_icon_normal"
+ },
+ {
+  "id": "GrapplingGun4",
+  "name": "GrapplingGun4",
+  "description": "",
+  "level": 49,
+  "points": 4,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Weapon_GrapplingGun"
+ },
+ {
+  "id": "Battle_RangeWeapon_RocketLauncher",
+  "name": "火箭发射器",
+  "description": "可远距离进行强劲轰炸的火箭发射器。\r\n可在「武器流水线工厂II」制作。",
+  "level": 49,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_Launcher_Default"
+ },
+ {
+  "id": "LauncherBullet",
+  "name": "火箭弹",
+  "description": "「火箭发射器」等使用的弹药。\r\n可在「武器流水线工厂II」制作。",
+  "level": 49,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_ExplosiveBullet"
+ },
+ {
+  "id": "BaseCampItemDispenser",
+  "name": "道具存取机",
+  "description": "可以自由取出设置的据点内\r\n所有箱子中道具的装置。",
+  "level": 49,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_BaseCampItemDispenser"
+ },
+ {
+  "id": "HugeKitchen",
+  "name": "大型厨房",
+  "description": "烹制食材时的必要设施。\r\n扩大了占地面积让复数帕鲁可以同时进行烹调。\r\n需要火系帕鲁点火。",
+  "level": 49,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_HugeKitchen"
+ },
+ {
+  "id": "SkillUnlock_SaintCentaur",
+  "name": "圣光骑士的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘圣光骑士。",
+  "level": 49,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_SaintCentaur_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_BlackCentaur",
+  "name": "混沌骑士的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘混沌骑士。",
+  "level": 49,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_BlackCentaur_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_SkyDragon_Grass",
+  "name": "翠羽龙的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘翠羽龙。",
+  "level": 49,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_SkyDragon_Grass_icon_normal"
+ },
+ {
+  "id": "ElectricGenerator_Large",
+  "name": "大型发电机",
+  "description": "储存雷系帕鲁生产的电的设施。\r\n更加大型，发电效率也更高。",
+  "level": 50,
+  "points": 4,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_ElectricGenerator_Large"
+ },
+ {
+  "id": "Battle_Armor_Grade_04_Steal_Cold",
+  "name": "耐寒帕鲁金属盔甲",
+  "description": "经过改良的「帕鲁金属盔甲」。\r\n能够抵御使身体冻僵的寒意。\r\n可在「作业流水线工厂 II」制作。",
+  "level": 50,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_StealArmorCold"
+ },
+ {
+  "id": "Battle_Defense_Missile",
+  "name": "固定式导弹发射器",
+  "description": "将具备「手工作业」适应性的帕鲁分派到这裡，\r\n它就会操控飞弹发射器坚守据点。",
+  "level": 50,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "Plastic",
+  "name": "塑钢",
+  "description": "由原油和金属加工制成的素材。\r\n可在电气炉制作。",
+  "level": 50,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Material_Plastic"
+ },
+ {
+  "id": "OilPump",
+  "name": "原油提炼机",
+  "description": "从油田提取原油所需的设备。\r\n它需要大量电能供给才能运行。",
+  "level": 50,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_OilPump"
+ },
+ {
+  "id": "JapaneseStyle_houseset",
+  "name": "和风建筑套组",
+  "description": "解锁此套组即可用和风建筑建造据点。\r\n可以建造的有地基、墙壁、屋顶和楼梯等\r\n建造房屋时所需的构造。",
+  "level": 50,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_JapaneseStyle_foundation"
+ },
+ {
+  "id": "SkillUnlock_JetDragon",
+  "name": "空涡龙的导弹发射器",
+  "description": "持有此道具时，\r\n即可骑乘空涡龙，并用导弹进行猛烈轰炸。",
+  "level": 50,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_JetDragon_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_WhiteAlienDragon",
+  "name": "杰诺路达的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘杰诺路达。",
+  "level": 50,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_WhiteAlienDragon_icon_normal"
+ },
+ {
+  "id": "Product_QuartzPit",
+  "name": "纯水晶采矿场",
+  "description": "生产纯水晶的设施。\r\n挖掘纯水晶的工作需要大量体力，相当严苛。\r\n把这些工作交给擅长挖掘的帕鲁吧。",
+  "level": 51,
+  "points": 5,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_QuartzPit"
+ },
+ {
+  "id": "Special_PalSphere_Grade_07",
+  "name": "究极帕鲁球",
+  "description": "可扔出并捕捉帕鲁的道具。\r\n拥有压倒性的性能，几乎可以抓住任何帕鲁。\r\n可在「帕鲁球流水线工厂II」制作。",
+  "level": 51,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_PalSphere_Ultimate"
+ },
+ {
+  "id": "Battle_Armor_Grade_05_Plastic",
+  "name": "塑钢盔甲",
+  "description": "以塑钢制成的盔甲。\r\n在增强防御力的同时，实现了轻量化。\r\n可在「作业流水线工厂 II」制作。",
+  "level": 51,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_PlasticArmor"
+ },
+ {
+  "id": "Battle_Helm_Grade_06_Plastic",
+  "name": "塑钢头盔",
+  "description": "以塑钢制成的头盔。\r\n在增强防御力的同时，实现了轻量化。\r\n可在「作业流水线工厂 II」制作。",
+  "level": 51,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_PlasticHelmet"
+ },
+ {
+  "id": "Battle_RangeWeapon_LaserRifle",
+  "name": "激光步枪",
+  "description": "能够发射激光的武器。\r\n威力高又易于使用。\r\n可在「武器流水线工厂II」制作。",
+  "level": 51,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_LaserRifle"
+ },
+ {
+  "id": "LaserBullet",
+  "name": "能量盒",
+  "description": "用于激光步枪等武器的弹药。",
+  "level": 51,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_LaserBullet"
+ },
+ {
+  "id": "CoolerPalFoodBox",
+  "name": "低温保鲜饲料箱",
+  "description": "可以冷冻的饲料箱。\r\n将冰系帕鲁指派到这里工作时，\r\n可以使里面的食物不会轻易腐败。",
+  "level": 51,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_CoolerPalFoodBox"
+ },
+ {
+  "id": "SkillUnlock_RaijinDaughter_Water",
+  "name": "天阴童子的项圈",
+  "description": "天阴童子的项圈。\r\n持有此道具时，队伍中的天阴童子会\r\n一直待在场上，并配合玩家的攻击发动额外攻击。",
+  "level": 51,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_RaijinDaughter_Water_icon_normal"
+ },
+ {
+  "id": "Unlock_Picking_Tier3",
+  "name": "专家开锁工具",
+  "description": "持有此道具时，能够通过撬锁打开\r\n需要金钥匙才能打开的宝箱。\r\n即使多次使用也不会坏。",
+  "level": 52,
+  "points": 3,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_Unlock_Picking_Tier3"
+ },
+ {
+  "id": "Battle_Glider_Grade_04",
+  "name": "Glider_Tera",
+  "description": "展开后可在空中滑翔的滑翔伞。\r\n性能得到进一步提升，速度和升力都提高了。\r\n可在「作业流水线工厂 II」制作。",
+  "level": 52,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Glider_Glider_Legendary"
+ },
+ {
+  "id": "Battle_RangeWeapon_FlameThrower",
+  "name": "FlameThrower",
+  "description": "",
+  "level": 52,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "FlamethrowerBullet",
+  "name": "火焰喷射器燃料",
+  "description": "用于Flamethrower等武器的燃料。",
+  "level": 52,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_FlamethrowerBullet"
+ },
+ {
+  "id": "FishingBait_3_A",
+  "name": "魅惑钓饵",
+  "description": "用来吸引帕鲁上钩的钓饵。\r\n经过改良，能使小游戏的判定条变大，\r\n垂钓时能获得更多道具。",
+  "level": 52,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Consume_FishingBait_3_A"
+ },
+ {
+  "id": "IceCrusher",
+  "name": "冷冻粉碎机",
+  "description": "可粉碎金属矿石以转换成其他材料的设施。\r\n虽然要使其工作需要电力供应，以及有「冷却」适应性的帕鲁，但是效率极佳。",
+  "level": 52,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_IceCrusher"
+ },
+ {
+  "id": "SkillUnlock_HadesBird_Electric",
+  "name": "雷鸣鸟的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘雷鸣鸟。",
+  "level": 52,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_HadesBird_Electric_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_FengyunDeeper_Electric",
+  "name": "雷隐鹿的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘雷隐鹿。",
+  "level": 52,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Essential_SkillUnlock_Saddle"
+ },
+ {
+  "id": "AdditionalInventory_003",
+  "name": "大型扩展背包",
+  "description": "能夠额外携带物品的大背包。\r\n持有此道具时，可增加背包栏位。",
+  "level": 53,
+  "points": 3,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_AdditionalInventory_003"
+ },
+ {
+  "id": "FishingPond2",
+  "name": "大型垂钓池",
+  "description": "配备垂钓工具的大型垂钓池。\r\n水域更加广阔，能钓上更大型的帕鲁。\r\n需有可手工作业的帕鲁。",
+  "level": 55,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_FishingPond2"
+ },
+ {
+  "id": "Battle_Armor_Grade_05_Plastic_Heat",
+  "name": "耐热塑钢盔甲",
+  "description": "经过改良的「塑钢盔甲」。\r\n具备傲人的耐热性能。\r\n可在「作业流水线工厂 II」制作。",
+  "level": 53,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_PlasticArmorHeat"
+ },
+ {
+  "id": "Battle_RangeWeapon_GrenadeLauncher",
+  "name": "榴弹发射器",
+  "description": "能够发射造成大范围爆炸的榴弹。\r\n对付大群敌人时很有用。\r\n可在「武器流水线工厂II」制作。",
+  "level": 53,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_GrenadeLauncher"
+ },
+ {
+  "id": "GrenadeBullet",
+  "name": "榴弹",
+  "description": "用于榴弹发射器等武器的弹药。",
+  "level": 53,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_GrenadeBullet"
+ },
+ {
+  "id": "FragGrenade_Super",
+  "name": "破片手榴弹Mk2",
+  "description": "改良后的破片手榴弹。\r\n投掷数秒后引爆，给大范围的敌人造成伤害。",
+  "level": 53,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_FragGrenade_Super"
+ },
+ {
+  "id": "SkillUnlock_MoonQueen",
+  "name": "辉月伊的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘辉月伊。",
+  "level": 53,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_MoonQueen_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_BadCatgirl",
+  "name": "妮瞅莎的霰弹枪",
+  "description": "妮瞅莎专用的霰弹枪。\r\n发动伙伴技能后，妮瞅莎会进入射击模式，\r\n猛烈攻击周围的敌人。",
+  "level": 53,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_BadCatgirl_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_AmaterasuWolf_Dark",
+  "name": "幽焰狼的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘幽焰狼。",
+  "level": 53,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_AmaterasuWolf_Dark_icon_normal"
+ },
+ {
+  "id": "Battle_Armor_Grade_05_Plastic_Cold",
+  "name": "耐寒塑钢盔甲",
+  "description": "经过改良的「塑钢盔甲」。\r\n能够抵御使身体冻僵的寒意。\r\n可在「作业流水线工厂 II」制作。",
+  "level": 54,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_PlasticArmorCold"
+ },
+ {
+  "id": "Battle_RangeWeapon_GatlingGun",
+  "name": "加特林机枪",
+  "description": "可通过高速扫射实现压制战场的加特林机枪。\r\n压制射击能够将敌人射成蜂窝。\r\n可在「武器流水线工厂II」制作。",
+  "level": 54,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_GatlingGun"
+ },
+ {
+  "id": "GatlingBullet",
+  "name": "加特林子弹",
+  "description": "用于加特林机枪等武器的弹药。",
+  "level": 54,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_GatlingBullet"
+ },
+ {
+  "id": "DismantlingConveyor",
+  "name": "帕鲁解体传送带",
+  "description": "能够将放入的帕鲁自动解体的，梦幻般的设备。",
+  "level": 54,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_DismantlingConveyor"
+ },
+ {
+  "id": "Accessory_AirDash2",
+  "name": "空中二段冲刺靴",
+  "description": "装备后可使玩家获得空中二段冲刺能力的饰品。",
+  "level": 54,
+  "points": 3,
+  "is_boss": true,
+  "icon_asset": ""
+ },
+ {
+  "id": "SkillUnlock_GoldenHorse",
+  "name": "金驰兽的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘金驰兽。",
+  "level": 54,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_GoldenHorse_icon_normal"
+ },
+ {
+  "id": "Shield_05",
+  "name": "Shield_Ultra",
+  "description": "以帕鲁矿技术制成的神奇护盾。\r\n在进一步多次实验后，结果实现了究极的品质。\r\n可在「作业流水线工厂 II」制作。",
+  "level": 55,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_Shield_05"
+ },
+ {
+  "id": "Battle_Armor_Grade_05_Plastic_Weight",
+  "name": "轻便塑钢盔甲",
+  "description": "经过改良的「塑钢盔甲」。\r\n能增加玩家的负重上限。\r\n可在「作业流水线工厂 II」制作。",
+  "level": 55,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_PlasticArmorWeight"
+ },
+ {
+  "id": "Battle_RangeWeapon_GuidedMissileLauncher",
+  "name": "追踪导弹发射器",
+  "description": "能够发射自动追踪敌人的导弹。\r\n导弹在命中后将爆炸，造成大范围伤害。\r\n可在「武器流水线工厂II」制作。",
+  "level": 55,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_GuidedMissileLauncher"
+ },
+ {
+  "id": "MissileBullet",
+  "name": "导弹",
+  "description": "用于追踪导弹发射器等武器的弹药。",
+  "level": 55,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_MissileBullet"
+ },
+ {
+  "id": "SkillUnlock_KingBahamut_Dragon",
+  "name": "殁殃的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘殁殃。",
+  "level": 55,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_KingBahamut_Dragon_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_Horus_Water",
+  "name": "伊西斯的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘伊西斯。",
+  "level": 55,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_Horus_Water_icon_normal"
+ },
+ {
+  "id": "Battle_RangeWeapon_HomingSphereLauncher",
+  "name": "自动追踪帕鲁球发射器",
+  "description": "用于发射帕鲁球的发射器。\r\n用它射出的帕鲁球会追踪帕鲁。\r\n可在「武器流水线工厂II」制作。",
+  "level": 55,
+  "points": 5,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Weapon_HomingSphereLauncher"
+ },
+ {
+  "id": "PalSphere_Exotic",
+  "name": "超限帕鲁球",
+  "description": "可扔出并捕捉帕鲁的道具。\r\n拥有超凡绝伦的性能，连超规格的帕鲁也能捕获。",
+  "level": 56,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_PalSphere_Exotic"
+ },
+ {
+  "id": "SphereFactory_Black_04",
+  "name": "高等文明帕鲁球工厂",
+  "description": "捕捉帕鲁用的帕鲁球的工厂。\r\n引入了高性能机器，可以快速制作帕鲁球。\r\n需有能进行手工作业的帕鲁。",
+  "level": 56,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_SphereFactory_Black_04"
+ },
+ {
+  "id": "StainlessSteel",
+  "name": "六棱晶锭",
+  "description": "由铬铁矿和金属矿石、\r\n六棱晶矿加工制成的合金。\r\n用于制作先进装备或建筑的材料。",
+  "level": 56,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Material_StainlessSteel"
+ },
+ {
+  "id": "BlastFurnace4",
+  "name": "巨大熔炉",
+  "description": "可用来冶炼六棱晶锭。\r\n扩大了建筑面积让复数帕鲁可以同时进行冶炼。\r\n需要火系帕鲁点火。",
+  "level": 56,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_BlastFurnace4"
+ },
+ {
+  "id": "MetalDetector",
+  "name": "金属探测器",
+  "description": "拿在手上即可探测附近隐藏的矿石。\r\n靠近矿石时，即会标记金属位置。\r\n一旦远离标记就会消失。",
+  "level": 56,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Essential_MetalDetector"
+ },
+ {
+  "id": "SkillUnlock_BlueThunderHorse",
+  "name": "驭雷马的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘驭雷马。",
+  "level": 56,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_BlueThunderHorse_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_BlackPuppy",
+  "name": "墨丸的背带",
+  "description": "墨丸的背带。\r\n发动伙伴技能后，它会探测附近的铬铁矿位置。",
+  "level": 56,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_BlackPuppy_icon_normal"
+ },
+ {
+  "id": "OctaviaSet02",
+  "name": "ULTRAKILL 联动套组2",
+  "description": "【ULTRAKILL 联动】\r\nV2盔甲与核心喷射霰弹枪的套组。",
+  "level": 56,
+  "points": 5,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Armor_Octavia002_Armor"
+ },
+ {
+  "id": "SFBow",
+  "name": "卓越弓",
+  "description": "以超高科技重新打造的弓。\r\n能够射出威力极强的箭矢。",
+  "level": 57,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_SFBow"
+ },
+ {
+  "id": "SFArrow",
+  "name": "卓越箭矢",
+  "description": "卓越弓专用的六棱晶素材箭矢。",
+  "level": 57,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_SFArrow"
+ },
+ {
+  "id": "SFArmor",
+  "name": "六棱晶盔甲",
+  "description": "以六棱晶制成的盔甲。\r\n具有压倒性的耐久度和防御力。",
+  "level": 57,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_SFArmor"
+ },
+ {
+  "id": "BeamSword",
+  "name": "光剑",
+  "description": "近战用的光剑。\r\n高能激光可瞬间融断敌人。",
+  "level": 57,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_BeamSword"
+ },
+ {
+  "id": "SphereModule_Homing",
+  "name": "追踪模块",
+  "description": "装备后帕鲁球会自动追踪帕鲁，\r\n并且提高捕获力。",
+  "level": 57,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_SphereModule_Homing"
+ },
+ {
+  "id": "MedicalPalBed_05",
+  "name": "高等文明帕鲁胶囊",
+  "description": "帕鲁用的回复胶囊。\r\n帕鲁在晚上或受伤时可以睡在这里。\r\n因为技术革新，恢复量提高了。",
+  "level": 57,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_MedicalPalBed_05"
+ },
+ {
+  "id": "SkillUnlock_NightBlueHorse",
+  "name": "夜冥驹的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘夜冥驹。",
+  "level": 57,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_NightBlueHorse_icon_normal"
+ },
+ {
+  "id": "AdditionalInventory_004",
+  "name": "巨大扩展背包",
+  "description": "能夠额外携带物品的巨大背包。\r\n持有此道具时，可增加背包栏位。",
+  "level": 57,
+  "points": 4,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Essential_AdditionalInventory_004"
+ },
+ {
+  "id": "ItemChest_04",
+  "name": "高等文明箱子",
+  "description": "可用于收纳道具。\r\n非常坚固，存放空间也很大。\r\n可以当作巨大且安全的仓库使用。",
+  "level": 58,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_ItemChest_04"
+ },
+ {
+  "id": "LaserGatlingGun",
+  "name": "激光加特林",
+  "description": "能够高速连射激光束。\r\n猛烈的火力能瞬间压制复数敌人。",
+  "level": 58,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_LaserGatlingGun"
+ },
+ {
+  "id": "LaserGatlingBullet",
+  "name": "加特林激光能量盒",
+  "description": "用于激光加特林等武器的弹药。",
+  "level": 58,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_LaserGatlingBullet"
+ },
+ {
+  "id": "SFHelmet",
+  "name": "六棱晶头盔",
+  "description": "以六棱晶制成的头盔。\r\n具有难以置信的强度和轻便性。",
+  "level": 58,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_SFHelmet"
+ },
+ {
+  "id": "SkillUnlock_WhiteShieldDragon",
+  "name": "艾基鲁迦的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘艾基鲁迦。",
+  "level": 58,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_WhiteShieldDragon_icon_normal"
+ },
+ {
+  "id": "SkillUnlock_WhiteDeer",
+  "name": "净世鹿的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘净世鹿。",
+  "level": 58,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_WhiteDeer_icon_normal"
+ },
+ {
+  "id": "Accessory_JumpCount_Increase2",
+  "name": "三段跳靴",
+  "description": "装备后可使玩家获得三段跳跃能力的饰品。",
+  "level": 58,
+  "points": 3,
+  "is_boss": true,
+  "icon_asset": ""
+ },
+ {
+  "id": "Potion_Extreme",
+  "name": "至高恢复药",
+  "description": "需要时间才能治疗身体伤口的药水。\r\n品质卓越，能够显著地恢复生命值。",
+  "level": 59,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Food_Potion_Extreme"
+ },
+ {
+  "id": "PalRevive",
+  "name": "复活药",
+  "description": "使受伤而无法动弹的帕鲁复活的药品。",
+  "level": 59,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Consume_PalRevive"
+ },
+ {
+  "id": "MedicineFacility_03",
+  "name": "高等文明制药台",
+  "description": "用于制作帕鲁治疗药的设备。\r\n透过未来技术，可制作未知的药物。\r\n交给可制药的帕鲁来操作吧。",
+  "level": 59,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_MedicineFacility_03"
+ },
+ {
+  "id": "SFArmorHeat",
+  "name": "耐热六棱晶盔甲",
+  "description": "经过改良的六棱晶盔甲。\r\n具备傲人的耐热性能。",
+  "level": 59,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_SFArmorHeat"
+ },
+ {
+  "id": "SFArmorCold",
+  "name": "耐寒六棱晶盔甲",
+  "description": "经过改良的六棱晶盔甲。\r\n能够抵御使身体冻僵的寒意。",
+  "level": 59,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_SFArmorCold"
+ },
+ {
+  "id": "SkillUnlock_SnowTigerBeastman",
+  "name": "霜牙王的巨锤",
+  "description": "持有此道具时，\r\n即可骑乘霜牙王。",
+  "level": 59,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_SnowTigerBeastman_icon_normal"
+ },
+ {
+  "id": "EnergyRocketLauncher",
+  "name": "等离子炮",
+  "description": "能够发射能量弹。\r\n着弹后会引发能量爆炸。",
+  "level": 60,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_EnergyRocketLauncher"
+ },
+ {
+  "id": "EnergyLauncherBullet",
+  "name": "电浆能量盒",
+  "description": "用于等离子炮等武器的弹药。",
+  "level": 60,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_EnergyLauncherBullet"
+ },
+ {
+  "id": "Shield_SF",
+  "name": "卓越护盾",
+  "description": "以超高科技打造的神奇护盾。\r\n一定时间不受攻击时可自动修复。\r\n品质达到完美无缺的境界。",
+  "level": 60,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": ""
+ },
+ {
+  "id": "SFArmorWeight",
+  "name": "轻便六棱晶盔甲",
+  "description": "经过改良的六棱晶盔甲。\r\n能增加玩家的负重上限。",
+  "level": 60,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Armor_SFArmorWeight"
+ },
+ {
+  "id": "SkillUnlock_DarkMechaDragon",
+  "name": "杰诺多兰的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘杰诺多兰。",
+  "level": 60,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_DarkMechaDragon_icon_normal"
+ },
+ {
+  "id": "MultiElectricHatchingPalEgg",
+  "name": "大型电能帕鲁蛋孵化器",
+  "description": "用于孵化帕鲁蛋的装置。\r\n需要电力供应才能运作，\r\n但可自动保持内部在最佳温度，并同时孵化多个蛋。",
+  "level": 60,
+  "points": 5,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_MultiElectricHatchingPalEgg"
+ },
+ {
+  "id": "Salvage_TreasureBoxKey02",
+  "name": "强力渔用磁铁",
+  "description": "进行精密打捞时所需的强力磁铁。\r\n可利用强大的磁力将沉在海底的资源和物资吸附上来。",
+  "level": 61,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Salvage_TreasureBoxKey02"
+ },
+ {
+  "id": "ManganeseIngot",
+  "name": "珊瑚锭",
+  "description": "由珊瑚矿石和金属矿石、\r\n石炭加工制成的合金。\r\n具备很高的能量耐受性，用于制作武器等物品的材料。",
+  "level": 61,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Material_ManganeseIngot"
+ },
+ {
+  "id": "Factory_Hard_04",
+  "name": "高等文明作业工厂",
+  "description": "用于制作物品及护甲的工厂。\r\n引入了高性能机器，可以快速制作。\r\n需有能进行手工作业的帕鲁。",
+  "level": 61,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Factory_Hard_04"
+ },
+ {
+  "id": "SF_houseset",
+  "name": "未来风建筑套组",
+  "description": "解锁此套组即可用未来风建筑建造据点。\r\n可以建造的有地基、墙壁、屋顶和楼梯等\r\n建造房屋时所需的构造。",
+  "level": 61,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_SF_foundation"
+ },
+ {
+  "id": "SkillUnlock_GhostAnglerfish_Fire",
+  "name": "炙灯鱼的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘炙灯鱼。",
+  "level": 61,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_GhostAnglerfish_Fire_icon_normal"
+ },
+ {
+  "id": "CrystalPit",
+  "name": "六棱晶矿采矿场",
+  "description": "生产六棱晶矿的设施。\r\n挖掘六棱晶矿的工作需要大量体力，相当严苛。\r\n把这些工作交给擅长挖掘的帕鲁吧。",
+  "level": 61,
+  "points": 5,
+  "is_boss": true,
+  "icon_asset": "T_icon_buildObject_CrystalPit"
+ },
+ {
+  "id": "EnergyShotgun",
+  "name": "能量霰弹枪",
+  "description": "可以发射能量弹的霰弹枪。\r\n拥有优秀的连射性能，近距离火力异常强劲。",
+  "level": 62,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_EnergyShotgun"
+ },
+ {
+  "id": "EnergyShotgunBullet",
+  "name": "能量霰弹枪子弹",
+  "description": "用于能量霰弹枪等武器的弹药。",
+  "level": 62,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_EnergyShotgunBullet"
+ },
+ {
+  "id": "WeaponFactory_Dirty_04",
+  "name": "高等文明武器工厂",
+  "description": "用于生产武器及弹药的工厂。\r\n引入了高性能机器，可以快速制作武器。\r\n需有能进行手工作业的帕鲁。",
+  "level": 62,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_WeaponFactory_Dirty_04"
+ },
+ {
+  "id": "Spa3",
+  "name": "和风温泉",
+  "description": "供疲惫的据点帕鲁休息的设施。\r\n洋溢着浓浓和风的疗愈空间，所以SAN值的恢复效果也更加显著。",
+  "level": 62,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Spa3"
+ },
+ {
+  "id": "SkillUnlock_IceNarwhal_Fire",
+  "name": "桃晶鲸的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘桃晶鲸。",
+  "level": 62,
+  "points": 4,
+  "is_boss": false,
+  "icon_asset": "T_IceNarwhal_Fire_icon_normal"
+ },
+ {
+  "id": "Accessory_AirDash3",
+  "name": "空中三段冲刺靴",
+  "description": "装备后可使玩家获得空中三段冲刺能力的饰品。",
+  "level": 62,
+  "points": 4,
+  "is_boss": true,
+  "icon_asset": ""
+ },
+ {
+  "id": "PalDopingShot_2",
+  "name": "高级强化枪",
+  "description": "向伙伴帕鲁射击可强化该帕鲁的攻击力与防御力，\r\n向敌人射击则会造成伤害。经过改良后，\r\n强化效果、持续时间及对敌伤害均有所提升。",
+  "level": 63,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_PalDopingShot_2"
+ },
+ {
+  "id": "HunterFlagSet",
+  "name": "盗猎团旗帜套组",
+  "description": "盗猎团团旗与\r\n盗猎团挂旗的套组。\r\n是击败盗猎团的证明。",
+  "level": 63,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Hunter_Flag"
+ },
+ {
+  "id": "BelieverFlagSet",
+  "name": "帕鲁保护团体旗帜套组",
+  "description": "帕鲁保护团体团旗与\r\n帕鲁保护团体挂旗的套组。\r\n是击败帕鲁保护团体的证明。",
+  "level": 63,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Believer_Flag"
+ },
+ {
+  "id": "SkillUnlock_PoseidonOrca",
+  "name": "海皇鲸的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘海皇鲸。",
+  "level": 63,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_PoseidonOrca_icon_normal"
+ },
+ {
+  "id": "GrapplingGun5",
+  "name": "GrapplingGun5",
+  "description": "",
+  "level": 63,
+  "points": 5,
+  "is_boss": true,
+  "icon_asset": "T_itemicon_Weapon_GrapplingGun"
+ },
+ {
+  "id": "OverheatRifle",
+  "name": "过热步枪",
+  "description": "无需重复装弹即可实现连续射击的突击步枪。\r\n但长时间连射容易引发过热，\r\n导致出现巨大破绽，请务必注意。",
+  "level": 64,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_OverheatRifle"
+ },
+ {
+  "id": "OverheatRifleBullet",
+  "name": "过热步枪子弹",
+  "description": "用于过热步枪等武器的弹药。",
+  "level": 64,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_OverheatRifleBullet"
+ },
+ {
+  "id": "FireCultFlagSet",
+  "name": "永炎同心会旗帜套组",
+  "description": "永炎同心会会旗与\r\n永炎同心会挂旗的套组。\r\n是击败永炎同心会的证明。",
+  "level": 64,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_FireCult_Flag"
+ },
+ {
+  "id": "PoliceFlagSet",
+  "name": "自卫队旗帜套组",
+  "description": "自卫队队旗与\r\n自卫队挂旗的套组。\r\n是击败自卫队的证明。",
+  "level": 64,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Police_Flag"
+ },
+ {
+  "id": "ChargeLaserRifle",
+  "name": "充能步枪",
+  "description": "采用高端技术研制的充能型光束步枪。\r\n蓄能后可发射威力巨大的一击。",
+  "level": 65,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Weapon_ChargeLaserRifle"
+ },
+ {
+  "id": "ChargeLaserRifleBullet",
+  "name": "充能步枪子弹",
+  "description": "用于充能步枪等武器的弹药。",
+  "level": 65,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_itemicon_Ammo_ChargeLaserRifleBullet"
+ },
+ {
+  "id": "ScientistFlagSet",
+  "name": "基因研究部队旗帜套组",
+  "description": "基因研究部队队旗与\r\n基因研究部队挂旗的套组。\r\n是击败基因研究部队的证明。",
+  "level": 65,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Scientist_Flag"
+ },
+ {
+  "id": "NinjaFlagSet",
+  "name": "月花众旗帜套组",
+  "description": "月花众团旗与\r\n月花众挂旗的套组。\r\n是击败月花众的证明。",
+  "level": 65,
+  "points": 3,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Ninja_Flag"
+ },
+ {
+  "id": "SkillUnlock_LegendDeer",
+  "name": "默世鹿的鞍具",
+  "description": "持有此道具时，\r\n即可骑乘默世鹿并生成护盾，抵御攻击。",
+  "level": 65,
+  "points": 5,
+  "is_boss": false,
+  "icon_asset": "T_LegendDeer_icon_normal"
+ },
+ {
+  "id": "FurnitureSet_1",
+  "name": "木制客厅家具套装",
+  "description": "装饰用的家具套组。\r\n放在客厅，尽情享受和帕鲁一起的快乐生活吧。",
+  "level": 5,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_TableSquare_Wood"
+ },
+ {
+  "id": "FurnitureSet_3",
+  "name": "木制酒吧家具套装",
+  "description": "装饰用的家具套组。\r\n可以打造酒吧风格，尽情享受和帕鲁一起的快乐生活吧。",
+  "level": 5,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Counter_Wood"
+ },
+ {
+  "id": "FurnitureSet_2",
+  "name": "木制酒吧收纳家具套装",
+  "description": "酒吧常见的木制收纳家具套组。\r\n可用于收纳道具。",
+  "level": 6,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Barrel_Wood"
+ },
+ {
+  "id": "FurnitureSet_9",
+  "name": "观叶植物套装",
+  "description": "装饰用的家具套组。\r\n放置一些植被，为据点增添一些色彩吧。",
+  "level": 6,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Plant01_Plant"
+ },
+ {
+  "id": "FurnitureSet_4",
+  "name": "挂墙观叶植物套装",
+  "description": "装饰用的家具套组。\r\n在墙上挂上一些植被，为据点增添一些色彩吧。",
+  "level": 7,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Ivy01"
+ },
+ {
+  "id": "FurnitureSet_21",
+  "name": "古典收纳套装",
+  "description": "古典式收纳用家具套组。\r\n可以用来收纳道具。",
+  "level": 8,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Shelf01_Stone"
+ },
+ {
+  "id": "FurnitureSet_28",
+  "name": "壁炉套装",
+  "description": "可以当作光源的砖制暖炉套组。\r\n需要点上火才可以使用。",
+  "level": 8,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Light_FirePlace01"
+ },
+ {
+  "id": "FurnitureSet_17",
+  "name": "地毯套装",
+  "description": "装饰用的家具套组。\r\n把它放在据点的地基上，增添一丝生活感吧。",
+  "level": 9,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Rug01_Stone"
+ },
+ {
+  "id": "FurnitureSet_19",
+  "name": "古典椅子套装",
+  "description": "装饰用的家具套组。\r\n搭配古典式书桌一起使用吧。",
+  "level": 12,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Chair01_Stone"
+ },
+ {
+  "id": "FurnitureSet_22",
+  "name": "古典收纳柜套装",
+  "description": "古典式收纳用橱柜套组。\r\n可以用来收纳道具。",
+  "level": 13,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Shelf05_Stone"
+ },
+ {
+  "id": "FurnitureSet_24",
+  "name": "古典书桌套装",
+  "description": "装饰用的家具套组。\r\n搭配古典式椅子一起使用吧。",
+  "level": 14,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Desk01_Stone"
+ },
+ {
+  "id": "FurnitureSet_20",
+  "name": "古典浴室套装",
+  "description": "装饰用的家具套组。\r\n可以打造出充满古典风格的浴室。",
+  "level": 16,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_BathTub_Stone"
+ },
+ {
+  "id": "FurnitureSet_16",
+  "name": "古典镜子套装",
+  "description": "装饰用的家具套组。\r\n时刻检查一下自己的仪表吧。",
+  "level": 16,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Mirror01_Stone"
+ },
+ {
+  "id": "FurnitureSet_15",
+  "name": "钢琴家具套装",
+  "description": "装饰用的家具套组。\r\n把它放在据点里，打造出丰富多彩的生活吧。",
+  "level": 17,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Piano01_Stone"
+ },
+ {
+  "id": "FurnitureSet_30",
+  "name": "金属书架套装",
+  "description": "金属架子套组。\r\n可以用来收纳道具。",
+  "level": 18,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Shelf01_Iron"
+ },
+ {
+  "id": "FurnitureSet_25",
+  "name": "厕所套装",
+  "description": "装饰用的家具套组。\r\n无法在这里如厕。",
+  "level": 18,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Toilet01_Stone"
+ },
+ {
+  "id": "FurnitureSet_32",
+  "name": "古典高级家具套装",
+  "description": "装饰用的家具套组。\r\n充满高级感的家具套组。",
+  "level": 19,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Curtain01_Wall_Stone"
+ },
+ {
+  "id": "FurnitureSet_18",
+  "name": "古典沙发套装",
+  "description": "装饰用的家具套组。\r\n可以让据点看起来高级感十足。",
+  "level": 20,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Sofa01_Stone"
+ },
+ {
+  "id": "FurnitureSet_23",
+  "name": "时钟套装",
+  "description": "装饰用的家具套组。\r\n无法用来确认时间。",
+  "level": 33,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Clock01_Wall_Iron"
+ },
+ {
+  "id": "FurnitureSet_6",
+  "name": "集装箱套組",
+  "description": "集装箱套组。\r\n可以用来收纳道具。",
+  "level": 34,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Container01_Iron"
+ },
+ {
+  "id": "FurnitureSet_13",
+  "name": "金属桌椅套装",
+  "description": "装饰用的家具套组。\r\n用它来搭配金属建筑，尽情享受和帕鲁一起的快乐生活吧。",
+  "level": 35,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Stool01_Iron"
+ },
+ {
+  "id": "FurnitureSet_29",
+  "name": "古典灯具套装",
+  "description": "可以当作光源的古典式灯具套组。\r\n需要通电才可以使用。",
+  "level": 36,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Light_FloorLamp01"
+ },
+ {
+  "id": "FurnitureSet_14",
+  "name": "铁木桌椅套装",
+  "description": "装饰用的家具套组。\r\n用它来搭配金属建筑，尽情享受和帕鲁一起的快乐生活吧。",
+  "level": 37,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_TableSide01_Iron"
+ },
+ {
+  "id": "FurnitureSet_31",
+  "name": "户外家具套装",
+  "description": "装饰用的家具套组。\r\n专为户外打造的家具套组。",
+  "level": 38,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_CableCoil01_Iron"
+ },
+ {
+  "id": "FurnitureSet_5",
+  "name": "铁桶套装",
+  "description": "装饰用的家具套组。\r\n铁桶可不能用来泡澡。",
+  "level": 39,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Barrel01_Iron"
+ },
+ {
+  "id": "FurnitureSet_7",
+  "name": "皮质椅子套装",
+  "description": "装饰用的家具套组。\r\n皮革制的家具很有高级感。",
+  "level": 40,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Sofa01_Iron"
+ },
+ {
+  "id": "FurnitureSet_27",
+  "name": "街灯套装",
+  "description": "可以当作光源的路灯套组。\r\n需要通电才可以使用。",
+  "level": 41,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Light_LightPole01"
+ },
+ {
+  "id": "FurnitureSet_26",
+  "name": "娱乐家具套装",
+  "description": "装饰用的家具套组。\r\n别担心，帕鲁们会继续工作的。",
+  "level": 42,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_GoalSoccer_Iron"
+ },
+ {
+  "id": "FurnitureSet_8",
+  "name": "紧急出口标志套装",
+  "description": "装饰用的家具套组。\r\n据说在文明时代曾被视为珍宝。",
+  "level": 42,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_SignExit_Ceiling_Iron"
+ },
+ {
+  "id": "FurnitureSet_11",
+  "name": "交通标志套装",
+  "description": "装饰用的家具套组。\r\n因为没有道路，无法发挥管理交通的效果。",
+  "level": 45,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_TrafficCone01_Iron"
+ },
+ {
+  "id": "FurnitureSet_12",
+  "name": "道路标志套装",
+  "description": "装饰用的家具套组。\r\n因为没有道路，无法发挥管理交通的效果。",
+  "level": 46,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_TrafficSign01_Iron"
+ },
+ {
+  "id": "FurnitureSet_10",
+  "name": "路障套装",
+  "description": "装饰用的家具套组。\r\n放在你想限制通行的地方吧。",
+  "level": 48,
+  "points": 1,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_TrafficBarricade01_Iron"
+ },
+ {
+  "id": "FurnitureSet_Japanese",
+  "name": "和风家具套组",
+  "description": "装饰用的家具套组。\r\n用它打造日式风格的据点吧。",
+  "level": 54,
+  "points": 2,
+  "is_boss": false,
+  "icon_asset": "T_icon_buildObject_Byobu"
+ }
+]

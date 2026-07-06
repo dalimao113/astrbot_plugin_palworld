@@ -1,0 +1,223 @@
+{
+  "api_base": {
+    "type": "string",
+    "default": "http://palworld-server:8212",
+    "description": "帕鲁 REST API 地址",
+    "hint": "走 Docker 内部网络用容器名访问，例如 http://palworld-server:8212。8212 仅内网调用，切勿暴露公网。"
+  },
+  "admin_password": {
+    "type": "string",
+    "default": "",
+    "description": "服务器 ADMIN_PASSWORD",
+    "hint": "REST API 的 HTTP Basic Auth 密码，用户名固定 admin。对应帕鲁容器的 ADMIN_PASSWORD 环境变量。",
+    "obvious_hint": true
+  },
+  "admin_qq": {
+    "type": "list",
+    "default": [],
+    "description": "管理员 QQ 号白名单",
+    "hint": "只有列表内的 QQ 号能执行 公告/踢/封/解封/存档/关服。例如：['10001', '10002']"
+  },
+  "query_cooldown": {
+    "type": "int",
+    "default": 10,
+    "description": "查询指令冷却(秒)",
+    "hint": "同一群两次查询(状态/在线/设置)的最小间隔。硬下限 5 秒，低于无效。"
+  },
+  "confirm_timeout": {
+    "type": "int",
+    "default": 60,
+    "description": "危险操作二次确认超时(秒)",
+    "hint": "封禁/关服 发起后，管理员需在此时间内回复「帕鲁 确认」执行，超时作废。"
+  },
+  "card_theme_color": {
+    "type": "string",
+    "default": "#6366F1",
+    "description": "卡片主题色(十六进制)",
+    "hint": "用于卡片头部蒙版/数字/徽章/进度条等强调色。默认靛蓝紫 #6366F1。"
+  },
+  "request_timeout": {
+    "type": "int",
+    "default": 5,
+    "description": "API 请求超时(秒)",
+    "hint": "调用帕鲁 REST API 的总超时，超时视为服务器离线。"
+  },
+  "enable_broadcast": {
+    "type": "bool",
+    "default": true,
+    "description": "启用后台主动播报(总开关)",
+    "hint": "开启后插件会定时轮询服务器，自动播报玩家上下线、服务器掉线/恢复。关闭则只保留指令查询。"
+  },
+  "poll_interval": {
+    "type": "int",
+    "default": 60,
+    "description": "后台轮询间隔(秒)",
+    "hint": "越小上下线播报越及时但请求越频繁。硬下限 20 秒，建议 30~120。"
+  },
+  "broadcast_groups": {
+    "type": "list",
+    "default": [],
+    "description": "指定播报群号(留空=自动登记)",
+    "hint": "留空时，任何用过帕鲁指令的群会自动成为播报群。填了则只播报到这些群。例如：['123456789']"
+  },
+  "notify_player_join_left": {
+    "type": "bool",
+    "default": true,
+    "description": "播报玩家上下线",
+    "hint": "玩家上线/下线时在播报群发提示(下线附带本次在线时长)。"
+  },
+  "notify_server_down": {
+    "type": "bool",
+    "default": true,
+    "description": "播报服务器掉线/恢复",
+    "hint": "服务器从在线变为连不上时发掉线告警卡，恢复时发恢复卡。"
+  },
+  "offline_alert_threshold": {
+    "type": "int",
+    "default": 2,
+    "description": "掉线判定的连续失败次数",
+    "hint": "连续多少次轮询失败才判定掉线并告警，避免网络抖动误报。硬下限 1。"
+  },
+  "notify_record": {
+    "type": "bool",
+    "default": true,
+    "description": "播报在线人数破纪录",
+    "hint": "当前同时在线人数超过历史纪录时在播报群庆祝。"
+  },
+  "notify_milestone": {
+    "type": "bool",
+    "default": true,
+    "description": "播报世界天数里程碑",
+    "hint": "帕鲁世界游戏天数达到 7/30/100/365 等里程碑时播报。"
+  },
+  "quiet_hours": {
+    "type": "string",
+    "default": "",
+    "description": "夜间静默时段(HH-HH)",
+    "hint": "此时段内不发上下线/里程碑/破纪录/FPS/设置变更播报，避免凌晨刷屏。格式如 23-8(晚23点到次日8点)。留空=不启用。掉线告警不受影响。"
+  },
+  "fps_alert_threshold": {
+    "type": "int",
+    "default": 0,
+    "description": "FPS 偏低告警阈值",
+    "hint": "服务器 FPS 低于此值时播报一次(恢复后清除)。0=关闭。帕鲁满帧约 60，建议设 30~45。"
+  },
+  "notify_settings_change": {
+    "type": "bool",
+    "default": false,
+    "description": "播报服务器设置变更",
+    "hint": "每约 10 分钟检查一次主要倍率/PVP 等，有人改动时播报。默认关闭。"
+  },
+  "daily_reboot_time": {
+    "type": "string",
+    "default": "",
+    "description": "每日例行重启时间(HH:MM)",
+    "hint": "若帕鲁容器配了每日自动重启(镜像 AUTO_REBOOT_CRON)，在此填同一时间(如 05:00)。插件会提前 2 分钟发例行重启预告，并在重启前后静默掉线/FPS 误报。留空=关闭。"
+  },
+  "notify_server_update": {
+    "type": "bool",
+    "default": true,
+    "description": "检测服务端新版本并通知",
+    "hint": "后台定时查 Steam 是否有帕鲁服务端新版本，检测到就发游戏公告+QQ群通知(更新由镜像自带的每日自动更新执行，本项只负责提前通知)。"
+  },
+  "update_check_hours": {
+    "type": "int",
+    "default": 6,
+    "description": "版本检测间隔(小时)",
+    "hint": "每隔多少小时查一次 Steam 新版本。默认 6 小时。"
+  },
+  "backup_keep_max": {
+    "type": "int",
+    "default": 0,
+    "description": "每日备份保留份数上限",
+    "hint": "镜像每天3点备份到 /palworld/backups/*.tar.gz。0=交给镜像自带的按天清理(DELETE_OLD_BACKUPS+OLD_BACKUP_DAYS)，插件不管。设>0则改用插件按份数清理(删最旧)。"
+  },
+  "engine_backup_keep": {
+    "type": "int",
+    "default": 30,
+    "description": "游戏引擎快照保留份数",
+    "hint": "帕鲁本体在 backup/world/ 下的高频内部快照(会失控涨满磁盘)。插件每小时清理只留最新此份数。0=不清理。默认30。"
+  },
+  "morning_report_time": {
+    "type": "string",
+    "default": "09:00",
+    "description": "早报推送时间(HH:MM)",
+    "hint": "每天定点向播报群推早报卡(服务器状态+今昨数据+肝帝榜)。留空=不发早报。"
+  },
+  "evening_report_time": {
+    "type": "string",
+    "default": "21:00",
+    "description": "晚报推送时间(HH:MM)",
+    "hint": "每天定点推晚报卡(今日战报)。留空=不发晚报。"
+  },
+  "weekly_settle_time": {
+    "type": "string",
+    "default": "10:00",
+    "description": "周肝帝结算时间(周一 HH:MM)",
+    "hint": "每周一定点结算上周肝帝榜并播报(@上周肝帝)，随后开启新一周计时。留空=不结算。"
+  },
+  "enable_shout": {
+    "type": "bool",
+    "default": true,
+    "description": "启用群→游戏喊话",
+    "hint": "群友 /帕鲁喊话 <内容> 把话广播到游戏内（带 [QQ-昵称] 前缀）。"
+  },
+  "shout_cooldown": {
+    "type": "int",
+    "default": 30,
+    "description": "喊话/喊人冷却(秒)",
+    "hint": "同一人喊话、同一目标被喊的最小间隔，防刷屏。硬下限 5 秒。"
+  },
+  "enable_host_stats": {
+    "type": "bool",
+    "default": true,
+    "description": "状态卡显示容器 CPU/内存",
+    "hint": "需把宿主机 docker.sock 只读挂载进 AstrBot 容器(docker-compose 加 - /var/run/docker.sock:/var/run/docker.sock:ro)。未挂载时自动不显示。"
+  },
+  "docker_container": {
+    "type": "string",
+    "default": "palworld-server",
+    "description": "帕鲁服容器名(找不到会自动探测)",
+    "hint": "读取该容器的 CPU/内存、拉存档、关服/重启等都用它。默认 palworld-server；若不存在，插件会自动探测镜像名含 palworld 的运行中容器。探测结果可用 /帕鲁自检 查看。"
+  },
+  "docker_sock": {
+    "type": "string",
+    "default": "/var/run/docker.sock",
+    "description": "docker socket 路径",
+    "hint": "一般不用改。容器内挂载点路径。"
+  },
+  "save_dir_in_container": {
+    "type": "string",
+    "default": "",
+    "description": "存档目录(帕鲁服容器内路径，留空自动探测)",
+    "hint": "/帕鲁背包·队伍 解析存档用。留空(推荐)时插件会自动在容器内 SaveGames/0/ 下找唯一的世界GUID目录，删档重开后也无需改。只有多世界并存或路径特殊时才手填完整路径(最后一段是32位世界GUID)。"
+  },
+  "save_cache_ttl": {
+    "type": "int",
+    "default": 120,
+    "description": "存档解析缓存秒数",
+    "hint": "/帕鲁我·背包·队伍 共用。每次拉档会先强制存盘，过于频繁影响服务器，建议≥60秒。"
+  },
+  "local_render": {
+    "type": "bool",
+    "default": false,
+    "description": "本地渲染出图(默认关，优先用稳定的 t2i)",
+    "hint": "默认关闭：出图走 AstrBot 内置 t2i 渲染服务，开箱即用、自带中文字体、稳定。仅当容器确实装了 Playwright+Chromium+中文字体、想要更快出图时才开为 true（会自动回退 t2i）。"
+  },
+  "prewarm_save": {
+    "type": "bool",
+    "default": true,
+    "description": "后台预热存档缓存",
+    "hint": "启动后及活跃期(有人在线/近期有人查过)在缓存到期前后台刷新存档，让 /帕鲁我·背包·队伍 首次发指令就命中缓存、秒出图。空服时不刷新，不会无谓强制存盘。"
+  },
+  "card_style": {
+    "type": "string",
+    "default": "fantasy",
+    "description": "卡片默认风格",
+    "options": [
+      "fantasy",
+      "pixel"
+    ],
+    "hint": "fantasy=二次元奇幻玻璃，pixel=像素羊皮纸复古。也可用 /帕鲁皮肤 指令实时切换。"
+  }
+}

@@ -1,0 +1,1400 @@
+[
+ {
+  "id": "Village_Shop",
+  "name": "村庄商人",
+  "currency": "金币",
+  "note": "小型聚落/村庄的商人",
+  "items": [
+   {
+    "name": "长耳发箍设计图1",
+    "item_id": "Blueprint_Head003",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "女巫帽设计图1",
+    "item_id": "Blueprint_Head004",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "农夫帽设计图1",
+    "item_id": "Blueprint_Head011",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "圆顶礼帽的设计图1",
+    "item_id": "Blueprint_Head012",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "炸蛋鸟帽设计图1",
+    "item_id": "Blueprint_Head013",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "叶泥泥帽设计图1",
+    "item_id": "Blueprint_Head015",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "企丸王帽设计图1",
+    "item_id": "Blueprint_Head016",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "姬小兔的发饰设计图1",
+    "item_id": "Blueprint_HeadEquip028",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "慈悲戒指",
+    "item_id": "Accessory_Nonkilling",
+    "price": 30000,
+    "stock": 0
+   },
+   {
+    "name": "帕鲁球",
+    "item_id": "PalSphere",
+    "price": 120,
+    "stock": 0
+   },
+   {
+    "name": "箭",
+    "item_id": "Arrow",
+    "price": 5,
+    "stock": 0
+   },
+   {
+    "name": "低品质药品",
+    "item_id": "Herbs",
+    "price": 240,
+    "stock": 0
+   },
+   {
+    "name": "药品",
+    "item_id": "Medicines",
+    "price": 800,
+    "stock": 0
+   },
+   {
+    "name": "高品质药品",
+    "item_id": "LuxuryMedicines",
+    "price": 3000,
+    "stock": 0
+   },
+   {
+    "name": "野莓种子",
+    "item_id": "BerrySeeds",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "小麦种子",
+    "item_id": "WheatSeeds",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "蛋",
+    "item_id": "Egg",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "牛奶",
+    "item_id": "Milk",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "红色野莓",
+    "item_id": "Berries",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "小麦",
+    "item_id": "Wheat",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "皮皮鸡的鸡肉",
+    "item_id": "Meat_ChickenPal",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "棉悠悠的羊肉",
+    "item_id": "Meat_SheepBall",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "羊毛",
+    "item_id": "Wool",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "皮革",
+    "item_id": "Leather",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "骨头",
+    "item_id": "Bone",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "角",
+    "item_id": "Horn",
+    "price": 300,
+    "stock": 0
+   },
+   {
+    "name": "发电器官",
+    "item_id": "ElectricOrgan",
+    "price": 200,
+    "stock": 0
+   },
+   {
+    "name": "毒腺",
+    "item_id": "Venom",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "喷火器官",
+    "item_id": "FireOrgan",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "红宝石",
+    "item_id": "Ruby",
+    "price": 5000,
+    "stock": -1
+   },
+   {
+    "name": "蓝宝石",
+    "item_id": "Sapphire",
+    "price": 10000,
+    "stock": -1
+   },
+   {
+    "name": "绿宝石",
+    "item_id": "Eemerald",
+    "price": 20000,
+    "stock": -1
+   },
+   {
+    "name": "钻石",
+    "item_id": "Diamond",
+    "price": 60000,
+    "stock": -1
+   },
+   {
+    "name": "贵重龙珠",
+    "item_id": "PalItem_ToSell_01",
+    "price": 10000,
+    "stock": -1
+   },
+   {
+    "name": "贵重羽毛",
+    "item_id": "PalItem_ToSell_02",
+    "price": 7500,
+    "stock": -1
+   },
+   {
+    "name": "贵重内脏",
+    "item_id": "PalItem_ToSell_03",
+    "price": 8500,
+    "stock": -1
+   },
+   {
+    "name": "贵重爪子",
+    "item_id": "PalItem_ToSell_04",
+    "price": 6500,
+    "stock": -1
+   },
+   {
+    "name": "贵重兽毛",
+    "item_id": "PalItem_ToSell_05",
+    "price": 5000,
+    "stock": -1
+   }
+  ]
+ },
+ {
+  "id": "Vagrant_Trader_1",
+  "name": "流浪商队",
+  "currency": "金币",
+  "note": "流动商队",
+  "items": [
+   {
+    "name": "帕鲁球",
+    "item_id": "PalSphere",
+    "price": 120,
+    "stock": 100
+   },
+   {
+    "name": "高级帕鲁球",
+    "item_id": "PalSphere_Mega",
+    "price": 920,
+    "stock": 20
+   },
+   {
+    "name": "优质帕鲁球",
+    "item_id": "PalSphere_Giga",
+    "price": 1520,
+    "stock": 10
+   }
+  ]
+ },
+ {
+  "id": "Desert_Shop",
+  "name": "沙漠商人",
+  "currency": "金币",
+  "note": "沙漠城镇(沙丘庇护所)的商人",
+  "items": [
+   {
+    "name": "费多拉帽设计图1",
+    "item_id": "Blueprint_Head005",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "大礼帽设计图1",
+    "item_id": "Blueprint_Head007",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "三角帽设计图1",
+    "item_id": "Blueprint_Head008",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "探险帽设计图1",
+    "item_id": "Blueprint_Head009",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "笑脸炸蛋鸟帽设计图1",
+    "item_id": "Blueprint_Head014",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "暗巫猫帽设计图1",
+    "item_id": "Blueprint_Head017",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "朋克蜥的兜帽设计图1",
+    "item_id": "Blueprint_HeadEquip025",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "慈悲戒指",
+    "item_id": "Accessory_Nonkilling",
+    "price": 30000,
+    "stock": 0
+   },
+   {
+    "name": "耐热毛皮盔甲",
+    "item_id": "FurArmorHeat",
+    "price": 3000,
+    "stock": 0
+   },
+   {
+    "name": "耐寒毛皮盔甲",
+    "item_id": "FurArmorCold",
+    "price": 3000,
+    "stock": 0
+   },
+   {
+    "name": "耐热内衣",
+    "item_id": "Accessory_HeatResist",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "防寒内衣",
+    "item_id": "Accessory_CoolResist",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "耐热防寒内衣",
+    "item_id": "Accessory_HeatColdResist",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "鸟枪",
+    "item_id": "Musket",
+    "price": 37600,
+    "stock": 0
+   },
+   {
+    "name": "劣质弹药",
+    "item_id": "RoughBullet",
+    "price": 120,
+    "stock": 0
+   },
+   {
+    "name": "手枪子弹",
+    "item_id": "HandgunBullet",
+    "price": 120,
+    "stock": 0
+   },
+   {
+    "name": "步枪子弹",
+    "item_id": "RifleBullet",
+    "price": 220,
+    "stock": 0
+   },
+   {
+    "name": "霰弹枪子弹",
+    "item_id": "ShotgunBullet",
+    "price": 220,
+    "stock": 0
+   },
+   {
+    "name": "突击步枪子弹",
+    "item_id": "AssaultRifleBullet",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "红宝石",
+    "item_id": "Ruby",
+    "price": 5000,
+    "stock": -1
+   },
+   {
+    "name": "蓝宝石",
+    "item_id": "Sapphire",
+    "price": 10000,
+    "stock": -1
+   },
+   {
+    "name": "绿宝石",
+    "item_id": "Eemerald",
+    "price": 20000,
+    "stock": -1
+   },
+   {
+    "name": "钻石",
+    "item_id": "Diamond",
+    "price": 60000,
+    "stock": -1
+   },
+   {
+    "name": "贵重龙珠",
+    "item_id": "PalItem_ToSell_01",
+    "price": 10000,
+    "stock": -1
+   },
+   {
+    "name": "贵重羽毛",
+    "item_id": "PalItem_ToSell_02",
+    "price": 7500,
+    "stock": -1
+   },
+   {
+    "name": "贵重内脏",
+    "item_id": "PalItem_ToSell_03",
+    "price": 8500,
+    "stock": -1
+   },
+   {
+    "name": "贵重爪子",
+    "item_id": "PalItem_ToSell_04",
+    "price": 6500,
+    "stock": -1
+   },
+   {
+    "name": "贵重兽毛",
+    "item_id": "PalItem_ToSell_05",
+    "price": 5000,
+    "stock": -1
+   }
+  ]
+ },
+ {
+  "id": "Volcano_Shop",
+  "name": "火山商人",
+  "currency": "金币",
+  "note": "火山地区城镇的商人",
+  "items": [
+   {
+    "name": "王冠设计图1",
+    "item_id": "Blueprint_Head001",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "金冠设计图1",
+    "item_id": "Blueprint_Head002",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "安全帽设计图1",
+    "item_id": "Blueprint_Head006",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "学士帽设计图1",
+    "item_id": "Blueprint_Head010",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "勾魂鱿帽子设计图1",
+    "item_id": "Blueprint_HeadEquip026",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "毛掸儿帽子设计图1",
+    "item_id": "Blueprint_HeadEquip031",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "雷鸣童子帽子设计图1",
+    "item_id": "Blueprint_HeadEquip032",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "慈悲戒指",
+    "item_id": "Accessory_Nonkilling",
+    "price": 30000,
+    "stock": 0
+   },
+   {
+    "name": "耐热毛皮盔甲",
+    "item_id": "FurArmorHeat",
+    "price": 3000,
+    "stock": 0
+   },
+   {
+    "name": "耐热内衣",
+    "item_id": "Accessory_HeatResist",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "炎属性抵抗戒指",
+    "item_id": "Accessory_FireResist",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "火箭十字弓",
+    "item_id": "BowGun_Fire",
+    "price": 25200,
+    "stock": 0
+   },
+   {
+    "name": "火箭",
+    "item_id": "Arrow_Fire",
+    "price": 15,
+    "stock": 0
+   },
+   {
+    "name": "劣质手枪",
+    "item_id": "MakeshiftHandgun",
+    "price": 16600,
+    "stock": 0
+   },
+   {
+    "name": "劣质弹药",
+    "item_id": "RoughBullet",
+    "price": 120,
+    "stock": 0
+   },
+   {
+    "name": "手枪子弹",
+    "item_id": "HandgunBullet",
+    "price": 120,
+    "stock": 0
+   },
+   {
+    "name": "步枪子弹",
+    "item_id": "RifleBullet",
+    "price": 220,
+    "stock": 0
+   },
+   {
+    "name": "霰弹枪子弹",
+    "item_id": "ShotgunBullet",
+    "price": 220,
+    "stock": 0
+   },
+   {
+    "name": "突击步枪子弹",
+    "item_id": "AssaultRifleBullet",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "红宝石",
+    "item_id": "Ruby",
+    "price": 5000,
+    "stock": -1
+   },
+   {
+    "name": "蓝宝石",
+    "item_id": "Sapphire",
+    "price": 10000,
+    "stock": -1
+   },
+   {
+    "name": "绿宝石",
+    "item_id": "Eemerald",
+    "price": 20000,
+    "stock": -1
+   },
+   {
+    "name": "钻石",
+    "item_id": "Diamond",
+    "price": 60000,
+    "stock": -1
+   },
+   {
+    "name": "贵重龙珠",
+    "item_id": "PalItem_ToSell_01",
+    "price": 10000,
+    "stock": -1
+   },
+   {
+    "name": "贵重羽毛",
+    "item_id": "PalItem_ToSell_02",
+    "price": 7500,
+    "stock": -1
+   },
+   {
+    "name": "贵重内脏",
+    "item_id": "PalItem_ToSell_03",
+    "price": 8500,
+    "stock": -1
+   },
+   {
+    "name": "贵重爪子",
+    "item_id": "PalItem_ToSell_04",
+    "price": 6500,
+    "stock": -1
+   },
+   {
+    "name": "贵重兽毛",
+    "item_id": "PalItem_ToSell_05",
+    "price": 5000,
+    "stock": -1
+   }
+  ]
+ },
+ {
+  "id": "Wander_Shop",
+  "name": "流浪商人",
+  "currency": "金币",
+  "note": "野外/营地随机出现的流浪杂货商人",
+  "items": [
+   {
+    "name": "帕鲁矿碎块",
+    "item_id": "Pal_crystal_S",
+    "price": 20,
+    "stock": 0
+   },
+   {
+    "name": "技能果实：自爆",
+    "item_id": "SkillCard_SelfDestruct",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "水之技能果实：酸雨",
+    "item_id": "SkillCard_AcidRain",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "雷之技能果实：锁定雷射",
+    "item_id": "SkillCard_LockonLaser",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "蛋",
+    "item_id": "Egg",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "牛奶",
+    "item_id": "Milk",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "红色野莓",
+    "item_id": "Berries",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "小麦",
+    "item_id": "Wheat",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "低品质药品",
+    "item_id": "Herbs",
+    "price": 240,
+    "stock": 0
+   },
+   {
+    "name": "药品",
+    "item_id": "Medicines",
+    "price": 800,
+    "stock": 0
+   },
+   {
+    "name": "高品质药品",
+    "item_id": "LuxuryMedicines",
+    "price": 3000,
+    "stock": 0
+   },
+   {
+    "name": "洗脑药",
+    "item_id": "MindControlDrug",
+    "price": 10000,
+    "stock": 0
+   },
+   {
+    "name": "羊毛",
+    "item_id": "Wool",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "皮革",
+    "item_id": "Leather",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "骨头",
+    "item_id": "Bone",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "角",
+    "item_id": "Horn",
+    "price": 300,
+    "stock": 0
+   },
+   {
+    "name": "帕鲁的体液",
+    "item_id": "PalFluid",
+    "price": 300,
+    "stock": 0
+   },
+   {
+    "name": "优质帕鲁油",
+    "item_id": "PalOil",
+    "price": 300,
+    "stock": 0
+   },
+   {
+    "name": "劣质弹药",
+    "item_id": "RoughBullet",
+    "price": 120,
+    "stock": 0
+   },
+   {
+    "name": "手枪子弹",
+    "item_id": "HandgunBullet",
+    "price": 120,
+    "stock": 0
+   },
+   {
+    "name": "步枪子弹",
+    "item_id": "RifleBullet",
+    "price": 220,
+    "stock": 0
+   },
+   {
+    "name": "霰弹枪子弹",
+    "item_id": "ShotgunBullet",
+    "price": 220,
+    "stock": 0
+   },
+   {
+    "name": "突击步枪子弹",
+    "item_id": "AssaultRifleBullet",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "红宝石",
+    "item_id": "Ruby",
+    "price": 5000,
+    "stock": -1
+   },
+   {
+    "name": "蓝宝石",
+    "item_id": "Sapphire",
+    "price": 10000,
+    "stock": -1
+   },
+   {
+    "name": "绿宝石",
+    "item_id": "Eemerald",
+    "price": 20000,
+    "stock": -1
+   },
+   {
+    "name": "钻石",
+    "item_id": "Diamond",
+    "price": 60000,
+    "stock": -1
+   },
+   {
+    "name": "贵重龙珠",
+    "item_id": "PalItem_ToSell_01",
+    "price": 10000,
+    "stock": -1
+   },
+   {
+    "name": "贵重羽毛",
+    "item_id": "PalItem_ToSell_02",
+    "price": 7500,
+    "stock": -1
+   },
+   {
+    "name": "贵重内脏",
+    "item_id": "PalItem_ToSell_03",
+    "price": 8500,
+    "stock": -1
+   },
+   {
+    "name": "贵重爪子",
+    "item_id": "PalItem_ToSell_04",
+    "price": 6500,
+    "stock": -1
+   },
+   {
+    "name": "贵重兽毛",
+    "item_id": "PalItem_ToSell_05",
+    "price": 5000,
+    "stock": -1
+   }
+  ]
+ },
+ {
+  "id": "Medal_Shop",
+  "name": "勋章商店",
+  "currency": "勋章",
+  "note": "用勋章兑换",
+  "items": [
+   {
+    "name": "不可思议的饰品箱",
+    "item_id": "UnlockEquipmentSlot_Accessory_01",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "神秘的饰品箱",
+    "item_id": "UnlockEquipmentSlot_Accessory_02",
+    "price": 1000,
+    "stock": 0
+   },
+   {
+    "name": "捣蛋猫帽子",
+    "item_id": "HeadEquip033",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "棉悠悠头套",
+    "item_id": "HeadEquip029",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "黑鸦隐士帽子",
+    "item_id": "HeadEquip027",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "趴趴鲶头套",
+    "item_id": "HeadEquip030",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "绸笠蛾帽",
+    "item_id": "HeadEquip024",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "百合女王的发饰",
+    "item_id": "HeadEquip023",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "搬运工戒指+1",
+    "item_id": "Accessory_MaxWeightUp_02",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "耐热防寒内衣",
+    "item_id": "Accessory_HeatColdResist",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "生命之果",
+    "item_id": "Fruit_hp_01",
+    "price": 500,
+    "stock": 0
+   },
+   {
+    "name": "刚力之果",
+    "item_id": "Fruit_attack_01",
+    "price": 500,
+    "stock": 0
+   },
+   {
+    "name": "坚壁之果",
+    "item_id": "Fruit__defense_01",
+    "price": 500,
+    "stock": 0
+   },
+   {
+    "name": "命脉灵药",
+    "item_id": "Elixir_hp_02",
+    "price": 350,
+    "stock": 0
+   },
+   {
+    "name": "活力灵药",
+    "item_id": "Elixir_stamina_02",
+    "price": 350,
+    "stock": 0
+   },
+   {
+    "name": "猛击灵药",
+    "item_id": "Elixir_attack_02",
+    "price": 350,
+    "stock": 0
+   },
+   {
+    "name": "勤勉灵药",
+    "item_id": "Elixir_workspeed_02",
+    "price": 350,
+    "stock": 0
+   },
+   {
+    "name": "巨人灵药",
+    "item_id": "Elixir_weight_02",
+    "price": 350,
+    "stock": 0
+   },
+   {
+    "name": "成熟觉醒星果",
+    "item_id": "Rankup_Arbitrary",
+    "price": 2000,
+    "stock": 0
+   },
+   {
+    "name": "莉莉之矛设计图",
+    "item_id": "Blueprint_Spear_ForestBoss",
+    "price": 600,
+    "stock": 0
+   },
+   {
+    "name": "V1盔甲设计图",
+    "item_id": "Blueprint_Octavia001_Armor",
+    "price": 780,
+    "stock": 0
+   },
+   {
+    "name": "V2盔甲设计图",
+    "item_id": "Blueprint_Octavia002_Armor",
+    "price": 780,
+    "stock": 0
+   }
+  ]
+ },
+ {
+  "id": "Bounty_Shop",
+  "name": "赏金商店",
+  "currency": "赏金",
+  "note": "讨伐通缉目标获得赏金后兑换",
+  "items": [
+   {
+    "name": "金币",
+    "item_id": "Money",
+    "price": 1,
+    "stock": 0
+   },
+   {
+    "name": "旧羊皮纸",
+    "item_id": "AncientParts3",
+    "price": 1,
+    "stock": 0
+   },
+   {
+    "name": "高等技术书",
+    "item_id": "TechnologyBook_G1",
+    "price": 5,
+    "stock": 0
+   },
+   {
+    "name": "帕鲁性转药",
+    "item_id": "PalGenderReverse",
+    "price": 7,
+    "stock": 0
+   },
+   {
+    "name": "羁绊宝桃",
+    "item_id": "AffectionFruit_01",
+    "price": 15,
+    "stock": 0
+   },
+   {
+    "name": "植入体：脑筋",
+    "item_id": "PalPassiveSkillChange_Noukin",
+    "price": 30,
+    "stock": 0
+   },
+   {
+    "name": "植入体：顽强肉体",
+    "item_id": "PalPassiveSkillChange_Deffence_up2",
+    "price": 30,
+    "stock": 0
+   },
+   {
+    "name": "植入体：工匠精神",
+    "item_id": "PalPassiveSkillChange_CraftSpeed_up2",
+    "price": 30,
+    "stock": 0
+   },
+   {
+    "name": "生命之果",
+    "item_id": "Fruit_hp_01",
+    "price": 70,
+    "stock": 0
+   },
+   {
+    "name": "刚力之果",
+    "item_id": "Fruit_attack_01",
+    "price": 70,
+    "stock": 0
+   },
+   {
+    "name": "坚壁之果",
+    "item_id": "Fruit__defense_01",
+    "price": 70,
+    "stock": 0
+   }
+  ]
+ },
+ {
+  "id": "Caravan_Shop",
+  "name": "商队商人",
+  "currency": "金币",
+  "note": "流动商队",
+  "items": [
+   {
+    "name": "火箭弹",
+    "item_id": "ExplosiveBullet",
+    "price": 5000,
+    "stock": 0
+   },
+   {
+    "name": "能量盒",
+    "item_id": "LaserBullet",
+    "price": 950,
+    "stock": 0
+   },
+   {
+    "name": "火焰喷射器燃料",
+    "item_id": "FlamethrowerBullet",
+    "price": 400,
+    "stock": 0
+   },
+   {
+    "name": "榴弹",
+    "item_id": "GrenadeBullet",
+    "price": 1500,
+    "stock": 0
+   },
+   {
+    "name": "加特林子弹",
+    "item_id": "GatlingBullet",
+    "price": 780,
+    "stock": 0
+   },
+   {
+    "name": "导弹",
+    "item_id": "MissileBullet",
+    "price": 15000,
+    "stock": 0
+   },
+   {
+    "name": "土豆种薯",
+    "item_id": "PotatoSeeds",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "胡萝卜种子",
+    "item_id": "CarrotSeeds",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "洋葱种子",
+    "item_id": "OnionSeeds",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "优质的布",
+    "item_id": "Cloth2",
+    "price": 80,
+    "stock": 0
+   },
+   {
+    "name": "美丽花朵",
+    "item_id": "Poppy",
+    "price": 240,
+    "stock": 0
+   },
+   {
+    "name": "无属性抵抗戒指",
+    "item_id": "Accessory_NormalResist",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "炎属性抵抗戒指",
+    "item_id": "Accessory_FireResist",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "水属性抵抗戒指",
+    "item_id": "Accessory_AquaResist",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "雷属性抵抗戒指",
+    "item_id": "Accessory_ThunderResist",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "草属性抵抗戒指",
+    "item_id": "Accessory_LeafResist",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "冰属性抵抗戒指",
+    "item_id": "Accessory_IceResist",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "地属性抵抗戒指",
+    "item_id": "Accessory_EarthResist",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "暗属性抵抗戒指",
+    "item_id": "Accessory_DarkResist",
+    "price": null,
+    "stock": 0
+   },
+   {
+    "name": "龙属性抵抗戒指",
+    "item_id": "Accessory_DragonResist",
+    "price": null,
+    "stock": 0
+   }
+  ]
+ },
+ {
+  "id": "Arena_Shop",
+  "name": "竞技场商店",
+  "currency": "竞技场币",
+  "note": "用竞技场代币兑换",
+  "items": [
+   {
+    "name": "能量霰弹枪设计图",
+    "item_id": "Blueprint_EnergyShotgun",
+    "price": 1500,
+    "stock": 0
+   },
+   {
+    "name": "充能步枪设计图",
+    "item_id": "Blueprint_ChargeLaserRifle",
+    "price": 1500,
+    "stock": 0
+   },
+   {
+    "name": "过热步枪设计图",
+    "item_id": "Blueprint_OverheatRifle",
+    "price": 1500,
+    "stock": 0
+   },
+   {
+    "name": "无属性助威哨子",
+    "item_id": "Otomo_ElementBoost_Normal",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "火属性助威哨子",
+    "item_id": "Otomo_ElementBoost_Fire",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "水属性助威哨子",
+    "item_id": "Otomo_ElementBoost_Water",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "雷属性助威哨子",
+    "item_id": "Otomo_ElementBoost_Electricity",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "草属性助威哨子",
+    "item_id": "Otomo_ElementBoost_Leaf",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "冰属性助威哨子",
+    "item_id": "Otomo_ElementBoost_Ice",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "地属性助威哨子",
+    "item_id": "Otomo_ElementBoost_Earth",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "暗属性助威哨子",
+    "item_id": "Otomo_ElementBoost_Dark",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "龙属性助威哨子",
+    "item_id": "Otomo_ElementBoost_Dragon",
+    "price": 150,
+    "stock": 0
+   },
+   {
+    "name": "植入体：沉着冷静",
+    "item_id": "PalPassiveSkillChange_CoolTimeReduction_Up",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "植入体：无限精力",
+    "item_id": "PalPassiveSkillChange_Stamina_Up",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "植入体：灵活",
+    "item_id": "PalPassiveSkillChange_MoveSpeed_up",
+    "price": 50,
+    "stock": 0
+   },
+   {
+    "name": "帕鲁性转药",
+    "item_id": "PalGenderReverse",
+    "price": 35,
+    "stock": 0
+   },
+   {
+    "name": "生命之果",
+    "item_id": "Fruit_hp_01",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "刚力之果",
+    "item_id": "Fruit_attack_01",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "坚壁之果",
+    "item_id": "Fruit__defense_01",
+    "price": 100,
+    "stock": 0
+   },
+   {
+    "name": "技能果实：光击阵",
+    "item_id": "SkillCard_HolyBlast",
+    "price": 45,
+    "stock": 0
+   },
+   {
+    "name": "技能果实：自爆",
+    "item_id": "SkillCard_SelfDestruct",
+    "price": 30,
+    "stock": 0
+   },
+   {
+    "name": "暗之技能果实：黑暗之拥",
+    "item_id": "SkillCard_DarkLegion",
+    "price": 45,
+    "stock": 0
+   },
+   {
+    "name": "暗之技能果实：启示录",
+    "item_id": "SkillCard_Apocalypse",
+    "price": 30,
+    "stock": 0
+   },
+   {
+    "name": "龙之技能果实：龙彗星",
+    "item_id": "SkillCard_DragonMeteor",
+    "price": 45,
+    "stock": 0
+   },
+   {
+    "name": "龙之技能果实：龙息炮",
+    "item_id": "SkillCard_ChargeCanon",
+    "price": 30,
+    "stock": 0
+   },
+   {
+    "name": "冰之技能果实：冰极冻域",
+    "item_id": "SkillCard_IceAge",
+    "price": 45,
+    "stock": 0
+   },
+   {
+    "name": "冰之技能果实：冰霜连弹",
+    "item_id": "SkillCard_IciclePierce",
+    "price": 30,
+    "stock": 0
+   },
+   {
+    "name": "炎之技能果实：烈焰球",
+    "item_id": "SkillCard_FireBall",
+    "price": 45,
+    "stock": 0
+   },
+   {
+    "name": "炎之技能果实：流火",
+    "item_id": "SkillCard_FlameFunnel",
+    "price": 30,
+    "stock": 0
+   },
+   {
+    "name": "水之技能果实：漩涡新星",
+    "item_id": "SkillCard_RipTide",
+    "price": 45,
+    "stock": 0
+   },
+   {
+    "name": "水之技能果实：水刀切割",
+    "item_id": "SkillCard_HydroSlicer",
+    "price": 30,
+    "stock": 0
+   },
+   {
+    "name": "雷之技能果实：雷霆飓风",
+    "item_id": "SkillCard_ThunderStorm",
+    "price": 45,
+    "stock": 0
+   },
+   {
+    "name": "雷之技能果实：雷动八方",
+    "item_id": "SkillCard_RangeThunder",
+    "price": 30,
+    "stock": 0
+   },
+   {
+    "name": "地之技能果实：震岩",
+    "item_id": "SkillCard_RockBeat",
+    "price": 45,
+    "stock": 0
+   },
+   {
+    "name": "地之技能果实：沙尘暴",
+    "item_id": "SkillCard_SandTwister",
+    "price": 30,
+    "stock": 0
+   },
+   {
+    "name": "草之技能果实：十字风切",
+    "item_id": "SkillCard_CrossWind",
+    "price": 45,
+    "stock": 0
+   },
+   {
+    "name": "草之技能果实：连锁叶刃",
+    "item_id": "SkillCard_ReflectiveShuriken",
+    "price": 30,
+    "stock": 0
+   },
+   {
+    "name": "神射左轮手枪设计图",
+    "item_id": "Blueprint_OctaviaRevolver",
+    "price": 1300,
+    "stock": 0
+   },
+   {
+    "name": "核心喷射霰弹枪设计图",
+    "item_id": "Blueprint_OctaviaShotgun",
+    "price": 1300,
+    "stock": 0
+   }
+  ]
+ }
+]

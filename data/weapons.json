@@ -1,0 +1,604 @@
+[
+ {
+  "name": "充能步枪",
+  "attack": 12500,
+  "tech": 65,
+  "ammo": "充能步枪子弹",
+  "item_id": "ChargeLaserRifle"
+ },
+ {
+  "name": "火箭发射器",
+  "attack": 10000,
+  "tech": 49,
+  "ammo": "火箭弹",
+  "item_id": "Launcher_Default"
+ },
+ {
+  "name": "等离子炮",
+  "attack": 10000,
+  "tech": 60,
+  "ammo": "电浆能量盒",
+  "item_id": "EnergyRocketLauncher"
+ },
+ {
+  "name": "追踪导弹发射器",
+  "attack": 5900,
+  "tech": 55,
+  "ammo": "导弹",
+  "item_id": "GuidedMissileLauncher"
+ },
+ {
+  "name": "多联装追踪导弹发射器",
+  "attack": 5900,
+  "tech": null,
+  "ammo": "导弹",
+  "item_id": "MultiGuidedMissileLauncher"
+ },
+ {
+  "name": "卓越弓",
+  "attack": 5800,
+  "tech": 57,
+  "ammo": "卓越箭矢",
+  "item_id": "SFBow"
+ },
+ {
+  "name": "破片手榴弹Mk2",
+  "attack": 4000,
+  "tech": 53,
+  "ammo": "",
+  "item_id": "FragGrenade_Super"
+ },
+ {
+  "name": "榴弹发射器",
+  "attack": 3000,
+  "tech": 53,
+  "ammo": "榴弹",
+  "item_id": "GrenadeLauncher"
+ },
+ {
+  "name": "陨石发射器",
+  "attack": 2000,
+  "tech": 38,
+  "ammo": "陨石弹",
+  "item_id": "Launcher_Meteor"
+ },
+ {
+  "name": "激光步枪",
+  "attack": 1250,
+  "tech": 51,
+  "ammo": "能量盒",
+  "item_id": "LaserRifle"
+ },
+ {
+  "name": "过热步枪",
+  "attack": 1225,
+  "tech": 64,
+  "ammo": "过热步枪子弹",
+  "item_id": "OverheatRifle"
+ },
+ {
+  "name": "半自动步枪",
+  "attack": 1150,
+  "tech": 41,
+  "ammo": "步枪子弹",
+  "item_id": "SemiAutoRifle"
+ },
+ {
+  "name": "单发步枪",
+  "attack": 1100,
+  "tech": 36,
+  "ammo": "步枪子弹",
+  "item_id": "SingleShotRifle"
+ },
+ {
+  "name": "复合弓",
+  "attack": 1100,
+  "tech": 32,
+  "ammo": "强化箭矢",
+  "item_id": "CompoundBow"
+ },
+ {
+  "name": "鸟枪",
+  "attack": 1000,
+  "tech": 21,
+  "ammo": "劣质弹药",
+  "item_id": "Musket"
+ },
+ {
+  "name": "光剑",
+  "attack": 930,
+  "tech": 57,
+  "ammo": "",
+  "item_id": "BeamSword"
+ },
+ {
+  "name": "太刀",
+  "attack": 780,
+  "tech": 44,
+  "ammo": "",
+  "item_id": "Katana"
+ },
+ {
+  "name": "破片手榴弹",
+  "attack": 750,
+  "tech": 25,
+  "ammo": "",
+  "item_id": "FragGrenade"
+ },
+ {
+  "name": "烧夷手榴弹",
+  "attack": 750,
+  "tech": 31,
+  "ammo": "",
+  "item_id": "FragGrenade_Fire"
+ },
+ {
+  "name": "电击手榴弹",
+  "attack": 750,
+  "tech": 27,
+  "ammo": "",
+  "item_id": "FragGrenade_Elec"
+ },
+ {
+  "name": "冷冻手榴弹",
+  "attack": 750,
+  "tech": 29,
+  "ammo": "",
+  "item_id": "FragGrenade_Ice"
+ },
+ {
+  "name": "暗黑手榴弹",
+  "attack": 750,
+  "tech": 40,
+  "ammo": "",
+  "item_id": "FragGrenade_Dark"
+ },
+ {
+  "name": "龙击手榴弹",
+  "attack": 750,
+  "tech": 42,
+  "ammo": "",
+  "item_id": "FragGrenade_Dragon"
+ },
+ {
+  "name": "大地手榴弹",
+  "attack": 750,
+  "tech": 38,
+  "ammo": "",
+  "item_id": "FragGrenade_Ground"
+ },
+ {
+  "name": "草木手榴弹",
+  "attack": 750,
+  "tech": 35,
+  "ammo": "",
+  "item_id": "FragGrenade_Leaf"
+ },
+ {
+  "name": "水流手榴弹",
+  "attack": 750,
+  "tech": 33,
+  "ammo": "",
+  "item_id": "FragGrenade_Water"
+ },
+ {
+  "name": "火焰喷射器",
+  "attack": 636,
+  "tech": 52,
+  "ammo": "",
+  "item_id": "FlameThrower"
+ },
+ {
+  "name": "古旧左轮手枪",
+  "attack": 600,
+  "tech": 33,
+  "ammo": "手枪子弹",
+  "item_id": "OldRevolver"
+ },
+ {
+  "name": "激光加特林",
+  "attack": 530,
+  "tech": 58,
+  "ammo": "加特林激光能量盒",
+  "item_id": "LaserGatlingGun"
+ },
+ {
+  "name": "莉莉之矛",
+  "attack": 450,
+  "tech": 44,
+  "ammo": "",
+  "item_id": "Spear_ForestBoss"
+ },
+ {
+  "name": "泰拉刃",
+  "attack": 425,
+  "tech": null,
+  "ammo": "",
+  "item_id": "YakushimaBlade002"
+ },
+ {
+  "name": "能量霰弹枪",
+  "attack": 402,
+  "tech": 62,
+  "ammo": "能量霰弹枪子弹",
+  "item_id": "EnergyShotgun"
+ },
+ {
+  "name": "加特林机枪",
+  "attack": 375,
+  "tech": 54,
+  "ammo": "加特林子弹",
+  "item_id": "GatlingGun"
+ },
+ {
+  "name": "剑",
+  "attack": 360,
+  "tech": 29,
+  "ammo": "",
+  "item_id": "Sword"
+ },
+ {
+  "name": "断钢剑",
+  "attack": 360,
+  "tech": null,
+  "ammo": "",
+  "item_id": "YakushimaBlade004"
+ },
+ {
+  "name": "突击步枪",
+  "attack": 320,
+  "tech": 45,
+  "ammo": "突击步枪子弹",
+  "item_id": "AssaultRifle_Default1"
+ },
+ {
+  "name": "劣质手枪",
+  "attack": 320,
+  "tech": 24,
+  "ammo": "劣质弹药",
+  "item_id": "MakeshiftHandgun"
+ },
+ {
+  "name": "精炼金属长矛",
+  "attack": 310,
+  "tech": 34,
+  "ammo": "",
+  "item_id": "Spear_3"
+ },
+ {
+  "name": "星旋机枪",
+  "attack": 300,
+  "tech": null,
+  "ammo": "突击步枪子弹",
+  "item_id": "YakushimaGun001"
+ },
+ {
+  "name": "十字弓",
+  "attack": 280,
+  "tech": 13,
+  "ammo": "",
+  "item_id": "BowGun"
+ },
+ {
+  "name": "毒箭十字弓",
+  "attack": 280,
+  "tech": 17,
+  "ammo": "",
+  "item_id": "BowGun_Poison"
+ },
+ {
+  "name": "火箭十字弓",
+  "attack": 280,
+  "tech": 15,
+  "ammo": "",
+  "item_id": "BowGun_Fire"
+ },
+ {
+  "name": "手枪",
+  "attack": 250,
+  "tech": 28,
+  "ammo": "手枪子弹",
+  "item_id": "HandGun_Default"
+ },
+ {
+  "name": "强化枪",
+  "attack": 250,
+  "tech": 25,
+  "ammo": "强化枪子弹",
+  "item_id": "PalDopingShot"
+ },
+ {
+  "name": "高级强化枪",
+  "attack": 250,
+  "tech": 63,
+  "ammo": "强化枪子弹",
+  "item_id": "PalDopingShot_2"
+ },
+ {
+  "name": "神射左轮手枪",
+  "attack": 250,
+  "tech": 32,
+  "ammo": "",
+  "item_id": "OctaviaRevolver"
+ },
+ {
+  "name": "核心喷射霰弹枪",
+  "attack": 230,
+  "tech": 56,
+  "ammo": "",
+  "item_id": "OctaviaShotgun"
+ },
+ {
+  "name": "传奇彩虹猫之刃",
+  "attack": 222,
+  "tech": null,
+  "ammo": "",
+  "item_id": "YakushimaBlade005"
+ },
+ {
+  "name": "泵动式霰弹枪",
+  "attack": 220,
+  "tech": 43,
+  "ammo": "霰弹枪子弹",
+  "item_id": "PumpActionShotgun"
+ },
+ {
+  "name": "破旧的霰弹枪",
+  "attack": 215,
+  "tech": 30,
+  "ammo": "劣质弹药",
+  "item_id": "MakeshiftShotgun"
+ },
+ {
+  "name": "彩虹猫之刃",
+  "attack": 200,
+  "tech": 30,
+  "ammo": "",
+  "item_id": "YakushimaBlade"
+ },
+ {
+  "name": "半自动霰弹枪",
+  "attack": 195,
+  "tech": 47,
+  "ammo": "霰弹枪子弹",
+  "item_id": "SemiAutoShotgun"
+ },
+ {
+  "name": "双管霰弹枪",
+  "attack": 190,
+  "tech": 39,
+  "ammo": "霰弹枪子弹",
+  "item_id": "DoubleBarrelShotgun"
+ },
+ {
+  "name": "破旧的突击步枪",
+  "attack": 170,
+  "tech": 31,
+  "ammo": "劣质弹药",
+  "item_id": "MakeshiftAssaultRifle"
+ },
+ {
+  "name": "女皇蜂之杖",
+  "attack": 150,
+  "tech": null,
+  "ammo": "",
+  "item_id": "Spear_QueenBee"
+ },
+ {
+  "name": "骑士蜂之矛",
+  "attack": 150,
+  "tech": null,
+  "ammo": "",
+  "item_id": "Spear_SoldierBee"
+ },
+ {
+  "name": "冲锋枪",
+  "attack": 130,
+  "tech": 37,
+  "ammo": "手枪子弹",
+  "item_id": "SubmachineGun"
+ },
+ {
+  "name": "帕鲁金属十字镐",
+  "attack": 120,
+  "tech": 44,
+  "ammo": "",
+  "item_id": "Pickaxe_Steal"
+ },
+ {
+  "name": "帕鲁金属斧",
+  "attack": 120,
+  "tech": 44,
+  "ammo": "",
+  "item_id": "Axe_Steal"
+ },
+ {
+  "name": "破旧的冲锋枪",
+  "attack": 100,
+  "tech": 26,
+  "ammo": "劣质弹药",
+  "item_id": "MakeshiftSubmachineGun"
+ },
+ {
+  "name": "泰拉棱镜",
+  "attack": 90,
+  "tech": null,
+  "ammo": "",
+  "item_id": "YakushimaBlade003"
+ },
+ {
+  "name": "金属长矛",
+  "attack": 80,
+  "tech": 13,
+  "ammo": "",
+  "item_id": "Spear_2"
+ },
+ {
+  "name": "陈旧的弓",
+  "attack": 65,
+  "tech": 3,
+  "ammo": "箭",
+  "item_id": "WeakerBow"
+ },
+ {
+  "name": "毒之弓",
+  "attack": 65,
+  "tech": 8,
+  "ammo": "",
+  "item_id": "Bow_Poison"
+ },
+ {
+  "name": "火之弓",
+  "attack": 65,
+  "tech": 5,
+  "ammo": "火箭",
+  "item_id": "Bow_Fire"
+ },
+ {
+  "name": "精炼金属斧头",
+  "attack": 60,
+  "tech": 34,
+  "ammo": "",
+  "item_id": "Axe_Tier_02"
+ },
+ {
+  "name": "精炼金属十字镐",
+  "attack": 60,
+  "tech": 34,
+  "ammo": "",
+  "item_id": "Pickaxe_Tier_02"
+ },
+ {
+  "name": "棒球棒",
+  "attack": 50,
+  "tech": 7,
+  "ammo": "",
+  "item_id": "Bat2"
+ },
+ {
+  "name": "夜光",
+  "attack": 50,
+  "tech": null,
+  "ammo": "",
+  "item_id": "YakushimaLantern001"
+ },
+ {
+  "name": "三连弓",
+  "attack": 40,
+  "tech": 10,
+  "ammo": "箭",
+  "item_id": "Bow_Triple"
+ },
+ {
+  "name": "石头长矛",
+  "attack": 35,
+  "tech": 4,
+  "ammo": "",
+  "item_id": "Spear"
+ },
+ {
+  "name": "金属斧头",
+  "attack": 30,
+  "tech": 11,
+  "ammo": "",
+  "item_id": "Axe_Tier_01"
+ },
+ {
+  "name": "金属十字镐",
+  "attack": 30,
+  "tech": 11,
+  "ammo": "",
+  "item_id": "Pickaxe_Tier_01"
+ },
+ {
+  "name": "五连弓",
+  "attack": 30,
+  "tech": null,
+  "ammo": "箭",
+  "item_id": "Bow_Fifth"
+ },
+ {
+  "name": "木棒",
+  "attack": 25,
+  "tech": 1,
+  "ammo": "",
+  "item_id": "Bat"
+ },
+ {
+  "name": "切肉刀",
+  "attack": 25,
+  "tech": 12,
+  "ammo": "",
+  "item_id": "MeatCutterKnife"
+ },
+ {
+  "name": "初级钓竿（疾旋鼬）",
+  "attack": 25,
+  "tech": 15,
+  "ammo": "",
+  "item_id": "FishingRod_01_1"
+ },
+ {
+  "name": "初级钓竿（叶泥泥）",
+  "attack": 25,
+  "tech": null,
+  "ammo": "",
+  "item_id": "FishingRod_01_2"
+ },
+ {
+  "name": "中级钓竿（捣蛋猫）",
+  "attack": 25,
+  "tech": 29,
+  "ammo": "",
+  "item_id": "FishingRod_02_1"
+ },
+ {
+  "name": "中级钓竿（武道蛙）",
+  "attack": 25,
+  "tech": null,
+  "ammo": "",
+  "item_id": "FishingRod_02_2"
+ },
+ {
+  "name": "高级钓竿（企丸丸）",
+  "attack": 25,
+  "tech": 45,
+  "ammo": "",
+  "item_id": "FishingRod_03_1"
+ },
+ {
+  "name": "高级钓竿（瞅什魔）",
+  "attack": 25,
+  "tech": null,
+  "ammo": "",
+  "item_id": "FishingRod_03_2"
+ },
+ {
+  "name": "石头斧",
+  "attack": 20,
+  "tech": 1,
+  "ammo": "",
+  "item_id": "Axe_Tier_00"
+ },
+ {
+  "name": "石制十字镐",
+  "attack": 20,
+  "tech": 1,
+  "ammo": "",
+  "item_id": "Pickaxe_Tier_00"
+ },
+ {
+  "name": "电棍",
+  "attack": 10,
+  "tech": 22,
+  "ammo": "",
+  "item_id": "ElecBaton"
+ },
+ {
+  "name": "携带火把",
+  "attack": 10,
+  "tech": 1,
+  "ammo": "",
+  "item_id": "Torch"
+ }
+]

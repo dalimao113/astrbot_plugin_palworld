@@ -1,0 +1,6 @@
+aiohttp
+# 存档解析(/帕鲁背包·队伍·我·箱·据点·公会)依赖：解析 PlM/Oodle 压缩的 GVAS 存档。
+# 注意：AstrBot 容器重建/更新后此包可能丢失，compose 启动命令已加自动重装兜底。
+# 必须锁 0.24.0：palwork/palsave.py 的解析器针对 0.24.0 内部结构做了 monkey-patch，
+# 更新的 save-tools 会导致存档解析失败(如 KeyError 'CharacterSaveParameterMap')。
+palworld-save-tools==0.24.0

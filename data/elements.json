@@ -1,0 +1,91 @@
+{
+ "无": {
+  "strong": [],
+  "weak": [
+   "暗"
+  ],
+  "color": "#9CA3AF",
+  "en": "Neutral"
+ },
+ "火": {
+  "strong": [
+   "草",
+   "冰"
+  ],
+  "weak": [
+   "水"
+  ],
+  "color": "#F97316",
+  "en": "Fire"
+ },
+ "水": {
+  "strong": [
+   "火"
+  ],
+  "weak": [
+   "雷"
+  ],
+  "color": "#3B82F6",
+  "en": "Water"
+ },
+ "草": {
+  "strong": [
+   "地"
+  ],
+  "weak": [
+   "火"
+  ],
+  "color": "#22C55E",
+  "en": "Grass"
+ },
+ "雷": {
+  "strong": [
+   "水"
+  ],
+  "weak": [
+   "地"
+  ],
+  "color": "#EAB308",
+  "en": "Electric"
+ },
+ "冰": {
+  "strong": [
+   "龙"
+  ],
+  "weak": [
+   "火"
+  ],
+  "color": "#38BDF8",
+  "en": "Ice"
+ },
+ "地": {
+  "strong": [
+   "雷"
+  ],
+  "weak": [
+   "草"
+  ],
+  "color": "#A16207",
+  "en": "Ground"
+ },
+ "暗": {
+  "strong": [
+   "无"
+  ],
+  "weak": [
+   "龙"
+  ],
+  "color": "#7C3AED",
+  "en": "Dark"
+ },
+ "龙": {
+  "strong": [
+   "暗"
+  ],
+  "weak": [
+   "冰"
+  ],
+  "color": "#DB2777",
+  "en": "Dragon"
+ }
+}

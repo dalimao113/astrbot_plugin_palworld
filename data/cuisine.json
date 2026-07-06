@@ -1,0 +1,217 @@
+[
+ {
+  "name": "沙拉",
+  "item_id": "Salad",
+  "effect": "略微提高工作速度"
+ },
+ {
+  "name": "欧姆蛋",
+  "item_id": "Omelet",
+  "effect": "攻击+10%"
+ },
+ {
+  "name": "炒蔬菜",
+  "item_id": "FriedVegetables",
+  "effect": "吃了之后一段时间，攻击 +10%"
+ },
+ {
+  "name": "热狗",
+  "item_id": "HotDog",
+  "effect": "食用后会使饱腹感持续一段时间"
+ },
+ {
+  "name": "松饼",
+  "item_id": "Pancake",
+  "effect": "稍微减缓SAN值的下降速度"
+ },
+ {
+  "name": "腌蘑菇",
+  "item_id": "MarinatedMushrooms",
+  "effect": "防御+10%"
+ },
+ {
+  "name": "蘑菇汤",
+  "item_id": "MushroomSoup",
+  "effect": "比较不容易感到饥饿"
+ },
+ {
+  "name": "奶油培根意面",
+  "item_id": "Carbonara",
+  "effect": "防御+20%"
+ },
+ {
+  "name": "卷饼",
+  "item_id": "BLT",
+  "effect": "攻击 +15%"
+ },
+ {
+  "name": "芝士汉堡",
+  "item_id": "CheeseBurger",
+  "effect": "会让你的饱腹感增强，防御增加10%"
+ },
+ {
+  "name": "披萨",
+  "item_id": "Pizza",
+  "effect": "略微提高工作速度， 且比较不容易感到饥饿"
+ },
+ {
+  "name": "肉汤",
+  "item_id": "MeatSauce",
+  "effect": "SAN值在一段时间内减少的慢， 攻击 +10%"
+ },
+ {
+  "name": "蛋糕",
+  "item_id": "Cake",
+  "effect": "放牧场箱子里，帕鲁吃后产帕鲁蛋（配种用）"
+ },
+ {
+  "name": "炖蘑菇",
+  "item_id": "MushroomStew",
+  "effect": "攻击 +10%"
+ },
+ {
+  "name": "汉堡",
+  "item_id": "Hamburger",
+  "effect": "吃了之后一段时间，饱腹感更强，攻击 +10%"
+ },
+ {
+  "name": "嫩煎皮皮鸡",
+  "item_id": "ChickenSaute",
+  "effect": "略微提高工作速度"
+ },
+ {
+  "name": "棉悠悠香草烤肉",
+  "item_id": "GrilledSheepHerbs",
+  "effect": "防御+10%"
+ },
+ {
+  "name": "棉悠悠成吉思汗烤肉",
+  "item_id": "GenghisKhan",
+  "effect": "略微提高工作速度， 且稍微减缓SAN值的下降速度"
+ },
+ {
+  "name": "炖煮天擒鸟肉",
+  "item_id": "Eaglestew",
+  "effect": "稍微减缓SAN值的下降速度"
+ },
+ {
+  "name": "草莽猪培根蛋",
+  "item_id": "BaconEggs",
+  "effect": "攻击+10%"
+ },
+ {
+  "name": "严冬鹿肉炖菜",
+  "item_id": "StewedIceDeer",
+  "effect": "比较不容易感到饥饿"
+ },
+ {
+  "name": "炸皮皮鸡肉块",
+  "item_id": "FriedChicken",
+  "effect": "略微提高工作速度， 且减缓SAN值的下降速度"
+ },
+ {
+  "name": "草莽猪热狗",
+  "item_id": "HotDog_2",
+  "effect": "防御+20%"
+ },
+ {
+  "name": "夏威夷紫霞鹿汉堡饭",
+  "item_id": "DeerLocoMoco",
+  "effect": "攻击+20%"
+ },
+ {
+  "name": "紫霞鹿肉炖菜",
+  "item_id": "DeerStew",
+  "effect": "防御+20%"
+ },
+ {
+  "name": "波霸牛汉堡",
+  "item_id": "Hamburger_2",
+  "effect": "提高工作速度， 且稍微减缓SAN值的下降速度"
+ },
+ {
+  "name": "波霸牛芝士汉堡",
+  "item_id": "Cheeseburger_2",
+  "effect": "攻击+20%， 且不容易感到饥饿"
+ },
+ {
+  "name": "炸水灵儿",
+  "item_id": "FriedKelpie",
+  "effect": "防御+10%， 且减缓SAN值的下降速度"
+ },
+ {
+  "name": "趴趴鲶杂烩",
+  "item_id": "Chowder",
+  "effect": "提高工作速度， 且比较不容易感到饥饿"
+ },
+ {
+  "name": "土豆",
+  "item_id": "Potato",
+  "effect": "适应性强、饱腹感好的优质作物"
+ },
+ {
+  "name": "草莽猪肉水饺",
+  "item_id": "Gyoza",
+  "effect": "攻击 +10%， 且比较不容易感到饥饿"
+ },
+ {
+  "name": "炒青菜",
+  "item_id": "StirFriedVegetables",
+  "effect": "防御 +10%， 且略微提高工作速度"
+ },
+ {
+  "name": "炸薯条",
+  "item_id": "PotatoChips",
+  "effect": "稍微减缓SAN值的下降速度"
+ },
+ {
+  "name": "春卷",
+  "item_id": "SpringRolls",
+  "effect": "攻击 +10%， 且减缓SAN值的下降速度"
+ },
+ {
+  "name": "法式焗菜",
+  "item_id": "Gratin",
+  "effect": "防御 +10%， 且不容易感到饥饿"
+ },
+ {
+  "name": "意大利杂菜汤",
+  "item_id": "Minestrone",
+  "effect": "提高工作速度"
+ },
+ {
+  "name": "森猛犸咖喱",
+  "item_id": "Curry",
+  "effect": "攻击 +25%"
+ },
+ {
+  "name": "土豆炖天擒鸟肉",
+  "item_id": "MeatAndPotatoes",
+  "effect": "防御 +25%"
+ },
+ {
+  "name": "蘑菇乳蛋饼",
+  "item_id": "Quiche",
+  "effect": "减缓SAN值的下降速度， 且不容易感到饥饿"
+ },
+ {
+  "name": "墨沫姬的章鱼烧",
+  "item_id": "OctopusGirl_Takoyaki",
+  "effect": "获得的经验值会少量提升"
+ },
+ {
+  "name": "海月仙的晶仙果冻",
+  "item_id": "JellyfishFairy_jelly",
+  "effect": "获得的经验值会少量提升， 攻击 +10%"
+ },
+ {
+  "name": "海月灵的水灵果冻",
+  "item_id": "JellyfishGhost_jelly",
+  "effect": "获得的经验值会少量提升， 防御 +10%"
+ },
+ {
+  "name": "海鲜沙拉",
+  "item_id": "Seafood_Salada",
+  "effect": "获得的经验值会提升"
+ }
+]

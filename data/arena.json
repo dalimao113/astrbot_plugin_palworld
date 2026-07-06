@@ -1,0 +1,826 @@
+{
+  "teams": [
+    {
+      "tier": "青铜",
+      "rank": 0,
+      "trainer": "初出茅庐的帕鲁训练家",
+      "level": 20,
+      "pals": [
+        {
+          "dev": "Kirin",
+          "name": "雷角马"
+        },
+        {
+          "dev": "LazyDragon",
+          "name": "佩克龙"
+        },
+        {
+          "dev": "SakuraSaurus",
+          "name": "连理龙"
+        },
+        {
+          "dev": "FlameBuffalo",
+          "name": "炽焰牛"
+        },
+        {
+          "dev": "DrillGame",
+          "name": "碎岩龟"
+        }
+      ]
+    },
+    {
+      "tier": "白银",
+      "rank": 1,
+      "trainer": "锋芒毕露的帕鲁训练家",
+      "level": 30,
+      "pals": [
+        {
+          "dev": "GrassRabbitMan",
+          "name": "踏春兔"
+        },
+        {
+          "dev": "AmaterasuWolf",
+          "name": "苍焰狼"
+        },
+        {
+          "dev": "IceDeer",
+          "name": "严冬鹿"
+        },
+        {
+          "dev": "HadesBird",
+          "name": "雷冥鸟"
+        },
+        {
+          "dev": "GrassPanda",
+          "name": "叶胖达"
+        }
+      ]
+    },
+    {
+      "tier": "黄金",
+      "rank": 2,
+      "trainer": "冷酷的帕鲁训练家",
+      "level": 40,
+      "pals": [
+        {
+          "dev": "VolcanicMonster",
+          "name": "熔岩兽"
+        },
+        {
+          "dev": "FlowerDinosaur_Electric",
+          "name": "雷冠龙"
+        },
+        {
+          "dev": "Ronin",
+          "name": "浪刃武士"
+        },
+        {
+          "dev": "Manticore_Dark",
+          "name": "狱阎王"
+        },
+        {
+          "dev": "DarkScorpion",
+          "name": "冥铠蝎"
+        }
+      ]
+    },
+    {
+      "tier": "铂金",
+      "rank": 3,
+      "trainer": "老手帕鲁训练家",
+      "level": 50,
+      "pals": [
+        {
+          "dev": "GrassMammoth_Ice",
+          "name": "雪猛犸"
+        },
+        {
+          "dev": "Umihebi_Fire",
+          "name": "腾炎龙"
+        },
+        {
+          "dev": "SkyDragon",
+          "name": "天羽龙"
+        },
+        {
+          "dev": "ThunderDragonMan",
+          "name": "波鲁杰克斯"
+        },
+        {
+          "dev": "Suzaku_Water",
+          "name": "清雀"
+        }
+      ]
+    },
+    {
+      "tier": "钻石",
+      "rank": 4,
+      "trainer": "强壮的佣兵",
+      "level": 60,
+      "pals": [
+        {
+          "dev": "WingGolem",
+          "name": "泰锋"
+        },
+        {
+          "dev": "WhiteTiger_Ground",
+          "name": "金棘兽"
+        },
+        {
+          "dev": "DarkScorpion_Ground",
+          "name": "金铠蝎"
+        },
+        {
+          "dev": "GrassMammoth",
+          "name": "森猛犸"
+        },
+        {
+          "dev": "GoldenHorse",
+          "name": "金驰兽"
+        }
+      ]
+    },
+    {
+      "tier": "钻石",
+      "rank": 4,
+      "trainer": "盗猎集团 粉碎者",
+      "level": 60,
+      "pals": [
+        {
+          "dev": "DarkScorpion",
+          "name": "冥铠蝎"
+        },
+        {
+          "dev": "CandleGhost",
+          "name": "恐炬灵"
+        },
+        {
+          "dev": "GrimGirl",
+          "name": "幽恋娜"
+        },
+        {
+          "dev": "MysteryMask",
+          "name": "面惧"
+        },
+        {
+          "dev": "ScorpionMan",
+          "name": "蛊刺妖"
+        }
+      ]
+    },
+    {
+      "tier": "钻石",
+      "rank": 4,
+      "trainer": "永炎同心会 殉教者",
+      "level": 60,
+      "pals": [
+        {
+          "dev": "Manticore",
+          "name": "狱焰王"
+        },
+        {
+          "dev": "VolcanicMonster",
+          "name": "熔岩兽"
+        },
+        {
+          "dev": "KingBahamut",
+          "name": "焰煌"
+        },
+        {
+          "dev": "RedArmorBird",
+          "name": "燧火鸟"
+        },
+        {
+          "dev": "FireKirin",
+          "name": "火麒麟"
+        }
+      ]
+    },
+    {
+      "tier": "钻石",
+      "rank": 4,
+      "trainer": "月花众 下忍",
+      "level": 60,
+      "pals": [
+        {
+          "dev": "Ronin_Dark",
+          "name": "鬼刃武士"
+        },
+        {
+          "dev": "MushroomDragon_Dark",
+          "name": "菇波"
+        },
+        {
+          "dev": "GrassRabbitMan",
+          "name": "踏春兔"
+        },
+        {
+          "dev": "SifuDog",
+          "name": "汪宗师"
+        },
+        {
+          "dev": "KendoFrog",
+          "name": "武道蛙"
+        }
+      ]
+    },
+    {
+      "tier": "钻石",
+      "rank": 4,
+      "trainer": "爱的传教者",
+      "level": 60,
+      "pals": [
+        {
+          "dev": "PinkLizard",
+          "name": "博爱蜥"
+        },
+        {
+          "dev": "PinkLizard",
+          "name": "博爱蜥"
+        },
+        {
+          "dev": "TropicalOstrich",
+          "name": "咕咕桑葩"
+        },
+        {
+          "dev": "TropicalOstrich",
+          "name": "咕咕桑葩"
+        },
+        {
+          "dev": "LilyQueen",
+          "name": "百合女王"
+        }
+      ]
+    },
+    {
+      "tier": "钻石",
+      "rank": 4,
+      "trainer": "基因研究部队 执行小队",
+      "level": 60,
+      "pals": [
+        {
+          "dev": "BlackGriffon",
+          "name": "异构格里芬"
+        },
+        {
+          "dev": "WhiteAlienDragon",
+          "name": "杰诺路达"
+        },
+        {
+          "dev": "DarkAlien",
+          "name": "杰诺贝达"
+        },
+        {
+          "dev": "Mutant",
+          "name": "秘斯媞雅"
+        },
+        {
+          "dev": "Suzaku_Water",
+          "name": "清雀"
+        }
+      ]
+    },
+    {
+      "tier": "钻石",
+      "rank": 4,
+      "trainer": "天坠之民",
+      "level": 60,
+      "pals": [
+        {
+          "dev": "Umihebi",
+          "name": "覆海龙"
+        },
+        {
+          "dev": "CaptainPenguin_Black",
+          "name": "闪丸王"
+        },
+        {
+          "dev": "GhostAnglerfish",
+          "name": "冥灯鱼"
+        },
+        {
+          "dev": "OctopusGirl",
+          "name": "墨沫姬"
+        },
+        {
+          "dev": "IceCrocodile",
+          "name": "肚肚鳄"
+        }
+      ]
+    },
+    {
+      "tier": "钻石",
+      "rank": 4,
+      "trainer": "斗志昂扬的帕鲁训练家",
+      "level": 60,
+      "pals": [
+        {
+          "dev": "BlackMetalDragon",
+          "name": "魔渊龙"
+        },
+        {
+          "dev": "WhiteShieldDragon",
+          "name": "艾基鲁迦"
+        },
+        {
+          "dev": "ThunderDragonMan",
+          "name": "波鲁杰克斯"
+        },
+        {
+          "dev": "Umihebi_Fire",
+          "name": "腾炎龙"
+        },
+        {
+          "dev": "SkyDragon",
+          "name": "天羽龙"
+        }
+      ]
+    },
+    {
+      "tier": "钻石",
+      "rank": 4,
+      "trainer": "帕鲁生态调查员",
+      "level": 60,
+      "pals": [
+        {
+          "dev": "BlueThunderHorse",
+          "name": "驭雷马"
+        },
+        {
+          "dev": "HadesBird_Electric",
+          "name": "雷鸣鸟"
+        },
+        {
+          "dev": "GrassPanda_Electric",
+          "name": "雷胖达"
+        },
+        {
+          "dev": "ThunderBird",
+          "name": "迅雷鸟"
+        }
+      ]
+    },
+    {
+      "tier": "钻石",
+      "rank": 4,
+      "trainer": "身上很好闻的猎人",
+      "level": 60,
+      "pals": [
+        {
+          "dev": "QueenBee",
+          "name": "女皇蜂"
+        },
+        {
+          "dev": "BlueberryFairy",
+          "name": "梅莉姆"
+        },
+        {
+          "dev": "LeafPrincess",
+          "name": "春彩娘"
+        },
+        {
+          "dev": "VioletFairy",
+          "name": "薇莉塔"
+        },
+        {
+          "dev": "FlowerDoll",
+          "name": "花丽娜"
+        }
+      ]
+    },
+    {
+      "tier": "大师",
+      "rank": 5,
+      "trainer": "黑市商人",
+      "level": 65,
+      "pals": [
+        {
+          "dev": "BlackGriffon",
+          "name": "异构格里芬"
+        },
+        {
+          "dev": "BlackGriffon",
+          "name": "异构格里芬"
+        },
+        {
+          "dev": "KingBahamut",
+          "name": "焰煌"
+        },
+        {
+          "dev": "KingBahamut",
+          "name": "焰煌"
+        },
+        {
+          "dev": "SnowTigerBeastman",
+          "name": "霜牙王"
+        }
+      ]
+    },
+    {
+      "tier": "大师",
+      "rank": 5,
+      "trainer": "亲切的帕鲁训练家",
+      "level": 65,
+      "pals": [
+        {
+          "dev": "WhiteDeer",
+          "name": "净世鹿"
+        },
+        {
+          "dev": "WhiteShieldDragon",
+          "name": "艾基鲁迦"
+        },
+        {
+          "dev": "WhiteAlienDragon",
+          "name": "杰诺路达"
+        },
+        {
+          "dev": "IceNarwhal",
+          "name": "凉晶鲸"
+        },
+        {
+          "dev": "MoonQueen",
+          "name": "辉月伊"
+        }
+      ]
+    },
+    {
+      "tier": "大师",
+      "rank": 5,
+      "trainer": "布朗博士",
+      "level": 65,
+      "pals": [
+        {
+          "dev": "BlackGriffon",
+          "name": "异构格里芬"
+        },
+        {
+          "dev": "BlackGriffon",
+          "name": "异构格里芬"
+        },
+        {
+          "dev": "BlackGriffon",
+          "name": "异构格里芬"
+        },
+        {
+          "dev": "WhiteAlienDragon",
+          "name": "杰诺路达"
+        },
+        {
+          "dev": "WhiteAlienDragon",
+          "name": "杰诺路达"
+        }
+      ]
+    },
+    {
+      "tier": "大师",
+      "rank": 5,
+      "trainer": "奖章商人",
+      "level": 65,
+      "pals": [
+        {
+          "dev": "WingGolem",
+          "name": "泰锋"
+        },
+        {
+          "dev": "DarkScorpion_Ground",
+          "name": "金铠蝎"
+        },
+        {
+          "dev": "LazyCatfish_Gold",
+          "name": "梆梆鲶"
+        },
+        {
+          "dev": "TentacleTurtle_Ground",
+          "name": "金盔仔"
+        },
+        {
+          "dev": "HerculesBeetle_Ground",
+          "name": "格鲁力斯"
+        }
+      ]
+    },
+    {
+      "tier": "大师",
+      "rank": 5,
+      "trainer": "经验老到的帕鲁训练家",
+      "level": 65,
+      "pals": [
+        {
+          "dev": "BlackGriffon",
+          "name": "异构格里芬"
+        },
+        {
+          "dev": "SnowTigerBeastman",
+          "name": "霜牙王"
+        },
+        {
+          "dev": "BlueThunderHorse",
+          "name": "驭雷马"
+        },
+        {
+          "dev": "Anubis",
+          "name": "阿努比斯"
+        },
+        {
+          "dev": "BlueDragon",
+          "name": "碧海龙"
+        }
+      ]
+    },
+    {
+      "tier": "大师",
+      "rank": 5,
+      "trainer": "充满斗志的帕鲁训练家",
+      "level": 65,
+      "pals": [
+        {
+          "dev": "KingBahamut",
+          "name": "焰煌"
+        },
+        {
+          "dev": "Manticore",
+          "name": "狱焰王"
+        },
+        {
+          "dev": "Horus",
+          "name": "荷鲁斯"
+        },
+        {
+          "dev": "Umihebi_Fire",
+          "name": "腾炎龙"
+        },
+        {
+          "dev": "VolcanicMonster",
+          "name": "熔岩兽"
+        }
+      ]
+    },
+    {
+      "tier": "大师",
+      "rank": 5,
+      "trainer": "月花众 上忍",
+      "level": 65,
+      "pals": [
+        {
+          "dev": "Ronin_Dark",
+          "name": "鬼刃武士"
+        },
+        {
+          "dev": "CandleGhost",
+          "name": "恐炬灵"
+        },
+        {
+          "dev": "Manticore_Dark",
+          "name": "狱阎王"
+        },
+        {
+          "dev": "GhostAnglerfish_Fire",
+          "name": "炙灯鱼"
+        },
+        {
+          "dev": "KendoFrog_Dark",
+          "name": "极道蛙"
+        }
+      ]
+    },
+    {
+      "tier": "大师",
+      "rank": 5,
+      "trainer": "天坠之民 精英",
+      "level": 65,
+      "pals": [
+        {
+          "dev": "IceNarwhal_Fire",
+          "name": "桃晶鲸"
+        },
+        {
+          "dev": "GrassMammoth_Ice",
+          "name": "雪猛犸"
+        },
+        {
+          "dev": "VolcanicMonster_Ice",
+          "name": "寒霜兽"
+        },
+        {
+          "dev": "BlueDragon_Ice",
+          "name": "碧月龙"
+        },
+        {
+          "dev": "WhiteTiger",
+          "name": "冰棘兽"
+        }
+      ]
+    },
+    {
+      "tier": "大师",
+      "rank": 5,
+      "trainer": "追寻传说的研究员",
+      "level": 65,
+      "pals": [
+        {
+          "dev": "BlackMetalDragon",
+          "name": "魔渊龙"
+        },
+        {
+          "dev": "WhiteAlienDragon",
+          "name": "杰诺路达"
+        },
+        {
+          "dev": "LazyDragon",
+          "name": "佩克龙"
+        },
+        {
+          "dev": "ThunderDragonMan",
+          "name": "波鲁杰克斯"
+        },
+        {
+          "dev": "SkyDragon_Grass",
+          "name": "翠羽龙"
+        }
+      ]
+    },
+    {
+      "tier": "大师",
+      "rank": 5,
+      "trainer": "老手帕鲁猎手",
+      "level": 65,
+      "pals": [
+        {
+          "dev": "ElecPanda",
+          "name": "暴电熊"
+        },
+        {
+          "dev": "LilyQueen",
+          "name": "百合女王"
+        },
+        {
+          "dev": "ThunderDragonMan",
+          "name": "波鲁杰克斯"
+        },
+        {
+          "dev": "Horus",
+          "name": "荷鲁斯"
+        },
+        {
+          "dev": "BlackGriffon",
+          "name": "异构格里芬"
+        }
+      ]
+    }
+  ],
+  "rewards": [
+    {
+      "tier": "青铜",
+      "first": [
+        {
+          "name": "优质帕鲁球",
+          "qty": "20"
+        },
+        {
+          "name": "战斗券",
+          "qty": "5"
+        }
+      ],
+      "repeat": [
+        {
+          "name": "优质帕鲁球",
+          "qty": "1–2"
+        },
+        {
+          "name": "战斗券",
+          "qty": "1"
+        }
+      ]
+    },
+    {
+      "tier": "白银",
+      "first": [
+        {
+          "name": "手枪设计图1",
+          "qty": "1"
+        },
+        {
+          "name": "战斗券",
+          "qty": "10"
+        }
+      ],
+      "repeat": [
+        {
+          "name": "特级帕鲁球",
+          "qty": "1–2"
+        },
+        {
+          "name": "战斗券",
+          "qty": "2"
+        }
+      ]
+    },
+    {
+      "tier": "黄金",
+      "first": [
+        {
+          "name": "耐热精炼金属盔甲设计图1",
+          "qty": "1"
+        },
+        {
+          "name": "战斗券",
+          "qty": "15"
+        }
+      ],
+      "repeat": [
+        {
+          "name": "大师帕鲁球",
+          "qty": "1–2"
+        },
+        {
+          "name": "战斗券",
+          "qty": "4"
+        }
+      ]
+    },
+    {
+      "tier": "铂金",
+      "first": [
+        {
+          "name": "陨石发射器设计图4",
+          "qty": "1"
+        },
+        {
+          "name": "战斗券",
+          "qty": "20"
+        }
+      ],
+      "repeat": [
+        {
+          "name": "传奇帕鲁球",
+          "qty": "1–2"
+        },
+        {
+          "name": "战斗券",
+          "qty": "6"
+        }
+      ]
+    },
+    {
+      "tier": "钻石",
+      "first": [
+        {
+          "name": "复活药",
+          "qty": "5"
+        },
+        {
+          "name": "战斗券",
+          "qty": "25"
+        }
+      ],
+      "repeat": [
+        {
+          "name": "究极帕鲁球",
+          "qty": "1–2"
+        },
+        {
+          "name": "战斗券",
+          "qty": "8"
+        }
+      ]
+    },
+    {
+      "tier": "大师",
+      "first": [
+        {
+          "name": "战斗券",
+          "qty": "100"
+        }
+      ],
+      "repeat": [
+        {
+          "name": "超限帕鲁球",
+          "qty": "1–2"
+        },
+        {
+          "name": "战斗券",
+          "qty": "10–20"
+        }
+      ]
+    }
+  ],
+  "shop_ref": "竞技场商店",
+  "shop_currency": "战斗券",
+  "tiers": [
+    "青铜",
+    "白银",
+    "黄金",
+    "铂金",
+    "钻石",
+    "大师"
+  ],
+  "tier_levels": {
+    "青铜": 20,
+    "白银": 30,
+    "黄金": 40,
+    "铂金": 50,
+    "钻石": 60,
+    "大师": 65
+  }
+}

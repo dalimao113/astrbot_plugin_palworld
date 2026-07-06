@@ -1,0 +1,426 @@
+{
+ "Arena": {
+  "msgid": "REGION_Arena",
+  "name": "竞技场"
+ },
+ "Desert_001": {
+  "msgid": "REGION_Desert_1",
+  "name": "荒漠沙丘"
+ },
+ "Desert_Small": {
+  "msgid": "REGION_Desert_Small",
+  "name": "日暮沙地"
+ },
+ "Desert_UndergroundCave_001": {
+  "msgid": "REGION_UndergroundCave_dessert01",
+  "name": "枯渴坑道"
+ },
+ "Desert_UndergroundCave_002": {
+  "msgid": "REGION_UndergroundCave_dessert02",
+  "name": "秘密坑道"
+ },
+ "Desert_UndergroundCave_003": {
+  "msgid": "REGION_UndergroundCave_dessert03",
+  "name": "边境坑道"
+ },
+ "Desert_Village_001": {
+  "msgid": "REGION_Desert_1_Village",
+  "name": "沙漠之镇"
+ },
+ "Forest_001": {
+  "msgid": "REGION_Forest_1",
+  "name": "弦月湖畔"
+ },
+ "Forest_002": {
+  "msgid": "REGION_Forest_2",
+  "name": "新绿清流"
+ },
+ "Forest_FixedDungeon_001": {
+  "msgid": "REGION_FixedDungeon_forest_1",
+  "name": "刚毅密域"
+ },
+ "Forest_FixedDungeon_002": {
+  "msgid": "REGION_FixedDungeon_forest_2",
+  "name": "精灵密域"
+ },
+ "Forest_FixedDungeon_003": {
+  "msgid": "REGION_FixedDungeon_forest_3",
+  "name": "神速密域"
+ },
+ "Forest_FixedDungeon_004": {
+  "msgid": "REGION_FixedDungeon_forest_4",
+  "name": "守护者密域"
+ },
+ "Forest_FixedDungeon_005": {
+  "msgid": "REGION_FixedDungeon_forest_5",
+  "name": "纯白密域"
+ },
+ "Forest_Ruin": {
+  "msgid": "REGION_Forest_Ruin",
+  "name": "古老的祭祀场"
+ },
+ "Forest_UnderGroundCave_001": {
+  "msgid": "REGION_UndergroundCave_forest01",
+  "name": "信徒坑道"
+ },
+ "Frost_001": {
+  "msgid": "REGION_Frost_1",
+  "name": "白银灵峰"
+ },
+ "Frost_Small": {
+  "msgid": "REGION_Frost_small",
+  "name": "霜冻雪山"
+ },
+ "Frost_UnderGroundCave_001": {
+  "msgid": "REGION_UndergroundCave_snow01",
+  "name": "冰山坑道"
+ },
+ "Frost_UnderGroundCave_002": {
+  "msgid": "REGION_UndergroundCave_snow02",
+  "name": "忘却坑道"
+ },
+ "Grass_001": {
+  "msgid": "REGION_Grass_1",
+  "name": "风起之丘"
+ },
+ "Grass_001_Crunch": {
+  "msgid": "REGION_Grass_1_Church",
+  "name": "破败教会"
+ },
+ "Grass_002": {
+  "msgid": "REGION_Grass_2",
+  "name": "翠竹溪谷"
+ },
+ "Grass_FixedDungeon_001": {
+  "msgid": "REGION_FixedDungeon_grass_1",
+  "name": "冰鸟密域"
+ },
+ "Grass_FixedDungeon_002": {
+  "msgid": "REGION_FixedDungeon_grass_2",
+  "name": "剑豪密域"
+ },
+ "Grass_FixedDungeon_003": {
+  "msgid": "REGION_FixedDungeon_grass_3",
+  "name": "翼龙密域"
+ },
+ "Grass_FixedDungeon_004": {
+  "msgid": "REGION_FixedDungeon_grass_4",
+  "name": "雷鸣龙密域"
+ },
+ "Grass_FixedDungeon_005": {
+  "msgid": "REGION_FixedDungeon_grass_5",
+  "name": "暗夜密域"
+ },
+ "Grass_FixedDungeon_006": {
+  "msgid": "REGION_FixedDungeon_grass_6",
+  "name": "魔导士密域"
+ },
+ "Grass_FixedDungeon_007": {
+  "msgid": "REGION_FixedDungeon_grass_7",
+  "name": "神秘密域"
+ },
+ "Grass_UnderGroundCave_001": {
+  "msgid": "REGION_UndergroundCave_grass01",
+  "name": "废弃坑道"
+ },
+ "Grass_UnderGroundCave_002": {
+  "msgid": "REGION_UndergroundCave_grass02",
+  "name": "浅滩坑道"
+ },
+ "Grass_UnderGroundCave_003": {
+  "msgid": "REGION_UndergroundCave_grass03",
+  "name": "水濂坑道"
+ },
+ "Grass_UnderGroundCave_004": {
+  "msgid": "REGION_UndergroundCave_grass04",
+  "name": "海湾坑道"
+ },
+ "Grass_Village_001": {
+  "msgid": "REGION_Grass_1_Village",
+  "name": "小型聚落"
+ },
+ "Oilrig_001": {
+  "msgid": "REGION_Oilrig_1",
+  "name": "盗猎团的油田"
+ },
+ "Oilrig_002": {
+  "msgid": "REGION_Oilrig_2",
+  "name": "盗猎团的勘探油田"
+ },
+ "Oilrig_003": {
+  "msgid": "REGION_Oilrig_3",
+  "name": "盗猎团的大型油田"
+ },
+ "Preserve_001": {
+  "msgid": "REGION_Preserve1",
+  "name": "第一禁猎区"
+ },
+ "Preserve_002": {
+  "msgid": "REGION_Preserve2",
+  "name": "第二禁猎区"
+ },
+ "Preserve_003": {
+  "msgid": "REGION_Preserve3",
+  "name": "第三禁猎区"
+ },
+ "PvPIsland_001": {
+  "msgid": "REGION_PvP_1",
+  "name": "潮风群岛"
+ },
+ "PvPIsland_001_Crunch": {
+  "msgid": "REGION_PvP_1_Church",
+  "name": "潮风群岛的教堂"
+ },
+ "PvPIsland_002": {
+  "msgid": "REGION_PvP_2",
+  "name": "忘却之岛"
+ },
+ "PvPIsland_002_Crunch": {
+  "msgid": "REGION_PvP_2_Church",
+  "name": "忘却之岛的教堂遗址"
+ },
+ "PvPIsland_003": {
+  "msgid": "REGION_PvP_3",
+  "name": "寒风呼啸之岛"
+ },
+ "PvPIsland_003_Crunch": {
+  "msgid": "REGION_PvP_3_Church",
+  "name": "湿地之岛的教堂遗址"
+ },
+ "PvPIsland_004": {
+  "msgid": "REGION_PvP_4",
+  "name": "东部的荒芜岛屿"
+ },
+ "PvPIsland_005": {
+  "msgid": "REGION_PvP_5",
+  "name": "湿地之岛"
+ },
+ "Sakurajim_Mushroom": {
+  "msgid": "REGION_Mushroom",
+  "name": "樱花岛：蘑菇湿地"
+ },
+ "Sakurajima_RockSand": {
+  "msgid": "REGION_RockSand",
+  "name": "樱花岛：北部矿场"
+ },
+ "Sakurajima_Sakura": {
+  "msgid": "REGION_Sakura",
+  "name": "舞樱神社"
+ },
+ "Sakurajima_WhiteSand": {
+  "msgid": "REGION_WhiteSand",
+  "name": "樱花岛：南部砂原"
+ },
+ "Tower_Desert": {
+  "msgid": "REGION_Desert_Boss",
+  "name": "自卫队的高塔"
+ },
+ "Tower_Forest": {
+  "msgid": "REGION_Forest_Boss",
+  "name": "帕鲁保护团体的高塔"
+ },
+ "Tower_Grass": {
+  "msgid": "REGION_Grass_Boss",
+  "name": "雷恩盗猎集团的高塔"
+ },
+ "Tower_Sakurajima": {
+  "msgid": "REGION_Sakurajima_Boss",
+  "name": "月花众的高塔"
+ },
+ "Tower_Snowy": {
+  "msgid": "REGION_Frost_Boss",
+  "name": "基因研究部队的高塔"
+ },
+ "Tower_Volcano": {
+  "msgid": "REGION_Volcano_Boss",
+  "name": "永炎同心会的高塔"
+ },
+ "Volcano_001": {
+  "msgid": "REGION_Volcano_1",
+  "name": "黑曜火山"
+ },
+ "Volcano_UnderGroundCave_001": {
+  "msgid": "REGION_UndergroundCave_volcano01",
+  "name": "灼热坑道"
+ },
+ "Volcano_UnderGroundCave_002": {
+  "msgid": "REGION_UndergroundCave_volcano02",
+  "name": "破灭坑道"
+ },
+ "Volcano_Village_001": {
+  "msgid": "REGION_Volcano_1_Village",
+  "name": "边远渔村"
+ },
+ "Darkisland03": {
+  "msgid": "REGION_Darkisland03",
+  "name": "天坠的遇难船"
+ },
+ "Darkisland05": {
+  "msgid": "REGION_Darkisland05",
+  "name": "结晶大树"
+ },
+ "Darkisland08": {
+  "msgid": "REGION_Darkisland08",
+  "name": "石柱洞窟"
+ },
+ "Darkisland11": {
+  "msgid": "REGION_Darkisland11",
+  "name": "余烬熔岩台"
+ },
+ "Darkisland_FT01": {
+  "msgid": "REGION_Darkisland_FT01",
+  "name": "燃灰之地"
+ },
+ "Darkisland_FT03": {
+  "msgid": "REGION_Darkisland_FT03",
+  "name": "黄土平原"
+ },
+ "Darkisland_FT04": {
+  "msgid": "REGION_Darkisland_FT04",
+  "name": "通往环形门的密道"
+ },
+ "Darkisland_FT05": {
+  "msgid": "REGION_Darkisland_FT05",
+  "name": "俯瞰高塔的环形门"
+ },
+ "Darkisland_FT07": {
+  "msgid": "REGION_Darkisland_FT07",
+  "name": "灼热高台"
+ },
+ "Darkisland_FT08": {
+  "msgid": "REGION_Darkisland_FT08",
+  "name": "锈灰高原"
+ },
+ "Darkisland_Boss": {
+  "msgid": "REGION_Darkisland_Boss",
+  "name": "天坠之塔"
+ },
+ "Darkisland_FT09": {
+  "msgid": "REGION_Darkisland_FT09",
+  "name": "干枯海岸"
+ },
+ "Darkisland_FT10": {
+  "msgid": "REGION_Darkisland_FT10",
+  "name": "冰封珊瑚丘"
+ },
+ "Grass_3": {
+  "msgid": "REGION_Grass_3",
+  "name": "黄金色的丘陵"
+ },
+ "Grass_4": {
+  "msgid": "REGION_Grass_4",
+  "name": "红叶岩场"
+ },
+ "Grass_5": {
+  "msgid": "REGION_Grass_5",
+  "name": "要塞遗迹"
+ },
+ "Grass_6": {
+  "msgid": "REGION_Grass_6",
+  "name": "飞鱼海岸"
+ },
+ "Grass_7": {
+  "msgid": "REGION_Grass_7",
+  "name": "鲨小子的地盘"
+ },
+ "Grass_8": {
+  "msgid": "REGION_Grass_8",
+  "name": "战火爪痕"
+ },
+ "Grass_9": {
+  "msgid": "REGION_Grass_9",
+  "name": "竹林深处"
+ },
+ "Frost_2": {
+  "msgid": "REGION_Frost_2",
+  "name": "灵峰山脚"
+ },
+ "Frost_3": {
+  "msgid": "REGION_Frost_3",
+  "name": "废弃遗迹"
+ },
+ "Volcano_2": {
+  "msgid": "REGION_Volcano_2",
+  "name": "火山山脚"
+ },
+ "Volcano_3": {
+  "msgid": "REGION_Volcano_3",
+  "name": "要塞城市遗址"
+ },
+ "Volcano_4": {
+  "msgid": "REGION_Volcano_4",
+  "name": "干燥沙滩"
+ },
+ "UndergroundCave_Darkisland_1": {
+  "msgid": "REGION_UndergroundCave_Darkisland_1",
+  "name": "食人鬼坑道"
+ },
+ "UndergroundCave_Darkisland_2": {
+  "msgid": "REGION_UndergroundCave_Darkisland_2",
+  "name": "盾龙坑道"
+ },
+ "UndergroundCave_Darkisland_3": {
+  "msgid": "REGION_UndergroundCave_Darkisland_3",
+  "name": "结晶坑道"
+ },
+ "UndergroundCave_Darkisland_4": {
+  "msgid": "REGION_UndergroundCave_Darkisland_4",
+  "name": "暗炎坑道"
+ },
+ "UndergroundCave_Darkisland_5": {
+  "msgid": "REGION_UndergroundCave_Darkisland_5",
+  "name": "染血坑道"
+ },
+ "FixedDungeon_DarkIsland_1": {
+  "msgid": "REGION_FixedDungeon_DarkIsland_1",
+  "name": "黑天马密域"
+ },
+ "FixedDungeon_DarkIsland_2": {
+  "msgid": "REGION_FixedDungeon_DarkIsland_2",
+  "name": "小勇者密域"
+ },
+ "FixedDungeon_DarkIsland_3": {
+  "msgid": "REGION_FixedDungeon_DarkIsland_3",
+  "name": "靛青密域"
+ },
+ "FixedDungeon_DarkIsland_4": {
+  "msgid": "REGION_FixedDungeon_DarkIsland_4",
+  "name": "猎魂密域"
+ },
+ "SmallIsland01": {
+  "msgid": "REGION_SmallIsland01",
+  "name": "向阳孤岛"
+ },
+ "SmallIsland02": {
+  "msgid": "REGION_SmallIsland02",
+  "name": "绿洲孤岛"
+ },
+ "SmallIsland03": {
+  "msgid": "REGION_SmallIsland03",
+  "name": "冰封孤岛"
+ },
+ "SmallIsland04": {
+  "msgid": "REGION_SmallIsland04",
+  "name": "极冻孤岛"
+ },
+ "SmallIsland05": {
+  "msgid": "REGION_SmallIsland05",
+  "name": "亡灵孤岛"
+ },
+ "SmallIsland06": {
+  "msgid": "REGION_SmallIsland06",
+  "name": "尘封宝藏孤岛"
+ },
+ "SmallIsland07": {
+  "msgid": "REGION_SmallIsland07",
+  "name": "常夏孤岛"
+ },
+ "FixedDungeon_Yakushima": {
+  "msgid": "REGION_FixedDungeon_Yakushima",
+  "name": "泰拉瑞亚密域"
+ },
+ "FixedDungeon_SmallIsland03": {
+  "msgid": "REGION_FixedDungeon_SmallIsland03",
+  "name": "冰封密域"
+ }
+}

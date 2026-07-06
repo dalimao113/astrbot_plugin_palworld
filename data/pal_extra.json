@@ -1,0 +1,1026 @@
+{
+ "SheepBall": {
+  "egg": "Common Egg",
+  "lv_min": 1,
+  "lv_max": 14
+ },
+ "PinkCat": {
+  "egg": "Common Egg",
+  "lv_min": 3,
+  "lv_max": 45
+ },
+ "ChickenPal": {
+  "egg": "Common Egg",
+  "lv_min": 3,
+  "lv_max": 5
+ },
+ "Carbunclo": {
+  "egg": "Verdant Egg",
+  "lv_min": 3,
+  "lv_max": 11
+ },
+ "Kitsunebi": {
+  "egg": "Scorching Egg",
+  "lv_min": 3,
+  "lv_max": 11
+ },
+ "Kitsunebi_Ice": {
+  "egg": "Frozen Egg",
+  "lv_min": 52,
+  "lv_max": 55
+ },
+ "BluePlatypus": {
+  "egg": "Damp Egg",
+  "lv_min": 3,
+  "lv_max": 13
+ },
+ "BluePlatypus_Fire": {
+  "egg": "Damp Egg",
+  "lv_min": 16,
+  "lv_max": 27
+ },
+ "ElecCat": {
+  "egg": "Electric Egg",
+  "lv_min": 3,
+  "lv_max": 17
+ },
+ "Monkey": {
+  "egg": "Verdant Egg",
+  "lv_min": 3,
+  "lv_max": 6
+ },
+ "FlameBambi": {
+  "egg": "Scorching Egg",
+  "lv_min": 9,
+  "lv_max": 11
+ },
+ "Penguin": {
+  "egg": "Damp Egg",
+  "lv_min": 2,
+  "lv_max": 34
+ },
+ "Penguin_Electric": {
+  "egg": "Damp Egg",
+  "lv_min": 16,
+  "lv_max": 27
+ },
+ "CaptainPenguin": {
+  "egg": "Large Damp Egg",
+  "lv_min": 15,
+  "lv_max": 15
+ },
+ "CaptainPenguin_Black": {
+  "egg": "Large Damp Egg",
+  "lv_min": 21,
+  "lv_max": 34
+ },
+ "Hedgehog": {
+  "egg": "Electric Egg",
+  "lv_min": 3,
+  "lv_max": 6
+ },
+ "Hedgehog_Ice": {
+  "egg": "Frozen Egg",
+  "lv_min": 1,
+  "lv_max": 55
+ },
+ "PlantSlime": {
+  "egg": "Verdant Egg",
+  "lv_min": 3,
+  "lv_max": 14
+ },
+ "CuteFox": {
+  "egg": "Common Egg",
+  "lv_min": 3,
+  "lv_max": 6
+ },
+ "WizardOwl": {
+  "egg": "Dark Egg",
+  "lv_min": 3,
+  "lv_max": 14
+ },
+ "Ganesha": {
+  "egg": "Damp Egg",
+  "lv_min": 1,
+  "lv_max": 4
+ },
+ "NegativeKoala": {
+  "egg": "Dark Egg",
+  "lv_min": 3,
+  "lv_max": 45
+ },
+ "WoolFox": {
+  "egg": "Common Egg",
+  "lv_min": 2,
+  "lv_max": 14
+ },
+ "DreamDemon": {
+  "egg": "Dark Egg",
+  "lv_min": 3,
+  "lv_max": 7
+ },
+ "Boar": {
+  "egg": "Rocky Egg",
+  "lv_min": 3,
+  "lv_max": 6
+ },
+ "NightFox": {
+  "egg": "Large Dark Egg",
+  "lv_min": 5,
+  "lv_max": 12
+ },
+ "CuteMole": {
+  "egg": "Rocky Egg",
+  "lv_min": 14,
+  "lv_max": 30
+ },
+ "NegativeOctopus": {
+  "egg": "Dark Egg",
+  "lv_min": 5,
+  "lv_max": 55
+ },
+ "NegativeOctopus_Neutral": {
+  "egg": "Common Egg",
+  "lv_min": 16,
+  "lv_max": 44
+ },
+ "Bastet": {
+  "egg": "Dark Egg",
+  "lv_min": 5,
+  "lv_max": 55
+ },
+ "Bastet_Ice": {
+  "egg": "Frozen Egg",
+  "lv_min": 30,
+  "lv_max": 34
+ },
+ "FlyingManta": {
+  "egg": "Damp Egg",
+  "lv_min": 2,
+  "lv_max": 12
+ },
+ "FlyingManta_Thunder": {
+  "egg": "Damp Egg",
+  "lv_min": 16,
+  "lv_max": 27
+ },
+ "Garm": {
+  "egg": "Common Egg",
+  "lv_min": 5,
+  "lv_max": 15
+ },
+ "ColorfulBird": {
+  "egg": "Common Egg",
+  "lv_min": 11,
+  "lv_max": 45
+ },
+ "FlowerRabbit": {
+  "egg": "Verdant Egg",
+  "lv_min": 15,
+  "lv_max": 45
+ },
+ "CowPal": {
+  "egg": "Common Egg",
+  "lv_min": 10,
+  "lv_max": 13
+ },
+ "LittleBriarRose": {
+  "egg": "Verdant Egg",
+  "lv_min": 16,
+  "lv_max": 17
+ },
+ "SharkKid": {
+  "egg": "Damp Egg",
+  "lv_min": 20,
+  "lv_max": 22
+ },
+ "SharkKid_Fire": {
+  "egg": "Scorching Egg",
+  "lv_min": 23,
+  "lv_max": 28
+ },
+ "GrassPanda": {
+  "egg": "Large Verdant Egg",
+  "lv_min": 25,
+  "lv_max": 28
+ },
+ "GrassPanda_Electric": {
+  "egg": "Large Electric Egg",
+  "lv_min": 15,
+  "lv_max": 55
+ },
+ "SweetsSheep": {
+  "egg": "Common Egg",
+  "lv_min": 14,
+  "lv_max": 16
+ },
+ "BerryGoat": {
+  "egg": "Verdant Egg",
+  "lv_min": 8,
+  "lv_max": 41
+ },
+ "BerryGoat_Dark": {
+  "egg": "Dark Egg",
+  "lv_min": 50,
+  "lv_max": 54
+ },
+ "Alpaca": {
+  "egg": "Common Egg",
+  "lv_min": 8,
+  "lv_max": 17
+ },
+ "Deer": {
+  "egg": "Common Egg",
+  "lv_min": 9,
+  "lv_max": 11
+ },
+ "Deer_Ground": {
+  "egg": "Large Rocky Egg",
+  "lv_min": 10,
+  "lv_max": 55
+ },
+ "HawkBird": {
+  "egg": "Common Egg",
+  "lv_min": 9,
+  "lv_max": 33
+ },
+ "PinkRabbit": {
+  "egg": "Common Egg",
+  "lv_min": 7,
+  "lv_max": 45
+ },
+ "PinkRabbit_Grass": {
+  "egg": "Verdant Egg",
+  "lv_min": 50,
+  "lv_max": 53
+ },
+ "Baphomet": {
+  "egg": "Scorching Egg",
+  "lv_min": 27,
+  "lv_max": 32
+ },
+ "Baphomet_Dark": {
+  "egg": "Large Dark Egg",
+  "lv_min": 25,
+  "lv_max": 55
+ },
+ "CuteButterfly": {
+  "egg": "Verdant Egg",
+  "lv_min": 18,
+  "lv_max": 20
+ },
+ "FlameBuffalo": {
+  "egg": "Scorching Egg",
+  "lv_min": 9,
+  "lv_max": 39
+ },
+ "LazyCatfish": {
+  "egg": "Rocky Egg",
+  "lv_min": 17,
+  "lv_max": 30
+ },
+ "LazyCatfish_Gold": {
+  "egg": "Large Rocky Egg",
+  "lv_min": 21,
+  "lv_max": 35
+ },
+ "DarkCrow": {
+  "egg": "Dark Egg",
+  "lv_min": 12,
+  "lv_max": 45
+ },
+ "LizardMan": {
+  "egg": "Dark Egg",
+  "lv_min": 26,
+  "lv_max": 31
+ },
+ "LizardMan_Fire": {
+  "egg": "Scorching Egg",
+  "lv_min": 15,
+  "lv_max": 31
+ },
+ "Werewolf": {
+  "egg": "Dark Egg",
+  "lv_min": 12,
+  "lv_max": 28
+ },
+ "Werewolf_Ice": {
+  "egg": "Frozen Egg",
+  "lv_min": 52,
+  "lv_max": 55
+ },
+ "Eagle": {
+  "egg": "Common Egg",
+  "lv_min": 9,
+  "lv_max": 20
+ },
+ "RobinHood": {
+  "egg": "Large Verdant Egg",
+  "lv_min": 22,
+  "lv_max": 25
+ },
+ "RobinHood_Ground": {
+  "egg": "Large Verdant Egg",
+  "lv_min": 28,
+  "lv_max": 32
+ },
+ "Gorilla": {
+  "egg": "Large Common Egg",
+  "lv_min": 22,
+  "lv_max": 24
+ },
+ "Gorilla_Ground": {
+  "egg": "Large Rocky Egg",
+  "lv_min": 42,
+  "lv_max": 46
+ },
+ "SoldierBee": {
+  "egg": "Verdant Egg",
+  "lv_min": 20,
+  "lv_max": 22
+ },
+ "QueenBee": {
+  "egg": "Huge Verdant Egg",
+  "lv_min": 28,
+  "lv_max": 29
+ },
+ "NaughtyCat": {
+  "egg": "Large Common Egg",
+  "lv_min": 25,
+  "lv_max": 50
+ },
+ "MopBaby": {
+  "egg": "Frozen Egg",
+  "lv_min": 10,
+  "lv_max": 27
+ },
+ "MopKing": {
+  "egg": "Large Frozen Egg",
+  "lv_min": 15,
+  "lv_max": 32
+ },
+ "WeaselDragon": {
+  "egg": "Frozen Egg",
+  "lv_min": 20,
+  "lv_max": 39
+ },
+ "WeaselDragon_Fire": {
+  "egg": "Large Scorching Egg",
+  "lv_min": 42,
+  "lv_max": 46
+ },
+ "Kirin": {
+  "egg": "Large Electric Egg",
+  "lv_min": 13,
+  "lv_max": 17
+ },
+ "IceFox": {
+  "egg": "Large Frozen Egg",
+  "lv_min": 24,
+  "lv_max": 30
+ },
+ "FireKirin": {
+  "egg": "Large Scorching Egg",
+  "lv_min": 28,
+  "lv_max": 32
+ },
+ "FireKirin_Dark": {
+  "egg": "Large Scorching Egg",
+  "lv_min": 30,
+  "lv_max": 37
+ },
+ "IceDeer": {
+  "egg": "Frozen Egg",
+  "lv_min": 25,
+  "lv_max": 39
+ },
+ "ThunderDog": {
+  "egg": "Large Electric Egg",
+  "lv_min": 27,
+  "lv_max": 53
+ },
+ "AmaterasuWolf": {
+  "egg": "Large Scorching Egg",
+  "lv_min": 28,
+  "lv_max": 32
+ },
+ "AmaterasuWolf_Dark": {
+  "egg": "Large Dark Egg",
+  "lv_min": 50,
+  "lv_max": 58
+ },
+ "RaijinDaughter": {
+  "egg": "Electric Egg",
+  "lv_min": 24,
+  "lv_max": 28
+ },
+ "RaijinDaughter_Water": {
+  "egg": "Dark Egg",
+  "lv_min": 50,
+  "lv_max": 54
+ },
+ "Mutant": {
+  "egg": "Large Common Egg",
+  "lv_min": 32,
+  "lv_max": 32
+ },
+ "FlowerDinosaur": {
+  "egg": "Large Verdant Egg",
+  "lv_min": 15,
+  "lv_max": 50
+ },
+ "FlowerDinosaur_Electric": {
+  "egg": "Large Electric Egg",
+  "lv_min": 32,
+  "lv_max": 36
+ },
+ "Serpent": {
+  "egg": "Damp Egg",
+  "lv_min": 15,
+  "lv_max": 26
+ },
+ "Serpent_Ground": {
+  "egg": "Large Rocky Egg",
+  "lv_min": 28,
+  "lv_max": 54
+ },
+ "GhostBeast": {
+  "egg": "Large Dark Egg",
+  "lv_min": 36,
+  "lv_max": 54
+ },
+ "DrillGame": {
+  "egg": "Large Rocky Egg",
+  "lv_min": 18,
+  "lv_max": 39
+ },
+ "CatBat": {
+  "egg": "Large Dark Egg",
+  "lv_min": 9,
+  "lv_max": 12
+ },
+ "PinkLizard": {
+  "egg": "Large Common Egg",
+  "lv_min": 18,
+  "lv_max": 36
+ },
+ "LavaGirl": {
+  "egg": "Scorching Egg",
+  "lv_min": 9,
+  "lv_max": 28
+ },
+ "BirdDragon": {
+  "egg": "Scorching Egg",
+  "lv_min": 10,
+  "lv_max": 54
+ },
+ "BirdDragon_Ice": {
+  "egg": "Large Frozen Egg",
+  "lv_min": 22,
+  "lv_max": 54
+ },
+ "Ronin": {
+  "egg": "Large Scorching Egg",
+  "lv_min": 23,
+  "lv_max": 50
+ },
+ "Ronin_Dark": {
+  "egg": "Large Scorching Egg",
+  "lv_min": 46,
+  "lv_max": 53
+ },
+ "ThunderBird": {
+  "egg": "Large Electric Egg",
+  "lv_min": 33,
+  "lv_max": 50
+ },
+ "RedArmorBird": {
+  "egg": "Large Scorching Egg",
+  "lv_min": 34,
+  "lv_max": 54
+ },
+ "CatMage": {
+  "egg": "Large Dark Egg",
+  "lv_min": 23,
+  "lv_max": 28
+ },
+ "CatMage_Fire": {
+  "egg": "Large Dark Egg",
+  "lv_min": 30,
+  "lv_max": 55
+ },
+ "FoxMage": {
+  "egg": "Large Scorching Egg",
+  "lv_min": 16,
+  "lv_max": 31
+ },
+ "FoxMage_Dark": {
+  "egg": "Large Scorching Egg",
+  "lv_min": 46,
+  "lv_max": 53
+ },
+ "GrassRabbitMan": {
+  "egg": "Huge Verdant Egg",
+  "lv_min": 35,
+  "lv_max": 53
+ },
+ "VioletFairy": {
+  "egg": "Huge Verdant Egg",
+  "lv_min": 38,
+  "lv_max": 38
+ },
+ "WhiteMoth": {
+  "egg": "Large Frozen Egg",
+  "lv_min": 36,
+  "lv_max": 40
+ },
+ "FairyDragon": {
+  "egg": "Large Dragon Egg",
+  "lv_min": 18,
+  "lv_max": 55
+ },
+ "FairyDragon_Water": {
+  "egg": "Huge Dragon Egg",
+  "lv_min": 25,
+  "lv_max": 55
+ },
+ "Kelpie": {
+  "egg": "Damp Egg",
+  "lv_min": 9,
+  "lv_max": 12
+ },
+ "Kelpie_Fire": {
+  "egg": "Scorching Egg",
+  "lv_min": 9,
+  "lv_max": 29
+ },
+ "BlueDragon": {
+  "egg": "Large Damp Egg",
+  "lv_min": 11,
+  "lv_max": 55
+ },
+ "BlueDragon_Ice": {
+  "egg": "Huge Frozen Egg",
+  "lv_min": 21,
+  "lv_max": 34
+ },
+ "WhiteTiger": {
+  "egg": "Large Frozen Egg",
+  "lv_min": 36,
+  "lv_max": 40
+ },
+ "WhiteTiger_Ground": {
+  "egg": "Large Rocky Egg",
+  "lv_min": 51,
+  "lv_max": 55
+ },
+ "Manticore": {
+  "egg": "Large Scorching Egg",
+  "lv_min": 34,
+  "lv_max": 54
+ },
+ "Manticore_Dark": {
+  "egg": "Huge Scorching Egg",
+  "lv_min": 33,
+  "lv_max": 59
+ },
+ "LazyDragon": {
+  "egg": "Huge Dragon Egg",
+  "lv_min": 18,
+  "lv_max": 50
+ },
+ "LazyDragon_Electric": {
+  "egg": "Huge Dragon Egg",
+  "lv_min": 31,
+  "lv_max": 31
+ },
+ "SakuraSaurus": {
+  "egg": "Large Verdant Egg",
+  "lv_min": 17,
+  "lv_max": 20
+ },
+ "SakuraSaurus_Water": {
+  "egg": "Huge Verdant Egg",
+  "lv_min": 25,
+  "lv_max": 55
+ },
+ "FlowerDoll": {
+  "egg": "Huge Verdant Egg",
+  "lv_min": 28,
+  "lv_max": 51
+ },
+ "VolcanicMonster": {
+  "egg": "Large Scorching Egg",
+  "lv_min": 34,
+  "lv_max": 37
+ },
+ "VolcanicMonster_Ice": {
+  "egg": "Large Frozen Egg",
+  "lv_min": 35,
+  "lv_max": 55
+ },
+ "KingAlpaca": {
+  "egg": "Huge Common Egg",
+  "lv_min": 25,
+  "lv_max": 55
+ },
+ "KingAlpaca_Ice": {
+  "egg": "Huge Frozen Egg",
+  "lv_min": 25,
+  "lv_max": 55
+ },
+ "GrassMammoth": {
+  "egg": "Huge Verdant Egg",
+  "lv_min": 33,
+  "lv_max": 40
+ },
+ "GrassMammoth_Ice": {
+  "egg": "Huge Frozen Egg",
+  "lv_min": 41,
+  "lv_max": 43
+ },
+ "Yeti": {
+  "egg": "Large Frozen Egg",
+  "lv_min": 41,
+  "lv_max": 43
+ },
+ "Yeti_Grass": {
+  "egg": "Huge Verdant Egg",
+  "lv_min": 35,
+  "lv_max": 55
+ },
+ "HerculesBeetle": {
+  "egg": "Huge Rocky Egg",
+  "lv_min": 30,
+  "lv_max": 30
+ },
+ "HerculesBeetle_Ground": {
+  "egg": "Huge Rocky Egg",
+  "lv_min": 52,
+  "lv_max": 56
+ },
+ "FengyunDeeper": {
+  "lv_min": 34,
+  "lv_max": 37
+ },
+ "FengyunDeeper_Electric": {},
+ "CatVampire": {
+  "lv_min": 23,
+  "lv_max": 23
+ },
+ "SkyDragon": {
+  "lv_min": 23,
+  "lv_max": 52
+ },
+ "SkyDragon_Grass": {
+  "lv_min": 52,
+  "lv_max": 54
+ },
+ "KingBahamut": {},
+ "KingBahamut_Dragon": {},
+ "HadesBird": {
+  "lv_min": 24,
+  "lv_max": 28
+ },
+ "HadesBird_Electric": {
+  "egg": "Huge Dark Egg",
+  "lv_min": 46,
+  "lv_max": 50
+ },
+ "BlackMetalDragon": {
+  "egg": "Huge Dragon Egg",
+  "lv_min": 35,
+  "lv_max": 55
+ },
+ "DarkScorpion": {
+  "egg": "Huge Dark Egg",
+  "lv_min": 50,
+  "lv_max": 51
+ },
+ "DarkScorpion_Ground": {
+  "egg": "Huge Rocky Egg",
+  "lv_min": 45,
+  "lv_max": 55
+ },
+ "Anubis": {
+  "egg": "Huge Rocky Egg",
+  "lv_min": 35,
+  "lv_max": 55
+ },
+ "Umihebi": {
+  "egg": "Huge Dragon Egg",
+  "lv_min": 35,
+  "lv_max": 55
+ },
+ "Umihebi_Fire": {
+  "egg": "Huge Dragon Egg",
+  "lv_min": 52,
+  "lv_max": 56
+ },
+ "Suzaku": {
+  "egg": "Huge Scorching Egg",
+  "lv_min": 40,
+  "lv_max": 42
+ },
+ "Suzaku_Water": {
+  "egg": "Huge Damp Egg",
+  "lv_min": 35,
+  "lv_max": 55
+ },
+ "ElecPanda": {
+  "egg": "Huge Electric Egg",
+  "lv_min": 18,
+  "lv_max": 55
+ },
+ "LilyQueen": {
+  "egg": "Huge Verdant Egg",
+  "lv_min": 15,
+  "lv_max": 51
+ },
+ "LilyQueen_Dark": {
+  "egg": "Huge Dark Egg",
+  "lv_min": 35,
+  "lv_max": 55
+ },
+ "Horus": {
+  "egg": "Huge Scorching Egg",
+  "lv_min": 35,
+  "lv_max": 55
+ },
+ "Horus_Water": {
+  "egg": "Huge Damp Egg",
+  "lv_min": 52,
+  "lv_max": 56
+ },
+ "ThunderDragonMan": {
+  "egg": "Huge Dragon Egg",
+  "lv_min": 35,
+  "lv_max": 55
+ },
+ "BlackGriffon": {
+  "egg": "Huge Dark Egg",
+  "lv_min": 35,
+  "lv_max": 55
+ },
+ "SaintCentaur": {
+  "egg": "Huge Common Egg"
+ },
+ "BlackCentaur": {
+  "egg": "Huge Dark Egg"
+ },
+ "IceHorse": {
+  "egg": "Huge Frozen Egg"
+ },
+ "IceHorse_Dark": {
+  "egg": "Huge Dark Egg",
+  "lv_min": 60,
+  "lv_max": 60
+ },
+ "JetDragon": {
+  "egg": "Huge Dragon Egg"
+ },
+ "NightLady": {
+  "egg": "Huge Dark Egg"
+ },
+ "NightLady_Dark": {
+  "egg": "Huge Dark Egg"
+ },
+ "MoonQueen": {
+  "egg": "Huge Dark Egg"
+ },
+ "KendoFrog": {
+  "egg": "Damp Egg",
+  "lv_min": 4,
+  "lv_max": 45
+ },
+ "KendoFrog_Dark": {
+  "egg": "Large Damp Egg",
+  "lv_min": 21,
+  "lv_max": 34
+ },
+ "LeafPrincess": {
+  "egg": "Verdant Egg",
+  "lv_min": 40,
+  "lv_max": 45
+ },
+ "MushroomDragon": {
+  "egg": "Verdant Egg",
+  "lv_min": 42,
+  "lv_max": 46
+ },
+ "MushroomDragon_Dark": {
+  "egg": "Large Verdant Egg",
+  "lv_min": 46,
+  "lv_max": 54
+ },
+ "SmallArmadillo": {
+  "egg": "Rocky Egg",
+  "lv_min": 40,
+  "lv_max": 45
+ },
+ "CandleGhost": {
+  "egg": "Large Dark Egg",
+  "lv_min": 46,
+  "lv_max": 50
+ },
+ "ScorpionMan": {
+  "egg": "Large Dark Egg",
+  "lv_min": 43,
+  "lv_max": 46
+ },
+ "WingGolem": {
+  "egg": "Huge Rocky Egg",
+  "lv_min": 45,
+  "lv_max": 55
+ },
+ "GuardianDog": {
+  "egg": "Common Egg",
+  "lv_min": 41,
+  "lv_max": 45
+ },
+ "SifuDog": {
+  "egg": "Large Common Egg",
+  "lv_min": 50,
+  "lv_max": 53
+ },
+ "FeatherOstrich": {
+  "egg": "Large Rocky Egg",
+  "lv_min": 18,
+  "lv_max": 45
+ },
+ "MimicDog": {
+  "egg": "Large Common Egg",
+  "lv_min": 5,
+  "lv_max": 55
+ },
+ "DarkAlien": {
+  "egg": "Large Dark Egg",
+  "lv_min": 25,
+  "lv_max": 30
+ },
+ "WhiteAlienDragon": {
+  "egg": "Huge Dragon Egg"
+ },
+ "DarkMechaDragon": {
+  "egg": "Huge Dark Egg"
+ },
+ "GhostRabbit": {
+  "egg": "Large Dark Egg",
+  "lv_min": 50,
+  "lv_max": 58
+ },
+ "NightBlueHorse": {
+  "egg": "Large Dark Egg",
+  "lv_min": 50,
+  "lv_max": 56
+ },
+ "WhiteShieldDragon": {
+  "egg": "Huge Dragon Egg"
+ },
+ "BlackPuppy": {
+  "egg": "Dark Egg",
+  "lv_min": 50,
+  "lv_max": 55
+ },
+ "WhiteDeer": {
+  "egg": "Large Common Egg",
+  "lv_min": 57,
+  "lv_max": 59
+ },
+ "MysteryMask": {
+  "egg": "Dark Egg",
+  "lv_min": 55,
+  "lv_max": 58
+ },
+ "GrimGirl": {
+  "egg": "Dark Egg",
+  "lv_min": 52,
+  "lv_max": 58
+ },
+ "PurpleSpider": {
+  "egg": "Dark Egg",
+  "lv_min": 30,
+  "lv_max": 55
+ },
+ "BlueThunderHorse": {
+  "egg": "Large Electric Egg",
+  "lv_min": 57,
+  "lv_max": 59
+ },
+ "SnowTigerBeastman": {
+  "egg": "Huge Frozen Egg"
+ },
+ "BlueberryFairy": {
+  "egg": "Large Verdant Egg",
+  "lv_min": 50,
+  "lv_max": 56
+ },
+ "BadCatgirl": {
+  "egg": "Dark Egg",
+  "lv_min": 52,
+  "lv_max": 56
+ },
+ "GoldenHorse": {
+  "egg": "Huge Rocky Egg",
+  "lv_min": 52,
+  "lv_max": 55
+ },
+ "LeafMomonga": {
+  "egg": "Verdant Egg",
+  "lv_min": 1,
+  "lv_max": 50
+ },
+ "IceWitch": {
+  "egg": "Frozen Egg",
+  "lv_min": 10,
+  "lv_max": 20
+ },
+ "SnowPeafowl": {
+  "egg": "Frozen Egg",
+  "lv_min": 10,
+  "lv_max": 20
+ },
+ "TropicalOstrich": {
+  "egg": "Verdant Egg",
+  "lv_min": 32,
+  "lv_max": 50
+ },
+ "Plesiosaur": {
+  "egg": "Large Verdant Egg",
+  "lv_min": 40,
+  "lv_max": 50
+ },
+ "IceCrocodile": {
+  "egg": "Frozen Egg",
+  "lv_min": 10,
+  "lv_max": 20
+ },
+ "IceSeal": {
+  "egg": "Large Frozen Egg",
+  "lv_min": 50,
+  "lv_max": 60
+ },
+ "TentacleTurtle": {
+  "egg": "Damp Egg",
+  "lv_min": 10,
+  "lv_max": 20
+ },
+ "TentacleTurtle_Ground": {
+  "egg": "Damp Egg",
+  "lv_min": 21,
+  "lv_max": 34
+ },
+ "JellyfishGhost": {
+  "egg": "Damp Egg",
+  "lv_min": 30,
+  "lv_max": 40
+ },
+ "JellyfishFairy": {
+  "egg": "Damp Egg",
+  "lv_min": 10,
+  "lv_max": 20
+ },
+ "OctopusGirl": {
+  "egg": "Large Damp Egg",
+  "lv_min": 10,
+  "lv_max": 20
+ },
+ "StuffedShark": {
+  "egg": "Damp Egg",
+  "lv_min": 1,
+  "lv_max": 38
+ },
+ "StuffedShark_Fire": {
+  "egg": "Damp Egg",
+  "lv_min": 21,
+  "lv_max": 34
+ },
+ "GhostAnglerfish": {
+  "egg": "Large Dark Egg",
+  "lv_min": 30,
+  "lv_max": 40
+ },
+ "GhostAnglerfish_Fire": {
+  "egg": "Large Scorching Egg",
+  "lv_min": 21,
+  "lv_max": 34
+ },
+ "IceNarwhal": {
+  "egg": "Large Frozen Egg",
+  "lv_min": 50,
+  "lv_max": 60
+ },
+ "IceNarwhal_Fire": {
+  "egg": "Huge Frozen Egg",
+  "lv_min": 21,
+  "lv_max": 34
+ },
+ "PoseidonOrca": {
+  "egg": "Huge Damp Egg",
+  "lv_min": 60,
+  "lv_max": 60
+ },
+ "LegendDeer": {
+  "egg": "Huge Common Egg"
+ }
+}
