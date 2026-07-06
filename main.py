@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.2.0",
+    "1.2.1",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -3203,6 +3203,15 @@ class PalworldPlugin(Star):
         p = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
         condense = max(0, int(pal.get("rank", 1) or 1) - 1)   # 浓缩星 0~4
         rarity = int((p.get("rarity") if p else 0) or 0)
+        # 种族基础值 / 工作速度 / 工作适性 / 伙伴技能（均来自图鉴 paldex，准确数据）
+        stats = (p.get("stats") or {}) if p else {}
+        wsu = (p.get("work_suitability") or {}) if p else {}
+        works = sorted(
+            ({"name": WORK_LABELS.get(k, k), "icon": WORK_ICON.get(k, "⚙️"), "level": int(v)}
+             for k, v in wsu.items() if v and int(v) > 0),
+            key=lambda w: -w["level"])
+        partner = {"title": p.get("partner_skill_title", "") if p else "",
+                   "desc": p.get("partner_skill_description", "") if p else ""}
         return {
             "name": p["pal_name"] if p else pal.get("char_id", "未知帕鲁"),
             "index": str(p.get("pal_index", "")) if p else "",
@@ -3216,6 +3225,10 @@ class PalworldPlugin(Star):
             "iv_hp": pal.get("iv_hp", 0), "iv_atk": pal.get("iv_atk", 0), "iv_def": pal.get("iv_def", 0),
             "passives": [self._passive_view(x) for x in pal.get("passives", [])],
             "wazas": [self._waza_view(x) for x in pal.get("equip_waza", [])],
+            "base_atk": int(stats.get("shot_attack") or stats.get("melee_attack") or 0),
+            "base_def": int(stats.get("defense") or 0),
+            "craft_speed": int((p.get("craft_speed") if p else 0) or 0),
+            "works": works, "partner": partner,
         }
 
     def _profile_save_extra(self, sp: Optional[dict]) -> dict:

@@ -1276,15 +1276,20 @@ stage_finish() {
 
 ${C_G}${C_BOLD}后端已就绪！接下来在浏览器里完成最后 3 步:${C_RESET}
 
-  ${C_BOLD}①${C_RESET} 打开 NapCat WebUI 扫码登录机器人 QQ:
-       ${C_C}http://${ip}:6099${C_RESET}
-       (首次登录 token 在容器日志里: docker logs napcat | grep token)
+  ${C_BOLD}① 扫码登录机器人 QQ${C_RESET} — 打开 NapCat WebUI:  ${C_C}http://${ip}:6099${C_RESET}
+       ${C_Y}登录要 token(WebUI 密钥)，两种查法任选:${C_RESET}
+         · ${C_BOLD}文件${C_RESET}(推荐): 1Panel 文件管理器打开
+             ${C_C}${ASTRBOT_DIR}/napcat/config/webui.json${C_RESET}
+             里 ${C_BOLD}"token"${C_RESET} 引号内的值就是登录密钥
+         · ${C_BOLD}日志${C_RESET}: ${C_C}docker logs napcat 2>&1 | grep -i token${C_RESET}
+       进去后用${C_BOLD}手机 QQ 扫码${C_RESET}登录机器人号(${C_BOLD}建议小号${C_RESET}，主号易风控)。
 
-  ${C_BOLD}②${C_RESET} 在 NapCat WebUI 里添加"反向 WebSocket":
-       ${C_C}ws://astrbot:6199/ws${C_RESET}
-       (astrbot 和 napcat 在同一网络, 用容器名互通)
+  ${C_BOLD}② 接上 AstrBot${C_RESET} — 反向 WebSocket ${C_G}已由脚本自动配好，一般无需手动加${C_RESET}。
+       (手动时: NapCat「网络配置」加 WebSocket 客户端 ${C_C}ws://astrbot:6199/ws${C_RESET}，
+        消息格式选 ${C_BOLD}array${C_RESET}；AstrBot 侧 aiocqhttp 反向 WS 监听 ${C_BOLD}6199${C_RESET}。)
 
-  ${C_BOLD}③${C_RESET} 确认插件配置里 admin_qq 已填你的 QQ:
+  ${C_BOLD}③ 确认管理员 QQ${C_RESET} — ${C_Y}${C_BOLD}必须填！否则公告/踢/封/关服/自检等管理指令没人能用！${C_RESET}
+       插件配置 ${C_C}admin_qq${C_RESET} 要有你的 QQ 号(纯数字):
        ${C_C}${PLUGIN_CONFIG}${C_RESET}
 
 ${C_G}${C_BOLD}关于出图(t2i 文转图渲染):${C_RESET}

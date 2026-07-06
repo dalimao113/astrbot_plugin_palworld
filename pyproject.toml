@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "astrbot_plugin_palworld"
-version = "1.1.2"
+version = "1.2.1"
 description = "AstrBot 帕鲁(Palworld)服务器查询与管理插件，输出精美卡片图片"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -12,14 +12,14 @@ license = { text = "AGPL-3.0-or-later" }
 authors = [{ name = "dalimao113" }]
 dependencies = [
     "aiohttp",
-    "jinja2",
     # 存档解析必须锁 0.24.0（palwork/palsave.py 针对其内部结构做了 monkey-patch）
     "palworld-save-tools==0.24.0",
 ]
 
 [project.optional-dependencies]
-# 本地 Playwright 渲染（可选；默认走 AstrBot 内置 t2i，见 local_render 配置）
-local-render = ["playwright"]
+# 本地渲染（可选；默认 local_render=False 走 AstrBot 内置 t2i，无需这些）。
+# jinja2 仅在本地 Playwright 渲染路径用到，故与 playwright 一并列为可选。
+local-render = ["playwright", "jinja2"]
 dev = ["pytest", "ruff"]
 
 [project.urls]

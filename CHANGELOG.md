@@ -2,6 +2,20 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.2.1] - 2026-07-06
+
+### 文档 / 发布一致性
+- 统一版本号：`pyproject.toml` 补齐到与 metadata.yaml / `main.py @register` / README 一致；新增 `tests/test_version.py` 防止三处版本再次漂移。
+- 依赖声明：`jinja2` 判定为仅本地渲染用，移入 pyproject `optional-dependencies.local-render`，使主依赖与 requirements.txt 一致。
+- README 修正：`/帕鲁风格`（不存在的命令）改为"WebUI 配置 card_style 切换"；项目结构表更新为模块化后的实际结构；补充"手动下载 ZIP 安装须把目录改名为 astrbot_plugin_palworld"的说明（避免包名含非法字符导致加载失败）。
+- 部署教程（docs/DEPLOY.md）第 6 章重写：NapCat WebUI token 的三种查法（含 1Panel 文件管理器打开 `napcat/config/webui.json`）；NapCat↔AstrBot 改为准确的**反向 WebSocket**（`ws://astrbot:6199/ws`）说明与 aiocqhttp 适配器关键参数。
+- 一键脚本 `install.sh` 收尾提醒增强：token 查找方式、反向 WS、`admin_qq` 必填 更醒目。
+
+### 帕鲁详情卡增强（队伍 / 帕鲁箱查询）
+- 每只帕鲁新增显示：**攻击 / 防御**（种族基础值）、**工作速度**、**工作适性**（带工种图标 + 等级）、**伙伴技能**（名称 + 详细解释）；数据均来自图鉴，准确无误差。
+- `生命IV / 攻击IV / 防御IV` 改名为直观的 **生命天赋 / 攻击天赋 / 防御天赋**（即游戏内"天赋"，个体值 0–100）。
+- 补全 `data/passives.json` 词条数据：**负面词条**（胆小/弱不禁风/笨手笨脚等）标记为红色并补上效果数值（如"攻击 -10%"），**正面词条**标金/彩，**牧场产出/特性**类标中性灰——好词条、坏词条一眼可分，且每个词条都有效果解释。
+
 ## [1.2.0] - 2026-07-06
 
 ### 工程重构（无功能变化）

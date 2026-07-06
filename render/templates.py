@@ -1283,6 +1283,8 @@ _TEAM_STAT_F = """
   .ivr .ivb .ivk { font-size:11px; color:#9c8fc0; }
   .ivr .ivb .ivv { font-size:16px; font-weight:800; color:#e8c466; }
   .ivr .ivb.hpb .ivv { color:#7fe0a0; }
+  .ivr .ivb.talent .ivv { color:#ff9a8f; }
+  .ivr.trow { margin-top:6px; }
 """
 TEAM_TMPL = _HEAD + _PCHIP + _TEAM_STAT_F + """
 </style></head><body><div class="page">
@@ -1307,10 +1309,19 @@ TEAM_TMPL = _HEAD + _PCHIP + _TEAM_STAT_F + """
       </div>
       <div class="ivr">
         <div class="ivb hpb"><div class="ivk">生命值</div><div class="ivv">{{ p.hp }}</div></div>
-        <div class="ivb"><div class="ivk">生命IV</div><div class="ivv">{{ p.iv_hp }}</div></div>
-        <div class="ivb"><div class="ivk">攻击IV</div><div class="ivv">{{ p.iv_atk }}</div></div>
-        <div class="ivb"><div class="ivk">防御IV</div><div class="ivv">{{ p.iv_def }}</div></div>
+        <div class="ivb"><div class="ivk">攻击</div><div class="ivv">{{ p.base_atk }}</div></div>
+        <div class="ivb"><div class="ivk">防御</div><div class="ivv">{{ p.base_def }}</div></div>
+        <div class="ivb"><div class="ivk">工作速度</div><div class="ivv">{{ p.craft_speed }}</div></div>
       </div>
+      <div class="ivr trow">
+        <div class="ivb talent"><div class="ivk">生命天赋</div><div class="ivv">{{ p.iv_hp }}</div></div>
+        <div class="ivb talent"><div class="ivk">攻击天赋</div><div class="ivv">{{ p.iv_atk }}</div></div>
+        <div class="ivb talent"><div class="ivk">防御天赋</div><div class="ivv">{{ p.iv_def }}</div></div>
+      </div>
+      {% if p.works %}<div class="sec-t" style="margin-top:12px">工作适性</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">{% for w in p.works %}<span class="pill">{{ w.icon }} {{ w.name }} Lv{{ w.level }}</span>{% endfor %}</div>{% endif %}
+      {% if p.partner.title %}<div class="sec-t" style="margin-top:12px">伙伴技能</div>
+      <div class="prow"><span class="pname pl-legend">{{ p.partner.title }}</span>{% if p.partner.desc %}<span class="pdesc">{{ p.partner.desc }}</span>{% endif %}</div>{% endif %}
       {% if p.passives %}<div class="sec-t" style="margin-top:12px">词条</div>
       {% for s in p.passives %}<div class="prow"><span class="pname pl-{{ s.color }}"><span class="ar">{{ s.arrows }}</span>{{ s.name }}</span>{% if s.effect %}<span class="pdesc">{{ s.effect }}</span>{% endif %}</div>{% endfor %}{% endif %}
       {% if p.wazas %}<div class="sec-t" style="margin-top:12px">技能</div>
@@ -1333,6 +1344,8 @@ _TEAM_STAT_P = """
   .ivr .ivb .ivk { font-size:11px; color:#574012; }
   .ivr .ivb .ivv { font-size:16px; color:#8f1212; }
   .ivr .ivb.hpb .ivv { color:#2f7a3a; }
+  .ivr .ivb.talent .ivv { color:#b06a00; }
+  .ivr.trow { margin-top:6px; }
 """
 TEAM_PIX = _PH + _PCHIP_PIX + _TEAM_STAT_P + """
 </style></head><body><div class="page">
@@ -1357,10 +1370,19 @@ TEAM_PIX = _PH + _PCHIP_PIX + _TEAM_STAT_P + """
       </div>
       <div class="ivr">
         <div class="ivb hpb"><div class="ivk">生命值</div><div class="ivv">{{ p.hp }}</div></div>
-        <div class="ivb"><div class="ivk">生命IV</div><div class="ivv">{{ p.iv_hp }}</div></div>
-        <div class="ivb"><div class="ivk">攻击IV</div><div class="ivv">{{ p.iv_atk }}</div></div>
-        <div class="ivb"><div class="ivk">防御IV</div><div class="ivv">{{ p.iv_def }}</div></div>
+        <div class="ivb"><div class="ivk">攻击</div><div class="ivv">{{ p.base_atk }}</div></div>
+        <div class="ivb"><div class="ivk">防御</div><div class="ivv">{{ p.base_def }}</div></div>
+        <div class="ivb"><div class="ivk">工作速度</div><div class="ivv">{{ p.craft_speed }}</div></div>
       </div>
+      <div class="ivr trow">
+        <div class="ivb talent"><div class="ivk">生命天赋</div><div class="ivv">{{ p.iv_hp }}</div></div>
+        <div class="ivb talent"><div class="ivk">攻击天赋</div><div class="ivv">{{ p.iv_atk }}</div></div>
+        <div class="ivb talent"><div class="ivk">防御天赋</div><div class="ivv">{{ p.iv_def }}</div></div>
+      </div>
+      {% if p.works %}<div class="sec-t" style="margin-top:12px">工作适性</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">{% for w in p.works %}<span class="pill">{{ w.icon }} {{ w.name }} Lv{{ w.level }}</span>{% endfor %}</div>{% endif %}
+      {% if p.partner.title %}<div class="sec-t" style="margin-top:12px">伙伴技能</div>
+      <div class="prow"><span class="pname pl-legend">{{ p.partner.title }}</span>{% if p.partner.desc %}<span class="pdesc">{{ p.partner.desc }}</span>{% endif %}</div>{% endif %}
       {% if p.passives %}<div class="sec-t" style="margin-top:12px">词条</div>
       {% for s in p.passives %}<div class="prow"><span class="pname pl-{{ s.color }}"><span class="ar">{{ s.arrows }}</span>{{ s.name }}</span>{% if s.effect %}<span class="pdesc">{{ s.effect }}</span>{% endif %}</div>{% endfor %}{% endif %}
       {% if p.wazas %}<div class="sec-t" style="margin-top:12px">技能</div>

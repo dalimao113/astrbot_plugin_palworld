@@ -401,23 +401,57 @@ networks:
 <a id="第-6-章让-qq-机器人上线"></a>
 ## 第 6 章 · 让 QQ 机器人上线
 
-### 6.1 NapCat 扫码登录 QQ
+### 6.1 登录 NapCat WebUI（先拿 token → 再扫码登录 QQ）
 
-浏览器打开 `http://你的服务器IP:6099`（NapCat 网页）。首次需要 token：在 1Panel **容器 → 容器 → napcat → 日志** 里，找带 `token` 字样的那行（或在容器终端执行 `cat /app/napcat/config/webui.json` 之类查看）。
+浏览器打开 `http://你的服务器IP:6099`（NapCat 网页），它会先要你输入 **token（WebUI 登录密钥）**。
 
-进去后用**手机 QQ 扫码**登录你要当机器人的那个 QQ 号（建议用小号）。登录成功后这个 6099 网页就不需要了。
+**怎么找 token —— 三种方式任选其一：**
 
-### 6.2 AstrBot 后台接上 NapCat
+1. **① 1Panel 文件管理器（最直观，推荐）**：1Panel 左侧 **主机 → 文件**（或 **容器 → 编排 → astrbot → 目录**），进入编排目录
+   `/opt/1panel/docker/compose/astrbot/napcat/config/`，找到并打开 **`webui.json`**，里面这一行引号内的就是登录密钥：
+   ```json
+   "token": "xxxxxxxxxxxx",
+   ```
+2. **② 看容器日志**：1Panel **容器 → 容器 → napcat → 日志**，找带 `WebUi`、`token=` 或 `panel` 字样的那行，里面带着 token。
+3. **③ 容器终端**：1Panel **容器 → napcat → 终端**，执行 `cat /app/napcat/config/webui.json`，看 `token` 字段。
 
-浏览器打开 `http://你的服务器IP:6185`（AstrBot 后台），首次会让你设置管理员账号密码。
+> ⚠️ **token 就是你 NapCat 后台的密码**（一串随机字符，例如 `a1b2c3d4e5f6` 这种），**别外泄**。想改：直接编辑 `webui.json` 的 `token` 值 → 保存 → 重启 napcat 容器即可。
 
-进去后：
+**拿到 token 登录后 → 扫码登录机器人 QQ：**
+进入 NapCat WebUI，在「**登录 / 扫码登录**」页，用**手机 QQ 扫屏幕上的二维码**，登录你要当机器人的那个 QQ 号（**强烈建议用小号**，主号有被风控风险）。页面显示「已登录 / 在线」即成功。之后 6099 网页平时用不到，可在防火墙里把 6099 关掉更安全。
 
-1. 左侧「平台适配器」→ 添加 → 选 **aiocqhttp（OneBot v11）**。
-2. 配置项里 NapCat 的连接信息一般用容器名 `napcat`、端口 `3001`（两容器同网络，互相用容器名访问）。
-3. 保存并启用，回到 NapCat 端确认反向 WS 已连上。
+### 6.2 确认 NapCat ↔ AstrBot 已互通（反向 WebSocket）
 
-> 具体字段以 AstrBot 当前版本界面为准。连通后，机器人就能收发 QQ 群消息了。
+本教程编排里，NapCat 和 AstrBot 通过**反向 WebSocket** 连接：**NapCat 主动连 AstrBot**（地址 `ws://astrbot:6199/ws`），AstrBot 用 `aiocqhttp` 适配器在 **6199** 端口接收。
+
+> ✅ **用一键脚本安装的，这两端已自动配好，通常无需手动配**——直接跳到本节末尾的「**确认已连通**」即可。
+
+**只有手动部署（没用一键脚本）才需要配两端：**
+
+**A. AstrBot 端**（后台 `http://IP:6185` → 首次设管理员账号密码 → 左侧「平台适配器 / 消息平台」）
+1. **添加** → 选 **`aiocqhttp`（OneBot v11）**。
+2. 关键参数（用**反向 WS**）：
+   - 连接模式：**反向 WebSocket**
+   - 监听地址 `ws_reverse_host`：`0.0.0.0`
+   - 监听端口 `ws_reverse_port`：`6199`
+   - 校验 `ws_reverse_token`：**留空**（若要填，A/B 两端必须一致）
+3. 保存并**启用**。
+
+**B. NapCat 端**（WebUI `http://IP:6099` → 左侧「网络配置 / 网络设置」）
+1. **新建** → 选 **WebSocket 客户端（websocketClient）**。
+2. 关键参数：
+   - 名称：`astrbot`（随意）
+   - URL：`ws://astrbot:6199/ws` —— **用容器名 `astrbot`**（两容器同一 docker 网络时）；若不同网络，改成 AstrBot 宿主机 `IP:6199`
+   - 消息格式 `messagePostFormat`：`array`
+   - Token：**留空**（与 A 端一致）
+3. 启用 / 保存。
+
+**确认已连通：**
+- NapCat WebUI 网络配置里，那条 `astrbot` 客户端显示 **已连接 / 绿色**；
+- AstrBot 后台「平台适配器」显示适配器 **在线**（或 astrbot 容器日志有 aiocqhttp 连接成功）；
+- 到 QQ 群 @机器人 或发条消息，有反应即通。
+
+> **端口速记**：`6099`=NapCat 登录网页、`6199`=AstrBot 接收 NapCat 反向 WS、`6185`=AstrBot 后台。（编排里映射的 `3001` 是 NapCat 的正向 WS 端口，本方案用反向 WS，一般用不到。）
 
 ---
 

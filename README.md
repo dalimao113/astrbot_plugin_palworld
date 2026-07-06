@@ -10,7 +10,7 @@
 图鉴配种攻略随手查；管理员可公告 / 踢封 / 存档 / 关服。<br>
 **所有回复一律输出精美卡片图片**，附一键部署脚本。
 
-![version](https://img.shields.io/badge/version-1.2.0-6366F1?style=flat-square)
+![version](https://img.shields.io/badge/version-1.2.1-6366F1?style=flat-square)
 ![AstrBot](https://img.shields.io/badge/AstrBot-4.25%2B-8B5CF6?style=flat-square)
 ![OneBot](https://img.shields.io/badge/OneBot-v11-4ade80?style=flat-square)
 ![NapCat](https://img.shields.io/badge/adapter-NapCat-22c55e?style=flat-square)
@@ -28,7 +28,7 @@
 
 ## 📸 功能展示
 
-> 以下均为插件实际渲染的卡片（**奇幻玻璃**风格；另有**像素羊皮纸**风格可 `/帕鲁风格` 切换）。
+> 以下均为插件实际渲染的卡片（**奇幻玻璃**风格；另有**像素羊皮纸**风格，可在 WebUI 插件配置 `card_style` 切换）。
 
 <table>
 <tr>
@@ -303,14 +303,19 @@ networks:
   - 建议尺寸 ~3:1 宽幅、主体偏右、≤500KB（详见图片建议）。
 - **超高清渲染**：CSS `zoom` 超采样（`SUPERSCALE=2`）× `device_scale_factor_level: ultra`，
   输出 **1944px 宽 PNG 无损**（约 2× 普通清晰度），放大也不糊。
-  - 想更清晰可把 main.py 顶部的 `SUPERSCALE` 调到 3（输出 2916px，文件更大）。
+  - 想更清晰可把 `constants.py` 里的 `SUPERSCALE` 调到 3（输出 2916px，文件更大）。
 - 主题色由配置 `card_theme_color` 控制（默认靛蓝 `#6366F1`，可自定义）。
 
 ## 📂 项目结构
 
 | 路径 | 类型 | 说明 |
 |---|---|---|
-| `main.py` | Python | 插件主程序：全部指令逻辑 + 卡片模板(Jinja2+内联CSS) + 后台轮询/播报 + 本地渲染 + 调用存档/公会解析 |
+| `main.py` | Python | 插件入口：插件类 + 生命周期 + AstrBot 指令/事件 Handler + 命令分发 + 各 `_cmd_*` 业务逻辑 + 后台轮询/播报 |
+| `constants.py` · `config.py` | Python | 常量/映射表；配置默认值(规范来源)+启动校验 |
+| `commands/router.py` | Python | 命令注册表（子命令→处理器 的单一事实来源）|
+| `services/` · `api/` | Python | 存档拉取/缓存/负缓存编排；Palworld REST + Docker socket 封装(含高危权限注释) |
+| `render/` | Python | `templates.py`(卡片 HTML/CSS 模板 + 两套皮肤) + `renderer.py`(渲染引擎) |
+| `utils/` | Python | 文本转义 / 输入长度限制(安全) 等工具 |
 | `_conf_schema.json` | JSON | AstrBot 插件配置项 schema（WebUI 配置界面据此生成）|
 | `metadata.yaml` | YAML | 插件元信息（名称/作者/版本/描述）|
 | `requirements.txt` | 文本 | Python 依赖声明 |
@@ -353,6 +358,8 @@ curl -fsSL https://raw.githubusercontent.com/dalimao113/astrbot_plugin_palworld/
 
 ### 已有 AstrBot，只想加插件（4 步）
 1. **装插件**：AstrBot WebUI「插件管理」填仓库地址 `https://github.com/dalimao113/astrbot_plugin_palworld` 安装；或用文件管理器把本仓库放进 `.../astrbot/data/plugins/astrbot_plugin_palworld/`。`palwork/`、数据、依赖都随插件自带,**无需手动移动文件**。
+
+   > ⚠️ **手动下载 ZIP 安装务必改名**：从 GitHub「Code → Download ZIP」下载解压后，目录名是 `astrbot_plugin_palworld-main`（带分支后缀）。**必须把目录重命名为 `astrbot_plugin_palworld`** 再放进 `data/plugins/`——否则插件包名含非法字符 `-`，会导致插件加载失败（相对导入无法工作）。用 WebUI 填仓库地址安装 / `git clone` / 一键脚本 时目录名本就正确，无需改名。
 2. **挂 docker.sock**（存档/负载功能需要,只查状态可跳过）：在 AstrBot 的 `docker-compose.yml` 加 `- /var/run/docker.sock:/var/run/docker.sock:ro`,重建 astrbot 容器。
 3. **填两项必配**:WebUI → 插件配置,只需填 `admin_password`（帕鲁服的 `ADMIN_PASSWORD`）+ `admin_qq`（你的 QQ）。其余（容器名 / 存档目录 / API 地址）**能自动探测就自动**,一般不用动。
 4. **自检**：发 `/帕鲁自检`（管理员）逐项确认环境 ✅,有 ❌ 按提示修。全绿即可开用。
