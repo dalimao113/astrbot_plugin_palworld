@@ -1284,9 +1284,12 @@ ${C_G}${C_BOLD}后端已就绪！接下来在浏览器里完成最后 3 步:${C_
          · ${C_BOLD}日志${C_RESET}: ${C_C}docker logs napcat 2>&1 | grep -i token${C_RESET}
        进去后用${C_BOLD}手机 QQ 扫码${C_RESET}登录机器人号(${C_BOLD}建议小号${C_RESET}，主号易风控)。
 
-  ${C_BOLD}② 接上 AstrBot${C_RESET} — 反向 WebSocket ${C_G}已由脚本自动配好，一般无需手动加${C_RESET}。
-       (手动时: NapCat「网络配置」加 WebSocket 客户端 ${C_C}ws://astrbot:6199/ws${C_RESET}，
-        消息格式选 ${C_BOLD}array${C_RESET}；AstrBot 侧 aiocqhttp 反向 WS 监听 ${C_BOLD}6199${C_RESET}。)
+  ${C_BOLD}② 接上 AstrBot${C_RESET} — ${C_Y}反向 WebSocket 需手动配两端(脚本不自动配)${C_RESET}:
+       · AstrBot 后台 ${C_C}http://${ip}:6185${C_RESET}「平台适配器」加 ${C_BOLD}aiocqhttp${C_RESET},
+         用${C_BOLD}反向 WS${C_RESET}、监听端口 ${C_BOLD}6199${C_RESET}
+       · NapCat WebUI「网络配置」加 ${C_BOLD}WebSocket 客户端${C_RESET} ${C_C}ws://astrbot:6199/ws${C_RESET},
+         消息格式选 ${C_BOLD}array${C_RESET}
+       (详细图文见 docs/DEPLOY.md 第 6.2 节)
 
   ${C_BOLD}③ 确认管理员 QQ${C_RESET} — ${C_Y}${C_BOLD}必须填！否则公告/踢/封/关服/自检等管理指令没人能用！${C_RESET}
        插件配置 ${C_C}admin_qq${C_RESET} 要有你的 QQ 号(纯数字):

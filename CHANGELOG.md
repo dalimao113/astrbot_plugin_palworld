@@ -2,6 +2,11 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.2.2] - 2026-07-08
+
+### 修复
+- **修正部署文档错误**：v1.2.1 误称"一键脚本会自动配置 NapCat↔AstrBot 的反向 WebSocket"，实际脚本**不配连接**（只部署容器 + 配出图 t2i）。`docs/DEPLOY.md` 第 6.2 节与 `install.sh` 收尾提示均改为如实说明"**需手动配两端**"：AstrBot 加 `aiocqhttp` 反向 WS 监听 `6199` + NapCat 加 WebSocket 客户端连 `ws://astrbot:6199/ws`（消息格式 array）。
+
 ## [1.2.1] - 2026-07-06
 
 ### 文档 / 发布一致性
