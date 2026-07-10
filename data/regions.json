@@ -422,5 +422,153 @@
  "FixedDungeon_SmallIsland03": {
   "msgid": "REGION_FixedDungeon_SmallIsland03",
   "name": "冰封密域"
+ },
+ "Statue1": {
+  "msgid": "REGION_Statue1",
+  "name": "阿努比斯像"
+ },
+ "Statue2": {
+  "msgid": "REGION_Statue2",
+  "name": "杰德兰雕像"
+ },
+ "Statue3": {
+  "msgid": "REGION_Statue3",
+  "name": "冰川像"
+ },
+ "Grass_10": {
+  "msgid": "REGION_Grass_10",
+  "name": "寂静之湖"
+ },
+ "Boss_KingWhale": {
+  "msgid": "REGION_Boss_KingWhale",
+  "name": "忘却孤岛"
+ },
+ "New_SmallIsland01": {
+  "msgid": "REGION_New_SmallIsland01",
+  "name": "环形遗迹孤岛"
+ },
+ "New_SmallIsland02": {
+  "msgid": "REGION_New_SmallIsland02",
+  "name": "炎脉孤岛"
+ },
+ "New_SmallIsland03": {
+  "msgid": "REGION_New_SmallIsland03",
+  "name": "风蚀孤岛"
+ },
+ "New_SmallIsland04": {
+  "msgid": "REGION_New_SmallIsland04",
+  "name": "双角孤岛"
+ },
+ "New_SmallIsland05": {
+  "msgid": "REGION_New_SmallIsland05",
+  "name": "冰环遗迹孤岛"
+ },
+ "New_SmallIsland06": {
+  "msgid": "REGION_New_SmallIsland06",
+  "name": "砂岩门孤岛"
+ },
+ "New_SmallIsland07": {
+  "msgid": "REGION_New_SmallIsland07",
+  "name": "太阳纹孤岛"
+ },
+ "WorldTree01": {
+  "msgid": "REGION_WorldTree01",
+  "name": "圣绿麓原"
+ },
+ "WorldTree02": {
+  "msgid": "REGION_WorldTree02",
+  "name": "诱藤之林"
+ },
+ "WorldTree03": {
+  "msgid": "REGION_WorldTree03",
+  "name": "黄尘峡谷"
+ },
+ "WorldTree04": {
+  "msgid": "REGION_WorldTree04",
+  "name": "亡骸河畔"
+ },
+ "WorldTree05": {
+  "msgid": "REGION_WorldTree05",
+  "name": "侵蚀树洞"
+ },
+ "WorldTree06": {
+  "msgid": "REGION_WorldTree06",
+  "name": "圣瀑湖畔"
+ },
+ "WorldTree07": {
+  "msgid": "REGION_WorldTree07",
+  "name": "圣冰山岭"
+ },
+ "WorldTree08": {
+  "msgid": "REGION_WorldTree08",
+  "name": "封印之室"
+ },
+ "WorldTree09": {
+  "msgid": "REGION_WorldTree09",
+  "name": "废弃研究所"
+ },
+ "WorldTree10": {
+  "msgid": "REGION_WorldTree10",
+  "name": "孢子回廊"
+ },
+ "WorldTree11": {
+  "msgid": "REGION_WorldTree11",
+  "name": "圣泪浅滩"
+ },
+ "WorldTree12": {
+  "msgid": "REGION_WorldTree12",
+  "name": "黄金废都"
+ },
+ "Wide_Sakurajima01": {
+  "msgid": "REGION_Wide_Sakurajima01",
+  "name": "樱花岛"
+ },
+ "Wide_Darkisland01": {
+  "msgid": "REGION_Wide_Darkisland01",
+  "name": "天坠"
+ },
+ "Wide_Skyisland01": {
+  "msgid": "REGION_Wide_Skyisland01",
+  "name": "天阳乡"
+ },
+ "Skyisland_Boss": {
+  "msgid": "REGION_Skyisland_Boss",
+  "name": "盟约之塔"
+ },
+ "Skyisland01": {
+  "msgid": "REGION_Skyisland01",
+  "name": "碧落裂隙"
+ },
+ "Skyisland02": {
+  "msgid": "REGION_Skyisland02",
+  "name": "睡莲峡谷"
+ },
+ "Skyisland03": {
+  "msgid": "REGION_Skyisland03",
+  "name": "龙痕山岭"
+ },
+ "Skyisland04": {
+  "msgid": "REGION_Skyisland04",
+  "name": "云泥湿地"
+ },
+ "Skyisland05": {
+  "msgid": "REGION_Skyisland05",
+  "name": "深蓝树海"
+ },
+ "Skyisland06": {
+  "msgid": "REGION_Skyisland06",
+  "name": "结晶群岛"
+ },
+ "Skyisland07": {
+  "msgid": "REGION_Skyisland07",
+  "name": "天空仙境"
+ },
+ "FixedDungeon_SkyIsland_01": {
+  "msgid": "REGION_FixedDungeon_SkyIsland_01",
+  "name": "星愿密域"
+ },
+ "FootOfWorldTree": {
+  "msgid": "REGION_FootOfWorldTree",
+  "name": "世界树下"
  }
 }

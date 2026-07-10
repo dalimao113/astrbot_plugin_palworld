@@ -213,5 +213,135 @@
   "name": "海鲜沙拉",
   "item_id": "Seafood_Salada",
   "effect": "获得的经验值会提升"
+ },
+ {
+  "name": "烤野莓",
+  "item_id": "Baked_Berries",
+  "effect": "恢复饱腹度 21，理智 +1"
+ },
+ {
+  "name": "面包",
+  "item_id": "Pan",
+  "effect": "恢复饱腹度 27，理智 +4"
+ },
+ {
+  "name": "热牛奶",
+  "item_id": "HotMilk",
+  "effect": "恢复饱腹度 16，理智 +1"
+ },
+ {
+  "name": "果酱面包",
+  "item_id": "JamBun",
+  "effect": "恢复饱腹度 51，理智 +6"
+ },
+ {
+  "name": "荷包蛋",
+  "item_id": "FriedEggs",
+  "effect": "恢复饱腹度 23，理智 +1"
+ },
+ {
+  "name": "烤蘑菇",
+  "item_id": "BakedMushroom",
+  "effect": "恢复饱腹度 18，理智 +1"
+ },
+ {
+  "name": "烤皮皮鸡",
+  "item_id": "BakedMeat_ChickenPal",
+  "effect": "恢复饱腹度 50，理智 +1"
+ },
+ {
+  "name": "棉悠悠羊肉烤串",
+  "item_id": "BakedMeat_SheepBall",
+  "effect": "恢复饱腹度 52，理智 +1"
+ },
+ {
+  "name": "水灵儿炭烤肉",
+  "item_id": "BakedMeat_Kelpie",
+  "effect": "恢复饱腹度 50，理智 +1"
+ },
+ {
+  "name": "烤天擒鸟肉",
+  "item_id": "BakedMeat_Eagle",
+  "effect": "恢复饱腹度 50，理智 +1"
+ },
+ {
+  "name": "草莽猪烤全猪",
+  "item_id": "BakedMeat_Boar",
+  "effect": "恢复饱腹度 60，理智 +1"
+ },
+ {
+  "name": "蒲烧趴趴鲶",
+  "item_id": "BakedMeat_LazyCatfish",
+  "effect": "恢复饱腹度 70，理智 +1"
+ },
+ {
+  "name": "紫霞鹿炙烤肉",
+  "item_id": "BakedMeat_Deer",
+  "effect": "恢复饱腹度 70，理智 +1"
+ },
+ {
+  "name": "严冬鹿炙烤肉",
+  "item_id": "BakedMeat_IceDeer",
+  "effect": "恢复饱腹度 252，理智 +1"
+ },
+ {
+  "name": "灌木羊香草烤肉",
+  "item_id": "BakedMeat_BerryGoat",
+  "effect": "恢复饱腹度 80，理智 +1"
+ },
+ {
+  "name": "波霸牛牛排",
+  "item_id": "BakedMeat_CowPal",
+  "effect": "恢复饱腹度 80，理智 +1"
+ },
+ {
+  "name": "连理龙带骨烤肉",
+  "item_id": "BakedMeat_SakuraSaurus",
+  "effect": "恢复饱腹度 252，理智 +3"
+ },
+ {
+  "name": "森猛犸巨兽烤排",
+  "item_id": "BakedMeat_GrassMammoth",
+  "effect": "恢复饱腹度 252，理智 +3"
+ },
+ {
+  "name": "连理炒面",
+  "item_id": "Yakisoba",
+  "effect": "恢复饱腹度 321，理智 +40"
+ },
+ {
+  "name": "肚肚鳄肉排",
+  "item_id": "BakedMeat_IceCrocodile",
+  "effect": "恢复饱腹度 85，理智 +1"
+ },
+ {
+  "name": "盐烤鞘刀鱼",
+  "item_id": "GrilledSwordCutlassFish",
+  "effect": "恢复饱腹度 90，理智 +10"
+ },
+ {
+  "name": "海鲜意面",
+  "item_id": "OctopusGirl_Takoyaki2",
+  "effect": "恢复饱腹度 193，理智 +15"
+ },
+ {
+  "name": "蘑菇蛋糕",
+  "item_id": "Cake02",
+  "effect": "恢复饱腹度 676，理智 +84"
+ },
+ {
+  "name": "蔬菜蛋糕",
+  "item_id": "Cake03",
+  "effect": "恢复饱腹度 696，理智 +87"
+ },
+ {
+  "name": "豪华蔬菜蛋糕",
+  "item_id": "Cake04",
+  "effect": "恢复饱腹度 717，理智 +90"
+ },
+ {
+  "name": "特制蛋糕",
+  "item_id": "Cake05",
+  "effect": "恢复饱腹度 738，理智 +92"
  }
 ]

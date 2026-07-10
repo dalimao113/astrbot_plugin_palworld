@@ -1,1 +1,6612 @@
-{"FarmBlockV2_wheet": {"mats": [{"name": "小麦种子", "count": 3}, {"name": "木材", "count": 35}, {"name": "石头", "count": 35}], "tech": 15}, "FarmBlockV2_tomato": {"mats": [{"name": "番茄种子", "count": 3}, {"name": "木材", "count": 70}, {"name": "石头", "count": 50}], "tech": 21}, "FarmBlockV2_Lettuce": {"mats": [{"name": "生菜种子", "count": 3}, {"name": "木材", "count": 100}, {"name": "石头", "count": 70}], "tech": 25}, "FarmBlockV2_Berries": {"mats": [{"name": "野莓种子", "count": 3}, {"name": "木材", "count": 20}, {"name": "石头", "count": 20}], "tech": 5}, "FarmBlockV2_Carrot": {"mats": [{"name": "胡萝卜种子", "count": 3}, {"name": "木材", "count": 70}, {"name": "石头", "count": 50}], "tech": 32}, "FarmBlockV2_Onion": {"mats": [{"name": "洋葱种子", "count": 3}, {"name": "木材", "count": 70}, {"name": "石头", "count": 50}], "tech": 36}, "FarmBlockV2_Potato": {"mats": [{"name": "土豆种薯", "count": 3}, {"name": "木材", "count": 70}, {"name": "石头", "count": 50}], "tech": 29}, "PalFoodBox": {"mats": [{"name": "木材", "count": 20}], "tech": 4}, "DefenseWall_Wood": {"mats": [{"name": "木材", "count": 10}], "tech": 16}, "Wood_Gate": {"mats": [{"name": "木材", "count": 10}], "tech": 11}, "DefenseWall": {"mats": [{"name": "石头", "count": 10}, {"name": "水泥", "count": 1}], "tech": 28}, "Stone_Gate": {"mats": [{"name": "石头", "count": 10}, {"name": "水泥", "count": 1}], "tech": 31}, "DefenseWall_Metal": {"mats": [{"name": "金属锭", "count": 10}, {"name": "水泥", "count": 1}], "tech": 43}, "Metal_Gate": {"mats": [{"name": "金属锭", "count": 10}, {"name": "水泥", "count": 1}], "tech": 42}, "DefenseBowGun": {"mats": [{"name": "金属锭", "count": 30}, {"name": "木材", "count": 30}, {"name": "石头", "count": 15}], "tech": 26}, "DefenseMachinegun": {"mats": [{"name": "金属锭", "count": 30}, {"name": "钉子", "count": 10}, {"name": "水泥", "count": 15}], "tech": 40}, "DefenseMissile": {"mats": [{"name": "精炼金属锭", "count": 100}, {"name": "电路板", "count": 20}, {"name": "钉子", "count": 20}], "tech": 50}, "DefenseWait": {"mats": [{"name": "木材", "count": 10}, {"name": "石头", "count": 10}], "tech": 9}, "ItemChest": {"mats": [{"name": "木材", "count": 15}, {"name": "石头", "count": 5}], "tech": 2}, "ItemChest_02": {"mats": [{"name": "金属锭", "count": 15}, {"name": "木材", "count": 30}], "tech": 16}, "ItemChest_03": {"mats": [{"name": "精炼金属锭", "count": 20}, {"name": "木材", "count": 50}, {"name": "钉子", "count": 20}], "tech": 39}, "PlayerBed_02": {"mats": [{"name": "木材", "count": 20}, {"name": "纤维", "count": 5}, {"name": "羊毛", "count": 1}], "tech": 3}, "PlayerBed_03": {"mats": [{"name": "布", "count": 10}, {"name": "木材", "count": 50}, {"name": "钉子", "count": 10}, {"name": "纤维", "count": 20}], "tech": 29}, "BuildableGoddessStatue": {"mats": [{"name": "石头", "count": 20}, {"name": "帕鲁矿碎块", "count": 10}], "tech": 6}, "Heater": {"mats": [{"name": "金属锭", "count": 20}, {"name": "木炭", "count": 10}, {"name": "喷火器官", "count": 5}], "tech": 17}, "ElectricHeater": {"mats": [{"name": "精炼金属锭", "count": 30}, {"name": "电路板", "count": 10}, {"name": "金属锭", "count": 30}], "tech": 41}, "Cooler": {"mats": [{"name": "金属锭", "count": 20}, {"name": "石头", "count": 20}, {"name": "结冰器官", "count": 5}], "tech": 18}, "ElectricCooler": {"mats": [{"name": "精炼金属锭", "count": 30}, {"name": "电路板", "count": 10}, {"name": "金属锭", "count": 30}], "tech": 42}, "Torch": {"mats": [{"name": "木材", "count": 5}, {"name": "石头", "count": 2}], "tech": 6}, "WallTorch": {"mats": [{"name": "木材", "count": 5}, {"name": "石头", "count": 2}], "tech": 14}, "Lamp": {"mats": [{"name": "金属锭", "count": 10}, {"name": "发电器官", "count": 3}, {"name": "钉子", "count": 3}], "tech": 26}, "CeilingLamp": {"mats": [{"name": "金属锭", "count": 20}, {"name": "发电器官", "count": 3}, {"name": "钉子", "count": 3}], "tech": 27}, "LargeLamp": {"mats": [{"name": "金属锭", "count": 50}, {"name": "电路板", "count": 5}, {"name": "钉子", "count": 5}], "tech": 46}, "LargeCeilingLamp": {"mats": [{"name": "金属锭", "count": 50}, {"name": "电路板", "count": 5}, {"name": "钉子", "count": 5}], "tech": 47}, "Trap_Noose": {"mats": [{"name": "木材", "count": 10}, {"name": "石头", "count": 5}], "tech": 4}, "Trap_MineElecShock": {"mats": [{"name": "金属锭", "count": 5}, {"name": "发电器官", "count": 2}], "tech": 33}, "Trap_MineFreeze": {"mats": [{"name": "金属锭", "count": 5}, {"name": "结冰器官", "count": 2}], "tech": 38}, "Trap_MineAttack": {"mats": [{"name": "金属锭", "count": 5}, {"name": "喷火器官", "count": 2}], "tech": 30}, "MedicalPalBed_02": {"mats": [{"name": "木材", "count": 10}, {"name": "纤维", "count": 5}], "tech": 3}, "MedicalPalBed_03": {"mats": [{"name": "布", "count": 10}, {"name": "木材", "count": 30}, {"name": "钉子", "count": 5}, {"name": "纤维", "count": 10}], "tech": 24}, "MedicalPalBed_04": {"mats": [{"name": "优质的布", "count": 10}, {"name": "木材", "count": 60}, {"name": "钉子", "count": 20}], "tech": 36}, "PalBoxV2": {"mats": [{"name": "帕鲁矿碎块", "count": 1}, {"name": "木材", "count": 8}, {"name": "石头", "count": 3}], "tech": 2}, "DisplayCharacter": {"mats": [{"name": "帕鲁矿碎块", "count": 10}, {"name": "木材", "count": 10}, {"name": "石头", "count": 20}], "tech": 15}, "CharacterRankUp": {"mats": [{"name": "帕鲁矿碎块", "count": 20}, {"name": "金属锭", "count": 20}, {"name": "古代文明部件", "count": 5}], "tech": 14}, "SphereFactory_Black_01": {"mats": [{"name": "帕鲁矿碎块", "count": 10}, {"name": "木材", "count": 30}, {"name": "钉子", "count": 10}], "tech": 14}, "SphereFactory_Black_02": {"mats": [{"name": "帕鲁矿碎块", "count": 30}, {"name": "木材", "count": 50}, {"name": "金属锭", "count": 100}], "tech": 27}, "SphereFactory_Black_03": {"mats": [{"name": "精炼金属锭", "count": 100}, {"name": "电路板", "count": 10}, {"name": "钉子", "count": 30}], "tech": 35}, "SphereFactory_Black_04": {"mats": [{"name": "六棱晶锭", "count": 50}, {"name": "塑钢", "count": 50}, {"name": "电路板", "count": 30}], "tech": 56}, "HatchingPalEgg": {"mats": [{"name": "帕鲁矿碎块", "count": 10}, {"name": "布", "count": 5}, {"name": "石头", "count": 30}], "tech": 7}, "ElectricHatchingPalEgg": {"mats": [{"name": "精炼金属锭", "count": 50}, {"name": "电路板", "count": 15}, {"name": "古代文明部件", "count": 10}], "tech": 37}, "MultiElectricHatchingPalEgg": {"mats": [{"name": "六棱晶锭", "count": 100}, {"name": "电路板", "count": 50}, {"name": "古代文明部件", "count": 30}], "tech": 60}, "MultiHatchingPalEgg": {"mats": [{"name": "帕鲁金属锭", "count": 50}, {"name": "布", "count": 20}, {"name": "古代文明部件", "count": 20}], "tech": 48}, "Spa": {"mats": [{"name": "木材", "count": 30}, {"name": "石头", "count": 15}, {"name": "帕鲁矿碎块", "count": 10}], "tech": 9}, "Spa2": {"mats": [{"name": "石头", "count": 100}, {"name": "木材", "count": 100}, {"name": "帕鲁矿碎块", "count": 30}], "tech": 31}, "Spa3": {"mats": [{"name": "石头", "count": 50}, {"name": "木材", "count": 300}, {"name": "帕鲁矿碎块", "count": 50}], "tech": 62}, "BlastFurnace": {"mats": [{"name": "木材", "count": 20}, {"name": "石头", "count": 50}, {"name": "喷火器官", "count": 3}], "tech": 10}, "BlastFurnace2": {"mats": [{"name": "石头", "count": 100}, {"name": "水泥", "count": 30}, {"name": "喷火器官", "count": 15}], "tech": 34}, "BlastFurnace3": {"mats": [{"name": "精炼金属锭", "count": 50}, {"name": "电路板", "count": 10}, {"name": "聚合物", "count": 20}], "tech": 44}, "BlastFurnace4": {"mats": [{"name": "塑钢", "count": 150}, {"name": "聚合物", "count": 100}, {"name": "喷火器官", "count": 200}], "tech": 56}, "Campfire": {"mats": [{"name": "木材", "count": 10}], "tech": 2}, "CookingStove": {"mats": [{"name": "木材", "count": 20}, {"name": "金属锭", "count": 15}, {"name": "喷火器官", "count": 3}], "tech": 17}, "ElectricKitchen": {"mats": [{"name": "精炼金属锭", "count": 30}, {"name": "电路板", "count": 5}, {"name": "木炭", "count": 20}], "tech": 41}, "HugeKitchen": {"mats": [{"name": "水泥", "count": 200}, {"name": "石头", "count": 1000}, {"name": "木炭", "count": 200}], "tech": 49}, "Factory_Hard_01": {"mats": [{"name": "金属锭", "count": 15}, {"name": "木材", "count": 50}, {"name": "钉子", "count": 10}], "tech": 11}, "Factory_Hard_02": {"mats": [{"name": "金属锭", "count": 100}, {"name": "木材", "count": 50}, {"name": "钉子", "count": 20}], "tech": 28}, "Factory_Hard_03": {"mats": [{"name": "精炼金属锭", "count": 100}, {"name": "电路板", "count": 10}, {"name": "钉子", "count": 30}], "tech": 42}, "Factory_Hard_04": {"mats": [{"name": "珊瑚锭", "count": 50}, {"name": "六棱晶锭", "count": 50}, {"name": "电路板", "count": 30}], "tech": 61}, "MedicineFacility_01": {"mats": [{"name": "木材", "count": 30}, {"name": "钉子", "count": 5}, {"name": "帕鲁矿碎块", "count": 10}], "tech": 12}, "MedicineFacility_02": {"mats": [{"name": "精炼金属锭", "count": 40}, {"name": "电路板", "count": 10}, {"name": "碳纤维", "count": 20}], "tech": 43}, "MedicineFacility_03": {"mats": [{"name": "六棱晶锭", "count": 50}, {"name": "塑钢", "count": 50}, {"name": "电路板", "count": 30}], "tech": 59}, "StonePit": {"mats": [{"name": "石头", "count": 50}, {"name": "木材", "count": 20}, {"name": "帕鲁矿碎块", "count": 10}], "tech": 7}, "CopperPit": {"mats": [{"name": "石头", "count": 50}, {"name": "金属锭", "count": 25}, {"name": "帕鲁矿碎块", "count": 20}], "tech": 24}, "CopperPit_2": {"mats": [{"name": "石头", "count": 100}, {"name": "金属锭", "count": 50}, {"name": "帕鲁矿碎块", "count": 40}], "tech": 39}, "WeaponFactory_Dirty_01": {"mats": [{"name": "金属锭", "count": 15}, {"name": "木材", "count": 50}, {"name": "钉子", "count": 10}], "tech": 20}, "WeaponFactory_Dirty_02": {"mats": [{"name": "金属锭", "count": 100}, {"name": "木材", "count": 50}, {"name": "钉子", "count": 20}], "tech": 32}, "WeaponFactory_Dirty_03": {"mats": [{"name": "精炼金属锭", "count": 100}, {"name": "电路板", "count": 10}, {"name": "钉子", "count": 30}], "tech": 47}, "WeaponFactory_Dirty_04": {"mats": [{"name": "珊瑚锭", "count": 50}, {"name": "六棱晶锭", "count": 50}, {"name": "电路板", "count": 30}], "tech": 62}, "WorkBench": {"mats": [{"name": "木材", "count": 2}], "tech": 1}, "StationDeforest2": {"mats": [{"name": "木材", "count": 50}, {"name": "石头", "count": 20}, {"name": "帕鲁矿碎块", "count": 10}], "tech": 7}, "WorkBench_SkillUnlock": {"mats": [{"name": "帕鲁矿碎块", "count": 10}, {"name": "木材", "count": 30}, {"name": "布", "count": 2}], "tech": 6}, "Crusher": {"mats": [{"name": "木材", "count": 50}, {"name": "石头", "count": 20}, {"name": "帕鲁矿碎块", "count": 10}], "tech": 8}, "FlourMill": {"mats": [{"name": "木材", "count": 50}, {"name": "石头", "count": 40}], "tech": 15}, "BreedFarm": {"mats": [{"name": "木材", "count": 100}, {"name": "石头", "count": 20}, {"name": "纤维", "count": 50}], "tech": 19}, "RepairBench": {"mats": [{"name": "木材", "count": 10}, {"name": "石头", "count": 10}], "tech": 2}, "ToolBoxV1": {"mats": [{"name": "金属锭", "count": 40}, {"name": "木材", "count": 100}, {"name": "钉子", "count": 15}], "tech": 20}, "OlympicCauldron": {"mats": [{"name": "金属锭", "count": 50}, {"name": "木材", "count": 100}, {"name": "喷火器官", "count": 20}], "tech": 21}, "Fountain": {"mats": [{"name": "金属锭", "count": 100}, {"name": "石头", "count": 200}, {"name": "帕鲁的体液", "count": 20}], "tech": 23}, "FlowerBed": {"mats": [{"name": "木材", "count": 50}, {"name": "石头", "count": 100}, {"name": "水泥", "count": 40}], "tech": 24}, "Silo": {"mats": [{"name": "木材", "count": 300}, {"name": "石头", "count": 100}, {"name": "纤维", "count": 100}], "tech": 25}, "Stump": {"mats": [{"name": "木材", "count": 150}, {"name": "金属锭", "count": 40}, {"name": "石头", "count": 30}], "tech": 28}, "MiningTool": {"mats": [{"name": "木材", "count": 50}, {"name": "石头", "count": 50}, {"name": "金属锭", "count": 50}], "tech": 30}, "Cauldron": {"mats": [{"name": "金属锭", "count": 50}, {"name": "石头", "count": 50}, {"name": "帕鲁的体液", "count": 15}], "tech": 32}, "Snowman": {"mats": [{"name": "结冰器官", "count": 50}, {"name": "木材", "count": 50}, {"name": "布", "count": 20}], "tech": 33}, "TransmissionTower": {"mats": [{"name": "金属锭", "count": 100}, {"name": "发电器官", "count": 30}, {"name": "电路板", "count": 20}], "tech": 48}, "BaseCampWorkHard": {"mats": [{"name": "木材", "count": 30}, {"name": "石头", "count": 10}], "tech": 14}, "CoolerBox": {"mats": [{"name": "金属锭", "count": 20}, {"name": "石头", "count": 20}, {"name": "结冰器官", "count": 5}], "tech": 13}, "Refrigerator": {"mats": [{"name": "精炼金属锭", "count": 50}, {"name": "聚合物", "count": 20}, {"name": "结冰器官", "count": 15}], "tech": 38}, "Signboard": {"mats": [{"name": "木材", "count": 10}], "tech": 7}, "WallSignboard": {"mats": [{"name": "木材", "count": 10}], "tech": 19}, "MonsterFarm": {"mats": [{"name": "木材", "count": 50}, {"name": "石头", "count": 20}, {"name": "纤维", "count": 30}], "tech": 5}, "DamagedScarecrow": {"mats": [{"name": "木材", "count": 20}, {"name": "纤维", "count": 5}, {"name": "帕鲁矿碎块", "count": 5}], "tech": 13}, "BaseCampBattleDirector": {"mats": [{"name": "帕鲁矿碎块", "count": 5}, {"name": "石头", "count": 20}], "tech": 4}, "TableDresser01_Stone": {"mats": [{"name": "木材", "count": 100}, {"name": "纤维", "count": 20}, {"name": "石头", "count": 30}], "tech": 21}, "CoolerPalFoodBox": {"mats": [{"name": "帕鲁金属锭", "count": 20}, {"name": "塑钢", "count": 20}, {"name": "结冰器官", "count": 50}], "tech": 51}, "DismantlingConveyor": {"mats": [{"name": "帕鲁金属锭", "count": 100}, {"name": "电路板", "count": 30}, {"name": "钉子", "count": 30}], "tech": 54}, "ElectricGenerator_Large": {"mats": [{"name": "帕鲁金属锭", "count": 200}, {"name": "发电器官", "count": 200}], "tech": 50}, "OilPump": {"mats": [{"name": "帕鲁金属锭", "count": 250}, {"name": "电路板", "count": 50}], "tech": 50}, "CoalPit": {"mats": [{"name": "石头", "count": 70}, {"name": "石炭", "count": 100}, {"name": "帕鲁矿碎块", "count": 30}], "tech": 42}, "SulfurPit": {"mats": [{"name": "石头", "count": 70}, {"name": "硫磺", "count": 100}, {"name": "帕鲁矿碎块", "count": 30}], "tech": 46}, "IceCrusher": {"mats": [{"name": "帕鲁金属锭", "count": 50}, {"name": "塑钢", "count": 30}, {"name": "结冰器官", "count": 50}], "tech": 52}, "SkinChange": {"mats": [{"name": "石头", "count": 10}, {"name": "帕鲁矿碎块", "count": 10}], "tech": 1}, "SanityDecrease1": {"mats": [{"name": "精炼金属锭", "count": 40}, {"name": "电路板", "count": 20}, {"name": "发电器官", "count": 30}], "tech": 41}, "WorkSpeedIncrease1": {"mats": [{"name": "帕鲁金属锭", "count": 40}, {"name": "电路板", "count": 30}, {"name": "发电器官", "count": 40}], "tech": 46}, "QuartzPit": {"mats": [{"name": "石头", "count": 70}, {"name": "纯水晶", "count": 100}, {"name": "帕鲁矿碎块", "count": 30}], "tech": 51}, "Factory_Money": {"mats": [{"name": "帕鲁金属锭", "count": 100}, {"name": "钉子", "count": 50}, {"name": "电路板", "count": 20}, {"name": "水泥", "count": 30}], "tech": 48}, "ItemChest_04": {"mats": [{"name": "六棱晶锭", "count": 20}, {"name": "碳纤维", "count": 50}, {"name": "钉子", "count": 20}], "tech": 58}, "MedicalPalBed_05": {"mats": [{"name": "六棱晶锭", "count": 10}, {"name": "帕鲁的体液", "count": 30}, {"name": "电路板", "count": 5}], "tech": 57}, "BaseCampItemDispenser": {"mats": [{"name": "帕鲁金属锭", "count": 100}, {"name": "帕鲁矿碎块", "count": 30}], "tech": 49}, "GuildChest": {"mats": [{"name": "精炼金属锭", "count": 50}, {"name": "帕鲁矿碎块", "count": 100}, {"name": "古代文明部件", "count": 10}], "tech": 41}, "Expedition": {"mats": [{"name": "木材", "count": 20}, {"name": "石头", "count": 20}, {"name": "帕鲁矿碎块", "count": 5}], "tech": 15}, "Lab": {"mats": [{"name": "金属锭", "count": 10}, {"name": "帕鲁矿碎块", "count": 10}], "tech": 20}, "OperatingTable": {"mats": [{"name": "精炼金属锭", "count": 30}, {"name": "优质的布", "count": 20}], "tech": 36}, "ManualElectricGenerator": {"mats": [{"name": "木材", "count": 50}, {"name": "发电器官", "count": 5}], "tech": 13}, "Farm_SkillFruits": {"mats": [{"name": "木材", "count": 200}, {"name": "帕鲁矿碎块", "count": 50}, {"name": "帕鲁的体液", "count": 30}], "tech": 48}, "Wooden_ladder": {"mats": [{"name": "木材", "count": 10}], "tech": 10}, "PalMedicineBox": {"mats": [{"name": "金属锭", "count": 20}, {"name": "木材", "count": 30}, {"name": "布", "count": 5}], "tech": 24}, "EnergyStorage_Electric": {"mats": [{"name": "金属锭", "count": 50}, {"name": "发电器官", "count": 20}], "tech": 37}, "Headstone": {"mats": [{"name": "石头", "count": 10}], "tech": 17}, "CompositeDesk": {"mats": [{"name": "精炼金属锭", "count": 20}, {"name": "木材", "count": 100}, {"name": "木炭", "count": 30}], "tech": 45}, "GlobalPalStorage": {"mats": [{"name": "帕鲁矿碎块", "count": 3}, {"name": "木材", "count": 5}, {"name": "石头", "count": 15}], "tech": 1}, "DimensionPalStorage": {"mats": [{"name": "金属锭", "count": 20}, {"name": "帕鲁矿碎块", "count": 40}, {"name": "古代文明部件", "count": 5}], "tech": 20}, "CrystalPit": {"mats": [{"name": "石头", "count": 70}, {"name": "六棱晶矿", "count": 100}], "tech": 61}, "FishingPond1": {"mats": [{"name": "木材", "count": 40}, {"name": "水泥", "count": 5}, {"name": "帕鲁的体液", "count": 10}], "tech": 31}, "FishingPond2": {"mats": [{"name": "木材", "count": 60}, {"name": "石头", "count": 20}, {"name": "塑钢", "count": 10}], "tech": 55}, "BaseCampWorkerExtraStation": {"mats": [{"name": "金属锭", "count": 20}, {"name": "帕鲁矿碎块", "count": 30}], "tech": 32}}
+{
+ "FarmBlockV2_wheet": {
+  "mats": [
+   {
+    "name": "小麦种子",
+    "count": 3
+   },
+   {
+    "name": "木材",
+    "count": 15
+   },
+   {
+    "name": "石头",
+    "count": 15
+   }
+  ],
+  "tech": 15
+ },
+ "FarmBlockV2_tomato": {
+  "mats": [
+   {
+    "name": "番茄种子",
+    "count": 3
+   },
+   {
+    "name": "木材",
+    "count": 70
+   },
+   {
+    "name": "石头",
+    "count": 50
+   },
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 5
+   }
+  ],
+  "tech": 21
+ },
+ "FarmBlockV2_Lettuce": {
+  "mats": [
+   {
+    "name": "生菜种子",
+    "count": 3
+   },
+   {
+    "name": "木材",
+    "count": 100
+   },
+   {
+    "name": "石头",
+    "count": 70
+   },
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 10
+   }
+  ],
+  "tech": 25
+ },
+ "FarmBlockV2_Berries": {
+  "mats": [
+   {
+    "name": "野莓种子",
+    "count": 3
+   },
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 10
+   }
+  ],
+  "tech": 5
+ },
+ "FarmBlockV2_Carrot": {
+  "mats": [
+   {
+    "name": "胡萝卜种子",
+    "count": 3
+   },
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "石头",
+    "count": 20
+   },
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 1
+   }
+  ],
+  "tech": 32
+ },
+ "FarmBlockV2_Onion": {
+  "mats": [
+   {
+    "name": "洋葱种子",
+    "count": 3
+   },
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "石头",
+    "count": 20
+   },
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 2
+   }
+  ],
+  "tech": 36
+ },
+ "FarmBlockV2_Potato": {
+  "mats": [
+   {
+    "name": "土豆种薯",
+    "count": 3
+   },
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "石头",
+    "count": 20
+   },
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 3
+   }
+  ],
+  "tech": 29
+ },
+ "PalFoodBox": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 4
+ },
+ "Wooden_foundation": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wooden_wall": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wood_WindowWall": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wood_TriangleWall": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wooden_roof": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wood_SlantedRoof": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wooden_stair": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wooden_DoorWall": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wooden_pillar": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "DefenseWall_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   }
+  ],
+  "tech": 8
+ },
+ "Wood_Gate": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   }
+  ],
+  "tech": 8
+ },
+ "Stone_foundation": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_wall": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_WindowWall": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_TriangleWall": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_roof": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_SlantedRoof": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_stair": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_DoorWall": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_pillar": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "DefenseWall": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 10
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_Gate": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 10
+   }
+  ],
+  "tech": 19
+ },
+ "Metal_foundation": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Metal_wall": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Metal_WindowWall": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Metal_TriangleWall": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Metal_roof": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Metal_SlantedRoof": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Metal_stair": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Metal_DoorWall": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Metal_pillars": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "DefenseWall_Metal": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "水泥",
+    "count": 1
+   }
+  ],
+  "tech": 30
+ },
+ "Metal_Gate": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "水泥",
+    "count": 1
+   }
+  ],
+  "tech": 30
+ },
+ "DefenseBowGun": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "木板",
+    "count": 3
+   },
+   {
+    "name": "石头",
+    "count": 15
+   },
+   {
+    "name": "钉子",
+    "count": 5
+   }
+  ],
+  "tech": 26
+ },
+ "DefenseMachinegun": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 15
+   },
+   {
+    "name": "钉子",
+    "count": 10
+   },
+   {
+    "name": "水泥",
+    "count": 15
+   }
+  ],
+  "tech": 40
+ },
+ "DefenseMissile": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 20
+   },
+   {
+    "name": "电脑",
+    "count": 5
+   },
+   {
+    "name": "生化电池",
+    "count": 3
+   },
+   {
+    "name": "水泥",
+    "count": 30
+   }
+  ],
+  "tech": 50
+ },
+ "DefenseWait": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 10
+   }
+  ],
+  "tech": 7
+ },
+ "ElectricGenerator": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 50
+   },
+   {
+    "name": "发电器官",
+    "count": 20
+   }
+  ],
+  "tech": 26
+ },
+ "FastTravelPoint": {
+  "mats": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 5
+   },
+   {
+    "name": "石头",
+    "count": 10
+   }
+  ],
+  "tech": 0
+ },
+ "ItemChest": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 15
+   },
+   {
+    "name": "石头",
+    "count": 5
+   }
+  ],
+  "tech": 2
+ },
+ "ItemChest_02": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   },
+   {
+    "name": "木材",
+    "count": 10
+   }
+  ],
+  "tech": 13
+ },
+ "ItemChest_03": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 5
+   },
+   {
+    "name": "硬木材",
+    "count": 10
+   },
+   {
+    "name": "钉子",
+    "count": 10
+   }
+  ],
+  "tech": 39
+ },
+ "PlayerBed_02": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 5
+   },
+   {
+    "name": "羊毛",
+    "count": 1
+   }
+  ],
+  "tech": 3
+ },
+ "PlayerBed_03": {
+  "mats": [
+   {
+    "name": "布",
+    "count": 10
+   },
+   {
+    "name": "木材",
+    "count": 50
+   },
+   {
+    "name": "钉子",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 20
+   }
+  ],
+  "tech": 28
+ },
+ "BuildableGoddessStatue": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 20
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 10
+   }
+  ],
+  "tech": 9
+ },
+ "Heater": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "木炭",
+    "count": 10
+   },
+   {
+    "name": "喷火器官",
+    "count": 5
+   }
+  ],
+  "tech": 17
+ },
+ "ElectricHeater": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 30
+   },
+   {
+    "name": "电路板",
+    "count": 10
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 5
+   },
+   {
+    "name": "喷火器官",
+    "count": 10
+   }
+  ],
+  "tech": 41
+ },
+ "Cooler": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "石头",
+    "count": 20
+   },
+   {
+    "name": "结冰器官",
+    "count": 5
+   }
+  ],
+  "tech": 18
+ },
+ "ElectricCooler": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 30
+   },
+   {
+    "name": "电路板",
+    "count": 10
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 10
+   }
+  ],
+  "tech": 42
+ },
+ "Torch": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 5
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 6
+ },
+ "WallTorch": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 5
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 14
+ },
+ "Lamp": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "发电器官",
+    "count": 3
+   },
+   {
+    "name": "钉子",
+    "count": 3
+   },
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 26
+ },
+ "CeilingLamp": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "发电器官",
+    "count": 3
+   },
+   {
+    "name": "钉子",
+    "count": 3
+   }
+  ],
+  "tech": 27
+ },
+ "LargeLamp": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 30
+   },
+   {
+    "name": "电路板",
+    "count": 5
+   },
+   {
+    "name": "钉子",
+    "count": 5
+   },
+   {
+    "name": "生化电池",
+    "count": 1
+   }
+  ],
+  "tech": 46
+ },
+ "LargeCeilingLamp": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 30
+   },
+   {
+    "name": "电路板",
+    "count": 5
+   },
+   {
+    "name": "钉子",
+    "count": 5
+   },
+   {
+    "name": "生化电池",
+    "count": 1
+   }
+  ],
+  "tech": 47
+ },
+ "Trap_LegHold": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   }
+  ],
+  "tech": 10
+ },
+ "Trap_LegHold_Big": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   }
+  ],
+  "tech": 21
+ },
+ "Trap_Noose": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 5
+   }
+  ],
+  "tech": 8
+ },
+ "Trap_MovingPanel": {
+  "mats": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 50
+   }
+  ],
+  "tech": 0
+ },
+ "Trap_MineElecShock": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   },
+   {
+    "name": "发电器官",
+    "count": 2
+   }
+  ],
+  "tech": 33
+ },
+ "Trap_MineFreeze": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   },
+   {
+    "name": "结冰器官",
+    "count": 2
+   }
+  ],
+  "tech": 38
+ },
+ "Trap_MineAttack": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   },
+   {
+    "name": "喷火器官",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "MedicalPalBed_02": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 5
+   }
+  ],
+  "tech": 3
+ },
+ "MedicalPalBed_03": {
+  "mats": [
+   {
+    "name": "布",
+    "count": 5
+   },
+   {
+    "name": "木板",
+    "count": 3
+   },
+   {
+    "name": "钉子",
+    "count": 5
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   }
+  ],
+  "tech": 24
+ },
+ "MedicalPalBed_04": {
+  "mats": [
+   {
+    "name": "优质的布",
+    "count": 5
+   },
+   {
+    "name": "硬木材",
+    "count": 5
+   },
+   {
+    "name": "钉子",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 20
+   }
+  ],
+  "tech": 36
+ },
+ "PalBoxV2": {
+  "mats": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 1
+   },
+   {
+    "name": "木材",
+    "count": 8
+   },
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 2
+ },
+ "DisplayCharacter": {
+  "mats": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 10
+   },
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 20
+   }
+  ],
+  "tech": 15
+ },
+ "CharacterRankUp": {
+  "mats": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 20
+   },
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   }
+  ],
+  "tech": 14
+ },
+ "SphereFactory_Black_01": {
+  "mats": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 10
+   },
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "钉子",
+    "count": 10
+   },
+   {
+    "name": "金属锭",
+    "count": 20
+   }
+  ],
+  "tech": 14
+ },
+ "SphereFactory_Black_02": {
+  "mats": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 30
+   },
+   {
+    "name": "木板",
+    "count": 5
+   },
+   {
+    "name": "金属锭",
+    "count": 100
+   },
+   {
+    "name": "钉子",
+    "count": 20
+   }
+  ],
+  "tech": 27
+ },
+ "SphereFactory_Black_03": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 100
+   },
+   {
+    "name": "电路板",
+    "count": 10
+   },
+   {
+    "name": "钉子",
+    "count": 30
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 50
+   }
+  ],
+  "tech": 35
+ },
+ "SphereFactory_Black_04": {
+  "mats": [
+   {
+    "name": "六棱晶锭",
+    "count": 50
+   },
+   {
+    "name": "塑钢",
+    "count": 50
+   },
+   {
+    "name": "电脑",
+    "count": 10
+   },
+   {
+    "name": "生化电池",
+    "count": 10
+   }
+  ],
+  "tech": 58
+ },
+ "HatchingPalEgg": {
+  "mats": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 5
+   },
+   {
+    "name": "石头",
+    "count": 30
+   },
+   {
+    "name": "古代文明部件",
+    "count": 2
+   }
+  ],
+  "tech": 10
+ },
+ "ElectricHatchingPalEgg": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 50
+   },
+   {
+    "name": "电路板",
+    "count": 15
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "古代文明核心",
+    "count": 2
+   }
+  ],
+  "tech": 36
+ },
+ "MultiElectricHatchingPalEgg": {
+  "mats": [
+   {
+    "name": "六棱晶锭",
+    "count": 100
+   },
+   {
+    "name": "电路板",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 30
+   },
+   {
+    "name": "古代文明核心",
+    "count": 20
+   }
+  ],
+  "tech": 58
+ },
+ "MultiHatchingPalEgg": {
+  "mats": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 50
+   },
+   {
+    "name": "优质的布",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "古代文明核心",
+    "count": 4
+   }
+  ],
+  "tech": 48
+ },
+ "Spa": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "石头",
+    "count": 15
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 7
+   },
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 3
+   }
+  ],
+  "tech": 9
+ },
+ "Spa2": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 50
+   },
+   {
+    "name": "木材",
+    "count": 50
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 3
+   },
+   {
+    "name": "水泥",
+    "count": 10
+   }
+  ],
+  "tech": 31
+ },
+ "Spa3": {
+  "mats": [
+   {
+    "name": "珊瑚锭",
+    "count": 30
+   },
+   {
+    "name": "超高热核心",
+    "count": 10
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 20
+   },
+   {
+    "name": "硬木材",
+    "count": 20
+   }
+  ],
+  "tech": 64
+ },
+ "BlastFurnace": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "石头",
+    "count": 40
+   },
+   {
+    "name": "喷火器官",
+    "count": 3
+   }
+  ],
+  "tech": 10
+ },
+ "BlastFurnace2": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 100
+   },
+   {
+    "name": "水泥",
+    "count": 30
+   },
+   {
+    "name": "喷火器官",
+    "count": 15
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 5
+   }
+  ],
+  "tech": 34
+ },
+ "BlastFurnace3": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 50
+   },
+   {
+    "name": "生化电池",
+    "count": 4
+   },
+   {
+    "name": "聚合物",
+    "count": 20
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 10
+   }
+  ],
+  "tech": 44
+ },
+ "BlastFurnace4": {
+  "mats": [
+   {
+    "name": "塑钢",
+    "count": 150
+   },
+   {
+    "name": "聚合物",
+    "count": 100
+   },
+   {
+    "name": "喷火器官",
+    "count": 200
+   },
+   {
+    "name": "电脑",
+    "count": 12
+   }
+  ],
+  "tech": 58
+ },
+ "CampFire": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   }
+  ],
+  "tech": 2
+ },
+ "CookingStove": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 5
+   },
+   {
+    "name": "金属锭",
+    "count": 15
+   },
+   {
+    "name": "喷火器官",
+    "count": 3
+   }
+  ],
+  "tech": 17
+ },
+ "ElectricKitchen": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 30
+   },
+   {
+    "name": "电路板",
+    "count": 5
+   },
+   {
+    "name": "木炭",
+    "count": 20
+   },
+   {
+    "name": "喷火器官",
+    "count": 5
+   }
+  ],
+  "tech": 41
+ },
+ "HugeKitchen": {
+  "mats": [
+   {
+    "name": "水泥",
+    "count": 200
+   },
+   {
+    "name": "木炭",
+    "count": 200
+   },
+   {
+    "name": "优质木板",
+    "count": 25
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 13
+   }
+  ],
+  "tech": 49
+ },
+ "Factory_Hard_01": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 8
+   },
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "钉子",
+    "count": 10
+   }
+  ],
+  "tech": 11
+ },
+ "Factory_Hard_02": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 100
+   },
+   {
+    "name": "木板",
+    "count": 5
+   },
+   {
+    "name": "钉子",
+    "count": 20
+   },
+   {
+    "name": "水泥",
+    "count": 10
+   }
+  ],
+  "tech": 29
+ },
+ "Factory_Hard_03": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 100
+   },
+   {
+    "name": "电路板",
+    "count": 10
+   },
+   {
+    "name": "水泥",
+    "count": 30
+   },
+   {
+    "name": "腐蚀溶剂",
+    "count": 5
+   }
+  ],
+  "tech": 42
+ },
+ "Factory_Hard_04": {
+  "mats": [
+   {
+    "name": "珊瑚锭",
+    "count": 50
+   },
+   {
+    "name": "六棱晶锭",
+    "count": 50
+   },
+   {
+    "name": "电脑",
+    "count": 30
+   },
+   {
+    "name": "生化电池",
+    "count": 20
+   }
+  ],
+  "tech": 62
+ },
+ "MedicineFacility_01": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "钉子",
+    "count": 5
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 10
+   }
+  ],
+  "tech": 12
+ },
+ "MedicineFacility_02": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 40
+   },
+   {
+    "name": "电路板",
+    "count": 10
+   },
+   {
+    "name": "碳纤维",
+    "count": 10
+   }
+  ],
+  "tech": 43
+ },
+ "MedicineFacility_03": {
+  "mats": [
+   {
+    "name": "六棱晶锭",
+    "count": 50
+   },
+   {
+    "name": "塑钢",
+    "count": 50
+   },
+   {
+    "name": "电路板",
+    "count": 30
+   }
+  ],
+  "tech": 61
+ },
+ "StonePit": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 50
+   },
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 10
+   }
+  ],
+  "tech": 7
+ },
+ "CopperPit": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 50
+   },
+   {
+    "name": "金属锭",
+    "count": 25
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   }
+  ],
+  "tech": 24
+ },
+ "CopperPit_2": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 100
+   },
+   {
+    "name": "金属锭",
+    "count": 50
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 40
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   }
+  ],
+  "tech": 39
+ },
+ "WeaponFactory_Dirty_01": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 15
+   },
+   {
+    "name": "木板",
+    "count": 10
+   },
+   {
+    "name": "钉子",
+    "count": 10
+   }
+  ],
+  "tech": 20
+ },
+ "WeaponFactory_Dirty_02": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 100
+   },
+   {
+    "name": "木板",
+    "count": 20
+   },
+   {
+    "name": "钉子",
+    "count": 20
+   },
+   {
+    "name": "优质帕鲁油",
+    "count": 10
+   }
+  ],
+  "tech": 32
+ },
+ "WeaponFactory_Dirty_03": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 100
+   },
+   {
+    "name": "电路板",
+    "count": 10
+   },
+   {
+    "name": "腐蚀溶剂",
+    "count": 5
+   },
+   {
+    "name": "生化电池",
+    "count": 5
+   }
+  ],
+  "tech": 47
+ },
+ "WeaponFactory_Dirty_04": {
+  "mats": [
+   {
+    "name": "珊瑚锭",
+    "count": 50
+   },
+   {
+    "name": "超高热核心",
+    "count": 10
+   },
+   {
+    "name": "腐蚀溶剂",
+    "count": 30
+   }
+  ],
+  "tech": 63
+ },
+ "WorkBench": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 0
+ },
+ "StationDeforest2": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 50
+   },
+   {
+    "name": "石头",
+    "count": 20
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 10
+   }
+  ],
+  "tech": 7
+ },
+ "WorkBench_SkillUnlock": {
+  "mats": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 10
+   },
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "布",
+    "count": 2
+   }
+  ],
+  "tech": 6
+ },
+ "Crusher": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 50
+   },
+   {
+    "name": "石头",
+    "count": 20
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 10
+   }
+  ],
+  "tech": 8
+ },
+ "FlourMill": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 40
+   },
+   {
+    "name": "金属锭",
+    "count": 10
+   }
+  ],
+  "tech": 15
+ },
+ "BreedFarm": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 50
+   }
+  ],
+  "tech": 19
+ },
+ "RepairBench": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 10
+   }
+  ],
+  "tech": 2
+ },
+ "ToolBoxV1": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "木材",
+    "count": 50
+   },
+   {
+    "name": "钉子",
+    "count": 15
+   }
+  ],
+  "tech": 20
+ },
+ "OlympicCauldron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "喷火器官",
+    "count": 5
+   }
+  ],
+  "tech": 21
+ },
+ "Fountain": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "石头",
+    "count": 50
+   },
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 8
+   }
+  ],
+  "tech": 23
+ },
+ "FlowerBed": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "石头",
+    "count": 50
+   },
+   {
+    "name": "水泥",
+    "count": 20
+   },
+   {
+    "name": "美丽花朵",
+    "count": 10
+   }
+  ],
+  "tech": 24
+ },
+ "Silo": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "石头",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 30
+   },
+   {
+    "name": "水泥",
+    "count": 10
+   }
+  ],
+  "tech": 25
+ },
+ "Stump": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 50
+   },
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 30
+   }
+  ],
+  "tech": 28
+ },
+ "MiningTool": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "石头",
+    "count": 50
+   },
+   {
+    "name": "金属锭",
+    "count": 15
+   }
+  ],
+  "tech": 30
+ },
+ "Cauldron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 20
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 5
+   },
+   {
+    "name": "优质帕鲁油",
+    "count": 3
+   }
+  ],
+  "tech": 32
+ },
+ "Snowman": {
+  "mats": [
+   {
+    "name": "结冰器官",
+    "count": 5
+   },
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 5
+   }
+  ],
+  "tech": 33
+ },
+ "TransmissionTower": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "生化电池",
+    "count": 2
+   },
+   {
+    "name": "电路板",
+    "count": 5
+   }
+  ],
+  "tech": 48
+ },
+ "BaseCampWorkHard": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "石头",
+    "count": 10
+   }
+  ],
+  "tech": 7
+ },
+ "CoolerBox": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 10
+   },
+   {
+    "name": "结冰器官",
+    "count": 2
+   }
+  ],
+  "tech": 13
+ },
+ "Refrigerator": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 50
+   },
+   {
+    "name": "聚合物",
+    "count": 20
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 10
+   },
+   {
+    "name": "电路板",
+    "count": 5
+   }
+  ],
+  "tech": 38
+ },
+ "Signboard": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   }
+  ],
+  "tech": 6
+ },
+ "WallSignboard": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   }
+  ],
+  "tech": 6
+ },
+ "MonsterFarm": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "石头",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 30
+   }
+  ],
+  "tech": 5
+ },
+ "DamagedScarecrow": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 5
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 5
+   }
+  ],
+  "tech": 13
+ },
+ "BaseCampBattleDirector": {
+  "mats": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 5
+   },
+   {
+    "name": "石头",
+    "count": 20
+   }
+  ],
+  "tech": 7
+ },
+ "Barrel_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "石头",
+    "count": 5
+   }
+  ],
+  "tech": 5
+ },
+ "Box_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "石头",
+    "count": 5
+   }
+  ],
+  "tech": 5
+ },
+ "Shelf_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 40
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 5
+ },
+ "Shelf_Cask_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 70
+   },
+   {
+    "name": "石头",
+    "count": 10
+   }
+  ],
+  "tech": 5
+ },
+ "Shelf_Hang01_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "石头",
+    "count": 5
+   }
+  ],
+  "tech": 5
+ },
+ "Shelf01_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 40
+   },
+   {
+    "name": "钉子",
+    "count": 2
+   }
+  ],
+  "tech": 10
+ },
+ "Shelf02_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 70
+   },
+   {
+    "name": "钉子",
+    "count": 5
+   }
+  ],
+  "tech": 10
+ },
+ "Shelf03_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "金属锭",
+    "count": 10
+   }
+  ],
+  "tech": 10
+ },
+ "Shelf04_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "金属锭",
+    "count": 3
+   }
+  ],
+  "tech": 10
+ },
+ "Shelf01_Wall_Iron": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 5
+   },
+   {
+    "name": "金属锭",
+    "count": 10
+   }
+  ],
+  "tech": 10
+ },
+ "Shelf05_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   }
+  ],
+  "tech": 13
+ },
+ "Shelf06_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 40
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   }
+  ],
+  "tech": 13
+ },
+ "Shelf07_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 40
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "金属锭",
+    "count": 3
+   }
+  ],
+  "tech": 13
+ },
+ "Shelf01_Wall_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "石头",
+    "count": 5
+   },
+   {
+    "name": "红色野莓",
+    "count": 3
+   }
+  ],
+  "tech": 13
+ },
+ "Shelf01_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "钉子",
+    "count": 1
+   }
+  ],
+  "tech": 17
+ },
+ "Shelf02_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "钉子",
+    "count": 2
+   }
+  ],
+  "tech": 17
+ },
+ "Shelf03_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 30
+   },
+   {
+    "name": "钉子",
+    "count": 3
+   }
+  ],
+  "tech": 17
+ },
+ "Shelf04_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 30
+   },
+   {
+    "name": "钉子",
+    "count": 3
+   }
+  ],
+  "tech": 17
+ },
+ "Container01_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 100
+   }
+  ],
+  "tech": 23
+ },
+ "Box01_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 23
+ },
+ "Box02_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "木材",
+    "count": 15
+   },
+   {
+    "name": "布",
+    "count": 2
+   }
+  ],
+  "tech": 23
+ },
+ "TableSquare_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "红色野莓",
+    "count": 5
+   }
+  ],
+  "tech": 5
+ },
+ "TableCircular_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "红色野莓",
+    "count": 5
+   }
+  ],
+  "tech": 5
+ },
+ "Bench_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   }
+  ],
+  "tech": 5
+ },
+ "Stool_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 5
+   }
+  ],
+  "tech": 5
+ },
+ "Stool_High_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 8
+   }
+  ],
+  "tech": 5
+ },
+ "Chair01_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   }
+  ],
+  "tech": 5
+ },
+ "Shelf_Hang02_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 5
+   },
+   {
+    "name": "石头",
+    "count": 5
+   }
+  ],
+  "tech": 5
+ },
+ "Counter_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "石头",
+    "count": 5
+   }
+  ],
+  "tech": 5
+ },
+ "Plant01_Plant": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 5
+   }
+  ],
+  "tech": 6
+ },
+ "Plant02_Plant": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 5
+   }
+  ],
+  "tech": 6
+ },
+ "Plant03_Plant": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 5
+   }
+  ],
+  "tech": 6
+ },
+ "Plant04_Plant": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 5
+   },
+   {
+    "name": "纤维",
+    "count": 5
+   }
+  ],
+  "tech": 6
+ },
+ "Ivy01": {
+  "mats": [
+   {
+    "name": "纤维",
+    "count": 10
+   }
+  ],
+  "tech": 7
+ },
+ "Ivy02": {
+  "mats": [
+   {
+    "name": "纤维",
+    "count": 5
+   }
+  ],
+  "tech": 7
+ },
+ "Ivy03": {
+  "mats": [
+   {
+    "name": "纤维",
+    "count": 5
+   }
+  ],
+  "tech": 7
+ },
+ "Rug01_Stone": {
+  "mats": [
+   {
+    "name": "布",
+    "count": 3
+   },
+   {
+    "name": "毒腺",
+    "count": 1
+   }
+  ],
+  "tech": 9
+ },
+ "Rug02_Stone": {
+  "mats": [
+   {
+    "name": "布",
+    "count": 2
+   },
+   {
+    "name": "喷火器官",
+    "count": 1
+   }
+  ],
+  "tech": 9
+ },
+ "Rug03_Stone": {
+  "mats": [
+   {
+    "name": "布",
+    "count": 2
+   },
+   {
+    "name": "优质帕鲁油",
+    "count": 1
+   }
+  ],
+  "tech": 9
+ },
+ "Rug04_Stone": {
+  "mats": [
+   {
+    "name": "布",
+    "count": 1
+   },
+   {
+    "name": "喷火器官",
+    "count": 1
+   }
+  ],
+  "tech": 9
+ },
+ "Chair01_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   }
+  ],
+  "tech": 11
+ },
+ "Chair02_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "毒腺",
+    "count": 1
+   }
+  ],
+  "tech": 11
+ },
+ "Stool01_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   }
+  ],
+  "tech": 11
+ },
+ "Desk01_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 5
+   },
+   {
+    "name": "石头",
+    "count": 5
+   }
+  ],
+  "tech": 14
+ },
+ "TableCircular01_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 5
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 14
+ },
+ "TableDresser01_Stone": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 20
+   },
+   {
+    "name": "石头",
+    "count": 30
+   }
+  ],
+  "tech": 21
+ },
+ "Sofa01_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 2
+   },
+   {
+    "name": "喷火器官",
+    "count": 1
+   }
+  ],
+  "tech": 20
+ },
+ "Sofa02_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "布",
+    "count": 3
+   },
+   {
+    "name": "喷火器官",
+    "count": 2
+   }
+  ],
+  "tech": 20
+ },
+ "Sofa03_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 1
+   },
+   {
+    "name": "喷火器官",
+    "count": 1
+   }
+  ],
+  "tech": 20
+ },
+ "BathTub_Stone": {
+  "mats": [
+   {
+    "name": "布",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 20
+   },
+   {
+    "name": "金属锭",
+    "count": 1
+   }
+  ],
+  "tech": 16
+ },
+ "Box01_Stone": {
+  "mats": [
+   {
+    "name": "纤维",
+    "count": 10
+   }
+  ],
+  "tech": 16
+ },
+ "Partition_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 16
+ },
+ "TowlRack01_Stone": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "布",
+    "count": 2
+   }
+  ],
+  "tech": 16
+ },
+ "Mirror01_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 10
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 16
+ },
+ "Mirror02_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 8
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 1
+   }
+  ],
+  "tech": 16
+ },
+ "Mirror01_Wall_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 10
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 16
+ },
+ "Piano01_Stone": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 20
+   },
+   {
+    "name": "金属锭",
+    "count": 5
+   }
+  ],
+  "tech": 17
+ },
+ "Piano02_Stone": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 20
+   },
+   {
+    "name": "金属锭",
+    "count": 5
+   }
+  ],
+  "tech": 17
+ },
+ "TableSink01_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "石头",
+    "count": 10
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   },
+   {
+    "name": "布",
+    "count": 1
+   }
+  ],
+  "tech": 18
+ },
+ "Toilet01_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 20
+   },
+   {
+    "name": "金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 18
+ },
+ "ToiletHolder01_Stone": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "纤维",
+    "count": 3
+   }
+  ],
+  "tech": 18
+ },
+ "Curtain01_Wall_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 3
+   },
+   {
+    "name": "金属锭",
+    "count": 1
+   }
+  ],
+  "tech": 18
+ },
+ "Globe01_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 50
+   },
+   {
+    "name": "金属锭",
+    "count": 1
+   }
+  ],
+  "tech": 18
+ },
+ "Stove01_Stone": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "木炭",
+    "count": 5
+   }
+  ],
+  "tech": 18
+ },
+ "Clock01_Wall_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 3
+   }
+  ],
+  "tech": 22
+ },
+ "Clock01_Stone": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "金属锭",
+    "count": 5
+   }
+  ],
+  "tech": 22
+ },
+ "Chair02_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 3
+   }
+  ],
+  "tech": 22
+ },
+ "Stool01_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 3
+   }
+  ],
+  "tech": 22
+ },
+ "TableCircular01_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   }
+  ],
+  "tech": 22
+ },
+ "Desk01_Iron": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 2
+   },
+   {
+    "name": "金属锭",
+    "count": 15
+   }
+  ],
+  "tech": 22
+ },
+ "TableSide01_Iron": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 1
+   },
+   {
+    "name": "金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 35
+ },
+ "TableSquare01_Iron": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 2
+   },
+   {
+    "name": "金属锭",
+    "count": 5
+   },
+   {
+    "name": "红色野莓",
+    "count": 2
+   }
+  ],
+  "tech": 35
+ },
+ "TableSquare02_Iron": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 2
+   },
+   {
+    "name": "金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 35
+ },
+ "CableCoil01_Iron": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "金属锭",
+    "count": 10
+   }
+  ],
+  "tech": 37
+ },
+ "GarbageBag_Iron": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 5
+   },
+   {
+    "name": "石头",
+    "count": 5
+   },
+   {
+    "name": "纤维",
+    "count": 5
+   }
+  ],
+  "tech": 37
+ },
+ "PipeClay01_Iron": {
+  "mats": [
+   {
+    "name": "水泥",
+    "count": 5
+   }
+  ],
+  "tech": 37
+ },
+ "Tire01_Iron": {
+  "mats": [
+   {
+    "name": "优质帕鲁油",
+    "count": 2
+   },
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 2
+   }
+  ],
+  "tech": 37
+ },
+ "Barrel01_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 1
+   }
+  ],
+  "tech": 34
+ },
+ "Barrel02_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 1
+   }
+  ],
+  "tech": 34
+ },
+ "Barrel03_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 1
+   }
+  ],
+  "tech": 34
+ },
+ "Chair01_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 2
+   },
+   {
+    "name": "皮革",
+    "count": 1
+   }
+  ],
+  "tech": 38
+ },
+ "Sofa01_Iron": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "皮革",
+    "count": 2
+   },
+   {
+    "name": "布",
+    "count": 1
+   }
+  ],
+  "tech": 38
+ },
+ "Sofa02_Iron": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "皮革",
+    "count": 3
+   }
+  ],
+  "tech": 38
+ },
+ "Chair01_Pal": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 2
+   },
+   {
+    "name": "皮革",
+    "count": 2
+   }
+  ],
+  "tech": 38
+ },
+ "GoalSoccer_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 20
+   }
+  ],
+  "tech": 46
+ },
+ "MachineGame01_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 30
+   },
+   {
+    "name": "布",
+    "count": 5
+   }
+  ],
+  "tech": 46
+ },
+ "MachineVending01_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 30
+   },
+   {
+    "name": "结冰器官",
+    "count": 2
+   }
+  ],
+  "tech": 46
+ },
+ "Television01_Iron": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "电路板",
+    "count": 1
+   }
+  ],
+  "tech": 46
+ },
+ "SignExit_Ceiling_Iron": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   },
+   {
+    "name": "发电器官",
+    "count": 1
+   }
+  ],
+  "tech": 47
+ },
+ "SignExit_Wall_Iron": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   },
+   {
+    "name": "发电器官",
+    "count": 1
+   }
+  ],
+  "tech": 47
+ },
+ "TrafficCone01_Iron": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 48
+ },
+ "TrafficCone02_Iron": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 2
+   }
+  ],
+  "tech": 48
+ },
+ "TrafficCone03_Iron": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 48
+ },
+ "TrafficLight01_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "发电器官",
+    "count": 2
+   }
+  ],
+  "tech": 48
+ },
+ "TrafficSign01_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   }
+  ],
+  "tech": 49
+ },
+ "TrafficSign02_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   }
+  ],
+  "tech": 49
+ },
+ "TrafficSign03_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   }
+  ],
+  "tech": 49
+ },
+ "TrafficSign04_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   }
+  ],
+  "tech": 49
+ },
+ "TrafficBarricade01_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   }
+  ],
+  "tech": 49
+ },
+ "TrafficBarricade02_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 3
+   },
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 49
+ },
+ "TrafficBarricade03_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   },
+   {
+    "name": "喷火器官",
+    "count": 1
+   }
+  ],
+  "tech": 49
+ },
+ "TrafficBarricade04_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   }
+  ],
+  "tech": 49
+ },
+ "TrafficBarricade05_Iron": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   }
+  ],
+  "tech": 49
+ },
+ "Decal_PalSticker_PinkCat": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 1
+   }
+  ],
+  "tech": 0
+ },
+ "Rug_Wood": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 1
+   }
+  ],
+  "tech": 0
+ },
+ "Light_FirePlace01": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "石头",
+    "count": 15
+   }
+  ],
+  "tech": 8
+ },
+ "Light_FirePlace02": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 15
+   },
+   {
+    "name": "石头",
+    "count": 30
+   }
+  ],
+  "tech": 8
+ },
+ "Light_LightPole01": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "发电器官",
+    "count": 3
+   },
+   {
+    "name": "钉子",
+    "count": 3
+   }
+  ],
+  "tech": 46
+ },
+ "Light_LightPole02": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "发电器官",
+    "count": 3
+   },
+   {
+    "name": "钉子",
+    "count": 3
+   }
+  ],
+  "tech": 46
+ },
+ "Light_LightPole03": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "发电器官",
+    "count": 3
+   },
+   {
+    "name": "钉子",
+    "count": 3
+   }
+  ],
+  "tech": 46
+ },
+ "Light_LightPole04": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "发电器官",
+    "count": 3
+   },
+   {
+    "name": "钉子",
+    "count": 3
+   }
+  ],
+  "tech": 46
+ },
+ "Light_FloorLamp01": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "发电器官",
+    "count": 3
+   },
+   {
+    "name": "钉子",
+    "count": 3
+   }
+  ],
+  "tech": 26
+ },
+ "Light_FloorLamp02": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "发电器官",
+    "count": 3
+   },
+   {
+    "name": "钉子",
+    "count": 3
+   }
+  ],
+  "tech": 26
+ },
+ "Light_CandleSticks_Top": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "发电器官",
+    "count": 3
+   },
+   {
+    "name": "钉子",
+    "count": 3
+   }
+  ],
+  "tech": 26
+ },
+ "Light_CandleSticks_Wall": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "发电器官",
+    "count": 2
+   },
+   {
+    "name": "钉子",
+    "count": 2
+   }
+  ],
+  "tech": 26
+ },
+ "Altar": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 100
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 20
+   }
+  ],
+  "tech": 33
+ },
+ "CoolerPalFoodBox": {
+  "mats": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 20
+   },
+   {
+    "name": "塑钢",
+    "count": 20
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 15
+   }
+  ],
+  "tech": 51
+ },
+ "DismantlingConveyor": {
+  "mats": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 100
+   },
+   {
+    "name": "电脑",
+    "count": 15
+   },
+   {
+    "name": "钉子",
+    "count": 30
+   },
+   {
+    "name": "塑钢",
+    "count": 30
+   }
+  ],
+  "tech": 56
+ },
+ "ElectricGenerator_Large": {
+  "mats": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 200
+   },
+   {
+    "name": "发电器官",
+    "count": 200
+   }
+  ],
+  "tech": 50
+ },
+ "OilPump": {
+  "mats": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 250
+   },
+   {
+    "name": "电路板",
+    "count": 50
+   }
+  ],
+  "tech": 50
+ },
+ "CoalPit": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 70
+   },
+   {
+    "name": "石炭",
+    "count": 100
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 30
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   }
+  ],
+  "tech": 37
+ },
+ "SulfurPit": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 70
+   },
+   {
+    "name": "硫磺",
+    "count": 100
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 30
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   }
+  ],
+  "tech": 46
+ },
+ "IceCrusher": {
+  "mats": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 50
+   },
+   {
+    "name": "塑钢",
+    "count": 30
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 25
+   },
+   {
+    "name": "腐蚀溶剂",
+    "count": 20
+   }
+  ],
+  "tech": 54
+ },
+ "Glass_foundation": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_wall": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_WindowWall": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_TriangleWall": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_roof": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_SlantedRoof": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_stair": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_DoorWall": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_pillars": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "SkinChange": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 10
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 10
+   }
+  ],
+  "tech": 2
+ },
+ "JapaneseStyle_wall_01": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_DoorWall_01": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_DoorWall_02": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_roof_01": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_roof_02": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_SlantedRoof": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_TriangleWall": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_WindowWall": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_foundation": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_stair": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_Pillar": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "SanityDecrease1": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 40
+   },
+   {
+    "name": "电路板",
+    "count": 20
+   },
+   {
+    "name": "腐蚀溶剂",
+    "count": 10
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 20
+   }
+  ],
+  "tech": 41
+ },
+ "WorkSpeedIncrease1": {
+  "mats": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 40
+   },
+   {
+    "name": "电路板",
+    "count": 30
+   },
+   {
+    "name": "生化电池",
+    "count": 5
+   }
+  ],
+  "tech": 46
+ },
+ "QuartzPit": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 70
+   },
+   {
+    "name": "纯水晶",
+    "count": 100
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 30
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   }
+  ],
+  "tech": 52
+ },
+ "Factory_Money": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 100
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "AI核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明核心",
+    "count": 5
+   }
+  ],
+  "tech": 73
+ },
+ "ItemChest_04": {
+  "mats": [
+   {
+    "name": "六棱晶锭",
+    "count": 20
+   },
+   {
+    "name": "碳纤维",
+    "count": 20
+   },
+   {
+    "name": "电脑",
+    "count": 2
+   }
+  ],
+  "tech": 59
+ },
+ "MedicalPalBed_05": {
+  "mats": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 10
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 6
+   },
+   {
+    "name": "电脑",
+    "count": 3
+   }
+  ],
+  "tech": 56
+ },
+ "BaseCampItemDispenser": {
+  "mats": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 100
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 30
+   },
+   {
+    "name": "生化电池",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "GuildChest": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 50
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 100
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   }
+  ],
+  "tech": 41
+ },
+ "Expedition": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 10
+   },
+   {
+    "name": "石头",
+    "count": 100
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 20
+   },
+   {
+    "name": "水泥",
+    "count": 20
+   }
+  ],
+  "tech": 22
+ },
+ "ItemBooth": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "木板",
+    "count": 4
+   },
+   {
+    "name": "布",
+    "count": 3
+   }
+  ],
+  "tech": 22
+ },
+ "Lab": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 30
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 30
+   }
+  ],
+  "tech": 19
+ },
+ "PalBooth": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "木板",
+    "count": 4
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 5
+   }
+  ],
+  "tech": 22
+ },
+ "OperatingTable": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 30
+   },
+   {
+    "name": "优质的布",
+    "count": 20
+   },
+   {
+    "name": "腐蚀溶剂",
+    "count": 10
+   }
+  ],
+  "tech": 38
+ },
+ "ManualElectricGenerator": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 5
+   },
+   {
+    "name": "发电器官",
+    "count": 5
+   }
+  ],
+  "tech": 26
+ },
+ "Farm_SkillFruits": {
+  "mats": [
+   {
+    "name": "神秘木材",
+    "count": 200
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 500
+   },
+   {
+    "name": "烈阳金属",
+    "count": 150
+   }
+  ],
+  "tech": 71
+ },
+ "Wooden_ladder": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   }
+  ],
+  "tech": 10
+ },
+ "PalMedicineBox": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "木板",
+    "count": 3
+   },
+   {
+    "name": "布",
+    "count": 5
+   }
+  ],
+  "tech": 24
+ },
+ "EnergyStorage_Electric": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 50
+   },
+   {
+    "name": "发电器官",
+    "count": 20
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 5
+   },
+   {
+    "name": "腐蚀溶剂",
+    "count": 5
+   }
+  ],
+  "tech": 37
+ },
+ "Headstone": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 10
+   }
+  ],
+  "tech": 17
+ },
+ "JapaneseStyle_DoorWall_03": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "Byobu": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   }
+  ],
+  "tech": 55
+ },
+ "Kakejiku": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   }
+  ],
+  "tech": 55
+ },
+ "Zaisu": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 15
+   },
+   {
+    "name": "布",
+    "count": 3
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   }
+  ],
+  "tech": 55
+ },
+ "Zabuton": {
+  "mats": [
+   {
+    "name": "布",
+    "count": 3
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   }
+  ],
+  "tech": 55
+ },
+ "Irori": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 10
+   },
+   {
+    "name": "金属锭",
+    "count": 3
+   },
+   {
+    "name": "木炭",
+    "count": 2
+   }
+  ],
+  "tech": 55
+ },
+ "Toro": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 15
+   }
+  ],
+  "tech": 55
+ },
+ "Andon": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 10
+   },
+   {
+    "name": "喷火器官",
+    "count": 3
+   }
+  ],
+  "tech": 55
+ },
+ "Shishiodoshi": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 10
+   },
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 3
+   }
+  ],
+  "tech": 55
+ },
+ "Bonsai": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 10
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 1
+   }
+  ],
+  "tech": 55
+ },
+ "Koro": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 3
+   },
+   {
+    "name": "木材",
+    "count": 5
+   }
+  ],
+  "tech": 55
+ },
+ "Seika": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 10
+   },
+   {
+    "name": "美丽花朵",
+    "count": 1
+   }
+  ],
+  "tech": 55
+ },
+ "Tansu": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 15
+   },
+   {
+    "name": "石头",
+    "count": 5
+   }
+  ],
+  "tech": 55
+ },
+ "Fudukue": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 10
+   }
+  ],
+  "tech": 55
+ },
+ "CompositeDesk": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 20
+   },
+   {
+    "name": "优质木板",
+    "count": 10
+   },
+   {
+    "name": "木炭",
+    "count": 30
+   }
+  ],
+  "tech": 45
+ },
+ "GlobalPalStorage": {
+  "mats": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 3
+   },
+   {
+    "name": "木材",
+    "count": 5
+   },
+   {
+    "name": "石头",
+    "count": 15
+   }
+  ],
+  "tech": 3
+ },
+ "DimensionPalStorage": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 40
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   }
+  ],
+  "tech": 20
+ },
+ "Wire_Fence": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   },
+   {
+    "name": "石头",
+    "count": 10
+   }
+  ],
+  "tech": 0
+ },
+ "SF_foundation": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_wall": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_WindowWall": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_TriangleWall": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_roof": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_SlantedRoof": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_stair": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_DoorWall": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_pillars": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "LilyQueenStatue": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 100
+   }
+  ],
+  "tech": 0
+ },
+ "ConservationGroupBannerA": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 5
+   },
+   {
+    "name": "布",
+    "count": 10
+   }
+  ],
+  "tech": 0
+ },
+ "ConservationGroupBannerB": {
+  "mats": [
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 10
+   }
+  ],
+  "tech": 0
+ },
+ "Hunter_GangFlag": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 2
+   }
+  ],
+  "tech": 0
+ },
+ "PalCage": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   }
+  ],
+  "tech": 0
+ },
+ "WoodenBarricade": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   }
+  ],
+  "tech": 0
+ },
+ "WallTorch02": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 5
+   },
+   {
+    "name": "石头",
+    "count": 2
+   },
+   {
+    "name": "喷火器官",
+    "count": 2
+   }
+  ],
+  "tech": 0
+ },
+ "CandleStand": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   },
+   {
+    "name": "喷火器官",
+    "count": 2
+   }
+  ],
+  "tech": 0
+ },
+ "FireStand": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   },
+   {
+    "name": "喷火器官",
+    "count": 2
+   },
+   {
+    "name": "木炭",
+    "count": 2
+   }
+  ],
+  "tech": 0
+ },
+ "Wood_Fence": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 3
+   }
+  ],
+  "tech": 2
+ },
+ "Stone_Fence": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Iron_Fence": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 3
+   }
+  ],
+  "tech": 30
+ },
+ "Glass_Fence": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 1
+   }
+  ],
+  "tech": 45
+ },
+ "JapaneseStyle_Fence": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 5
+   }
+  ],
+  "tech": 49
+ },
+ "SF_Fence": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 2
+   }
+  ],
+  "tech": 62
+ },
+ "CrystalPit": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 70
+   },
+   {
+    "name": "六棱晶矿",
+    "count": 100
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   }
+  ],
+  "tech": 62
+ },
+ "FishingPond1": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 15
+   },
+   {
+    "name": "水泥",
+    "count": 30
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 3
+   }
+  ],
+  "tech": 31
+ },
+ "FishingPond2": {
+  "mats": [
+   {
+    "name": "优质木板",
+    "count": 20
+   },
+   {
+    "name": "石头",
+    "count": 30
+   },
+   {
+    "name": "珊瑚锭",
+    "count": 10
+   },
+   {
+    "name": "优质帕鲁油",
+    "count": 20
+   }
+  ],
+  "tech": 69
+ },
+ "BaseCampWorkerExtraStation": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 30
+   }
+  ],
+  "tech": 32
+ },
+ "SF_Desk": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 15
+   }
+  ],
+  "tech": 0
+ },
+ "SF_Chair": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 10
+   }
+  ],
+  "tech": 0
+ },
+ "LanternTop": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 5
+   },
+   {
+    "name": "发电器官",
+    "count": 2
+   }
+  ],
+  "tech": 0
+ },
+ "Shrine_Lantern": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "发电器官",
+    "count": 3
+   },
+   {
+    "name": "石头",
+    "count": 10
+   }
+  ],
+  "tech": 0
+ },
+ "GuardianDogStatue": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 70
+   }
+  ],
+  "tech": 0
+ },
+ "Hunter_Flag": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 20
+   }
+  ],
+  "tech": 11
+ },
+ "Hunter_Banner": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 20
+   }
+  ],
+  "tech": 11
+ },
+ "Believer_Flag": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 20
+   }
+  ],
+  "tech": 20
+ },
+ "Believer_Banner": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 20
+   }
+  ],
+  "tech": 20
+ },
+ "FireCult_Flag": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 20
+   }
+  ],
+  "tech": 28
+ },
+ "FireCult_Banner": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 20
+   }
+  ],
+  "tech": 28
+ },
+ "Police_Flag": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 20
+   }
+  ],
+  "tech": 39
+ },
+ "Police_Banner": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 20
+   }
+  ],
+  "tech": 39
+ },
+ "Scientist_Flag": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "优质的布",
+    "count": 20
+   }
+  ],
+  "tech": 50
+ },
+ "Scientist_Banner": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "优质的布",
+    "count": 20
+   }
+  ],
+  "tech": 50
+ },
+ "Ninja_Flag": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "优质的布",
+    "count": 20
+   }
+  ],
+  "tech": 55
+ },
+ "Ninja_Banner": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "优质的布",
+    "count": 20
+   }
+  ],
+  "tech": 55
+ },
+ "YakushimaBoss002_Relic": {
+  "mats": [
+   {
+    "name": "神圣锭",
+    "count": 100
+   }
+  ],
+  "tech": 0
+ },
+ "Wooden_TriangleFoundation": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wooden_DiagonalWall": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wooden_TriangleRoof": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wooden_TriangleStairsCorner": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wood_TriangleWallReverse": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wooden_WallGate": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wooden_SlopedRoofCorner": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Wooden_PyramidRoof": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Stone_TriangleFoundation": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_DiagonalWall": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_TriangleRoof": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_TriangleStairsCorner": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_TriangleWallReverse": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_WallGate": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_SlopedRoofCorner": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Stone_PyramidRoof": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Iron_TriangleFoundation": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Iron_DiagonalWall": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Iron_TriangleRoof": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Iron_TriangleStairsCorner": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Iron_TriangleWallReverse": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Iron_WallGate": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Iron_SlopedRoofCorner": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Iron_PyramidRoof": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Glass_TriangleFoundation": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_DiagonalWall": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_TriangleRoof": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_TriangleStairsCorner": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_TriangleWallReverse": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_WallGate": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_SlopedRoofCorner": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "Glass_PyramidRoof": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "JapaneseStyle_TriangleFoundation": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_DiagonalWall": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_TriangleRoof_01": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_TriangleRoof_02": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_TriangleStairsCorner_01": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_TriangleWallReverse": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_WallGate": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_SlopedRoofCorner": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "JapaneseStyle_PyramidRoof": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "SF_TriangleFoundation": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_DiagonalWall": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_TriangleRoof": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_TriangleStairsCorner": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_TriangleWallReverse": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_WallGate": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_SlopedRoofCorner": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "SF_PyramidRoof": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "Wooden_SlopedRoofCornerReverse": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 2
+   }
+  ],
+  "tech": 2
+ },
+ "Stone_SlopedRoofCornerReverse": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 3
+   }
+  ],
+  "tech": 19
+ },
+ "Iron_SlopedRoofCornerReverse": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 1
+   },
+   {
+    "name": "石头",
+    "count": 2
+   }
+  ],
+  "tech": 30
+ },
+ "Glass_SlopedRoofCornerReverse": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 1
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 2
+   }
+  ],
+  "tech": 45
+ },
+ "JapaneseStyle_SlopedRoofCornerReverse": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 4
+   }
+  ],
+  "tech": 49
+ },
+ "SF_SlopedRoofCornerReverse": {
+  "mats": [
+   {
+    "name": "聚合物",
+    "count": 1
+   }
+  ],
+  "tech": 62
+ },
+ "Ancient_SlopedRoofCornerReverse": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "AncientWorkBench": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 50
+   },
+   {
+    "name": "AI核心",
+    "count": 5
+   },
+   {
+    "name": "生化电池",
+    "count": 20
+   }
+  ],
+  "tech": 67
+ },
+ "AncientElectricGenerator": {
+  "mats": [
+   {
+    "name": "帕鲁树晶锭",
+    "count": 100
+   },
+   {
+    "name": "发电器官",
+    "count": 200
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   }
+  ],
+  "tech": 75
+ },
+ "AncientBlastFurnace": {
+  "mats": [
+   {
+    "name": "珊瑚锭",
+    "count": 100
+   },
+   {
+    "name": "超高热核心",
+    "count": 20
+   },
+   {
+    "name": "电脑",
+    "count": 30
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   }
+  ],
+  "tech": 66
+ },
+ "AncientCookingStove": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 80
+   },
+   {
+    "name": "超高热核心",
+    "count": 30
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 50
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   }
+  ],
+  "tech": 70
+ },
+ "AncientMultiProduct": {
+  "mats": [
+   {
+    "name": "帕鲁树晶锭",
+    "count": 50
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   }
+  ],
+  "tech": 78
+ },
+ "AncientFarmBlock": {
+  "mats": [
+   {
+    "name": "帕鲁树晶锭",
+    "count": 50
+   },
+   {
+    "name": "世界树圣水",
+    "count": 50
+   },
+   {
+    "name": "神秘木材",
+    "count": 100
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   }
+  ],
+  "tech": 78
+ },
+ "DefenseMachinegun_AutoTurret": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 30
+   },
+   {
+    "name": "钉子",
+    "count": 10
+   },
+   {
+    "name": "水泥",
+    "count": 15
+   }
+  ],
+  "tech": 0
+ },
+ "MultiElectricHatchingPalEggWithBreed": {
+  "mats": [
+   {
+    "name": "帕鲁树晶锭",
+    "count": 100
+   },
+   {
+    "name": "AI核心",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 30
+   },
+   {
+    "name": "古代文明核心",
+    "count": 20
+   }
+  ],
+  "tech": 76
+ },
+ "AncientRelicRecycler": {
+  "mats": [
+   {
+    "name": "帕鲁树晶锭",
+    "count": 50
+   },
+   {
+    "name": "神秘木材",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 30
+   },
+   {
+    "name": "古代文明核心",
+    "count": 20
+   }
+  ],
+  "tech": 74
+ },
+ "SkyIslandOrePit": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 70
+   },
+   {
+    "name": "烈阳金属",
+    "count": 100
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   }
+  ],
+  "tech": 72
+ },
+ "FurnitureTree01_Green": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 12
+ },
+ "FurnitureTree02_Green": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 12
+ },
+ "FurnitureTree03_Green": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 12
+ },
+ "FurnitureTree01_Red": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 14
+ },
+ "FurnitureTree02_Red": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 14
+ },
+ "FurnitureTree03_Red": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 14
+ },
+ "FurnitureTree01_Yellow": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 16
+ },
+ "FurnitureTree02_Yellow": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 16
+ },
+ "FurnitureTree03_Yellow": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 16
+ },
+ "FurnitureTree01_Cherry": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 20
+   }
+  ],
+  "tech": 56
+ },
+ "FurnitureTree02_Cherry": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 20
+   }
+  ],
+  "tech": 56
+ },
+ "FurnitureTree03_Cherry": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 20
+   }
+  ],
+  "tech": 56
+ },
+ "FurnitureTree01_Tropical": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 20
+   }
+  ],
+  "tech": 27
+ },
+ "FurnitureTree02_Tropical": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 20
+   }
+  ],
+  "tech": 27
+ },
+ "FurnitureTree03_Tropical": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 20
+   }
+  ],
+  "tech": 27
+ },
+ "FurnitureTree01_Snow": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 20
+   }
+  ],
+  "tech": 49
+ },
+ "FurnitureTree02_Snow": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 20
+   }
+  ],
+  "tech": 49
+ },
+ "FurnitureTree03_Snow": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 20
+   }
+  ],
+  "tech": 49
+ },
+ "FurnitureTree01_Desert": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 20
+   }
+  ],
+  "tech": 37
+ },
+ "FurnitureTree02_Desert": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 20
+   }
+  ],
+  "tech": 37
+ },
+ "FurnitureTree03_Desert": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 20
+   }
+  ],
+  "tech": 37
+ },
+ "FurnitureTree01_Bamboo": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 23
+ },
+ "FurnitureTree02_Bamboo": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 23
+ },
+ "FurnitureTree03_Bamboo": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 23
+ },
+ "FurnitureBush01_Green": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 12
+ },
+ "FurnitureBush01_Yellow": {
+  "mats": [
+   {
+    "name": "纤维",
+    "count": 20
+   }
+  ],
+  "tech": 16
+ },
+ "FurnitureBush01_Flower": {
+  "mats": [
+   {
+    "name": "纤维",
+    "count": 20
+   }
+  ],
+  "tech": 23
+ },
+ "FurnitureBush02_Flower": {
+  "mats": [
+   {
+    "name": "纤维",
+    "count": 20
+   }
+  ],
+  "tech": 23
+ },
+ "FurnitureBush01_Tropical": {
+  "mats": [
+   {
+    "name": "纤维",
+    "count": 20
+   }
+  ],
+  "tech": 27
+ },
+ "FurnitureBush01_Snow": {
+  "mats": [
+   {
+    "name": "纤维",
+    "count": 20
+   }
+  ],
+  "tech": 49
+ },
+ "FurnitureStone01": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 20
+   }
+  ],
+  "tech": 14
+ },
+ "TableCircular_Wood_None": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 12
+ },
+ "TableSquare_Wood_None": {
+  "mats": [
+   {
+    "name": "木材",
+    "count": 20
+   }
+  ],
+  "tech": 12
+ },
+ "JetDragonStatue": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 100
+   }
+  ],
+  "tech": 79
+ },
+ "IceHorseStatue": {
+  "mats": [
+   {
+    "name": "石头",
+    "count": 100
+   }
+  ],
+  "tech": 64
+ },
+ "ArcadeVideoGame": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 30
+   }
+  ],
+  "tech": 46
+ },
+ "Ancient_foundation": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_wall": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_roof": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_stair": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_DoorWall": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_TriangleWall": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_SlantedRoof": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_WindowWall": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_Pillars": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "DarkIsland_Flag": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "优质的布",
+    "count": 20
+   }
+  ],
+  "tech": 60
+ },
+ "DarkIsland_Banner": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "优质的布",
+    "count": 20
+   }
+  ],
+  "tech": 60
+ },
+ "SkyIsland_Flag": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 20
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "优质的布",
+    "count": 20
+   }
+  ],
+  "tech": 71
+ },
+ "SkyIsland_Banner": {
+  "mats": [
+   {
+    "name": "精炼金属锭",
+    "count": 10
+   },
+   {
+    "name": "纤维",
+    "count": 10
+   },
+   {
+    "name": "优质的布",
+    "count": 20
+   }
+  ],
+  "tech": 71
+ },
+ "Ancient_TriangleFoundation": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_DiagonalWall": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_TriangleRoof": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_TriangleStairsCorner": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_TriangleWallReverse": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_WallGate": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_SlopedRoofCorner": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_PyramidRoof": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "Ancient_Fence": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 2
+   }
+  ],
+  "tech": 67
+ },
+ "BaseCampWorkHard02": {
+  "mats": [
+   {
+    "name": "金属锭",
+    "count": 100
+   },
+   {
+    "name": "水泥",
+    "count": 30
+   }
+  ],
+  "tech": 28
+ },
+ "BaseCampWorkHard03": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 100
+   },
+   {
+    "name": "古代文明核心",
+    "count": 5
+   }
+  ],
+  "tech": 71
+ },
+ "StationDeforest3": {
+  "mats": [
+   {
+    "name": "硬木材",
+    "count": 100
+   },
+   {
+    "name": "石头",
+    "count": 50
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   }
+  ],
+  "tech": 43
+ },
+ "Clinic": {
+  "mats": [
+   {
+    "name": "木板",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 20
+   },
+   {
+    "name": "钉子",
+    "count": 15
+   }
+  ],
+  "tech": 24
+ },
+ "Ancient_Clinic": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 50
+   },
+   {
+    "name": "电脑",
+    "count": 15
+   },
+   {
+    "name": "世界树圣水",
+    "count": 45
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   }
+  ],
+  "tech": 73
+ },
+ "Ancient_Spa": {
+  "mats": [
+   {
+    "name": "帕鲁树晶锭",
+    "count": 100
+   },
+   {
+    "name": "世界树圣水",
+    "count": 10
+   },
+   {
+    "name": "超高热核心",
+    "count": 20
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 20
+   }
+  ],
+  "tech": 76
+ },
+ "Ancient_AirConditioner": {
+  "mats": [
+   {
+    "name": "帕鲁树晶锭",
+    "count": 30
+   },
+   {
+    "name": "AI核心",
+    "count": 10
+   },
+   {
+    "name": "超高热核心",
+    "count": 5
+   },
+   {
+    "name": "极低温冷却介质",
+    "count": 5
+   }
+  ],
+  "tech": 0
+ },
+ "Ancient_MedicalPalBed": {
+  "mats": [
+   {
+    "name": "烈阳金属锭",
+    "count": 10
+   },
+   {
+    "name": "世界树圣水",
+    "count": 2
+   },
+   {
+    "name": "神秘木材",
+    "count": 3
+   }
+  ],
+  "tech": 73
+ },
+ "OilPump02": {
+  "mats": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 300
+   },
+   {
+    "name": "电路板",
+    "count": 50
+   },
+   {
+    "name": "生化电池",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   }
+  ],
+  "tech": 51
+ }
+}
