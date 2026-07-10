@@ -221,6 +221,7 @@ HELP_TMPL = _HEAD + """
     <div class="cmd"><div class="c"><b>/帕鲁物品</b> [名/类]</div><div class="d">详情/分类浏览/翻页</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁设施</b> [名/字]</div><div class="d">详情或模糊列表·空=全部·翻页</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁科技</b> [名/字]</div><div class="d">详情或模糊列表·空=全部·翻页</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁研究所</b> [类/名]</div><div class="d">🆕 全局增益研究·9大适性·材料/前置</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁栖息区域</b> 帕鲁名</div><div class="d">地图上涂出它的刷新热区</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁推荐词条</b> 帕鲁名</div><div class="d">按角色推荐高价值词条</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁属性克制</b></div><div class="d">九系属性克制关系图</div></div>
@@ -749,6 +750,7 @@ HELP_PIX = _PH + """
     <div class="cmd"><div class="c"><b>/帕鲁物品</b> [名/类]</div><div class="d">详情/分类/翻页</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁设施</b> [名/字]</div><div class="d">详情/模糊列表/翻页</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁科技</b> [名/字]</div><div class="d">详情/模糊列表/翻页</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁研究所</b> [类/名]</div><div class="d">🆕 全局增益研究/9适性/材料</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁栖息区域</b> 帕鲁名</div><div class="d">地图上涂出刷新热区</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁推荐词条</b> 帕鲁名</div><div class="d">按角色推荐词条</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁属性克制</b></div><div class="d">九系属性克制图</div></div>
@@ -2184,6 +2186,74 @@ TECH_PIX = _PH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+# ---------------- 研究所(1.0 新增) ----------------
+LAB_OVERVIEW_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">🔬 帕鲁研究所</div>
+    <div class="subtitle"><span class="pill soft">共 {{ total }} 项研究</span><span class="pill soft">9 大工作适性</span></div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    <div style="font-size:14px;color:#cfc1ea;line-height:1.75;margin-bottom:14px">在据点建造「研究所」后，投入材料与帕鲁工时研究各类工作适性的<b style="color:#e8c466">全局增益</b>(工作速度 / 据点战力 / 孵化 / 远征 等)，效果对全服帕鲁生效。</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:11px">
+      {% for c in cats %}
+      <div style="display:flex;flex-direction:column;align-items:center;padding:14px 6px 11px;border-radius:14px;background:rgba(12,8,38,.42);border:1px solid rgba(232,198,106,.2)">
+        <div style="font-size:38px;line-height:1">{{ c.emoji }}</div>
+        <div style="margin-top:7px;font-size:15px;font-weight:800;color:#ece3f7">{{ c.name }}</div>
+        <div style="margin-top:4px;font-size:12px;color:#b9a9d6">{{ c.count }} 项 · <span style="color:#7cfc9a">{{ c.essential }} 必需</span></div>
+      </div>{% endfor %}
+    </div>
+    <div style="margin-top:15px;font-size:13px;color:#9c8fc0;line-height:1.7">发 <b style="color:#e8c466">/帕鲁研究所 手工</b> 看某类全部研究；发 <b style="color:#e8c466">/帕鲁研究所 &lt;研究名&gt;</b> 看单项材料/前置。</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+LAB_LIST_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">{{ emoji }} {{ category }}</div>
+    <div class="subtitle"><span class="pill soft">{{ items|length }} 项研究</span></div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    <div style="display:flex;flex-direction:column;gap:8px">
+      {% for it in items %}
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:12px;background:rgba(12,8,38,.42);border:1px solid rgba(232,198,106,.16)">
+        {% if it.essential %}<span style="flex:none;font-size:11px;font-weight:800;color:#0d0820;background:#7cfc9a;border-radius:6px;padding:2px 6px">必需</span>{% endif %}
+        <div style="flex:1;min-width:0">
+          <div style="font-size:15px;font-weight:700;color:#ece3f7">{{ it.name }}</div>
+          {% if it.effect %}<div style="font-size:12.5px;color:#9effb6;margin-top:2px">{{ it.effect }}</div>{% endif %}
+        </div>
+      </div>{% endfor %}
+    </div>
+    <div style="margin-top:13px;font-size:13px;color:#9c8fc0">发 <b style="color:#e8c466">/帕鲁研究所 &lt;研究名&gt;</b> 看材料与前置。</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+LAB_DETAIL_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:15px;width:100%">
+    <div style="flex:none;font-size:72px">{{ emoji }}</div>
+    <div style="flex:1;min-width:0">
+      <div class="title">{{ name }}</div>
+      <div class="subtitle">
+        <span class="pill soft">{{ emoji }} {{ category }}</span>
+        {% if essential %}<span class="pill" style="background:rgba(124,252,154,.22);border-color:rgba(124,252,154,.5)">✔ 必需研究</span>{% endif %}
+        {% if work %}<span class="pill soft">⏳ {{ work }} 工时</span>{% endif %}
+      </div>
+    </div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    {% if effect %}<div class="sec-t">研究效果</div>
+    <div style="font-size:16px;color:#9effb6;font-weight:700;background:rgba(124,252,154,.1);border:1px solid rgba(124,252,154,.3);border-radius:12px;padding:11px 15px">{{ effect }}</div>{% endif %}
+    {% if materials %}<div class="sec-t" style="margin-top:15px">所需材料</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      {% for m in materials %}<span style="display:inline-flex;align-items:center;gap:6px;background:rgba(12,8,38,.5);border:1px solid rgba(232,198,106,.22);border-radius:11px;padding:6px 12px;font-size:14px;color:#ece3f7">{{ m.name }} <b style="color:#e8c466">×{{ m.count }}</b></span>{% endfor %}
+    </div>{% endif %}
+    {% if prereq %}<div class="sec-t" style="margin-top:15px">前置研究</div>
+    <div style="font-size:14px;color:#cfc1ea;background:rgba(99,102,241,.14);border:1px solid rgba(232,198,106,.22);border-radius:12px;padding:10px 15px">🔗 需先完成「{{ prereq }}」</div>{% endif %}
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+
 # ---------------- 网格列表(模糊搜索/全表浏览，分页) ----------------
 GRID_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div>
@@ -3037,6 +3107,7 @@ STYLES = {
                 "symptom": SYMPTOM_TMPL,
                 "item": ITEM_TMPL, "itemcat": ITEMCAT_TMPL,
                 "facility": FACILITY_TMPL, "tech": TECH_TMPL, "grid": GRID_TMPL, "map": MAP_TMPL,
+                "lab_overview": LAB_OVERVIEW_TMPL, "lab_list": LAB_LIST_TMPL, "lab_detail": LAB_DETAIL_TMPL,
                 "bag": BAG_TMPL, "team": TEAM_TMPL, "palbox": PALBOX_TMPL, "guild": GUILD_TMPL,
                 "basecamp": BASECAMP_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,

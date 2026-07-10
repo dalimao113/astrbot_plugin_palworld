@@ -85,6 +85,7 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("物品", "_cmd_item", ("道具", "item"), cooldown=True, pass_args=True, description="物品图鉴", category="paldex"),
     CommandSpec("设施", "_cmd_facility", ("建筑", "facility", "building"), cooldown=True, pass_args=True, description="设施图鉴", category="paldex"),
     CommandSpec("科技", "_cmd_tech", ("技术", "tech"), cooldown=True, pass_args=True, description="科技图鉴", category="paldex"),
+    CommandSpec("研究所", "_cmd_lab", ("研究", "实验室", "lab"), cooldown=True, pass_args=True, description="研究所图鉴(1.0)", category="paldex"),
 
     # ---------------- 玩家自助 ----------------
     CommandSpec("绑定", "_cmd_bind", ("bind",), pass_args=True, description="绑定游戏角色", category="player"),

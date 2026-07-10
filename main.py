@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.3.3",
+    "1.4.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -286,6 +286,20 @@ class PalworldPlugin(Star):
                     self._tech_by_name.setdefault(nm, it)
         except Exception as e:  # noqa: BLE001
             logger.warning(f"{LOG_PREFIX} 科技数据 data/tech.json 加载失败: {e}")
+        # 研究所(1.0 新增) list + 名字索引 + 分类分组
+        self._lab: list = []
+        self._lab_by_name: dict = {}
+        self._lab_by_cat: dict = {}
+        try:
+            with open(os.path.join(base, "lab_research.json"), encoding="utf-8") as _f:
+                for it in json.loads(_f.read()):
+                    nm = it.get("name")
+                    if nm:
+                        self._lab.append(it)
+                        self._lab_by_name.setdefault(nm, it)
+                        self._lab_by_cat.setdefault(it.get("category", "通用"), []).append(it)
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"{LOG_PREFIX} 研究所数据 data/lab_research.json 加载失败: {e}")
         # 词条(被动技能) id -> {name,rank,sign,effect}; 主动技能枚举 -> 中文名
         self._passives: dict = {}
         self._wazas: dict = {}
@@ -922,6 +936,43 @@ class PalworldPlugin(Star):
             return await self._msg_card(event, "🔍", "查无此科技",
                                         desc=f"没有名字含「{query}」的科技。", color="#F5A623")
         return await self._render_grid(event, "科技图鉴", "🔬", matches, page, "/帕鲁科技", query)
+
+    _LAB_CAT_EMOJI = {"手工": "🔨", "点火": "🔥", "浇水": "💧", "播种": "🌱", "发电": "⚡",
+                      "砍伐": "🪓", "采矿": "⛏️", "冷却": "❄️", "制药": "💊", "通用": "🔬"}
+
+    def _lab_detail(self, event, it: dict):
+        cat = it.get("category", "通用")
+        return self._img(event, self._t("lab_detail"), {
+            "name": it["name"], "category": cat, "emoji": self._LAB_CAT_EMOJI.get(cat, "🔬"),
+            "effect": it.get("effect", ""), "materials": it.get("materials", []),
+            "prereq": it.get("prereq", ""), "work": it.get("work", 0),
+            "essential": bool(it.get("essential"))})
+
+    async def _cmd_lab(self, event: AstrMessageEvent, args: list[str]):
+        if not self._lab:
+            return await self._msg_card(event, "🔬", "研究所数据未加载",
+                                        desc="data/lab_research.json 缺失或损坏。", color="#E5484D")
+        query, _page = self._parse_page_args(args)
+        if not query:
+            cats = [{"name": c, "emoji": self._LAB_CAT_EMOJI.get(c, "🔬"),
+                     "count": len(v), "essential": sum(1 for x in v if x.get("essential"))}
+                    for c, v in self._lab_by_cat.items()]
+            return await self._img(event, self._t("lab_overview"), {"cats": cats, "total": len(self._lab)})
+        if query in self._lab_by_cat:
+            return await self._img(event, self._t("lab_list"),
+                                   {"category": query + "研究", "emoji": self._LAB_CAT_EMOJI.get(query, "🔬"),
+                                    "items": self._lab_by_cat[query]})
+        if query in self._lab_by_name:
+            return await self._lab_detail(event, self._lab_by_name[query])
+        matches = [x for x in self._lab if query in x["name"]]
+        if len(matches) == 1:
+            return await self._lab_detail(event, matches[0])
+        if not matches:
+            return await self._msg_card(event, "🔍", "查无此研究",
+                                        desc=f"没有名字含「{query}」的研究，也不是分类名"
+                                             "(手工/点火/浇水/播种/发电/砍伐/采矿/冷却/制药)。", color="#F5A623")
+        return await self._img(event, self._t("lab_list"),
+                               {"category": f"含「{query}」的研究", "emoji": "🔬", "items": matches})
 
     def _breed_result(self, pa: dict, pb: dict):
         ci = self._breed.get(frozenset((self._name_idx.get(pa["pal_name"]), self._name_idx.get(pb["pal_name"]))))
@@ -2433,7 +2484,7 @@ class PalworldPlugin(Star):
                 return alias, (([rest] + list(args)) if rest else list(args))
         return sub, args
 
-    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
+    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
     async def palworld(self, event: AstrMessageEvent):
         raw = (event.message_str or "").strip()
         # 去掉可选的「/」前缀和指令词「帕鲁」，剩余既可能是「在线」也可能是「在线 参数」

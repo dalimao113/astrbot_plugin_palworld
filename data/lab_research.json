@@ -1,0 +1,4370 @@
+[
+ {
+  "id": "Cool1",
+  "name": "冷却保存Lv1",
+  "category": "冷却",
+  "effect": "保鲜(腐坏降低) -10%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 30
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 5000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Cool1_2",
+  "name": "冷却工作Lv1",
+  "category": "冷却",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 50
+   },
+   {
+    "name": "毛掸儿的棉毛",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 15000,
+  "prereq": "冷却保存Lv1",
+  "essential": true
+ },
+ {
+  "id": "Cool1_5",
+  "name": "冷却工作Lv4",
+  "category": "冷却",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 200
+   },
+   {
+    "name": "纯水晶",
+    "count": 150
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 150000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Cool1_6",
+  "name": "冷却工作Lv5",
+  "category": "冷却",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "极低温冷却介质",
+    "count": 50
+   },
+   {
+    "name": "六棱晶矿",
+    "count": 100
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 300000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Cool2_2",
+  "name": "孵化促进Lv2",
+  "category": "冷却",
+  "effect": "孵蛋速度 +10%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 80
+   },
+   {
+    "name": "纯水晶",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 30000,
+  "prereq": "冷却工作Lv1",
+  "essential": true
+ },
+ {
+  "id": "Cool2_4",
+  "name": "孵化促进Lv4",
+  "category": "冷却",
+  "effect": "孵蛋速度 +10%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 200
+   },
+   {
+    "name": "纯水晶",
+    "count": 150
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 150000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Cool3_4",
+  "name": "据点帕鲁强化Lv2",
+  "category": "冷却",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 200
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 50
+   }
+  ],
+  "work": 150000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Cool3_5",
+  "name": "据点帕鲁强化Lv3",
+  "category": "冷却",
+  "effect": "据点帕鲁防御 +2%",
+  "materials": [
+   {
+    "name": "极低温冷却介质",
+    "count": 50
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 300000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Cool4_3",
+  "name": "冷却保存Lv4",
+  "category": "冷却",
+  "effect": "保鲜(腐坏降低) -10%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 120
+   },
+   {
+    "name": "毛掸儿的棉毛",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 75000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Cool5",
+  "name": "雪人研发",
+  "category": "冷却",
+  "effect": "解锁科技",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 40
+   },
+   {
+    "name": "木材",
+    "count": 30
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 15000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Cool1_3",
+  "name": "冷却工作Lv2",
+  "category": "冷却",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 80
+   },
+   {
+    "name": "纯水晶",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 30000,
+  "prereq": "冷却工作Lv4",
+  "essential": false
+ },
+ {
+  "id": "Cool1_4",
+  "name": "冷却工作Lv3",
+  "category": "冷却",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 120
+   },
+   {
+    "name": "毛掸儿的棉毛",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 75000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Cool2",
+  "name": "孵化促进Lv1",
+  "category": "冷却",
+  "effect": "孵蛋速度 +5%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 50
+   },
+   {
+    "name": "毛掸儿的棉毛",
+    "count": 5
+   },
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 15000,
+  "prereq": "冷却保存Lv1",
+  "essential": false
+ },
+ {
+  "id": "Cool2_3",
+  "name": "孵化促进Lv3",
+  "category": "冷却",
+  "effect": "孵蛋速度 +5%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 120
+   },
+   {
+    "name": "毛掸儿的棉毛",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 75000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Cool3",
+  "name": "冷却研究技巧Lv1",
+  "category": "冷却",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 50
+   },
+   {
+    "name": "毛掸儿的棉毛",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 15000,
+  "prereq": "冷却保存Lv1",
+  "essential": false
+ },
+ {
+  "id": "Cool3_2",
+  "name": "冷却研究技巧Lv2",
+  "category": "冷却",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 80
+   },
+   {
+    "name": "纯水晶",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 30000,
+  "prereq": "冷却工作Lv2",
+  "essential": false
+ },
+ {
+  "id": "Cool3_3",
+  "name": "据点帕鲁强化Lv1",
+  "category": "冷却",
+  "effect": "据点帕鲁防御 +2%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 120
+   },
+   {
+    "name": "毛掸儿的棉毛",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 30
+   }
+  ],
+  "work": 100000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Cool4",
+  "name": "冷却保存Lv2",
+  "category": "冷却",
+  "effect": "保鲜(腐坏降低) -5%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 50
+   },
+   {
+    "name": "毛掸儿的棉毛",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 15000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Cool4_2",
+  "name": "冷却保存Lv3",
+  "category": "冷却",
+  "effect": "保鲜(腐坏降低) -5%",
+  "materials": [
+   {
+    "name": "结冰器官",
+    "count": 80
+   },
+   {
+    "name": "纯水晶",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 30000,
+  "prereq": "冷却工作Lv3",
+  "essential": false
+ },
+ {
+  "id": "Medicine1",
+  "name": "制药工作Lv1",
+  "category": "制药",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "美丽花朵",
+    "count": 10
+   },
+   {
+    "name": "洞穴蘑菇",
+    "count": 10
+   },
+   {
+    "name": "低品质药品",
+    "count": 5
+   }
+  ],
+  "work": 50000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Medicine1_5",
+  "name": "制药工作Lv5",
+  "category": "制药",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "高品质恢复药",
+    "count": 20
+   },
+   {
+    "name": "高品质药品",
+    "count": 40
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Medicine1_6",
+  "name": "制药工作Lv6",
+  "category": "制药",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "腐蚀溶剂",
+    "count": 100
+   },
+   {
+    "name": "高品质药品",
+    "count": 60
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 10000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Medicine3_3",
+  "name": "药物制作节约术Lv3",
+  "category": "制药",
+  "effect": "材料节约 -10%",
+  "materials": [
+   {
+    "name": "高品质恢复药",
+    "count": 30
+   },
+   {
+    "name": "高品质药品",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Medicine1_2",
+  "name": "制药工作Lv2",
+  "category": "制药",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "美丽花朵",
+    "count": 20
+   },
+   {
+    "name": "洞穴蘑菇",
+    "count": 20
+   },
+   {
+    "name": "药品",
+    "count": 10
+   }
+  ],
+  "work": 200000,
+  "prereq": "制药工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Medicine1_3",
+  "name": "制药工作Lv3",
+  "category": "制药",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "美丽花朵",
+    "count": 30
+   },
+   {
+    "name": "不可思议的蘑菇",
+    "count": 20
+   },
+   {
+    "name": "高品质药品",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 500000,
+  "prereq": "制药工作Lv4",
+  "essential": false
+ },
+ {
+  "id": "Medicine1_4",
+  "name": "制药工作Lv4",
+  "category": "制药",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "恢复药",
+    "count": 20
+   },
+   {
+    "name": "高品质药品",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Medicine2",
+  "name": "制药研究技巧Lv1",
+  "category": "制药",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "美丽花朵",
+    "count": 20
+   },
+   {
+    "name": "洞穴蘑菇",
+    "count": 20
+   },
+   {
+    "name": "药品",
+    "count": 10
+   }
+  ],
+  "work": 200000,
+  "prereq": "制药工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Medicine2_2",
+  "name": "制药研究技巧Lv2",
+  "category": "制药",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "美丽花朵",
+    "count": 30
+   },
+   {
+    "name": "不可思议的蘑菇",
+    "count": 20
+   },
+   {
+    "name": "高品质药品",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 500000,
+  "prereq": "制药工作Lv2",
+  "essential": false
+ },
+ {
+  "id": "Medicine2_3",
+  "name": "据点帕鲁强化Lv1",
+  "category": "制药",
+  "effect": "据点帕鲁防御 +2%",
+  "materials": [
+   {
+    "name": "恢复药",
+    "count": 30
+   },
+   {
+    "name": "高品质药品",
+    "count": 30
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 30
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Medicine2_4",
+  "name": "据点帕鲁强化Lv2",
+  "category": "制药",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "高品质恢复药",
+    "count": 30
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 50
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Medicine2_5",
+  "name": "据点帕鲁强化Lv3",
+  "category": "制药",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "腐蚀溶剂",
+    "count": 100
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 10000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Medicine3",
+  "name": "药物制作节约术Lv1",
+  "category": "制药",
+  "effect": "材料节约 -5%",
+  "materials": [
+   {
+    "name": "美丽花朵",
+    "count": 30
+   },
+   {
+    "name": "不可思议的蘑菇",
+    "count": 20
+   },
+   {
+    "name": "高品质药品",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Medicine3_2",
+  "name": "药物制作节约术Lv2",
+  "category": "制药",
+  "effect": "材料节约 -5%",
+  "materials": [
+   {
+    "name": "恢复药",
+    "count": 20
+   },
+   {
+    "name": "高品质药品",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 1500000,
+  "prereq": "制药工作Lv3",
+  "essential": false
+ },
+ {
+  "id": "Medicine4",
+  "name": "魔女之釜研发",
+  "category": "制药",
+  "effect": "解锁科技",
+  "materials": [
+   {
+    "name": "美丽花朵",
+    "count": 15
+   },
+   {
+    "name": "洞穴蘑菇",
+    "count": 15
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 200000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "GenerateEnergy1",
+  "name": "发电工作Lv1",
+  "category": "发电",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 30
+   },
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 150000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "GenerateEnergy1_5",
+  "name": "发电工作Lv5",
+  "category": "发电",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 200
+   },
+   {
+    "name": "电路板",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "GenerateEnergy1_6",
+  "name": "发电工作Lv6",
+  "category": "发电",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "生化电池",
+    "count": 50
+   },
+   {
+    "name": "电路板",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 10000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "GenerateEnergy2_3",
+  "name": "蓄电技法Lv3",
+  "category": "发电",
+  "effect": "电力储存 +30%",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 120
+   },
+   {
+    "name": "电路板",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 2000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "GenerateEnergy3_4",
+  "name": "据点帕鲁强化Lv2",
+  "category": "发电",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "电路板",
+    "count": 50
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 50
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "GenerateEnergy3_5",
+  "name": "据点帕鲁强化Lv3",
+  "category": "发电",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "生化电池",
+    "count": 50
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 10000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "GenerateEnergy4_3",
+  "name": "省电的秘诀Lv3",
+  "category": "发电",
+  "effect": "耗电降低 -10%",
+  "materials": [
+   {
+    "name": "电路板",
+    "count": 50
+   },
+   {
+    "name": "古代文明核心",
+    "count": 5
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "GenerateEnergy1_2",
+  "name": "发电工作Lv2",
+  "category": "发电",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 50
+   },
+   {
+    "name": "雷鸣童子的云朵",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 200000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "GenerateEnergy1_3",
+  "name": "发电工作Lv3",
+  "category": "发电",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 80
+   },
+   {
+    "name": "电路板",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 1000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "GenerateEnergy1_4",
+  "name": "发电工作Lv4",
+  "category": "发电",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 120
+   },
+   {
+    "name": "电路板",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 2000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "GenerateEnergy2",
+  "name": "蓄电技法Lv1",
+  "category": "发电",
+  "effect": "电力储存 +20%",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 50
+   },
+   {
+    "name": "雷鸣童子的云朵",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "GenerateEnergy2_2",
+  "name": "蓄电技法Lv2",
+  "category": "发电",
+  "effect": "电力储存 +20%",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 80
+   },
+   {
+    "name": "电路板",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 1000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "GenerateEnergy3",
+  "name": "发电研究技巧Lv1",
+  "category": "发电",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 50
+   },
+   {
+    "name": "雷鸣童子的云朵",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "GenerateEnergy3_2",
+  "name": "发电研究技巧Lv2",
+  "category": "发电",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 80
+   },
+   {
+    "name": "电路板",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 1000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "GenerateEnergy3_3",
+  "name": "据点帕鲁强化Lv1",
+  "category": "发电",
+  "effect": "据点帕鲁防御 +2%",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 120
+   },
+   {
+    "name": "电路板",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 30
+   }
+  ],
+  "work": 3000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "GenerateEnergy4",
+  "name": "省电的秘诀Lv1",
+  "category": "发电",
+  "effect": "耗电降低 -5%",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 80
+   },
+   {
+    "name": "电路板",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 1000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "GenerateEnergy4_2",
+  "name": "省电的秘诀Lv2",
+  "category": "发电",
+  "effect": "耗电降低 -5%",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 120
+   },
+   {
+    "name": "电路板",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 2000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "GenerateEnergy5",
+  "name": "输电塔研发",
+  "category": "发电",
+  "effect": "解锁科技",
+  "materials": [
+   {
+    "name": "发电器官",
+    "count": 30
+   },
+   {
+    "name": "精炼金属锭",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Handcraft1",
+  "name": "手工作业速度Lv1",
+  "category": "手工",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 50
+   },
+   {
+    "name": "石头",
+    "count": 40
+   },
+   {
+    "name": "布",
+    "count": 10
+   }
+  ],
+  "work": 50000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Handcraft1_5",
+  "name": "手工作业速度Lv5",
+  "category": "手工",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "火药",
+    "count": 300
+   },
+   {
+    "name": "电路板",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 30
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Handcraft1_6",
+  "name": "手工作业速度Lv6",
+  "category": "手工",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "电脑",
+    "count": 30
+   },
+   {
+    "name": "优质的布",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 10000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Handcraft2_4",
+  "name": "防具制作节约术Lv2",
+  "category": "手工",
+  "effect": "材料节约 -10%",
+  "materials": [
+   {
+    "name": "电路板",
+    "count": 20
+   },
+   {
+    "name": "优质的布",
+    "count": 30
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 15
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Handcraft2_5",
+  "name": "帕鲁装备制作节约术Lv2",
+  "category": "手工",
+  "effect": "材料节约 -10%",
+  "materials": [
+   {
+    "name": "电路板",
+    "count": 30
+   },
+   {
+    "name": "优质的布",
+    "count": 35
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 2000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Handcraft2_6",
+  "name": "武器制作节约术Lv2",
+  "category": "手工",
+  "effect": "材料节约 -10%",
+  "materials": [
+   {
+    "name": "火药",
+    "count": 300
+   },
+   {
+    "name": "电路板",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 30
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Handcraft3_4",
+  "name": "据点帕鲁强化Lv2",
+  "category": "手工",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "电路板",
+    "count": 50
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 50
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Handcraft3_5",
+  "name": "据点帕鲁强化Lv3",
+  "category": "手工",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "电脑",
+    "count": 30
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 10000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Handcraft4_3",
+  "name": "帕鲁球复制技术Lv2",
+  "category": "手工",
+  "effect": "额外产出概率 +10%",
+  "materials": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 150
+   },
+   {
+    "name": "水泥",
+    "count": 100
+   },
+   {
+    "name": "古代文明部件",
+    "count": 15
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 15
+   }
+  ],
+  "work": 2500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Handcraft4_4",
+  "name": "弹药复制技术Lv2",
+  "category": "手工",
+  "effect": "额外产出概率 +10%",
+  "materials": [
+   {
+    "name": "火药",
+    "count": 200
+   },
+   {
+    "name": "钉子",
+    "count": 150
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 30
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Handcraft1_2",
+  "name": "手工作业速度Lv2",
+  "category": "手工",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 100
+   },
+   {
+    "name": "水泥",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 20
+   },
+   {
+    "name": "钉子",
+    "count": 10
+   }
+  ],
+  "work": 200000,
+  "prereq": "手工作业速度Lv1",
+  "essential": false
+ },
+ {
+  "id": "Handcraft1_3",
+  "name": "手工作业速度Lv3",
+  "category": "手工",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "水泥",
+    "count": 30
+   },
+   {
+    "name": "火药",
+    "count": 30
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 500000,
+  "prereq": "手工作业速度Lv5",
+  "essential": false
+ },
+ {
+  "id": "Handcraft1_4",
+  "name": "手工作业速度Lv4",
+  "category": "手工",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "火药",
+    "count": 100
+   },
+   {
+    "name": "电路板",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 15
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Handcraft2",
+  "name": "防具制作节约术Lv1",
+  "category": "手工",
+  "effect": "材料节约 -5%",
+  "materials": [
+   {
+    "name": "布",
+    "count": 30
+   },
+   {
+    "name": "钉子",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 3
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 200000,
+  "prereq": "手工作业速度Lv1",
+  "essential": false
+ },
+ {
+  "id": "Handcraft2_2",
+  "name": "帕鲁装备制作节约术Lv1",
+  "category": "手工",
+  "effect": "材料节约 -5%",
+  "materials": [
+   {
+    "name": "皮革",
+    "count": 30
+   },
+   {
+    "name": "钉子",
+    "count": 15
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 150000,
+  "prereq": "手工作业速度Lv2",
+  "essential": false
+ },
+ {
+  "id": "Handcraft2_3",
+  "name": "武器制作节约术Lv1",
+  "category": "手工",
+  "effect": "材料节约 -5%",
+  "materials": [
+   {
+    "name": "火药",
+    "count": 50
+   },
+   {
+    "name": "聚合物",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 7
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Handcraft3",
+  "name": "手工作业研究技巧Lv1",
+  "category": "手工",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 50
+   },
+   {
+    "name": "水泥",
+    "count": 10
+   },
+   {
+    "name": "布",
+    "count": 15
+   },
+   {
+    "name": "钉子",
+    "count": 10
+   }
+  ],
+  "work": 200000,
+  "prereq": "手工作业速度Lv1",
+  "essential": false
+ },
+ {
+  "id": "Handcraft3_2",
+  "name": "手工作业研究技巧Lv2",
+  "category": "手工",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "水泥",
+    "count": 30
+   },
+   {
+    "name": "火药",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 3
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 500000,
+  "prereq": "手工作业速度Lv3",
+  "essential": false
+ },
+ {
+  "id": "Handcraft3_3",
+  "name": "据点帕鲁强化Lv1",
+  "category": "手工",
+  "effect": "据点帕鲁防御 +2%",
+  "materials": [
+   {
+    "name": "电路板",
+    "count": 30
+   },
+   {
+    "name": "优质的布",
+    "count": 35
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 30
+   }
+  ],
+  "work": 2500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Handcraft4",
+  "name": "帕鲁球复制技术Lv1",
+  "category": "手工",
+  "effect": "额外产出概率 +5%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 100
+   },
+   {
+    "name": "水泥",
+    "count": 10
+   },
+   {
+    "name": "帕鲁矿碎块",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 200000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Handcraft4_2",
+  "name": "弹药复制技术Lv1",
+  "category": "手工",
+  "effect": "额外产出概率 +5%",
+  "materials": [
+   {
+    "name": "火药",
+    "count": 30
+   },
+   {
+    "name": "钉子",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 500000,
+  "prereq": "手工作业速度Lv4",
+  "essential": false
+ },
+ {
+  "id": "Handcraft5",
+  "name": "大型工具箱研发",
+  "category": "手工",
+  "effect": "解锁科技",
+  "materials": [
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "钉子",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 200000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Seeding1",
+  "name": "播种工作Lv1",
+  "category": "播种",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "红色野莓",
+    "count": 30
+   },
+   {
+    "name": "木材",
+    "count": 50
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 50000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Seeding1_5",
+  "name": "播种工作Lv5",
+  "category": "播种",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "洋葱",
+    "count": 100
+   },
+   {
+    "name": "古代文明核心",
+    "count": 5
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Seeding1_6",
+  "name": "播种工作Lv6",
+  "category": "播种",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "洋葱",
+    "count": 150
+   },
+   {
+    "name": "古代文明核心",
+    "count": 5
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 3000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Seeding2_2",
+  "name": "收割知识Lv1",
+  "category": "播种",
+  "effect": "作物收获量 +10%",
+  "materials": [
+   {
+    "name": "红色野莓",
+    "count": 100
+   },
+   {
+    "name": "叶泥泥的叶子",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 300000,
+  "prereq": "播种工作Lv2",
+  "essential": true
+ },
+ {
+  "id": "Seeding2_6",
+  "name": "收割知识Lv3",
+  "category": "播种",
+  "effect": "作物收获量 +10%",
+  "materials": [
+   {
+    "name": "洋葱",
+    "count": 200
+   },
+   {
+    "name": "古代文明核心",
+    "count": 5
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Seeding3_4",
+  "name": "据点帕鲁强化Lv2",
+  "category": "播种",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "洋葱",
+    "count": 300
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 50
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Seeding3_5",
+  "name": "据点帕鲁强化Lv3",
+  "category": "播种",
+  "effect": "据点帕鲁防御 +2%",
+  "materials": [
+   {
+    "name": "胡萝卜",
+    "count": 300
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 3000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Seeding1_2",
+  "name": "播种工作Lv2",
+  "category": "播种",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "面粉",
+    "count": 20
+   },
+   {
+    "name": "叶泥泥的叶子",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 150000,
+  "prereq": "播种工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Seeding1_3",
+  "name": "播种工作Lv3",
+  "category": "播种",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "番茄",
+    "count": 30
+   },
+   {
+    "name": "生菜",
+    "count": 30
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 300000,
+  "prereq": "播种工作Lv5",
+  "essential": false
+ },
+ {
+  "id": "Seeding1_4",
+  "name": "播种工作Lv4",
+  "category": "播种",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "土豆",
+    "count": 30
+   },
+   {
+    "name": "胡萝卜",
+    "count": 30
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 750000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Seeding2",
+  "name": "作物知识Lv1",
+  "category": "播种",
+  "effect": "作物生长 +5%",
+  "materials": [
+   {
+    "name": "红色野莓",
+    "count": 40
+   },
+   {
+    "name": "木材",
+    "count": 70
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 150000,
+  "prereq": "播种工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Seeding2_3",
+  "name": "作物知识Lv2",
+  "category": "播种",
+  "effect": "作物生长 +5%",
+  "materials": [
+   {
+    "name": "面粉",
+    "count": 30
+   },
+   {
+    "name": "水泥",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 750000,
+  "prereq": "播种工作Lv2",
+  "essential": false
+ },
+ {
+  "id": "Seeding2_4",
+  "name": "作物知识Lv3",
+  "category": "播种",
+  "effect": "作物生长 +10%",
+  "materials": [
+   {
+    "name": "番茄",
+    "count": 50
+   },
+   {
+    "name": "生菜",
+    "count": 30
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Seeding2_5",
+  "name": "收割知识Lv2",
+  "category": "播种",
+  "effect": "作物收获量 +10%",
+  "materials": [
+   {
+    "name": "土豆",
+    "count": 30
+   },
+   {
+    "name": "胡萝卜",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 750000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Seeding3",
+  "name": "播种研究技巧Lv1",
+  "category": "播种",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "红色野莓",
+    "count": 40
+   },
+   {
+    "name": "木材",
+    "count": 50
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 150000,
+  "prereq": "播种工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Seeding3_2",
+  "name": "播种研究技巧Lv2",
+  "category": "播种",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "面粉",
+    "count": 30
+   },
+   {
+    "name": "叶泥泥的叶子",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 300000,
+  "prereq": "播种工作Lv3",
+  "essential": false
+ },
+ {
+  "id": "Seeding3_3",
+  "name": "据点帕鲁强化Lv1",
+  "category": "播种",
+  "effect": "据点帕鲁防御 +2%",
+  "materials": [
+   {
+    "name": "番茄",
+    "count": 100
+   },
+   {
+    "name": "生菜",
+    "count": 100
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 30
+   }
+  ],
+  "work": 1000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Seeding4",
+  "name": "花坛研发",
+  "category": "播种",
+  "effect": "解锁科技",
+  "materials": [
+   {
+    "name": "美丽花朵",
+    "count": 20
+   },
+   {
+    "name": "水泥",
+    "count": 10
+   },
+   {
+    "name": "叶泥泥的叶子",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 150000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Seeding5",
+  "name": "筒仓研发",
+  "category": "播种",
+  "effect": "解锁科技",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 100
+   },
+   {
+    "name": "石头",
+    "count": 50
+   },
+   {
+    "name": "纤维",
+    "count": 50
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 200000,
+  "prereq": "播种工作Lv4",
+  "essential": false
+ },
+ {
+  "id": "Watering1",
+  "name": "浇水工作Lv1",
+  "category": "浇水",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 50000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Watering1_5",
+  "name": "浇水工作Lv5",
+  "category": "浇水",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 200
+   },
+   {
+    "name": "优质帕鲁油",
+    "count": 130
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Watering1_6",
+  "name": "浇水工作Lv6",
+  "category": "浇水",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "极低温冷却介质",
+    "count": 50
+   },
+   {
+    "name": "优质帕鲁油",
+    "count": 130
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 3000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Watering2_2",
+  "name": "收割知识Lv1",
+  "category": "浇水",
+  "effect": "作物收获量 +10%",
+  "materials": [
+   {
+    "name": "番茄",
+    "count": 50
+   },
+   {
+    "name": "生菜",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 300000,
+  "prereq": "浇水工作Lv2",
+  "essential": true
+ },
+ {
+  "id": "Watering2_4",
+  "name": "收割知识Lv2",
+  "category": "浇水",
+  "effect": "作物收获量 +10%",
+  "materials": [
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 200
+   },
+   {
+    "name": "洋葱",
+    "count": 130
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Watering3_4",
+  "name": "据点帕鲁强化Lv2",
+  "category": "浇水",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 200
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 50
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Watering3_5",
+  "name": "据点帕鲁强化Lv3",
+  "category": "浇水",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "极低温冷却介质",
+    "count": 50
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 3000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Watering4_2",
+  "name": "帕鲁矿粉碎术Lv2",
+  "category": "浇水",
+  "effect": "额外产出概率 +10%",
+  "materials": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 150
+   },
+   {
+    "name": "古代文明核心",
+    "count": 5
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 1000000,
+  "prereq": "浇水工作Lv4",
+  "essential": true
+ },
+ {
+  "id": "Watering1_2",
+  "name": "浇水工作Lv2",
+  "category": "浇水",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 30
+   },
+   {
+    "name": "优质帕鲁油",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 150000,
+  "prereq": "浇水工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Watering1_3",
+  "name": "浇水工作Lv3",
+  "category": "浇水",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 50
+   },
+   {
+    "name": "优质帕鲁油",
+    "count": 30
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 300000,
+  "prereq": "浇水工作Lv5",
+  "essential": false
+ },
+ {
+  "id": "Watering1_4",
+  "name": "浇水工作Lv4",
+  "category": "浇水",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 100
+   },
+   {
+    "name": "优质帕鲁油",
+    "count": 90
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 750000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Watering2",
+  "name": "作物知识Lv1",
+  "category": "浇水",
+  "effect": "作物生长 +5%",
+  "materials": [
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 35
+   },
+   {
+    "name": "小麦",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 150000,
+  "prereq": "浇水工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Watering2_3",
+  "name": "作物知识Lv2",
+  "category": "浇水",
+  "effect": "作物生长 +10%",
+  "materials": [
+   {
+    "name": "土豆",
+    "count": 100
+   },
+   {
+    "name": "胡萝卜",
+    "count": 100
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 750000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Watering3",
+  "name": "浇水研究技巧Lv1",
+  "category": "浇水",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 25
+   },
+   {
+    "name": "优质帕鲁油",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 200000,
+  "prereq": "浇水工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Watering3_2",
+  "name": "浇水研究技巧Lv2",
+  "category": "浇水",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 50
+   },
+   {
+    "name": "优质帕鲁油",
+    "count": 25
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 750000,
+  "prereq": "浇水工作Lv3",
+  "essential": false
+ },
+ {
+  "id": "Watering3_3",
+  "name": "据点帕鲁强化Lv1",
+  "category": "浇水",
+  "effect": "据点帕鲁防御 +2%",
+  "materials": [
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 100
+   },
+   {
+    "name": "洋葱",
+    "count": 200
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 30
+   }
+  ],
+  "work": 1000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Watering4",
+  "name": "帕鲁矿粉碎术Lv1",
+  "category": "浇水",
+  "effect": "额外产出概率 +5%",
+  "materials": [
+   {
+    "name": "帕鲁矿碎块",
+    "count": 40
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Watering5",
+  "name": "喷泉研发",
+  "category": "浇水",
+  "effect": "解锁科技",
+  "materials": [
+   {
+    "name": "水栖帕鲁的黏液",
+    "count": 30
+   },
+   {
+    "name": "优质帕鲁油",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 150000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "EmitFlame1",
+  "name": "生火工作Lv1",
+  "category": "点火",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "木炭",
+    "count": 30
+   },
+   {
+    "name": "喷火器官",
+    "count": 10
+   }
+  ],
+  "work": 50000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "EmitFlame1_5",
+  "name": "生火工作Lv5",
+  "category": "点火",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "塑钢",
+    "count": 50
+   },
+   {
+    "name": "喷火器官",
+    "count": 200
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "EmitFlame1_6",
+  "name": "生火工作Lv6",
+  "category": "点火",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "六棱晶锭",
+    "count": 50
+   },
+   {
+    "name": "超高热核心",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 10000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "EmitFlame2_2",
+  "name": "孵化促进Lv2",
+  "category": "点火",
+  "effect": "孵蛋速度 +10%",
+  "materials": [
+   {
+    "name": "精炼金属锭",
+    "count": 30
+   },
+   {
+    "name": "喷火器官",
+    "count": 80
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "EmitFlame2_4",
+  "name": "孵化促进Lv4",
+  "category": "点火",
+  "effect": "孵蛋速度 +10%",
+  "materials": [
+   {
+    "name": "塑钢",
+    "count": 50
+   },
+   {
+    "name": "喷火器官",
+    "count": 200
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "EmitFlame3_4",
+  "name": "据点帕鲁强化Lv2",
+  "category": "点火",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "塑钢",
+    "count": 50
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 50
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "EmitFlame3_5",
+  "name": "据点帕鲁强化Lv3",
+  "category": "点火",
+  "effect": "据点帕鲁防御 +2%",
+  "materials": [
+   {
+    "name": "六棱晶锭",
+    "count": 50
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 10000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "EmitFlame4_2",
+  "name": "精炼技法Lv1",
+  "category": "点火",
+  "effect": "额外产出概率 +5%",
+  "materials": [
+   {
+    "name": "精炼金属锭",
+    "count": 50
+   },
+   {
+    "name": "喷火器官",
+    "count": 80
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "EmitFlame4_3",
+  "name": "大量烹饪术Lv2",
+  "category": "点火",
+  "effect": "额外产出概率 +10%",
+  "materials": [
+   {
+    "name": "烤野莓",
+    "count": 200
+   },
+   {
+    "name": "喷火器官",
+    "count": 120
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 2500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "EmitFlame4_4",
+  "name": "精炼技法Lv2",
+  "category": "点火",
+  "effect": "额外产出概率 +10%",
+  "materials": [
+   {
+    "name": "塑钢",
+    "count": 50
+   },
+   {
+    "name": "古代文明核心",
+    "count": 5
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 5000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "EmitFlame1_2",
+  "name": "生火工作Lv2",
+  "category": "点火",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "木炭",
+    "count": 50
+   },
+   {
+    "name": "喷火器官",
+    "count": 15
+   },
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 200000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "EmitFlame1_3",
+  "name": "生火工作Lv3",
+  "category": "点火",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "精炼金属锭",
+    "count": 40
+   },
+   {
+    "name": "喷火器官",
+    "count": 70
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "EmitFlame1_4",
+  "name": "生火工作Lv4",
+  "category": "点火",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 50
+   },
+   {
+    "name": "喷火器官",
+    "count": 120
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "EmitFlame2",
+  "name": "孵化促进Lv1",
+  "category": "点火",
+  "effect": "孵蛋速度 +5%",
+  "materials": [
+   {
+    "name": "木炭",
+    "count": 50
+   },
+   {
+    "name": "喷火器官",
+    "count": 20
+   },
+   {
+    "name": "金属锭",
+    "count": 15
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 200000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "EmitFlame2_3",
+  "name": "孵化促进Lv3",
+  "category": "点火",
+  "effect": "孵蛋速度 +5%",
+  "materials": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 50
+   },
+   {
+    "name": "喷火器官",
+    "count": 120
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "EmitFlame3",
+  "name": "生火研究技巧Lv1",
+  "category": "点火",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "木炭",
+    "count": 50
+   },
+   {
+    "name": "喷火器官",
+    "count": 10
+   },
+   {
+    "name": "金属锭",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 200000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "EmitFlame3_2",
+  "name": "生火研究技巧Lv2",
+  "category": "点火",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "木炭",
+    "count": 50
+   },
+   {
+    "name": "喷火器官",
+    "count": 80
+   },
+   {
+    "name": "精炼金属锭",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "EmitFlame3_3",
+  "name": "据点帕鲁强化Lv1",
+  "category": "点火",
+  "effect": "据点帕鲁防御 +2%",
+  "materials": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 50
+   },
+   {
+    "name": "喷火器官",
+    "count": 120
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 30
+   }
+  ],
+  "work": 2500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "EmitFlame4",
+  "name": "大量烹饪术Lv1",
+  "category": "点火",
+  "effect": "额外产出概率 +5%",
+  "materials": [
+   {
+    "name": "烤野莓",
+    "count": 50
+   },
+   {
+    "name": "喷火器官",
+    "count": 20
+   },
+   {
+    "name": "金属锭",
+    "count": 15
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 200000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "EmitFlame5",
+  "name": "圣火台研发",
+  "category": "点火",
+  "effect": "解锁科技",
+  "materials": [
+   {
+    "name": "木炭",
+    "count": 35
+   },
+   {
+    "name": "喷火器官",
+    "count": 20
+   },
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 200000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Deforest1",
+  "name": "伐木工作Lv1",
+  "category": "砍伐",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 50
+   },
+   {
+    "name": "蘑菇",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 50000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Deforest1_5",
+  "name": "伐木工作Lv5",
+  "category": "砍伐",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "碳纤维",
+    "count": 300
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Deforest1_6",
+  "name": "伐木工作Lv6",
+  "category": "砍伐",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "硬木材",
+    "count": 500
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 3000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Deforest2_3",
+  "name": "远征省时Lv2",
+  "category": "砍伐",
+  "effect": "远征耗时降低 -10%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 400
+   },
+   {
+    "name": "碳纤维",
+    "count": 30
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 300000,
+  "prereq": "伐木工作Lv2",
+  "essential": true
+ },
+ {
+  "id": "Deforest2_4",
+  "name": "远征的秘诀Lv2",
+  "category": "砍伐",
+  "effect": "远征奖励 +10%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 600
+   },
+   {
+    "name": "碳纤维",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 7
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 15
+   }
+  ],
+  "work": 750000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Deforest3_4",
+  "name": "据点帕鲁强化Lv2",
+  "category": "砍伐",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "碳纤维",
+    "count": 300
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 50
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Deforest3_5",
+  "name": "据点帕鲁强化Lv3",
+  "category": "砍伐",
+  "effect": "据点帕鲁防御 +2%",
+  "materials": [
+   {
+    "name": "硬木材",
+    "count": 500
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 3000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Deforest1_2",
+  "name": "伐木工作Lv2",
+  "category": "砍伐",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 150
+   },
+   {
+    "name": "蘑菇",
+    "count": 30
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 150000,
+  "prereq": "伐木工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Deforest1_3",
+  "name": "伐木工作Lv3",
+  "category": "砍伐",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 400
+   },
+   {
+    "name": "碳纤维",
+    "count": 30
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 300000,
+  "prereq": "伐木工作Lv4",
+  "essential": false
+ },
+ {
+  "id": "Deforest1_4",
+  "name": "伐木工作Lv4",
+  "category": "砍伐",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 900
+   },
+   {
+    "name": "碳纤维",
+    "count": 100
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 750000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Deforest2",
+  "name": "远征省时Lv1",
+  "category": "砍伐",
+  "effect": "远征耗时降低 -5%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 150
+   },
+   {
+    "name": "蘑菇",
+    "count": 30
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 150000,
+  "prereq": "伐木工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Deforest2_2",
+  "name": "远征的秘诀Lv1",
+  "category": "砍伐",
+  "effect": "远征奖励 +5%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 300
+   },
+   {
+    "name": "碳纤维",
+    "count": 20
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 300000,
+  "prereq": "伐木工作Lv2",
+  "essential": false
+ },
+ {
+  "id": "Deforest2_5",
+  "name": "远征省时Lv3",
+  "category": "砍伐",
+  "effect": "远征耗时降低 -5%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 800
+   },
+   {
+    "name": "碳纤维",
+    "count": 80
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 1000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Deforest2_6",
+  "name": "远征的秘诀Lv3",
+  "category": "砍伐",
+  "effect": "远征奖励 +5%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 800
+   },
+   {
+    "name": "碳纤维",
+    "count": 80
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Deforest3",
+  "name": "伐木研究技巧Lv1",
+  "category": "砍伐",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 150
+   },
+   {
+    "name": "蘑菇",
+    "count": 25
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 150000,
+  "prereq": "伐木工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Deforest3_2",
+  "name": "伐木研究技巧Lv2",
+  "category": "砍伐",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 300
+   },
+   {
+    "name": "碳纤维",
+    "count": 30
+   },
+   {
+    "name": "古代文明部件",
+    "count": 5
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 300000,
+  "prereq": "伐木工作Lv3",
+  "essential": false
+ },
+ {
+  "id": "Deforest3_3",
+  "name": "据点帕鲁强化Lv1",
+  "category": "砍伐",
+  "effect": "据点帕鲁防御 +2%",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 800
+   },
+   {
+    "name": "碳纤维",
+    "count": 80
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 30
+   }
+  ],
+  "work": 1000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Deforest4",
+  "name": "树桩和斧头研发",
+  "category": "砍伐",
+  "effect": "解锁科技",
+  "materials": [
+   {
+    "name": "木材",
+    "count": 50
+   },
+   {
+    "name": "金属锭",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 150000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Mining1",
+  "name": "采矿工作Lv1",
+  "category": "采矿",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "石头",
+    "count": 50
+   },
+   {
+    "name": "金属矿石",
+    "count": 30
+   }
+  ],
+  "work": 50000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Mining1_5",
+  "name": "采矿工作Lv5",
+  "category": "采矿",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "塑钢",
+    "count": 50
+   },
+   {
+    "name": "纯水晶",
+    "count": 200
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Mining1_6",
+  "name": "采矿工作Lv6",
+  "category": "采矿",
+  "effect": "工作速度 +10%",
+  "materials": [
+   {
+    "name": "六棱晶锭",
+    "count": 50
+   },
+   {
+    "name": "六棱晶矿",
+    "count": 100
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 3000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Mining2_3",
+  "name": "远征省时Lv2",
+  "category": "采矿",
+  "effect": "远征耗时降低 -10%",
+  "materials": [
+   {
+    "name": "精炼金属锭",
+    "count": 50
+   },
+   {
+    "name": "硫磺",
+    "count": 150
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 750000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Mining2_4",
+  "name": "远征的秘诀Lv2",
+  "category": "采矿",
+  "effect": "远征奖励 +10%",
+  "materials": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 50
+   },
+   {
+    "name": "纯水晶",
+    "count": 150
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 1000000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Mining4_3",
+  "name": "采油效率提升lv3",
+  "category": "采矿",
+  "effect": "原油开采 +40%",
+  "materials": [
+   {
+    "name": "塑钢",
+    "count": 30
+   },
+   {
+    "name": "古代文明核心",
+    "count": 5
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": true
+ },
+ {
+  "id": "Mining1_2",
+  "name": "采矿工作Lv2",
+  "category": "采矿",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "石头",
+    "count": 150
+   },
+   {
+    "name": "金属矿石",
+    "count": 50
+   },
+   {
+    "name": "石炭",
+    "count": 20
+   },
+   {
+    "name": "硫磺",
+    "count": 20
+   }
+  ],
+  "work": 150000,
+  "prereq": "采矿工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Mining1_3",
+  "name": "采矿工作Lv3",
+  "category": "采矿",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "石头",
+    "count": 400
+   },
+   {
+    "name": "精炼金属锭",
+    "count": 35
+   },
+   {
+    "name": "硫磺",
+    "count": 110
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 10
+   }
+  ],
+  "work": 300000,
+  "prereq": "采矿工作Lv5",
+  "essential": false
+ },
+ {
+  "id": "Mining1_4",
+  "name": "采矿工作Lv4",
+  "category": "采矿",
+  "effect": "工作速度 +5%",
+  "materials": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 50
+   },
+   {
+    "name": "硫磺",
+    "count": 150
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 750000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Mining2",
+  "name": "远征省时Lv1",
+  "category": "采矿",
+  "effect": "远征耗时降低 -5%",
+  "materials": [
+   {
+    "name": "石头",
+    "count": 150
+   },
+   {
+    "name": "金属矿石",
+    "count": 60
+   },
+   {
+    "name": "石炭",
+    "count": 30
+   },
+   {
+    "name": "硫磺",
+    "count": 30
+   }
+  ],
+  "work": 150000,
+  "prereq": "采矿工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Mining2_2",
+  "name": "远征的秘诀Lv1",
+  "category": "采矿",
+  "effect": "远征奖励 +5%",
+  "materials": [
+   {
+    "name": "石头",
+    "count": 300
+   },
+   {
+    "name": "石炭",
+    "count": 60
+   },
+   {
+    "name": "硫磺",
+    "count": 60
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 7
+   }
+  ],
+  "work": 300000,
+  "prereq": "采矿工作Lv2",
+  "essential": false
+ },
+ {
+  "id": "Mining3",
+  "name": "采矿研究技巧Lv1",
+  "category": "采矿",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "石头",
+    "count": 120
+   },
+   {
+    "name": "金属矿石",
+    "count": 40
+   },
+   {
+    "name": "石炭",
+    "count": 20
+   }
+  ],
+  "work": 150000,
+  "prereq": "采矿工作Lv1",
+  "essential": false
+ },
+ {
+  "id": "Mining3_2",
+  "name": "采矿研究技巧Lv2",
+  "category": "采矿",
+  "effect": "研究速度 +10%",
+  "materials": [
+   {
+    "name": "石头",
+    "count": 400
+   },
+   {
+    "name": "精炼金属锭",
+    "count": 30
+   },
+   {
+    "name": "硫磺",
+    "count": 100
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 300000,
+  "prereq": "采矿工作Lv3",
+  "essential": false
+ },
+ {
+  "id": "Mining3_3",
+  "name": "据点帕鲁强化Lv1",
+  "category": "采矿",
+  "effect": "据点帕鲁防御 +2%",
+  "materials": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 50
+   },
+   {
+    "name": "纯水晶",
+    "count": 50
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 1000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Mining3_4",
+  "name": "据点帕鲁强化Lv2",
+  "category": "采矿",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "塑钢",
+    "count": 50
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 35
+   }
+  ],
+  "work": 1500000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Mining3_5",
+  "name": "据点帕鲁强化Lv3",
+  "category": "采矿",
+  "effect": "据点帕鲁攻击 +2%",
+  "materials": [
+   {
+    "name": "六棱晶锭",
+    "count": 50
+   },
+   {
+    "name": "古代文明核心",
+    "count": 10
+   },
+   {
+    "name": "古代文明部件",
+    "count": 20
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 70
+   }
+  ],
+  "work": 3000000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Mining4",
+  "name": "采油效率提升lv1",
+  "category": "采矿",
+  "effect": "原油开采 +20%",
+  "materials": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 50
+   },
+   {
+    "name": "硫磺",
+    "count": 200
+   },
+   {
+    "name": "古代文明部件",
+    "count": 10
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 20
+   }
+  ],
+  "work": 750000,
+  "prereq": "",
+  "essential": false
+ },
+ {
+  "id": "Mining4_2",
+  "name": "采油效率提升lv2",
+  "category": "采矿",
+  "effect": "原油开采 +30%",
+  "materials": [
+   {
+    "name": "帕鲁金属锭",
+    "count": 100
+   },
+   {
+    "name": "纯水晶",
+    "count": 100
+   },
+   {
+    "name": "古代文明部件",
+    "count": 15
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 25
+   }
+  ],
+  "work": 1000000,
+  "prereq": "采矿工作Lv4",
+  "essential": false
+ },
+ {
+  "id": "Mining5",
+  "name": "矿车研发",
+  "category": "采矿",
+  "effect": "解锁科技",
+  "materials": [
+   {
+    "name": "石头",
+    "count": 100
+   },
+   {
+    "name": "金属矿石",
+    "count": 40
+   },
+   {
+    "name": "石炭",
+    "count": 25
+   },
+   {
+    "name": "旧羊皮纸",
+    "count": 5
+   }
+  ],
+  "work": 150000,
+  "prereq": "",
+  "essential": false
+ }
+]
