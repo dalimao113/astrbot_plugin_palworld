@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.3.1",
+    "1.3.2",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -246,6 +246,7 @@ class PalworldPlugin(Star):
         self._items: list = []
         self._item_by_name: dict = {}
         self._item_by_id: dict = {}      # item_id -> item(取中文名/图标)
+        self._item_id_ci: dict = {}      # 小写id -> 正确id(存档物品id大小写容错，如 bone->Bone)
         try:
             with open(os.path.join(base, "items.json"), encoding="utf-8") as _f:
                 idata = json.loads(_f.read())
@@ -253,6 +254,7 @@ class PalworldPlugin(Star):
                 nm = it.get("name")
                 if it.get("item_id"):
                     self._item_by_id.setdefault(it["item_id"], it)
+                    self._item_id_ci.setdefault(it["item_id"].lower(), it["item_id"])
                 if nm and nm != "zh_Hans_Text":
                     self._items.append(it)
                     self._item_by_name.setdefault(nm, it)
@@ -457,10 +459,17 @@ class PalworldPlugin(Star):
                 logger.warning(f"{LOG_PREFIX} 帕鲁图标 {dev_name} 读取失败: {e}")
         return ""
 
+    def _canon_iid(self, iid):
+        """存档物品id -> items.json 里的正确大小写id(容错 bone->Bone)。找不到原样返回。"""
+        if not iid:
+            return iid
+        return getattr(self, "_item_id_ci", {}).get(str(iid).lower(), iid)
+
     def _item_icon(self, item_id: str) -> str:
         """读取 data/images/items/<item_id>.png(游戏物品图标) -> base64 data uri。无图返回空。"""
         if not item_id:
             return ""
+        item_id = self._canon_iid(item_id)   # 大小写容错(存档id如 bone -> Bone)
         cache = getattr(self, "_item_icon_cache", None)
         if cache is None:
             cache = self._item_icon_cache = {}
@@ -3280,9 +3289,10 @@ class PalworldPlugin(Star):
         cells = []
         for it in sp.get("inventory", []):
             try:
-                meta = self._item_by_id.get(it.get("id"))
+                iid = self._canon_iid(it.get("id"))
+                meta = self._item_by_id.get(iid)
                 cells.append({"name": meta["name"] if meta else it.get("id", "?"),
-                              "icon": self._item_icon(it.get("id")),
+                              "icon": self._item_icon(iid),
                               "cat": self._item_category(meta.get("type")) if meta else "",
                               "count": it.get("count", 1)})
             except Exception as e:  # noqa: BLE001
