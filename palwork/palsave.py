@@ -151,7 +151,9 @@ def _parse_item_slot(vals):
                 s = b[off + 4:off + 4 + slen - 1].decode('ascii')
             except Exception:
                 continue
-            if s.isprintable() and s and s != 'None':
+            # 物品id须是合法标识(≥2字符,字母数字+下划线/连字符);否则是把count等字段误读为
+            # slen的假匹配(如count=2被当成slen=2,读出单字节'#'),跳过继续找真正的 FString。
+            if len(s) >= 2 and s != 'None' and s.replace('_', '').replace('-', '').isalnum():
                 cnt = _struct.unpack_from('<i', b, off - 4)[0]
                 return s, (cnt if cnt > 0 else 1)
     return None
