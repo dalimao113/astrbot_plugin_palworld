@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.4.3",
+    "1.4.4",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -983,7 +983,15 @@ class PalworldPlugin(Star):
         if query in self._lab_by_cat:
             return await self._img(event, self._t("lab_list"),
                                    {"category": query + "研究", "emoji": self._LAB_CAT_EMOJI.get(query, "🔬"),
-                                    "items": self._lab_by_cat[query]})
+                                    "items": self._lab_by_cat[query], "cat_short": query})
+        mnum = re.match(r"^(.+?)(\d+)$", query)     # 分类+编号，如「手工1」=手工类第1项
+        if mnum and mnum.group(1) in self._lab_by_cat:
+            pool = self._lab_by_cat[mnum.group(1)]
+            idx = int(mnum.group(2))
+            if 1 <= idx <= len(pool):
+                return await self._lab_detail(event, pool[idx - 1])
+            return await self._msg_card(event, "🔢", "编号超出范围",
+                                        desc=f"「{mnum.group(1)}」类共 {len(pool)} 项，没有第 {idx} 项。", color="#F5A623")
         if query in self._lab_by_name:
             return await self._lab_detail(event, self._lab_by_name[query])
         matches = [x for x in self._lab if query in x["name"]]
@@ -994,7 +1002,8 @@ class PalworldPlugin(Star):
                                         desc=f"没有名字含「{query}」的研究，也不是分类名"
                                              "(手工/点火/浇水/播种/发电/砍伐/采矿/冷却/制药)。", color="#F5A623")
         return await self._img(event, self._t("lab_list"),
-                               {"category": f"含「{query}」的研究", "emoji": "🔬", "items": matches})
+                               {"category": f"含「{query}」的研究", "emoji": "🔬", "items": matches,
+                                "cat_short": matches[0]["category"] if matches else "手工"})
 
     def _breed_result(self, pa: dict, pb: dict):
         ci = self._breed.get(frozenset((self._name_idx.get(pa["pal_name"]), self._name_idx.get(pb["pal_name"]))))
@@ -2410,14 +2419,22 @@ class PalworldPlugin(Star):
         q, page = self._parse_page_args(args)
         ELS = ("无", "火", "水", "雷", "草", "冰", "地", "暗", "龙")
 
-        def _ent(pool):
-            return [{"no": f["element"], "name": f["tech"], "k": "item", "ik": f["fruit_id"]} for f in pool]
+        def _ent(pool):   # no=序号(供「元素+编号」查询，如 火1)
+            return [{"no": str(i + 1), "name": f["tech"], "k": "item", "ik": f["fruit_id"]} for i, f in enumerate(pool)]
         if not q:
             return await self._render_grid(event, "技能果实图鉴", "🍐",
                                            _ent(self._skill_fruits), page, "/帕鲁技能果实", "")
         if q in ELS:
             return await self._render_grid(event, f"{q}属性技能果实", "🍐",
                                            _ent(self._sf_by_element.get(q, [])), page, "/帕鲁技能果实", q)
+        mnum = re.match(r"^(.+?)(\d+)$", q)        # 元素+编号，如「火1」=火属性第1个
+        if mnum and mnum.group(1) in ELS:
+            pool = self._sf_by_element.get(mnum.group(1), [])
+            idx = int(mnum.group(2))
+            if 1 <= idx <= len(pool):
+                return await self._skillfruit_detail(event, pool[idx - 1])
+            return await self._msg_card(event, "🔢", "编号超出范围",
+                                        desc=f"「{mnum.group(1)}」属性共 {len(pool)} 个技能果实，没有第 {idx} 个。", color="#F5A623")
         if q in self._sf_by_tech:                 # 技能名精确命中
             return await self._skillfruit_detail(event, self._sf_by_tech[q])
         matches = [x for x in self._skill_fruits if q in x["tech"] or q in x["fruit_name"]]
@@ -2439,12 +2456,18 @@ class PalworldPlugin(Star):
             return await self._msg_card(event, "🧬", "植入体数据未加载",
                                         desc="data/implants.json 缺失或损坏。", color="#E5484D")
         q, page = self._parse_page_args(args)
+        gidx = {im["item_id"]: i + 1 for i, im in enumerate(self._implants)}   # 全局序号(按稀有度排序)
 
-        def _ent(pool):   # 列表用完整名(区分「植入体：X」/「耗材植入体：X」，避免重名)
-            return [{"no": ("★" * min(im.get("rank", 0), 5)) if im.get("rank", 0) > 0 else "",
-                     "name": im["name"], "k": "item", "ik": im["item_id"]} for im in pool]
+        def _ent(pool):   # no=全局编号(供纯数字查询)；名字用完整名(区分永久/耗材，避免重名)
+            return [{"no": str(gidx[im["item_id"]]), "name": im["name"], "k": "item", "ik": im["item_id"]} for im in pool]
         if not q:
             return await self._render_grid(event, "植入体图鉴", "🧬", _ent(self._implants), page, "/帕鲁植入体", "")
+        if q.isdigit():                           # 纯数字=全局第 N 个
+            idx = int(q)
+            if 1 <= idx <= len(self._implants):
+                return await self._implant_detail(event, self._implants[idx - 1])
+            return await self._msg_card(event, "🔢", "编号超出范围",
+                                        desc=f"植入体共 {len(self._implants)} 种，没有第 {idx} 种。", color="#F5A623")
         exact = self._implant_by_name.get(q)      # 完整名精确命中
         if exact:
             return await self._implant_detail(event, exact)

@@ -2220,6 +2220,7 @@ LAB_LIST_TMPL = _HEAD + """</style></head><body><div class="page">
     <div style="display:flex;flex-direction:column;gap:8px">
       {% for it in items %}
       <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:12px;background:rgba(12,8,38,.42);border:1px solid rgba(232,198,106,.16)">
+        <span style="flex:none;min-width:26px;height:26px;line-height:26px;text-align:center;font-size:13px;font-weight:800;color:#0d0820;background:linear-gradient(135deg,#f3d98a,#e8c66a);border-radius:8px">{{ loop.index }}</span>
         {% if it.essential %}<span style="flex:none;font-size:11px;font-weight:800;color:#0d0820;background:#7cfc9a;border-radius:6px;padding:2px 6px">必需</span>{% endif %}
         <div style="flex:1;min-width:0">
           <div style="font-size:15px;font-weight:700;color:#ece3f7">{{ it.name }}</div>
@@ -2227,7 +2228,7 @@ LAB_LIST_TMPL = _HEAD + """</style></head><body><div class="page">
         </div>
       </div>{% endfor %}
     </div>
-    <div style="margin-top:13px;font-size:13px;color:#9c8fc0">发 <b style="color:#e8c466">/帕鲁研究所 &lt;研究名&gt;</b> 看材料与前置。</div>
+    <div style="margin-top:13px;font-size:13px;color:#9c8fc0">按编号查:发 <b style="color:#e8c466">/帕鲁研究所 {{ cat_short }}1</b>(该类第1项);或 <b style="color:#e8c466">/帕鲁研究所 &lt;研究名&gt;</b> 查详情。</div>
   </div>
   """ + _FOOT + """
 </div></body></html>"""
