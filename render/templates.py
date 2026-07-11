@@ -2705,20 +2705,30 @@ PASSREC_TMPL = _HEAD + """</style></head><body><div class="page">
 
 # 词条大全·分类总览（/帕鲁词条大全）
 PASSDEX_TMPL = _HEAD + """</style></head><body><div class="page">
-  <div class="head"><div>
-    <div class="title">📜 词条大全</div>
-    <div class="subtitle">共 {{ total }} 个词条 · 按类别浏览</div>
+  <div class="head"><div style="display:flex;align-items:center;gap:13px;width:100%">
+    <div style="flex:none;width:66px;height:66px;border-radius:17px;background:radial-gradient(circle at 50% 38%,rgba(232,198,106,.4),rgba(18,12,48,.5) 72%);border:2px solid rgba(232,198,106,.6);display:flex;align-items:center;justify-content:center;font-size:34px">📜</div>
+    <div style="flex:1;min-width:0">
+      <div class="title">词条大全</div>
+      <div class="subtitle">帕鲁被动词条百科 · 共 <b style="color:#e8c466">{{ total }}</b> 个 · 9 大类别</div>
+    </div>
   </div></div>
   <div class="glass">""" + _GEMS + """
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
     {% for c in cats %}
-      <div style="padding:12px 14px;border-radius:14px;background:rgba(12,8,38,.5);border:1px solid rgba(232,198,106,.2)">
-        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:21px">{{ c.icon }}</span><span style="font-size:16px;font-weight:800;color:#e8c466">{{ c.name }}</span><span class="pill soft" style="margin-left:auto">{{ c.count }}</span></div>
-        <div style="margin-top:6px;font-size:11.5px;color:#b9a9d6;line-height:1.5;height:2.3em;overflow:hidden">{{ c.sample }}…</div>
+      <div style="position:relative;padding:13px 14px 12px 19px;border-radius:15px;background:linear-gradient(135deg,{{c.color}}26,rgba(18,12,48,.5) 78%);border:1px solid {{c.color}}55;overflow:hidden">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:5px;background:{{c.color}}"></div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="flex:none;width:40px;height:40px;border-radius:11px;background:{{c.color}}30;border:1px solid {{c.color}}66;display:flex;align-items:center;justify-content:center;font-size:21px">{{c.icon}}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:16px;font-weight:800;color:#f3ecd2">{{c.name}}</div>
+            <div style="font-size:11px;color:{{c.color}};font-weight:800">{{c.count}} 个词条</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:#b9a9d6;line-height:1.5;height:2.2em;overflow:hidden">{{c.sample}}…</div>
       </div>
     {% endfor %}
     </div>
-    <div style="margin-top:12px;text-align:center;font-size:11.5px;color:#9c8fc0">发「/帕鲁词条大全 攻击」看该类全部 · 「/帕鲁词条大全 词条名」查具体效果</div>
+    <div style="margin-top:13px;padding:10px 14px;border-radius:12px;background:rgba(99,102,241,.13);border:1px solid rgba(232,198,106,.2);text-align:center;font-size:12px;color:#d8cdf0;line-height:1.7">🔍 发「<b>/帕鲁词条大全 攻击</b>」看该类全部词条 · 「<b>/帕鲁词条大全 力量</b>」查具体效果</div>
   </div>
   """ + _FOOT + """
 </div></body></html>"""
@@ -2726,21 +2736,28 @@ PASSDEX_TMPL = _HEAD + """</style></head><body><div class="page">
 
 # 词条大全·分类列表/搜索结果（/帕鲁词条大全 <分类/词条名>）
 PASSLIST_TMPL = _HEAD + """</style></head><body><div class="page">
-  <div class="head"><div>
-    <div class="title">{{ icon }} {{ cat }}</div>
-    <div class="subtitle">{{ count }} 个词条</div>
+  <div class="head"><div style="display:flex;align-items:center;gap:13px;width:100%">
+    <div style="flex:none;width:64px;height:64px;border-radius:16px;background:radial-gradient(circle at 50% 40%,{{color}}55,rgba(18,12,48,.5) 72%);border:2px solid {{color}}aa;display:flex;align-items:center;justify-content:center;font-size:32px">{{ icon }}</div>
+    <div style="flex:1;min-width:0">
+      <div class="title">{{ cat }}</div>
+      <div class="subtitle"><span class="pill soft">{{ count }} 个词条</span></div>
+    </div>
   </div></div>
   <div class="glass">""" + _GEMS + """
     {% for it in items %}
-    <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 2px;{% if not loop.last %}border-bottom:1px solid rgba(232,198,106,.1){% endif %}">
-      <span style="flex:none;width:8px;height:8px;margin-top:6px;border-radius:50%;background:{% if it.sign>0 %}#4ade80{% elif it.sign<0 %}#f87171{% else %}#9c8fc0{% endif %}"></span>
+    <div style="display:flex;align-items:center;gap:11px;padding:10px 12px;margin-bottom:7px;border-radius:12px;background:rgba(12,8,38,.45);border:1px solid rgba(232,198,106,.12);border-left:3px solid {% if it.sign>0 %}#5cc97a{% elif it.sign<0 %}#e15b5b{% else %}#9c8fc0{% endif %}">
       <div style="flex:1;min-width:0">
-        <div style="font-size:14.5px;font-weight:700;color:#f3ecd2">{{ it.name }}{% if it.rank %} <span style="font-size:11px;color:#9c8fc0">Lv{{ it.rank }}</span>{% endif %}{% if it.cat %} <span class="pill soft" style="font-size:10px">{{ it.cat }}</span>{% endif %}</div>
-        {% if it.effect %}<div style="font-size:12.5px;color:#c2b2dd;margin-top:2px;line-height:1.5">{{ it.effect }}</div>{% endif %}
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+          <span style="font-size:14.5px;font-weight:800;color:#f3ecd2">{{ it.name }}</span>
+          {% if it.rank %}<span style="font-size:10px;background:{{color}}33;color:{{color}};border:1px solid {{color}}66;padding:1px 6px;border-radius:5px;font-weight:800">Lv{{ it.rank }}</span>{% endif %}
+          {% if it.cat %}<span class="pill soft" style="font-size:10px">{{ it.cat }}</span>{% endif %}
+        </div>
+        {% if it.effect %}<div style="font-size:12.5px;color:#cbbde8;margin-top:3px;line-height:1.45">{{ it.effect }}</div>{% endif %}
       </div>
+      <span style="flex:none;font-size:14px">{% if it.sign>0 %}🟢{% elif it.sign<0 %}🔴{% else %}⚪{% endif %}</span>
     </div>
     {% endfor %}
-    <div style="margin-top:11px;text-align:center;font-size:11.5px;color:#9c8fc0">🟢正面 🔴负面 · 发「/帕鲁词条大全」看全部分类</div>
+    <div style="margin-top:5px;text-align:center;font-size:11.5px;color:#9c8fc0">🟢增益 · 🔴减益 · ⚪中性 — 发「/帕鲁词条大全」看全部分类</div>
   </div>
   """ + _FOOT + """
 </div></body></html>"""

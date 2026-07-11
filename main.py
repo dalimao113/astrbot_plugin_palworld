@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.8.3",
+    "1.8.4",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -1961,6 +1961,8 @@ class PalworldPlugin(Star):
     _PASSDEX_CATS = ["攻击", "防御", "生命", "工作", "移动", "元素", "生存", "训练师", "其他"]
     _PASSDEX_ICON = {"攻击": "⚔️", "防御": "🛡️", "生命": "❤️", "工作": "🔨",
                      "移动": "💨", "元素": "🔮", "生存": "🍖", "训练师": "🧑", "其他": "✨"}
+    _PASSDEX_COLOR = {"攻击": "#e15b5b", "防御": "#5b9ae1", "生命": "#5cc97a", "工作": "#e6942e",
+                      "移动": "#2ec8b0", "元素": "#b06ee0", "生存": "#e8c466", "训练师": "#9aa6c0", "其他": "#c9a86a"}
 
     @staticmethod
     def _passive_category(pid: str, effect: str) -> str:
@@ -2006,7 +2008,8 @@ class PalworldPlugin(Star):
         g = self._passdex_group()
         q = " ".join(args).strip().rstrip("类")
         if not q:
-            cats = [{"name": c, "icon": self._PASSDEX_ICON.get(c, "✨"), "count": len(g.get(c, [])),
+            cats = [{"name": c, "icon": self._PASSDEX_ICON.get(c, "✨"),
+                     "color": self._PASSDEX_COLOR.get(c, "#c9a86a"), "count": len(g.get(c, [])),
                      "sample": "、".join(x["name"] for x in g.get(c, [])[:4])}
                     for c in self._PASSDEX_CATS if g.get(c)]
             return await self._img(event, self._t("passdex"),
@@ -2015,13 +2018,14 @@ class PalworldPlugin(Star):
             items = g.get(q, [])
             return await self._img(event, self._t("passlist"),
                                    {"cat": q + "类词条", "icon": self._PASSDEX_ICON.get(q, "✨"),
+                                    "color": self._PASSDEX_COLOR.get(q, "#c9a86a"),
                                     "items": items, "count": len(items)})
         # 词条名模糊查询 → 命中列表
         hits = [{**x, "cat": c} for c, lst in g.items() for x in lst
                 if q in x["name"] or x["name"] in q]
         if hits:
             return await self._img(event, self._t("passlist"),
-                                   {"cat": f"含「{q}」的词条", "icon": "🔍",
+                                   {"cat": f"含「{q}」的词条", "icon": "🔍", "color": "#c9a86a",
                                     "items": hits, "count": len(hits)})
         return await self._msg_card(event, "🔍", "查无此词条",
                                     desc=f"没有名字含「{q}」的词条。\n发「/帕鲁词条大全」看全部分类。", color="#F5A623")
