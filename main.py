@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.6.8",
+    "1.6.9",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2869,6 +2869,74 @@ class PalworldPlugin(Star):
                 "medal": ["🥇", "🥈", "🥉"][i - 1] if i <= 3 else str(i)})
         return await self._img(event, self._t("power"),
                                {"rows": rows, "sub": f"全服最强帕鲁 Top{len(rows)} · 共 {len(allpals)} 只"})
+
+    # ------------------------------------------------------------------
+    # 帕鲁战力等级排行（/帕鲁战力榜）：基于图鉴种族值的战力，全帕鲁排名，翻页+详细
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _species_power(p: dict) -> int:
+        """种族战力评分(基于图鉴基础三围:血量×0.5 + 主攻[近战/远程取高] + 防御)。仅用于横向排序。"""
+        st = p.get("stats") or {}
+        atk = max(int(st.get("melee_attack", 0) or 0), int(st.get("shot_attack", 0) or 0))
+        return round((int(st.get("hp", 0) or 0)) * 0.5 + atk + int(st.get("defense", 0) or 0))
+
+    def _power_ranked(self) -> list:
+        """全图鉴按种族战力降序缓存 [(power, pal), ...]。"""
+        if getattr(self, "_pp_ranked", None) is None:
+            lst = [(self._species_power(p), p) for p in self._pals if (p.get("stats") or {}).get("hp")]
+            lst.sort(key=lambda x: (-x[0], x[1].get("pal_name", "")))
+            self._pp_ranked = lst
+        return self._pp_ranked
+
+    async def _cmd_paldex_power(self, event: AstrMessageEvent, args: list):
+        if not self._pals:
+            return await self._msg_card(event, "🏆", "图鉴数据未加载",
+                                        desc="data/paldex.json 缺失或损坏。", color="#E5484D")
+        ranked = self._power_ranked()
+        query, page = self._parse_page_args(args)
+        # 详细查询：/帕鲁战力榜 <帕鲁名或编号>
+        if query:
+            p = self._find_pal(query)
+            if not p:
+                return await self._msg_card(event, "🔍", "查无此帕鲁",
+                                            desc=f"没有名字/编号含「{query}」的帕鲁。", color="#F5A623")
+            pw = self._species_power(p)
+            rank = next((i for i, (_, pp) in enumerate(ranked, 1) if pp is p), "?")
+            st = p.get("stats") or {}
+            hp, me, sh, df = (int(st.get(k, 0) or 0) for k in ("hp", "melee_attack", "shot_attack", "defense"))
+            mx = max(hp, me, sh, df, 1)
+            data = {
+                "name": _esc(p.get("pal_name", "?")), "icon": self._pal_icon(p.get("pal_dev_name", "")),
+                "elements": p.get("elements", []), "rarity": int(p.get("rarity", 0) or 0),
+                "power": pw, "rank": rank, "total": len(ranked),
+                "partner": _esc(p.get("partner_skill_title", "") or ""),
+                "stats": [
+                    {"k": "生命", "v": hp, "pct": int(hp / mx * 100)},
+                    {"k": "近战", "v": me, "pct": int(me / mx * 100)},
+                    {"k": "远程", "v": sh, "pct": int(sh / mx * 100)},
+                    {"k": "防御", "v": df, "pct": int(df / mx * 100)},
+                ]}
+            return await self._img(event, self._t("palpowerdetail"), data)
+        # 排行翻页：每页 14
+        per = 14
+        total_pages = max(1, (len(ranked) + per - 1) // per)
+        page = max(1, min(page, total_pages))
+        mxp = ranked[0][0] if ranked else 1
+        chunk = ranked[(page - 1) * per: page * per]
+        rows = []
+        for off, (pw, p) in enumerate(chunk):
+            i = (page - 1) * per + off + 1
+            els = p.get("elements", []) or []
+            rows.append({
+                "rank": i, "name": _esc(p.get("pal_name", "?")),
+                "icon": self._pal_icon(p.get("pal_dev_name", "")),
+                "element": (els[0].replace("属性", "") if els else "—"),
+                "rarity": int(p.get("rarity", 0) or 0),
+                "power": pw, "pct": int(pw / (mxp or 1) * 100),
+                "medal": ["🥇", "🥈", "🥉"][i - 1] if i <= 3 else str(i)})
+        sub = f"已知帕鲁战力排行 · 第 {page}/{total_pages} 页 · 共 {len(ranked)} 只"
+        return await self._img(event, self._t("palpower"),
+                               {"rows": rows, "sub": sub, "page": page, "total_pages": total_pages})
 
     async def _collection_wall(self, event, field, title, badge, label, empty):
         """收藏墙通用：遍历全服帕鲁筛 field(lucky/is_alpha) 为真的，网格展示。"""
