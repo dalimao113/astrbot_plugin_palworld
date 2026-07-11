@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.4.6",
+    "1.4.7",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2509,6 +2509,15 @@ class PalworldPlugin(Star):
                                         desc="paldex.json 里缺少世界树 boss。", color="#E5484D")
         return await self._img(event, self._t("worldtree"), {"bosses": bosses})
 
+    async def _cmd_v10(self, event: AstrMessageEvent, args: list):
+        """/帕鲁1.0：插件对幻兽帕鲁 1.0 正式版的数据与功能支持总览。"""
+        def _n(a):
+            return len(getattr(self, a, []) or [])
+        stats = {"pals": _n("_pals"), "items": _n("_items"), "skills": _n("_skills"),
+                 "tech": _n("_tech"), "buildings": _n("_buildings"), "recipes": _n("_recipes"),
+                 "lab": _n("_lab"), "fruits": _n("_skill_fruits"), "implants": _n("_implants")}
+        return await self._img(event, self._t("v10"), {"stats": stats})
+
     # ------------------------------------------------------------------
     # 渲染封装：优先用本地 Playwright(快、可并行、无网络往返)，失败回退 AstrBot 远程 t2i
     # ------------------------------------------------------------------
@@ -2620,7 +2629,7 @@ class PalworldPlugin(Star):
                 return alias, (([rest] + list(args)) if rest else list(args))
         return sub, args
 
-    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
+    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
     async def palworld(self, event: AstrMessageEvent):
         raw = (event.message_str or "").strip()
         # 去掉可选的「/」前缀和指令词「帕鲁」，剩余既可能是「在线」也可能是「在线 参数」

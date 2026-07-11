@@ -237,6 +237,7 @@ HELP_TMPL = _HEAD + """
     <div class="cmd"><div class="c"><b>/帕鲁技能果实</b> [属性/名]</div><div class="d">🆕 92种果实图鉴·带图标·教什么技能</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁植入体</b> [名/页]</div><div class="d">🆕 68种改造词条·编号查:/帕鲁植入体查询 N</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁世界树</b></div><div class="d">🆕 1.0最终boss专题:暮尘蛾&夜蔓爵</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁1.0</b></div><div class="d">🆕 1.0正式版支持总览·数据统计·新功能导览</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁钓鱼</b></div><div class="d">钓鱼能钓到什么 + 概率</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁工作</b> 工种</div><div class="d">某工种(采矿/搬运…)最强帕鲁排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁坐骑</b></div><div class="d">可骑乘帕鲁按奔跑速度排行</div></div>
@@ -769,6 +770,7 @@ HELP_PIX = _PH + """
     <div class="cmd"><div class="c"><b>/帕鲁技能果实</b> [属性/名]</div><div class="d">🆕 92种果实图鉴/带图标</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁植入体</b> [名/页]</div><div class="d">🆕 68种·编号查/帕鲁植入体查询 N</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁世界树</b></div><div class="d">🆕 1.0最终boss:暮尘蛾&夜蔓爵</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁1.0</b></div><div class="d">🆕 1.0支持总览/新功能导览</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁钓鱼</b></div><div class="d">钓鱼可获得物+概率</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁工作</b> 工种</div><div class="d">工种最强帕鲁排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁坐骑</b></div><div class="d">坐骑奔跑速度榜</div></div>
@@ -2334,6 +2336,36 @@ WORLDTREE_TMPL = _HEAD + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+# ---------------- 1.0 支持总览(1.0) ----------------
+V10_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">🎉 幻兽帕鲁 1.0 · 全面支持</div>
+    <div class="subtitle"><span class="pill" style="background:rgba(124,252,154,.2);border-color:rgba(124,252,154,.45)">正式版数据已更新</span></div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    <div class="sec-t">数据收录</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px">
+      {% set cells = [("帕鲁图鉴",stats.pals,"🐾"),("物品",stats.items,"🎒"),("主动技能",stats.skills,"✨"),("科技",stats.tech,"🔬"),("建筑设施",stats.buildings,"🏛️"),("制作配方",stats.recipes,"🛠️"),("研究所",stats.lab,"🧪"),("技能果实",stats.fruits,"🍐"),("植入体",stats.implants,"🧬")] %}
+      {% for label,num,emo in cells %}
+      <div style="display:flex;flex-direction:column;align-items:center;padding:12px 5px;border-radius:13px;background:rgba(12,8,38,.42);border:1px solid rgba(232,198,106,.16)">
+        <div style="font-size:24px">{{ emo }}</div>
+        <div style="font-size:23px;font-weight:800;color:#e8c466;line-height:1.1;margin-top:3px">{{ num }}</div>
+        <div style="font-size:11.5px;color:#b9a9d6;margin-top:2px">{{ label }}</div>
+      </div>{% endfor %}
+    </div>
+    <div class="sec-t" style="margin-top:16px">1.0 新增查询</div>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      <div style="font-size:13.5px;color:#e9e0f5"><b style="color:#e8c466">/帕鲁研究所</b> — 全局增益研究,9大工作适性,按「手工1」编号查</div>
+      <div style="font-size:13.5px;color:#e9e0f5"><b style="color:#e8c466">/帕鲁技能果实</b> — 92种果实按元素分类,按「火1」编号查</div>
+      <div style="font-size:13.5px;color:#e9e0f5"><b style="color:#e8c466">/帕鲁植入体</b> — 68种改造词条,「/帕鲁植入体查询 N」按编号</div>
+      <div style="font-size:13.5px;color:#e9e0f5"><b style="color:#e8c466">/帕鲁世界树</b> — 最终boss暮尘蛾&夜蔓爵专题</div>
+    </div>
+    <div style="margin-top:13px;font-size:12.5px;color:#9c8fc0">全部查询支持:名称 / 模糊(含关键字返列表) / 编号 / 分类浏览。</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+
 # ---------------- 网格列表(模糊搜索/全表浏览，分页) ----------------
 GRID_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div>
@@ -3192,7 +3224,7 @@ STYLES = {
                 "basecamp": BASECAMP_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "mission": MISSION_TMPL, "missionlist": MISSIONLIST_TMPL, "boss": BOSS_TMPL,
-                "merchant": MERCHANT_TMPL, "skill": SKILL_TMPL, "skillfruit": SKILLFRUIT_TMPL, "implant": IMPLANT_TMPL, "worldtree": WORLDTREE_TMPL, "compare": COMPARE_TMPL,
+                "merchant": MERCHANT_TMPL, "skill": SKILL_TMPL, "skillfruit": SKILLFRUIT_TMPL, "implant": IMPLANT_TMPL, "worldtree": WORLDTREE_TMPL, "v10": V10_TMPL, "compare": COMPARE_TMPL,
                 "hatch": HATCH_TMPL, "inherit": INHERIT_TMPL,
                 "arena": ARENA_TMPL, "arena_tier": ARENA_TIER_TMPL},
     "pixel": {"status": STATUS_PIX, "players": PLAYERS_PIX, "settings": SETTINGS_PIX,

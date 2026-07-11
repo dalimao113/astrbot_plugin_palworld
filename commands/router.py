@@ -74,6 +74,7 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("植入体查询", "_cmd_implant_num", ("植入体编号",), cooldown=True, pass_args=True, description="按编号查植入体(1.0)", category="paldex"),
     CommandSpec("植入体", "_cmd_implant", ("改造", "implant"), cooldown=True, pass_args=True, description="植入体图鉴(1.0)", category="paldex"),
     CommandSpec("世界树", "_cmd_worldtree", ("世界树boss", "最终boss", "worldtree"), cooldown=True, pass_args=True, description="世界树最终boss专题(1.0)", category="paldex"),
+    CommandSpec("1.0", "_cmd_v10", ("版本", "v10", "1.0内容", "1.0导览", "1.0总览"), cooldown=True, pass_args=True, description="1.0正式版支持总览", category="paldex"),
     CommandSpec("技能", "_cmd_skill", ("主动技能", "skill"), cooldown=True, pass_args=True, description="主动技能", category="paldex"),
     CommandSpec("钓鱼", "_cmd_fishing", ("fishing", "钓"), cooldown=True, pass_args=True, description="钓鱼", category="paldex"),
     CommandSpec("工作", "_cmd_work", ("工作适性", "适性", "work"), cooldown=True, pass_args=True, description="工作适性排行", category="paldex"),
