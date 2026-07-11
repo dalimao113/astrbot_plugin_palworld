@@ -2324,7 +2324,7 @@ WORLDTREE_TMPL = _HEAD + """</style></head><body><div class="page">
       {% if b.icon %}<img src="{{ b.icon }}" style="width:88px;height:88px;flex:none;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))">{% else %}<div style="flex:none;font-size:60px">🌳</div>{% endif %}
       <div style="flex:1;min-width:0">
         <div style="font-size:19px;font-weight:800;color:#e8c466">{{ b.name }} <span style="font-size:13px;color:#9c8fc0;font-weight:400">#{{ b.index }}</span></div>
-        <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="pill soft" style="font-size:12px">{{ e }}</span>{% endfor %}<span class="pill soft" style="font-size:12px">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="pill soft" style="font-size:12px">HP {{ b.hp }}</span>{% endif %}</div>
+        <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="pill soft" style="font-size:12px">{{ e }}</span>{% endfor %}<span class="pill soft" style="font-size:12px">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="pill soft" style="font-size:12px">HP种族值 {{ b.hp }}</span>{% endif %}</div>
         {% if b.partner %}<div style="font-size:12.5px;color:#bff7cc;margin-top:2px">🛡 伙伴技能：{{ b.partner }}</div>{% endif %}
         <div style="font-size:12px;color:#cfc1ea;margin-top:4px;line-height:1.6"><b style="color:#9c8fc0">技能</b> {{ b.skills|join('、') }}</div>
         <div style="font-size:12px;color:#e8c466;margin-top:3px"><b style="color:#9c8fc0">掉落</b> {{ b.drops|join('、') }}</div>
@@ -2345,7 +2345,7 @@ V10_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="glass">""" + _GEMS + """
     <div class="sec-t">数据收录</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px">
-      {% set cells = [("帕鲁图鉴",stats.pals,"🐾"),("物品",stats.items,"🎒"),("主动技能",stats.skills,"✨"),("科技",stats.tech,"🔬"),("建筑设施",stats.buildings,"🏛️"),("制作配方",stats.recipes,"🛠️"),("研究所",stats.lab,"🧪"),("技能果实",stats.fruits,"🍐"),("植入体",stats.implants,"🧬")] %}
+      {% set cells = [("帕鲁图鉴",stats['pals'],"🐾"),("物品",stats['items'],"🎒"),("主动技能",stats['skills'],"✨"),("科技",stats['tech'],"🔬"),("建筑设施",stats['buildings'],"🏛️"),("制作配方",stats['recipes'],"🛠️"),("研究所",stats['lab'],"🧪"),("技能果实",stats['fruits'],"🍐"),("植入体",stats['implants'],"🧬")] %}
       {% for label,num,emo in cells %}
       <div style="display:flex;flex-direction:column;align-items:center;padding:12px 5px;border-radius:13px;background:rgba(12,8,38,.42);border:1px solid rgba(232,198,106,.16)">
         <div style="font-size:24px">{{ emo }}</div>
