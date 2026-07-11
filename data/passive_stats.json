@@ -1,0 +1,1034 @@
+{
+"HP_ACC_up1": {
+"hp": 10.0
+},
+"HP_ACC_up2": {
+"hp": 15.0
+},
+"HP_ACC_up3": {
+"hp": 20.0
+},
+"HP_ACC_up4": {
+"hp": 25.0
+},
+"Attack_ACC_up1": {
+"atk": 5.0
+},
+"Attack_ACC_up2": {
+"atk": 10.0
+},
+"Attack_ACC_up3": {
+"atk": 15.0
+},
+"Attack_ACC_up4": {
+"atk": 20.0
+},
+"Attack_ACC_up1_Armor": {
+"atk": 3.0
+},
+"Attack_ACC_up2_Armor": {
+"atk": 6.0
+},
+"Attack_ACC_up3_Armor": {
+"atk": 9.0
+},
+"Attack_ACC_up4_Armor": {
+"atk": 12.0
+},
+"Attack_ACC_up1_Gorilla": {
+"atk": 75.0
+},
+"Attack_ACC_up2_Gorilla": {
+"atk": 115.0
+},
+"Attack_ACC_up3_Gorilla": {
+"atk": 165.0
+},
+"Attack_ACC_up4_Gorilla": {
+"atk": 225.0
+},
+"Attack_ACC_up5_Gorilla": {
+"atk": 300.0
+},
+"Attack_ACC_up1_WingGolem": {
+"atk": 50.0
+},
+"Attack_ACC_up2_WingGolem": {
+"atk": 75.0
+},
+"Attack_ACC_up3_WingGolem": {
+"atk": 110.0
+},
+"Attack_ACC_up4_WingGolem": {
+"atk": 150.0
+},
+"Attack_ACC_up5_WingGolem": {
+"atk": 200.0
+},
+"defense_ACC_up1_WingGolem": {
+"def": 50.0
+},
+"defense_ACC_up2_WingGolem": {
+"def": 75.0
+},
+"defense_ACC_up3_WingGolem": {
+"def": 110.0
+},
+"defense_ACC_up4_WingGolem": {
+"def": 150.0
+},
+"defense_ACC_up5_WingGolem": {
+"def": 200.0
+},
+"Attack_ACC_up_WingGolem_Fire_1": {
+"atk": 60.0
+},
+"Attack_ACC_up_WingGolem_Fire_2": {
+"atk": 85.0
+},
+"Attack_ACC_up_WingGolem_Fire_3": {
+"atk": 120.0
+},
+"Attack_ACC_up_WingGolem_Fire_4": {
+"atk": 160.0
+},
+"Attack_ACC_up_WingGolem_Fire_5": {
+"atk": 210.0
+},
+"defense_ACC_up_WingGolem_Fire_1": {
+"def": 60.0
+},
+"defense_ACC_up_WingGolem_Fire_2": {
+"def": 85.0
+},
+"defense_ACC_up_WingGolem_Fire_3": {
+"def": 120.0
+},
+"defense_ACC_up_WingGolem_Fire_4": {
+"def": 160.0
+},
+"defense_ACC_up_WingGolem_Fire_5": {
+"def": 210.0
+},
+"defense_ACC_up1": {
+"def": 10.0
+},
+"defense_ACC_up2": {
+"def": 15.0
+},
+"defense_ACC_up3": {
+"def": 20.0
+},
+"defense_ACC_up4": {
+"def": 25.0
+},
+"AccuracyDecrease": {
+"atk": 15.0
+},
+"AccuracySuperDecrease": {
+"atk": 200.0
+},
+"MeleeAttack_up2": {
+"atk": 50.0
+},
+"MeleeAttack_up1": {
+"atk": 20.0
+},
+"MeleeAttack_down1": {
+"atk": 0
+},
+"MeleeAttack_down2": {
+"atk": 0
+},
+"ShotAttack_up2": {
+"atk": 20.0
+},
+"ShotAttack_up1": {
+"atk": 10.0
+},
+"ShotAttack_down1": {
+"atk": 0
+},
+"ShotAttack_down2": {
+"atk": 0
+},
+"Deffence_up3": {
+"def": 30.0
+},
+"Deffence_up2": {
+"def": 20.0
+},
+"Deffence_up1": {
+"def": 10.0
+},
+"Deffence_down1": {
+"def": -10.0
+},
+"Deffence_down2": {
+"def": -20.0
+},
+"Support_up2": {
+"def": 5.0
+},
+"Noukin": {
+"atk": 30.0
+},
+"Rare": {
+"atk": 15.0,
+"def": 15.0
+},
+"Legend": {
+"atk": 20.0,
+"def": 20.0
+},
+"PAL_ALLAttack_up3": {
+"atk": 30.0,
+"def": 5.0
+},
+"PAL_ALLAttack_up2": {
+"atk": 20.0
+},
+"PAL_ALLAttack_up1": {
+"atk": 10.0
+},
+"PAL_ALLAttack_down1": {
+"atk": 0
+},
+"PAL_ALLAttack_down2": {
+"atk": 0
+},
+"PAL_rude": {
+"atk": 15.0
+},
+"PAL_conceited": {
+"def": -10.0
+},
+"PAL_SpiritualInst": {
+"def": -10.0
+},
+"PAL_sadist": {
+"atk": 15.0,
+"def": -15.0
+},
+"PAL_masochist": {
+"def": 15.0,
+"atk": 0
+},
+"PAL_CorporateSlave": {
+"atk": 0
+},
+"PAL_oraora": {
+"atk": 10.0,
+"def": -10.0
+},
+"PAL_ElementPassive_Test": {
+"atk": 15.0
+},
+"PAL_ElementPassive_1": {
+"atk": 17.0
+},
+"PAL_ElementPassive_2": {
+"atk": 20.0
+},
+"PAL_ElementPassive_3": {
+"atk": 24.0
+},
+"PAL_ElementPassive_4": {
+"atk": 30.0
+},
+"TrainerATK_UP_1": {
+"atk": 10.0
+},
+"TrainerDEF_UP_1": {
+"def": 10.0
+},
+"PAL_TribePassive_Test": {
+"atk": 12.0,
+"def": 12.0
+},
+"PAL_TribePassive_1": {
+"atk": 13.0,
+"def": 13.0
+},
+"PAL_TribePassive_2": {
+"atk": 15.0,
+"def": 15.0
+},
+"PAL_TribePassive_3": {
+"atk": 19.0,
+"def": 19.0
+},
+"PAL_TribePassive_4": {
+"atk": 24.0,
+"def": 24.0
+},
+"TrainerATK_UP_PartnerSkill_1": {
+"atk": 10.0
+},
+"TrainerATK_UP_PartnerSkill_2": {
+"atk": 11.0
+},
+"TrainerATK_UP_PartnerSkill_3": {
+"atk": 13.0
+},
+"TrainerATK_UP_PartnerSkill_4": {
+"atk": 16.0
+},
+"TrainerATK_UP_PartnerSkill_5": {
+"atk": 20.0
+},
+"TrainerDEF_UP_PartnerSkill_1": {
+"def": 5.0
+},
+"TrainerDEF_UP_PartnerSkill_2": {
+"def": 6.0
+},
+"TrainerDEF_UP_PartnerSkill_3": {
+"def": 7.0
+},
+"TrainerDEF_UP_PartnerSkill_4": {
+"def": 8.0
+},
+"TrainerDEF_UP_PartnerSkill_5": {
+"def": 10.0
+},
+"TrainerDEF_UP_PartnerSkill_6": {
+"def": 12.0
+},
+"TrainerDEF_UP_PartnerSkill_7": {
+"def": 14.0
+},
+"TrainerDEF_UP_PartnerSkill_Otomo_1": {
+"def": 5.0
+},
+"TrainerDEF_UP_PartnerSkill_Otomo_2": {
+"def": 6.0
+},
+"TrainerDEF_UP_PartnerSkill_Otomo_3": {
+"def": 7.0
+},
+"TrainerDEF_UP_PartnerSkill_Otomo_4": {
+"def": 8.0
+},
+"TrainerDEF_UP_PartnerSkill_Otomo_5": {
+"def": 10.0
+},
+"TrainerDEF_UP_PartnerSkill_Otomo_6": {
+"def": 12.0
+},
+"TrainerDEF_UP_PartnerSkill_Otomo_7": {
+"def": 14.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_1": {
+"atk": 5.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_2": {
+"atk": 6.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_3": {
+"atk": 7.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_4": {
+"atk": 8.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_5": {
+"atk": 10.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_Ride_1": {
+"atk": 5.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_Ride_2": {
+"atk": 7.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_Ride_3": {
+"atk": 10.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_Ride_4": {
+"atk": 14.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_Ride_5": {
+"atk": 20.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_Ride_Legend_1": {
+"atk": 10.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_Ride_Legend_2": {
+"atk": 14.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_Ride_Legend_3": {
+"atk": 20.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_Ride_Legend_4": {
+"atk": 28.0
+},
+"GiveElement_TrainerATK_UP_PartnerSkill_Ride_Legend_5": {
+"atk": 40.0
+},
+"ATK_up_PartnerSkill_1": {
+"atk": 5.0
+},
+"ATK_up_PartnerSkill_2": {
+"atk": 6.0
+},
+"ATK_up_PartnerSkill_3": {
+"atk": 7.0
+},
+"ATK_up_PartnerSkill_4": {
+"atk": 8.0
+},
+"CoolTimeReduction_Up_1": {
+"atk": 10.0
+},
+"Alien": {
+"atk": 10.0
+},
+"Attack_ACC_up1_Otomo_Only_Equip": {
+"atk": 4.0
+},
+"Attack_ACC_up2_Otomo_Only_Equip": {
+"atk": 8.0
+},
+"Attack_ACC_up3_Otomo_Only_Equip": {
+"atk": 12.0
+},
+"Attack_ACC_up4_Otomo_Only_Equip": {
+"atk": 16.0
+},
+"Defense_ACC_up1_Otomo_Only_Equip": {
+"def": 5.0
+},
+"Defense_ACC_up2_Otomo_Only_Equip": {
+"def": 10.0
+},
+"Defense_ACC_up3_Otomo_Only_Equip": {
+"def": 15.0
+},
+"Defense_ACC_up4_Otomo_Only_Equip": {
+"def": 20.0
+},
+"Nushi": {
+"def": 20.0
+},
+"GYM_NAME_Meadow": {
+"atk": 20.0
+},
+"GYM_NAME_Forest": {
+"atk": 20.0
+},
+"GYM_NAME_Desert": {
+"atk": 20.0
+},
+"GYM_NAME_Volcano": {
+"atk": 20.0
+},
+"GYM_NAME_Snow": {
+"atk": 20.0
+},
+"GYM_NAME_Sakurajima": {
+"atk": 20.0
+},
+"GYM_NAME_Viking": {
+"atk": 20.0
+},
+"DefenseUp_Earth_PartnerSkill_1": {
+"def": 15.0
+},
+"DefenseUp_Earth_PartnerSkill_2": {
+"def": 17.0
+},
+"DefenseUp_Earth_PartnerSkill_3": {
+"def": 20.0
+},
+"DefenseUp_Earth_PartnerSkill_4": {
+"def": 24.0
+},
+"DefenseUp_Earth_PartnerSkill_5": {
+"def": 30.0
+},
+"AttackUp_IfAllOtomoTribeDifferent_PartnerSkill_1": {
+"atk": 30.0
+},
+"AttackUp_IfAllOtomoTribeDifferent_PartnerSkill_2": {
+"atk": 40.0
+},
+"AttackUp_IfAllOtomoTribeDifferent_PartnerSkill_3": {
+"atk": 50.0
+},
+"AttackUp_IfAllOtomoTribeDifferent_PartnerSkill_4": {
+"atk": 60.0
+},
+"AttackUp_IfAllOtomoTribeDifferent_PartnerSkill_5": {
+"atk": 80.0
+},
+"AttackUp_GiveFire_AddBurn_Active_ClownRabbit_PartnerSkill_1": {
+"atk": 15.0
+},
+"AttackUp_GiveFire_AddBurn_Active_ClownRabbit_PartnerSkill_2": {
+"atk": 25.0
+},
+"AttackUp_GiveFire_AddBurn_Active_ClownRabbit_PartnerSkill_3": {
+"atk": 35.0
+},
+"AttackUp_GiveFire_AddBurn_Active_ClownRabbit_PartnerSkill_4": {
+"atk": 50.0
+},
+"AttackUp_GiveFire_AddBurn_Active_ClownRabbit_PartnerSkill_5": {
+"atk": 70.0
+},
+"WorldTreeAura": {
+"hp": 30.0,
+"atk": 30.0,
+"def": 30.0
+},
+"WorldTree_ATK": {
+"atk": 50.0,
+"def": -30.0
+},
+"WorldTree_DEF": {
+"def": 50.0,
+"atk": 0
+},
+"WorldTree_FullStomach": {
+"hp": -20.0
+},
+"WorldTree_ATK_DEF": {
+"atk": 40.0,
+"def": 20.0,
+"hp": -50.0
+},
+"MiniNushi": {
+"def": 5.0
+},
+"Deffence_up2_2": {
+"def": 20.0
+},
+"SelfAttackUp_Ride_1": {
+"atk": 15.0
+},
+"SelfAttackUp_Ride_2": {
+"atk": 17.0
+},
+"SelfAttackUp_Ride_3": {
+"atk": 20.0
+},
+"SelfAttackUp_Ride_4": {
+"atk": 24.0
+},
+"SelfAttackUp_Ride_5": {
+"atk": 30.0
+},
+"DefenseUp_Leaf_PartnerSkill_1": {
+"def": 15.0
+},
+"DefenseUp_Leaf_PartnerSkill_2": {
+"def": 17.0
+},
+"DefenseUp_Leaf_PartnerSkill_3": {
+"def": 20.0
+},
+"DefenseUp_Leaf_PartnerSkill_4": {
+"def": 24.0
+},
+"DefenseUp_Leaf_PartnerSkill_5": {
+"def": 30.0
+},
+"DefenseUp_Fire_PartnerSkill_1": {
+"def": 15.0
+},
+"DefenseUp_Fire_PartnerSkill_2": {
+"def": 17.0
+},
+"DefenseUp_Fire_PartnerSkill_3": {
+"def": 20.0
+},
+"DefenseUp_Fire_PartnerSkill_4": {
+"def": 24.0
+},
+"DefenseUp_Fire_PartnerSkill_5": {
+"def": 30.0
+},
+"DefenseUp_Ice_PartnerSkill_1": {
+"def": 15.0
+},
+"DefenseUp_Ice_PartnerSkill_2": {
+"def": 17.0
+},
+"DefenseUp_Ice_PartnerSkill_3": {
+"def": 20.0
+},
+"DefenseUp_Ice_PartnerSkill_4": {
+"def": 24.0
+},
+"DefenseUp_Ice_PartnerSkill_5": {
+"def": 30.0
+},
+"DefenseUp_Dark_PartnerSkill_1": {
+"def": 15.0
+},
+"DefenseUp_Dark_PartnerSkill_2": {
+"def": 17.0
+},
+"DefenseUp_Dark_PartnerSkill_3": {
+"def": 20.0
+},
+"DefenseUp_Dark_PartnerSkill_4": {
+"def": 24.0
+},
+"DefenseUp_Dark_PartnerSkill_5": {
+"def": 30.0
+},
+"DefenseUp_Water_PartnerSkill_1": {
+"def": 15.0
+},
+"DefenseUp_Water_PartnerSkill_2": {
+"def": 17.0
+},
+"DefenseUp_Water_PartnerSkill_3": {
+"def": 20.0
+},
+"DefenseUp_Water_PartnerSkill_4": {
+"def": 24.0
+},
+"DefenseUp_Water_PartnerSkill_5": {
+"def": 30.0
+},
+"DefenseUp_Dragon_PartnerSkill_1": {
+"def": 15.0
+},
+"DefenseUp_Dragon_PartnerSkill_2": {
+"def": 17.0
+},
+"DefenseUp_Dragon_PartnerSkill_3": {
+"def": 20.0
+},
+"DefenseUp_Dragon_PartnerSkill_4": {
+"def": 24.0
+},
+"DefenseUp_Dragon_PartnerSkill_5": {
+"def": 30.0
+},
+"DefenseUp_Electricity_PartnerSkill_1": {
+"def": 15.0
+},
+"DefenseUp_Electricity_PartnerSkill_2": {
+"def": 17.0
+},
+"DefenseUp_Electricity_PartnerSkill_3": {
+"def": 20.0
+},
+"DefenseUp_Electricity_PartnerSkill_4": {
+"def": 24.0
+},
+"DefenseUp_Electricity_PartnerSkill_5": {
+"def": 30.0
+},
+"DefenseUp_Leaf_PartnerSkill_MushroomLady_1": {
+"def": 20.0
+},
+"DefenseUp_Leaf_PartnerSkill_MushroomLady_2": {
+"def": 23.0
+},
+"DefenseUp_Leaf_PartnerSkill_MushroomLady_3": {
+"def": 27.0
+},
+"DefenseUp_Leaf_PartnerSkill_MushroomLady_4": {
+"def": 32.0
+},
+"DefenseUp_Leaf_PartnerSkill_MushroomLady_5": {
+"def": 40.0
+},
+"DefenseUp_Normal_PartnerSkill_1": {
+"def": 15.0
+},
+"DefenseUp_Normal_PartnerSkill_2": {
+"def": 17.0
+},
+"DefenseUp_Normal_PartnerSkill_3": {
+"def": 20.0
+},
+"DefenseUp_Normal_PartnerSkill_4": {
+"def": 24.0
+},
+"DefenseUp_Normal_PartnerSkill_5": {
+"def": 30.0
+},
+"ShotAttack_PartnerSkill_NightFox_1": {
+"atk": 20.0
+},
+"ShotAttack_PartnerSkill_NightFox_2": {
+"atk": 25.0
+},
+"ShotAttack_PartnerSkill_NightFox_3": {
+"atk": 30.0
+},
+"ShotAttack_PartnerSkill_NightFox_4": {
+"atk": 35.0
+},
+"ShotAttack_PartnerSkill_NightFox_5": {
+"atk": 40.0
+},
+"ShotAttack_PartnerSkill_Coop_1": {
+"atk": 30.0
+},
+"ShotAttack_PartnerSkill_Coop_2": {
+"atk": 35.0
+},
+"ShotAttack_PartnerSkill_Coop_3": {
+"atk": 40.0
+},
+"ShotAttack_PartnerSkill_Coop_4": {
+"atk": 45.0
+},
+"ShotAttack_PartnerSkill_Coop_5": {
+"atk": 50.0
+},
+"Defense_KingAlpaca_PartnerSkill_1": {
+"def": 5.0
+},
+"Defense_KingAlpaca_PartnerSkill_2": {
+"def": 7.0
+},
+"Defense_KingAlpaca_PartnerSkill_3": {
+"def": 9.0
+},
+"Defense_KingAlpaca_PartnerSkill_4": {
+"def": 11.0
+},
+"Defense_KingAlpaca_PartnerSkill_5": {
+"def": 14.0
+},
+"Defense_PartnerSkill_BlackMetalDragon_1": {
+"def": 15.0
+},
+"Defense_PartnerSkill_BlackMetalDragon_2": {
+"def": 17.0
+},
+"Defense_PartnerSkill_BlackMetalDragon_3": {
+"def": 20.0
+},
+"Defense_PartnerSkill_BlackMetalDragon_4": {
+"def": 24.0
+},
+"Defense_PartnerSkill_BlackMetalDragon_5": {
+"def": 30.0
+},
+"ShotAttack_PartnerSkill_CaptainPenguin_1": {
+"atk": 5.0
+},
+"ShotAttack_PartnerSkill_CaptainPenguin_2": {
+"atk": 6.0
+},
+"ShotAttack_PartnerSkill_CaptainPenguin_3": {
+"atk": 7.0
+},
+"ShotAttack_PartnerSkill_CaptainPenguin_4": {
+"atk": 8.0
+},
+"ShotAttack_PartnerSkill_CaptainPenguin_5": {
+"atk": 10.0
+},
+"ShotAttack_PartnerSkill_CaptainPenguin_Black_1": {
+"atk": 5.0
+},
+"ShotAttack_PartnerSkill_CaptainPenguin_Black_2": {
+"atk": 6.0
+},
+"ShotAttack_PartnerSkill_CaptainPenguin_Black_3": {
+"atk": 7.0
+},
+"ShotAttack_PartnerSkill_CaptainPenguin_Black_4": {
+"atk": 8.0
+},
+"ShotAttack_PartnerSkill_CaptainPenguin_Black_5": {
+"atk": 10.0
+},
+"Defense_ShotAttack_MopKing_PartnerSkill_1": {
+"atk": 12.0,
+"def": 12.0
+},
+"Defense_ShotAttack_MopKing_PartnerSkill_2": {
+"atk": 13.0,
+"def": 13.0
+},
+"Defense_ShotAttack_MopKing_PartnerSkill_3": {
+"atk": 15.0,
+"def": 15.0
+},
+"Defense_ShotAttack_MopKing_PartnerSkill_4": {
+"atk": 19.0,
+"def": 19.0
+},
+"Defense_ShotAttack_MopKing_PartnerSkill_5": {
+"atk": 24.0,
+"def": 24.0
+},
+"TrainerATK_UP_PartnerSkill_KendoFrog_1": {
+"atk": 50.0
+},
+"TrainerATK_UP_PartnerSkill_KendoFrog_2": {
+"atk": 56.0
+},
+"TrainerATK_UP_PartnerSkill_KendoFrog_3": {
+"atk": 64.0
+},
+"TrainerATK_UP_PartnerSkill_KendoFrog_4": {
+"atk": 74.0
+},
+"TrainerATK_UP_PartnerSkill_KendoFrog_5": {
+"atk": 86.0
+},
+"GrassMinotaur_PartnerSkill_1": {
+"atk": 10.0,
+"def": 10.0
+},
+"GrassMinotaur_PartnerSkill_2": {
+"atk": 12.0
+},
+"GrassMinotaur_PartnerSkill_3": {
+"atk": 14.0
+},
+"GrassMinotaur_PartnerSkill_4": {
+"atk": 16.0
+},
+"GrassMinotaur_PartnerSkill_5": {
+"atk": 20.0
+},
+"GhostDragon_Fire_PartnerSkill_1": {
+"atk": 15.0,
+"def": 15.0
+},
+"GhostDragon_Fire_PartnerSkill_2": {
+"atk": 17.0,
+"def": 17.0
+},
+"GhostDragon_Fire_PartnerSkill_3": {
+"atk": 19.0,
+"def": 19.0
+},
+"GhostDragon_Fire_PartnerSkill_4": {
+"atk": 21.0,
+"def": 21.0
+},
+"GhostDragon_Fire_PartnerSkill_5": {
+"atk": 25.0,
+"def": 25.0
+},
+"ActiveOtomoATK_UP_LifeDrain_PartnerSkill_1": {
+"atk": 40.0
+},
+"ActiveOtomoATK_UP_LifeDrain_PartnerSkill_2": {
+"atk": 50.0
+},
+"ActiveOtomoATK_UP_LifeDrain_PartnerSkill_3": {
+"atk": 60.0
+},
+"ActiveOtomoATK_UP_LifeDrain_PartnerSkill_4": {
+"atk": 70.0
+},
+"ActiveOtomoATK_UP_LifeDrain_PartnerSkill_5": {
+"atk": 80.0
+},
+"MutationPal_Immortal": {
+"atk": 15.0
+},
+"AttackUp_Leaf_PartnerSkill_1": {
+"atk": 15.0
+},
+"AttackUp_Leaf_PartnerSkill_2": {
+"atk": 17.0
+},
+"AttackUp_Leaf_PartnerSkill_3": {
+"atk": 20.0
+},
+"AttackUp_Leaf_PartnerSkill_4": {
+"atk": 24.0
+},
+"AttackUp_Leaf_PartnerSkill_5": {
+"atk": 30.0
+},
+"AttackUp_Fire_PartnerSkill_1": {
+"atk": 15.0
+},
+"AttackUp_Fire_PartnerSkill_2": {
+"atk": 17.0
+},
+"AttackUp_Fire_PartnerSkill_3": {
+"atk": 20.0
+},
+"AttackUp_Fire_PartnerSkill_4": {
+"atk": 24.0
+},
+"AttackUp_Fire_PartnerSkill_5": {
+"atk": 30.0
+},
+"AttackUp_Ice_PartnerSkill_1": {
+"atk": 15.0
+},
+"AttackUp_Ice_PartnerSkill_2": {
+"atk": 17.0
+},
+"AttackUp_Ice_PartnerSkill_3": {
+"atk": 20.0
+},
+"AttackUp_Ice_PartnerSkill_4": {
+"atk": 24.0
+},
+"AttackUp_Ice_PartnerSkill_5": {
+"atk": 30.0
+},
+"AttackUp_Dark_PartnerSkill_1": {
+"atk": 15.0
+},
+"AttackUp_Dark_PartnerSkill_2": {
+"atk": 17.0
+},
+"AttackUp_Dark_PartnerSkill_3": {
+"atk": 20.0
+},
+"AttackUp_Dark_PartnerSkill_4": {
+"atk": 24.0
+},
+"AttackUp_Dark_PartnerSkill_5": {
+"atk": 30.0
+},
+"AttackUp_Water_PartnerSkill_1": {
+"atk": 15.0
+},
+"AttackUp_Water_PartnerSkill_2": {
+"atk": 17.0
+},
+"AttackUp_Water_PartnerSkill_3": {
+"atk": 20.0
+},
+"AttackUp_Water_PartnerSkill_4": {
+"atk": 24.0
+},
+"AttackUp_Water_PartnerSkill_5": {
+"atk": 30.0
+},
+"AttackUp_Dragon_PartnerSkill_1": {
+"atk": 15.0
+},
+"AttackUp_Dragon_PartnerSkill_2": {
+"atk": 17.0
+},
+"AttackUp_Dragon_PartnerSkill_3": {
+"atk": 20.0
+},
+"AttackUp_Dragon_PartnerSkill_4": {
+"atk": 24.0
+},
+"AttackUp_Dragon_PartnerSkill_5": {
+"atk": 30.0
+},
+"AttackUp_Electricity_PartnerSkill_1": {
+"atk": 15.0
+},
+"AttackUp_Electricity_PartnerSkill_2": {
+"atk": 17.0
+},
+"AttackUp_Electricity_PartnerSkill_3": {
+"atk": 20.0
+},
+"AttackUp_Electricity_PartnerSkill_4": {
+"atk": 24.0
+},
+"AttackUp_Electricity_PartnerSkill_5": {
+"atk": 30.0
+},
+"AttackUp_Normal_PartnerSkill_1": {
+"atk": 15.0
+},
+"AttackUp_Normal_PartnerSkill_2": {
+"atk": 17.0
+},
+"AttackUp_Normal_PartnerSkill_3": {
+"atk": 20.0
+},
+"AttackUp_Normal_PartnerSkill_4": {
+"atk": 24.0
+},
+"AttackUp_Normal_PartnerSkill_5": {
+"atk": 30.0
+},
+"AttackUp_Earth_PartnerSkill_1": {
+"atk": 15.0
+},
+"AttackUp_Earth_PartnerSkill_2": {
+"atk": 17.0
+},
+"AttackUp_Earth_PartnerSkill_3": {
+"atk": 20.0
+},
+"AttackUp_Earth_PartnerSkill_4": {
+"atk": 24.0
+},
+"AttackUp_Earth_PartnerSkill_5": {
+"atk": 30.0
+},
+"ShotAttack_PartnerSkill_SpecificElement_1": {
+"atk": 4.0
+},
+"ShotAttack_PartnerSkill_SpecificElement_2": {
+"atk": 5.0
+},
+"ShotAttack_PartnerSkill_SpecificElement_3": {
+"atk": 6.0
+},
+"ShotAttack_PartnerSkill_SpecificElement_4": {
+"atk": 7.0
+},
+"ShotAttack_PartnerSkill_SpecificElement_5": {
+"atk": 8.0
+},
+"ShotAttack_Defence_PartnerSkill_SpecificElement_1": {
+"atk": 2.0,
+"def": 2.0
+},
+"ShotAttack_Defence_PartnerSkill_SpecificElement_2": {
+"atk": 3.0,
+"def": 3.0
+},
+"ShotAttack_Defence_PartnerSkill_SpecificElement_3": {
+"atk": 4.0,
+"def": 4.0
+},
+"ShotAttack_Defence_PartnerSkill_SpecificElement_4": {
+"atk": 5.0,
+"def": 5.0
+},
+"ShotAttack_Defence_PartnerSkill_SpecificElement_5": {
+"atk": 6.0,
+"def": 6.0
+},
+"ShotAttack_MoveSpeed_PartnerSkill_SpecificElement_1": {
+"atk": 2.0
+},
+"ShotAttack_MoveSpeed_PartnerSkill_SpecificElement_2": {
+"atk": 3.0
+},
+"ShotAttack_MoveSpeed_PartnerSkill_SpecificElement_3": {
+"atk": 4.0
+},
+"ShotAttack_MoveSpeed_PartnerSkill_SpecificElement_4": {
+"atk": 5.0
+},
+"ShotAttack_MoveSpeed_PartnerSkill_SpecificElement_5": {
+"atk": 6.0
+},
+"DashDefence_PartnerSkill_BrownRabbit_1": {
+"def": 50.0
+},
+"DashDefence_PartnerSkill_BrownRabbit_2": {
+"def": 52.0
+},
+"DashDefence_PartnerSkill_BrownRabbit_3": {
+"def": 55.0
+},
+"DashDefence_PartnerSkill_BrownRabbit_4": {
+"def": 59.0
+},
+"DashDefence_PartnerSkill_BrownRabbit_5": {
+"def": 65.0
+}
+}

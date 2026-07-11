@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.7.1",
+    "1.7.2",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -308,6 +308,13 @@ class PalworldPlugin(Star):
                 self._passives = json.loads(_f.read())
         except Exception as e:  # noqa: BLE001
             logger.warning(f"{LOG_PREFIX} 词条数据 data/passives.json 加载失败: {e}")
+        # 被动技能的基础属性加成(HP/攻/防 %)，用于按游戏公式算准确当前属性
+        self._passive_stat: dict = {}
+        try:
+            with open(os.path.join(base, "passive_stats.json"), encoding="utf-8") as _f:
+                self._passive_stat = json.loads(_f.read())
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"{LOG_PREFIX} 被动加成 data/passive_stats.json 加载失败: {e}")
         # 植入体(1.0) list + 名字/词条名索引（/帕鲁植入体）
         self._implants: list = []
         self._implant_by_name: dict = {}
@@ -2798,38 +2805,50 @@ class PalworldPlugin(Star):
 
     @staticmethod
     def _combat_stats(bhp: int, batk: int, bdef: int, level: int,
-                      iv_hp: int = 0, iv_atk: int = 0, iv_def: int = 0, rank: int = 1):
-        """按游戏公式算当前属性(HP/攻击/防御)。公式经存档 568 只帕鲁实测验证
-        (HP rank1 精确命中 85%，余下偏差来自灵魂强化/被动/受伤)：
-          HP  = 500 + 5×Lv + 种族HP  × 0.5   × Lv × (1 + 0.3×天赋HP/100)
-          攻击 = 100        + 种族攻击 × 0.075 × Lv × (1 + 0.3×天赋攻/100)
-          防御 = 50         + 种族防御 × 0.075 × Lv × (1 + 0.3×天赋防/100)
-        浓缩(Rank)每级约 +5%。灵魂强化/被动技能加成另计。"""
-        hp = int(500 + 5 * level + bhp * 0.5 * level * (1 + 0.3 * iv_hp / 100))
-        atk = int(100 + 0.075 * batk * level * (1 + 0.3 * iv_atk / 100))
-        dfn = int(50 + 0.075 * bdef * level * (1 + 0.3 * iv_def / 100))
+                      iv_hp: int = 0, iv_atk: int = 0, iv_def: int = 0, rank: int = 1,
+                      alpha: bool = False, bonus_hp: float = 0.0,
+                      bonus_atk: float = 0.0, bonus_def: float = 0.0):
+        """按游戏公式算当前属性(HP/攻击/防御)。经存档 + 游戏面板实测验证(炽焰牛/云海鹿精确命中)：
+          头目(Alpha)帕鲁 HP 种族值 ×1.2(DT 的 BOSS_ 条目确认)；
+          HP  = (500 + 5×Lv + 种族HP  × 0.5   × Lv × (1 + 0.3×天赋HP/100)) × (1+被动HP%)
+          攻击 = (100        + 种族攻击 × 0.075 × Lv × (1 + 0.3×天赋攻/100)) × (1+被动攻%)
+          防御 = (50         + 种族防御 × 0.075 × Lv × (1 + 0.3×天赋防/100)) × (1+被动防%)
+        被动如 Rare 攻/防 +15%、Deffence +20%；浓缩(Rank)每级约 +5%。"""
+        if alpha:
+            bhp = round(bhp * 1.2)
+        hp = int((500 + 5 * level + bhp * 0.5 * level * (1 + 0.3 * iv_hp / 100)) * (1 + bonus_hp / 100))
+        atk = int((100 + 0.075 * batk * level * (1 + 0.3 * iv_atk / 100)) * (1 + bonus_atk / 100))
+        dfn = int((50 + 0.075 * bdef * level * (1 + 0.3 * iv_def / 100)) * (1 + bonus_def / 100))
         if rank > 1:
             m = 1 + (rank - 1) * 0.05
             hp, atk, dfn = int(hp * m), int(atk * m), int(dfn * m)
         return hp, atk, dfn
 
+    def _passive_bonus(self, passives) -> dict:
+        """一组被动技能的基础属性加成合计 {hp%, atk%, def%}(存档 id 带 rank 后缀时去尾匹配)。"""
+        tot = {"hp": 0.0, "atk": 0.0, "def": 0.0}
+        ps = self._passive_stat or {}
+        for pid in (passives or []):
+            b = ps.get(pid) or ps.get(re.sub(r"_\d+$", "", str(pid))) or {}
+            for k in tot:
+                tot[k] += b.get(k, 0.0)
+        return tot
+
     def _pal_power(self, brief: dict) -> int:
-        """玩家帕鲁综合战力：按游戏公式算真实 HP/攻/防(等级+天赋+浓缩) + 被动 + 头目加成。"""
+        """玩家帕鲁综合战力：游戏公式算真实 HP/攻/防(头目HP×1.2 + 等级+天赋+浓缩 + 被动加成)。"""
         p = self._pal_by_dev.get(str(brief.get("char_id", "")).lower())
         st = (p or {}).get("stats") or {}
         bhp = int(st.get("hp", 0) or 0) or 100
         batk = max(int(st.get("melee_attack", 0) or 0), int(st.get("shot_attack", 0) or 0)) or 100
         bdef = int(st.get("defense", 0) or 0) or 50
+        pb = self._passive_bonus(brief.get("passives", []))
         hp, atk, dfn = self._combat_stats(
             bhp, batk, bdef, int(brief.get("level", 1) or 1),
             int(brief.get("iv_hp", 0) or 0), int(brief.get("iv_atk", 0) or 0),
-            int(brief.get("iv_def", 0) or 0), int(brief.get("rank", 1) or 1))
-        pb = 0.0
-        for pid in brief.get("passives", []):
-            sign = self._passive_view(pid).get("sign", 0)
-            pb += 0.05 if sign > 0 else (-0.05 if sign < 0 else 0)
-        alpha = 1.2 if brief.get("is_alpha") else 1.0
-        return int((hp * 0.5 + atk + dfn) * (1 + pb) * alpha)
+            int(brief.get("iv_def", 0) or 0), int(brief.get("rank", 1) or 1),
+            bool(brief.get("is_alpha")), pb["hp"], pb["atk"], pb["def"])
+        hp = max(int(brief.get("hp", 0) or 0), hp)   # 生命值优先用存档真实值(满血含灵魂/状态点)
+        return int(hp * 0.5 + atk + dfn)
 
     # 无主(据点公会共享)帕鲁在存档里被复制进每个成员档案，跨玩家聚合时需按 iid 去重，
     # 归到统一的"据点共享"名下只计一次，避免同一只被计 N 次 / 挂 N 个主人。
@@ -3515,14 +3534,17 @@ class PalworldPlugin(Star):
         partner = {"title": p.get("partner_skill_title", "") if p else "",
                    "desc": ((p.get("partner_skill_description") or
                              ("该伙伴技能游戏内暂未提供中文详细说明" if p.get("partner_skill_title") else "")) if p else "")}
-        # 当前真实攻/防：按游戏公式(等级+天赋+浓缩)算，与存档真实生命值同为"当前属性"，
-        # 而非裸种族值(种族值几十、真实值几百，混显会误导)。HP 直接用存档真实值(含灵魂/被动)。
+        # 当前真实 HP/攻/防：游戏公式(头目HP种族×1.2 + 等级+天赋+浓缩) × 被动加成，经实测校准。
         _batk = max(int(stats.get("shot_attack") or 0), int(stats.get("melee_attack") or 0)) or 100
-        _, _cur_atk, _cur_def = self._combat_stats(
+        _pb = self._passive_bonus(pal.get("passives", []))
+        _hp_f, _cur_atk, _cur_def = self._combat_stats(
             int(stats.get("hp") or 0) or 100, _batk, int(stats.get("defense") or 0) or 50,
             int(pal.get("level", 1) or 1), int(pal.get("iv_hp", 0) or 0),
             int(pal.get("iv_atk", 0) or 0), int(pal.get("iv_def", 0) or 0),
-            int(pal.get("rank", 1) or 1))
+            int(pal.get("rank", 1) or 1), bool(pal.get("is_alpha")),
+            _pb["hp"], _pb["atk"], _pb["def"])
+        # 生命值：满血含灵魂/状态点时存档更准、受伤时公式 MaxHP 更准 → 取较大者
+        _hp_display = max(int(pal.get("hp", 0) or 0), _hp_f)
         return {
             "name": p["pal_name"] if p else pal.get("char_id", "未知帕鲁"),
             "index": str(p.get("pal_index", "")) if p else "",
@@ -3530,7 +3552,7 @@ class PalworldPlugin(Star):
             "elements": p.get("elements", []) if p else [],
             "level": pal.get("level", 1), "gender": self._gender_cn(pal.get("gender", "")),
             "alpha": bool(pal.get("is_alpha")), "lucky": bool(pal.get("lucky")),
-            "nickname": _esc(pal.get("nickname", "")), "hp": pal.get("hp", 0),
+            "nickname": _esc(pal.get("nickname", "")), "hp": _hp_display,
             "health": self._health_view(pal.get("health", "")),
             "condense": condense, "rarity": rarity, "rtier": self._rarity_tier(rarity),
             "iv_hp": pal.get("iv_hp", 0), "iv_atk": pal.get("iv_atk", 0), "iv_def": pal.get("iv_def", 0),
