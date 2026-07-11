@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.5.6",
+    "1.5.7",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2191,14 +2191,19 @@ class PalworldPlugin(Star):
         if not catch:
             return await self._msg_card(event, "🎣", "钓鱼数据未加载",
                                         desc="data/fishing.json 缺失或损坏。", color="#E5484D")
+        fpals = (self._fishing or {}).get("fish_pals") or []
         rows = [{"name": c["name"], "sub": (f"×{c['qty']}" if c.get("qty") and c["qty"] != "1" else ""),
                  "right": c.get("rate", "")} for c in catch]
+        rows += [{"name": f["name"], "sub": f.get("size", ""), "right": "🐟可钓"} for f in fpals]
+        badges = [f"{len(catch)} 种钓获物"]
+        if fpals:
+            badges.append(f"{len(fpals)} 种可钓帕鲁")
         return await self._img(event, self._t("merchant"),
                                {"emoji": "🎣", "title": "🎣 钓鱼可获得",
-                                "badges": [f"{len(catch)} 种钓获物", "水边钓点"],
-                                "note": "在水边用钓竿钓鱼，有概率钓上以下物品（概率为单次大致值）：",
+                                "badges": badges,
+                                "note": "在水边用钓竿钓鱼，有概率钓上以下物品，也能钓到水系帕鲁（标🐟）：",
                                 "rows": rows,
-                                "foot": "钓点遍布各水域；稀有设计图/钥匙/帕鲁之魂都能钓到，刷概率多试几次。"})
+                                "foot": "钓点遍布各水域；稀有设计图/钥匙/帕鲁之魂、以及各种水系帕鲁都能钓到。"})
 
     # ------------------------------------------------------------------
     # 工作适性排行（/帕鲁工作 <工种>）

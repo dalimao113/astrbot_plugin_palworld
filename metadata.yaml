@@ -1,7 +1,7 @@
 name: astrbot_plugin_palworld
 display_name: 帕鲁服务器管家
 desc: 帕鲁(Palworld)服务器查询与管理插件，群友查状态/在线/设置，管理员可公告/踢/封/解封/存档/关服，所有回复输出精美卡片图片。
-version: "1.5.6"
+version: "1.5.7"
 author: dalimao113
 repo: https://github.com/dalimao113/astrbot_plugin_palworld
 astrbot_version: ">=4.25,<5"
