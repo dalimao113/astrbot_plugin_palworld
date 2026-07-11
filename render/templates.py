@@ -236,6 +236,7 @@ HELP_TMPL = _HEAD + """
     <div class="cmd"><div class="c"><b>/帕鲁技能</b> 名/属性</div><div class="d">主动技能威力/冷却/效果</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁技能果实</b> [属性/名]</div><div class="d">🆕 92种果实图鉴·带图标·教什么技能</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁植入体</b> [名/页]</div><div class="d">🆕 68种改造词条·编号查:/帕鲁植入体查询 N</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁世界树</b></div><div class="d">🆕 1.0最终boss专题:暮尘蛾&夜蔓爵</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁钓鱼</b></div><div class="d">钓鱼能钓到什么 + 概率</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁工作</b> 工种</div><div class="d">某工种(采矿/搬运…)最强帕鲁排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁坐骑</b></div><div class="d">可骑乘帕鲁按奔跑速度排行</div></div>
@@ -767,6 +768,7 @@ HELP_PIX = _PH + """
     <div class="cmd"><div class="c"><b>/帕鲁技能</b> 名/属性</div><div class="d">技能威力/冷却/效果</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁技能果实</b> [属性/名]</div><div class="d">🆕 92种果实图鉴/带图标</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁植入体</b> [名/页]</div><div class="d">🆕 68种·编号查/帕鲁植入体查询 N</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁世界树</b></div><div class="d">🆕 1.0最终boss:暮尘蛾&夜蔓爵</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁钓鱼</b></div><div class="d">钓鱼可获得物+概率</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁工作</b> 工种</div><div class="d">工种最强帕鲁排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁坐骑</b></div><div class="d">坐骑奔跑速度榜</div></div>
@@ -2307,6 +2309,31 @@ IMPLANT_TMPL = _HEAD + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+# ---------------- 世界树最终boss专题(1.0) ----------------
+WORLDTREE_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">🌳 世界树守护者</div>
+    <div class="subtitle"><span class="pill" style="background:rgba(124,252,154,.2);border-color:rgba(124,252,154,.45)">1.0 最终 Boss</span><span class="pill soft">世界树·封印之室</span></div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    <div style="font-size:13.5px;color:#cfc1ea;line-height:1.75;margin-bottom:6px">自古伫立于「世界树」旁的两位守护者，镇守着最深处封印之室。击败它们方能解除屏障、抵达世界树的真相。</div>
+    {% for b in bosses %}
+    <div style="display:flex;gap:14px;padding:13px;margin-top:11px;border-radius:15px;background:rgba(12,8,38,.5);border:1px solid rgba(200,140,255,.28)">
+      {% if b.icon %}<img src="{{ b.icon }}" style="width:88px;height:88px;flex:none;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))">{% else %}<div style="flex:none;font-size:60px">🌳</div>{% endif %}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:19px;font-weight:800;color:#e8c466">{{ b.name }} <span style="font-size:13px;color:#9c8fc0;font-weight:400">#{{ b.index }}</span></div>
+        <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="pill soft" style="font-size:12px">{{ e }}</span>{% endfor %}<span class="pill soft" style="font-size:12px">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="pill soft" style="font-size:12px">HP {{ b.hp }}</span>{% endif %}</div>
+        {% if b.partner %}<div style="font-size:12.5px;color:#bff7cc;margin-top:2px">🛡 伙伴技能：{{ b.partner }}</div>{% endif %}
+        <div style="font-size:12px;color:#cfc1ea;margin-top:4px;line-height:1.6"><b style="color:#9c8fc0">技能</b> {{ b.skills|join('、') }}</div>
+        <div style="font-size:12px;color:#e8c466;margin-top:3px"><b style="color:#9c8fc0">掉落</b> {{ b.drops|join('、') }}</div>
+      </div>
+    </div>{% endfor %}
+    <div style="margin-top:13px;font-size:13px;color:#9c8fc0">发 <b style="color:#e8c466">/帕鲁图鉴 {{ bosses[0].name }}</b> 看完整属性/工作适性/伙伴技能详情。</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+
 # ---------------- 网格列表(模糊搜索/全表浏览，分页) ----------------
 GRID_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div>
@@ -3165,7 +3192,7 @@ STYLES = {
                 "basecamp": BASECAMP_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "mission": MISSION_TMPL, "missionlist": MISSIONLIST_TMPL, "boss": BOSS_TMPL,
-                "merchant": MERCHANT_TMPL, "skill": SKILL_TMPL, "skillfruit": SKILLFRUIT_TMPL, "implant": IMPLANT_TMPL, "compare": COMPARE_TMPL,
+                "merchant": MERCHANT_TMPL, "skill": SKILL_TMPL, "skillfruit": SKILLFRUIT_TMPL, "implant": IMPLANT_TMPL, "worldtree": WORLDTREE_TMPL, "compare": COMPARE_TMPL,
                 "hatch": HATCH_TMPL, "inherit": INHERIT_TMPL,
                 "arena": ARENA_TMPL, "arena_tier": ARENA_TIER_TMPL},
     "pixel": {"status": STATUS_PIX, "players": PLAYERS_PIX, "settings": SETTINGS_PIX,
