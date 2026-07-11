@@ -471,7 +471,7 @@ PALDEX_TMPL = _HEAD + """
   <div class="head"><div style="display:flex;align-items:center;gap:15px;width:100%">
     {% if icon %}<div style="flex:none;width:108px;height:108px;border-radius:20px;background:radial-gradient(circle at 50% 38%,rgba(232,198,106,.30),rgba(18,12,48,.55) 72%);border:2px solid rgba(232,198,106,.62);box-shadow:0 3px 15px rgba(0,0,0,.5),inset 0 0 18px rgba(232,198,106,.18);display:flex;align-items:center;justify-content:center"><img src="{{ icon }}" style="width:92px;height:92px;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(0,0,0,.6))"></div>{% else %}<div style="flex:none;font-size:72px">📕</div>{% endif %}
     <div style="flex:1;min-width:0">
-      <div class="title">{{ name }}</div>
+      <div class="title">{{ name }}{% if is_tower_boss %} <span style="font-size:15px;vertical-align:middle;background:linear-gradient(135deg,#c0392b,#8e2318);color:#fff;padding:3px 11px;border-radius:9px;font-weight:800;box-shadow:0 2px 7px rgba(192,57,43,.55)">🗼 塔主</span>{% elif is_boss %} <span style="font-size:15px;vertical-align:middle;background:linear-gradient(135deg,#d68910,#a86008);color:#fff;padding:3px 11px;border-radius:9px;font-weight:800;box-shadow:0 2px 7px rgba(214,137,16,.5)">👑 头目</span>{% endif %}</div>
       <div class="subtitle">
         <span class="pill soft">图鉴 #{{ index }}</span>
         {% for e in elements %}<span class="pill soft">{{ e }}</span>{% endfor %}
@@ -1449,7 +1449,7 @@ PALDEX_PIX = _PH + """
     {% if icon %}<div style="flex:none;width:104px;height:104px;background:rgba(214,184,124,.3);border:3px solid #6b4a24;box-shadow:inset 0 0 0 2px rgba(255,247,224,.5);display:flex;align-items:center;justify-content:center"><img src="{{ icon }}" style="width:86px;height:86px;object-fit:contain;image-rendering:pixelated"></div>{% else %}<div style="flex:none;font-size:64px">▥</div>{% endif %}
     <div style="flex:1;min-width:0">
       <div class="title">{{ name }}</div>
-      <div class="subtitle"><span class="pill">#{{ index }}</span>{% for e in elements %}<span class="pill">{{ e }}</span>{% endfor %}<span class="pill">{{ "★"*(rarity if rarity <= 5 else 5) if rarity else "★" }}</span>{% if nocturnal %}<span class="pill">夜行</span>{% endif %}</div>
+      <div class="subtitle">{% if is_tower_boss %}<span class="pill" style="background:#c0392b;color:#fff">🗼塔主</span>{% elif is_boss %}<span class="pill" style="background:#d68910;color:#fff">👑头目</span>{% endif %}<span class="pill">#{{ index }}</span>{% for e in elements %}<span class="pill">{{ e }}</span>{% endfor %}<span class="pill">{{ "★"*(rarity if rarity <= 5 else 5) if rarity else "★" }}</span>{% if nocturnal %}<span class="pill">夜行</span>{% endif %}</div>
     </div>
   </div></div>
   <div class="frame">
@@ -1832,7 +1832,7 @@ PALPOWER_TMPL = _HEAD + """</style></head><body><div class="page">
       <div style="width:30px;flex-shrink:0;text-align:center;font-size:17px;font-weight:900;color:#e8c466">{{ r.medal }}</div>
       {% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;flex-shrink:0">{% else %}<span style="font-size:24px">🐾</span>{% endif %}
       <div style="flex:1;min-width:0">
-        <div style="font-size:15px;font-weight:700;color:#f3ecd2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</div>
+        <div style="font-size:15px;font-weight:700;color:#f3ecd2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.boss=='tower' %} <span style="font-size:10.5px;background:#c0392b;color:#fff;padding:1px 6px;border-radius:5px;font-weight:800">🗼塔主</span>{% elif r.boss=='boss' %} <span style="font-size:10.5px;background:#d68910;color:#fff;padding:1px 6px;border-radius:5px;font-weight:800">👑头目</span>{% endif %}</div>
         <div style="font-size:12px;color:#9c8fc0">{{ r.element }} · 稀有度 {{ r.rarity }}</div>
       </div>
       <div style="flex-shrink:0;text-align:right;min-width:62px">
@@ -2437,6 +2437,7 @@ GRID_TMPL = _HEAD + """</style></head><body><div class="page">
       {% for c in cells %}
       <div style="position:relative;display:flex;flex-direction:column;align-items:center;padding:11px 3px 8px;border-radius:13px;background:rgba(12,8,38,.42);border:1px solid rgba(232,198,106,.16)">
         <div style="position:absolute;top:4px;left:4px;font-size:10px;font-weight:800;color:#0d0820;background:linear-gradient(135deg,#f3d98a,#e8c66a);border-radius:6px;padding:1px 5px;box-shadow:0 1px 3px rgba(0,0,0,.4)">{{ c.no }}</div>
+        {% if c.boss %}<div style="position:absolute;top:3px;right:4px;font-size:13px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.85));z-index:2">{% if c.boss=='tower' %}🗼{% else %}👑{% endif %}</div>{% endif %}
         {% if c.icon %}<img src="{{ c.icon }}" style="width:60px;height:60px;object-fit:contain;filter:drop-shadow(0 2px 5px rgba(0,0,0,.5))">{% else %}<div style="width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:30px">❔</div>{% endif %}
         <div style="margin-top:6px;font-size:11.5px;color:#ece3f7;text-align:center;line-height:1.25;height:2.5em;overflow:hidden;word-break:break-all">{{ c.name }}</div>
       </div>
@@ -2458,6 +2459,7 @@ GRID_PIX = _PH + """</style></head><body><div class="page">
       {% for c in cells %}
       <div style="position:relative;display:flex;flex-direction:column;align-items:center;padding:10px 3px 7px;background:rgba(214,184,124,.22);border:2px solid #6b4a24">
         <div style="position:absolute;top:2px;left:2px;font-size:10px;font-weight:700;color:#fff7e0;background:#6b4a24;padding:0 4px">{{ c.no }}</div>
+        {% if c.boss %}<div style="position:absolute;top:2px;right:3px;font-size:12px;z-index:2">{% if c.boss=='tower' %}🗼{% else %}👑{% endif %}</div>{% endif %}
         {% if c.icon %}<img src="{{ c.icon }}" style="width:58px;height:58px;object-fit:contain;image-rendering:pixelated">{% else %}<div style="width:58px;height:58px;display:flex;align-items:center;justify-content:center;font-size:28px">▢</div>{% endif %}
         <div style="margin-top:5px;font-size:11.5px;color:#382207;text-align:center;line-height:1.25;height:2.5em;overflow:hidden;word-break:break-all">{{ c.name }}</div>
       </div>

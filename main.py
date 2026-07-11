@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.8.0",
+    "1.8.1",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -614,6 +614,7 @@ class PalworldPlugin(Star):
             "name": p["pal_name"], "index": p["pal_index"], "elements": p.get("elements", []),
             "icon": self._pal_icon(dev),
             "rarity": min(int(p.get("rarity", 0) or 0), 5), "nocturnal": bool(p.get("nocturnal")),
+            "is_boss": bool(p.get("is_boss")), "is_tower_boss": bool(p.get("is_tower_boss")),
             "desc": clean(p.get("pal_description"))[:120],
             "partner_title": p.get("partner_skill_title", ""),
             # 伙伴技能描述：游戏 1.0 未提供中文文本，缺时给诚实占位(不用工作适性瞎编，避免误导)
@@ -637,7 +638,8 @@ class PalworldPlugin(Star):
                 m = re.match(r"0*(\d+)", str(p.get("pal_index", "")))
                 return (int(m.group(1)) if m else 99999, str(p.get("pal_index", "")))
             self._ord_pals = [{"no": str(p.get("pal_index", "?")), "name": p.get("pal_name", ""),
-                               "k": "pal", "ik": p.get("pal_dev_name", "")}
+                               "k": "pal", "ik": p.get("pal_dev_name", ""),
+                               "boss": ("tower" if p.get("is_tower_boss") else ("boss" if p.get("is_boss") else ""))}
                               for p in sorted(self._pals, key=sk)]
         return self._ord_pals
 
@@ -2988,6 +2990,7 @@ class PalworldPlugin(Star):
                 "icon": self._pal_icon(p.get("pal_dev_name", "")),
                 "element": (els[0].replace("属性", "") if els else "—"),
                 "rarity": int(p.get("rarity", 0) or 0),
+                "boss": ("tower" if p.get("is_tower_boss") else ("boss" if p.get("is_boss") else "")),
                 "power": pw, "pct": int(pw / (mxp or 1) * 100),
                 "medal": ["🥇", "🥈", "🥉"][i - 1] if i <= 3 else str(i)})
         sub = f"已知帕鲁战力排行 · 第 {page}/{total_pages} 页 · 共 {len(ranked)} 只"
