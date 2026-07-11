@@ -71,6 +71,7 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("商人", "_cmd_merchant", ("商店", "merchant", "shop"), cooldown=True, pass_args=True, description="商人", category="paldex"),
     CommandSpec("哪里买", "_cmd_wheretobuy", ("哪买", "在哪买", "哪里有卖", "wheretobuy"), cooldown=True, pass_args=True, description="哪里购买物品", category="paldex"),
     CommandSpec("技能果实", "_cmd_skillfruit", ("果实图鉴", "skillfruit"), cooldown=True, pass_args=True, description="技能果实图鉴(1.0)", category="paldex"),
+    CommandSpec("植入体查询", "_cmd_implant_num", ("植入体编号",), cooldown=True, pass_args=True, description="按编号查植入体(1.0)", category="paldex"),
     CommandSpec("植入体", "_cmd_implant", ("改造", "implant"), cooldown=True, pass_args=True, description="植入体图鉴(1.0)", category="paldex"),
     CommandSpec("技能", "_cmd_skill", ("主动技能", "skill"), cooldown=True, pass_args=True, description="主动技能", category="paldex"),
     CommandSpec("钓鱼", "_cmd_fishing", ("fishing", "钓"), cooldown=True, pass_args=True, description="钓鱼", category="paldex"),

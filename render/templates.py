@@ -235,7 +235,7 @@ HELP_TMPL = _HEAD + """
     <div class="cmd"><div class="c"><b>/帕鲁哪里买</b> 物品</div><div class="d">某物品在哪个商店买、多少钱</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁技能</b> 名/属性</div><div class="d">主动技能威力/冷却/效果</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁技能果实</b> [属性/名]</div><div class="d">🆕 92种果实图鉴·带图标·教什么技能</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁植入体</b> [名]</div><div class="d">🆕 68种植入体·改造帕鲁词条·效果/用法</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁植入体</b> [名/页]</div><div class="d">🆕 68种改造词条·编号查:/帕鲁植入体查询 N</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁钓鱼</b></div><div class="d">钓鱼能钓到什么 + 概率</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁工作</b> 工种</div><div class="d">某工种(采矿/搬运…)最强帕鲁排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁坐骑</b></div><div class="d">可骑乘帕鲁按奔跑速度排行</div></div>
@@ -766,7 +766,7 @@ HELP_PIX = _PH + """
     <div class="cmd"><div class="c"><b>/帕鲁哪里买</b> 物品</div><div class="d">物品在哪买/多少钱</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁技能</b> 名/属性</div><div class="d">技能威力/冷却/效果</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁技能果实</b> [属性/名]</div><div class="d">🆕 92种果实图鉴/带图标</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁植入体</b> [名]</div><div class="d">🆕 68种·改造帕鲁词条</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁植入体</b> [名/页]</div><div class="d">🆕 68种·编号查/帕鲁植入体查询 N</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁钓鱼</b></div><div class="d">钓鱼可获得物+概率</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁工作</b> 工种</div><div class="d">工种最强帕鲁排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁坐骑</b></div><div class="d">坐骑奔跑速度榜</div></div>

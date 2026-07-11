@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.4.4",
+    "1.4.5",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2460,14 +2460,8 @@ class PalworldPlugin(Star):
 
         def _ent(pool):   # no=全局编号(供纯数字查询)；名字用完整名(区分永久/耗材，避免重名)
             return [{"no": str(gidx[im["item_id"]]), "name": im["name"], "k": "item", "ik": im["item_id"]} for im in pool]
-        if not q:
+        if not q:                                 # 纯数字被当页码：/帕鲁植入体 1 = 第1页
             return await self._render_grid(event, "植入体图鉴", "🧬", _ent(self._implants), page, "/帕鲁植入体", "")
-        if q.isdigit():                           # 纯数字=全局第 N 个
-            idx = int(q)
-            if 1 <= idx <= len(self._implants):
-                return await self._implant_detail(event, self._implants[idx - 1])
-            return await self._msg_card(event, "🔢", "编号超出范围",
-                                        desc=f"植入体共 {len(self._implants)} 种，没有第 {idx} 种。", color="#F5A623")
         exact = self._implant_by_name.get(q)      # 完整名精确命中
         if exact:
             return await self._implant_detail(event, exact)
@@ -2476,9 +2470,24 @@ class PalworldPlugin(Star):
             return await self._implant_detail(event, matches[0])
         if not matches:
             return await self._msg_card(event, "🔍", "查无此植入体",
-                                        desc=f"没有名字含「{q}」的植入体或词条。", color="#F5A623")
+                                        desc=f"没有名字含「{q}」的植入体或词条。\n按编号查用 /帕鲁植入体查询 <编号>。", color="#F5A623")
         # 命中多个(如「鬼神」有永久/耗材两版) → 列表让用户按完整名精确查
         return await self._render_grid(event, f"含「{q}」的植入体", "🧬", _ent(matches), page, "/帕鲁植入体", q)
+
+    async def _cmd_implant_num(self, event: AstrMessageEvent, args: list):
+        """/帕鲁植入体查询 <编号>：按全局序号查第 N 个植入体(与分页解耦)。"""
+        if not self._implants:
+            return await self._msg_card(event, "🧬", "植入体数据未加载",
+                                        desc="data/implants.json 缺失或损坏。", color="#E5484D")
+        num = (args[0].strip() if args else "")
+        if not num.isdigit():
+            return await self._msg_card(event, "🔢", "请给出编号",
+                                        desc="用法：/帕鲁植入体查询 1 (查第1个)。\n编号见 /帕鲁植入体 列表左上角。", color="#F5A623")
+        idx = int(num)
+        if not (1 <= idx <= len(self._implants)):
+            return await self._msg_card(event, "🔢", "编号超出范围",
+                                        desc=f"植入体共 {len(self._implants)} 种，没有第 {idx} 种。", color="#F5A623")
+        return await self._implant_detail(event, self._implants[idx - 1])
 
     # ------------------------------------------------------------------
     # 渲染封装：优先用本地 Playwright(快、可并行、无网络往返)，失败回退 AstrBot 远程 t2i
