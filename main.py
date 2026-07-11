@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.7.0",
+    "1.7.1",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -3515,6 +3515,14 @@ class PalworldPlugin(Star):
         partner = {"title": p.get("partner_skill_title", "") if p else "",
                    "desc": ((p.get("partner_skill_description") or
                              ("该伙伴技能游戏内暂未提供中文详细说明" if p.get("partner_skill_title") else "")) if p else "")}
+        # 当前真实攻/防：按游戏公式(等级+天赋+浓缩)算，与存档真实生命值同为"当前属性"，
+        # 而非裸种族值(种族值几十、真实值几百，混显会误导)。HP 直接用存档真实值(含灵魂/被动)。
+        _batk = max(int(stats.get("shot_attack") or 0), int(stats.get("melee_attack") or 0)) or 100
+        _, _cur_atk, _cur_def = self._combat_stats(
+            int(stats.get("hp") or 0) or 100, _batk, int(stats.get("defense") or 0) or 50,
+            int(pal.get("level", 1) or 1), int(pal.get("iv_hp", 0) or 0),
+            int(pal.get("iv_atk", 0) or 0), int(pal.get("iv_def", 0) or 0),
+            int(pal.get("rank", 1) or 1))
         return {
             "name": p["pal_name"] if p else pal.get("char_id", "未知帕鲁"),
             "index": str(p.get("pal_index", "")) if p else "",
@@ -3530,6 +3538,7 @@ class PalworldPlugin(Star):
             "wazas": [self._waza_view(x) for x in pal.get("equip_waza", [])],
             "base_atk": int(stats.get("shot_attack") or stats.get("melee_attack") or 0),
             "base_def": int(stats.get("defense") or 0),
+            "cur_atk": _cur_atk, "cur_def": _cur_def,
             "craft_speed": int((p.get("craft_speed") if p else 0) or 0),
             "works": works, "partner": partner,
         }

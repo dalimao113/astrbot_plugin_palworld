@@ -1321,8 +1321,8 @@ TEAM_TMPL = _HEAD + _PCHIP + _TEAM_STAT_F + """
       </div>
       <div class="ivr">
         <div class="ivb hpb"><div class="ivk">生命值</div><div class="ivv">{{ p.hp }}</div></div>
-        <div class="ivb"><div class="ivk">攻击</div><div class="ivv">{{ p.base_atk }}</div></div>
-        <div class="ivb"><div class="ivk">防御</div><div class="ivv">{{ p.base_def }}</div></div>
+        <div class="ivb"><div class="ivk">攻击</div><div class="ivv">{{ p.cur_atk }}</div></div>
+        <div class="ivb"><div class="ivk">防御</div><div class="ivv">{{ p.cur_def }}</div></div>
         <div class="ivb"><div class="ivk">工作速度</div><div class="ivv">{{ p.craft_speed }}</div></div>
       </div>
       <div class="ivr trow">
@@ -1382,8 +1382,8 @@ TEAM_PIX = _PH + _PCHIP_PIX + _TEAM_STAT_P + """
       </div>
       <div class="ivr">
         <div class="ivb hpb"><div class="ivk">生命值</div><div class="ivv">{{ p.hp }}</div></div>
-        <div class="ivb"><div class="ivk">攻击</div><div class="ivv">{{ p.base_atk }}</div></div>
-        <div class="ivb"><div class="ivk">防御</div><div class="ivv">{{ p.base_def }}</div></div>
+        <div class="ivb"><div class="ivk">攻击</div><div class="ivv">{{ p.cur_atk }}</div></div>
+        <div class="ivb"><div class="ivk">防御</div><div class="ivv">{{ p.cur_def }}</div></div>
         <div class="ivb"><div class="ivk">工作速度</div><div class="ivv">{{ p.craft_speed }}</div></div>
       </div>
       <div class="ivr trow">
