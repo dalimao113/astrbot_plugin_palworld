@@ -2418,10 +2418,10 @@ MAP_TMPL = _HEAD + """</style></head><body><div class="page">
   <div style="position:relative;width:100%;border-radius:16px;overflow:hidden;border:1px solid rgba(232,198,106,.3);box-shadow:0 4px 16px rgba(0,0,0,.45)">
     <img src="{{ mapimg }}" style="display:block;width:100%">
     {% for p in players %}
-    <div style="position:absolute;left:{{ p.left }}%;top:{{ p.top }}%;transform:translate(-50%,-100%);width:24px;height:31px;z-index:5">
-      <div style="position:absolute;top:0;left:0;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 55% 40%,#ff9a9a,#d12f2f);border:2px solid #fff;box-shadow:0 2px 5px rgba(0,0,0,.65)"></div>
-      <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:9px solid #d12f2f"></div>
-      <div style="position:absolute;top:0;left:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.5)">{{ p.no }}</div>
+    <div style="position:absolute;left:{{ p.left }}%;top:{{ p.top }}%;transform:translate(-50%,-100%);width:16px;height:21px;z-index:5">
+      <div style="position:absolute;top:0;left:0;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 55% 40%,#ff9a9a,#d12f2f);border:1.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.65)"></div>
+      <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:3.5px solid transparent;border-right:3.5px solid transparent;border-top:6px solid #d12f2f"></div>
+      <div style="position:absolute;top:0;left:0;width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.5)">{{ p.no }}</div>
     </div>
     {% endfor %}
   </div>

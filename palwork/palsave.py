@@ -4,6 +4,25 @@ import ctypes, struct
 from palworld_save_tools.gvas import GvasFile
 from palworld_save_tools.paltypes import PALWORLD_CUSTOM_PROPERTIES, PALWORLD_TYPE_HINTS
 
+# 1.0 存档兼容：worldSaveData 顶层新增 InLockerCharacterInstanceIDArray(SetProperty)，
+# 锁定的 save-tools 0.24.0 不识别 SetProperty，解析顶层属性即抛 "Unknown type: SetProperty"，
+# 导致整份存档读不了、玩家信息全查不到。该数据档案提取用不到，注册跳过器：读掉 inner 类型名
+# 与可选 GUID 后，用 size(payload 字节数)整块跳过，对齐到下一个属性即可。
+from palworld_save_tools import archive as _archive
+if not getattr(_archive.FArchiveReader, "_pal_setprop_patched", False):
+    _orig_ar_property = _archive.FArchiveReader.property
+
+    def _ar_property_with_set(self, type_name, size, path, nested_caller_path=""):
+        if type_name == "SetProperty":
+            array_type = self.fstring()
+            id_ = self.optional_guid()
+            self.skip(size)   # size = set body 字节数(NumRemoved+Num+元素)
+            return {"array_type": array_type, "id": id_, "value": None, "skipped_set": True}
+        return _orig_ar_property(self, type_name, size, path, nested_caller_path)
+
+    _archive.FArchiveReader.property = _ar_property_with_set
+    _archive.FArchiveReader._pal_setprop_patched = True
+
 # 本服游戏版本的角色 blob 尾部有额外字节，0.24.0 解析器会报 "EOF not reached"。
 # object(全部真实数据) 已在前面读完，这里宽容吞掉尾部不报错。
 import palworld_save_tools.rawdata.character as _char
