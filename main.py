@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.4.8",
+    "1.4.9",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -602,7 +602,9 @@ class PalworldPlugin(Star):
             "rarity": min(int(p.get("rarity", 0) or 0), 5), "nocturnal": bool(p.get("nocturnal")),
             "desc": clean(p.get("pal_description"))[:120],
             "partner_title": p.get("partner_skill_title", ""),
-            "partner_desc": clean(p.get("partner_skill_description"))[:90],
+            # 伙伴技能描述：游戏 1.0 未提供中文文本，缺时给诚实占位(不用工作适性瞎编，避免误导)
+            "partner_desc": (clean(p.get("partner_skill_description"))[:90]
+                             or ("该伙伴技能游戏内暂未提供中文详细说明" if p.get("partner_skill_title") else "")),
             "skills": sk, "works": works, "drops": drops, "ranch": ranch,
             "hp": num(st.get("hp")), "atk": num(st.get("melee_attack")), "defense": num(st.get("defense")),
             "shot": num(st.get("shot_attack")), "stamina": num(st.get("stamina")),
@@ -3416,7 +3418,8 @@ class PalworldPlugin(Star):
              for k, v in wsu.items() if v and int(v) > 0),
             key=lambda w: -w["level"])
         partner = {"title": p.get("partner_skill_title", "") if p else "",
-                   "desc": p.get("partner_skill_description", "") if p else ""}
+                   "desc": ((p.get("partner_skill_description") or
+                             ("该伙伴技能游戏内暂未提供中文详细说明" if p.get("partner_skill_title") else "")) if p else "")}
         return {
             "name": p["pal_name"] if p else pal.get("char_id", "未知帕鲁"),
             "index": str(p.get("pal_index", "")) if p else "",
