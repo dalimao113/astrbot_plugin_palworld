@@ -2288,7 +2288,7 @@ IMPLANT_TMPL = _HEAD + """</style></head><body><div class="page">
     <div style="flex:1;min-width:0">
       <div class="title">{{ name }}</div>
       <div class="subtitle">
-        {% if rank %}<span class="pill" style="background:rgba(232,198,106,.24)">{{ "★" * (rank if rank <= 5 else 5) }} Rank{{ rank }}</span>{% endif %}
+        {% if rank %}<span class="pill" style="background:rgba(232,198,106,.24)">稀有度 {{ "★" * (rank if rank <= 5 else 5) }}</span>{% endif %}
         {% if consumable %}<span class="pill" style="background:rgba(245,166,35,.22);border-color:rgba(245,166,35,.5)">🔥 耗材·一次性</span>{% else %}<span class="pill soft">♻ 可反复植入</span>{% endif %}
       </div>
     </div>

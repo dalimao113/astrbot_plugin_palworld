@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.4.2",
+    "1.4.3",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -315,8 +315,7 @@ class PalworldPlugin(Star):
             with open(os.path.join(base, "implants.json"), encoding="utf-8") as _f:
                 self._implants = json.loads(_f.read())
             for im in self._implants:
-                self._implant_by_name.setdefault(im["name"], im)
-                self._implant_by_name.setdefault(im["passive"], im)
+                self._implant_by_name.setdefault(im["name"], im)   # 完整名唯一(区分耗材/永久)
         except Exception:  # noqa: BLE001
             pass
         try:
@@ -2419,11 +2418,15 @@ class PalworldPlugin(Star):
         if q in ELS:
             return await self._render_grid(event, f"{q}属性技能果实", "🍐",
                                            _ent(self._sf_by_element.get(q, [])), page, "/帕鲁技能果实", q)
-        f = self._sf_by_tech.get(q) or next((x for x in self._skill_fruits if q in x["tech"]), None)
-        if not f:
+        if q in self._sf_by_tech:                 # 技能名精确命中
+            return await self._skillfruit_detail(event, self._sf_by_tech[q])
+        matches = [x for x in self._skill_fruits if q in x["tech"] or q in x["fruit_name"]]
+        if len(matches) == 1:
+            return await self._skillfruit_detail(event, matches[0])
+        if not matches:
             return await self._msg_card(event, "🔍", "查无此技能果实",
                                         desc=f"没有教「{q}」的技能果实。\n可按属性查，如 /帕鲁技能果实 火。", color="#F5A623")
-        return await self._skillfruit_detail(event, f)
+        return await self._render_grid(event, f"含「{q}」的技能果实", "🍐", _ent(matches), page, "/帕鲁技能果实", q)
 
     def _implant_detail(self, event, im: dict):
         return self._img(event, self._t("implant"), {
@@ -2436,16 +2439,23 @@ class PalworldPlugin(Star):
             return await self._msg_card(event, "🧬", "植入体数据未加载",
                                         desc="data/implants.json 缺失或损坏。", color="#E5484D")
         q, page = self._parse_page_args(args)
+
+        def _ent(pool):   # 列表用完整名(区分「植入体：X」/「耗材植入体：X」，避免重名)
+            return [{"no": ("★" * min(im.get("rank", 0), 5)) if im.get("rank", 0) > 0 else "",
+                     "name": im["name"], "k": "item", "ik": im["item_id"]} for im in pool]
         if not q:
-            entries = [{"no": ("★" * min(im.get("rank", 0), 5)) if im.get("rank", 0) > 0 else "",
-                        "name": im["passive"], "k": "item", "ik": im["item_id"]} for im in self._implants]
-            return await self._render_grid(event, "植入体图鉴", "🧬", entries, page, "/帕鲁植入体", "")
-        im = self._implant_by_name.get(q) or next(
-            (x for x in self._implants if q in x["name"] or q in x["passive"]), None)
-        if not im:
+            return await self._render_grid(event, "植入体图鉴", "🧬", _ent(self._implants), page, "/帕鲁植入体", "")
+        exact = self._implant_by_name.get(q)      # 完整名精确命中
+        if exact:
+            return await self._implant_detail(event, exact)
+        matches = [x for x in self._implants if q in x["name"] or q in x["passive"]]
+        if len(matches) == 1:
+            return await self._implant_detail(event, matches[0])
+        if not matches:
             return await self._msg_card(event, "🔍", "查无此植入体",
                                         desc=f"没有名字含「{q}」的植入体或词条。", color="#F5A623")
-        return await self._implant_detail(event, im)
+        # 命中多个(如「鬼神」有永久/耗材两版) → 列表让用户按完整名精确查
+        return await self._render_grid(event, f"含「{q}」的植入体", "🧬", _ent(matches), page, "/帕鲁植入体", q)
 
     # ------------------------------------------------------------------
     # 渲染封装：优先用本地 Playwright(快、可并行、无网络往返)，失败回退 AstrBot 远程 t2i
