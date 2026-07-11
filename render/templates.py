@@ -2609,10 +2609,12 @@ HABITAT_TMPL = _HEAD + """</style></head><body><div class="page">
     <div style="position:absolute;inset:0;mix-blend-mode:screen">
       {% for pt in points %}<div style="position:absolute;left:{{pt.l}}%;top:{{pt.t}}%;width:26px;height:26px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,{{color}}d0,{{color}}00 62%)"></div>{% endfor %}
     </div>
+    {% for pt in boss_points %}<div style="position:absolute;left:{{pt.l}}%;top:{{pt.t}}%;transform:translate(-50%,-100%);z-index:6;font-size:20px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.95))">{% if boss_is_tower %}🗼{% else %}👑{% endif %}</div>{% endfor %}
   </div>
   <div class="glass" style="margin-top:12px">""" + _GEMS + """
     <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:13.5px;color:#e9e0f5">
       <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:13px;height:13px;border-radius:50%;background:{{color}};display:inline-block;box-shadow:0 0 7px {{color}}"></span>栖息热区</span>
+      {% if boss_points %}<span class="pill" style="background:#c0392b;color:#fff">{{ boss_label }} {{ boss_lv }} · {{ boss_points|length }}处</span>{% endif %}
       <span class="pill soft">{{ count }} 个刷新点</span>
       {% if has_day and has_night %}<span class="pill soft">日夜均刷</span>{% elif nocturnal %}<span class="pill soft">夜间为主</span>{% endif %}
     </div>

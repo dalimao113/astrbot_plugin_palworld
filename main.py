@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.7.3",
+    "1.8.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -370,6 +370,13 @@ class PalworldPlugin(Star):
         try:
             with open(os.path.join(base, "pal_spawns.json"), encoding="utf-8") as _f:
                 self._pal_spawns = json.loads(_f.read())
+        except Exception:  # noqa: BLE001
+            pass
+        # 头目/塔主固定刷新位置 {dev: {name,is_tower,points:[[l,t]],lv_min,lv_max}}（栖息地叠加显示）
+        self._boss_spawns: dict = {}
+        try:
+            with open(os.path.join(base, "boss_spawns.json"), encoding="utf-8") as _f:
+                self._boss_spawns = json.loads(_f.read())
         except Exception:  # noqa: BLE001
             pass
         # 任务(主线/支线) [{id,name,type,desc,objective,coords,exp,rewards,next,group,order}]（/帕鲁任务）
@@ -1845,11 +1852,19 @@ class PalworldPlugin(Star):
         top = sorted(region_count.items(), key=lambda kv: -kv[1])[:6]
         regions = [{"name": n, "pct": max(1, round(c * 100.0 / len(pts)))} for n, c in top] if pts else []
         points = [{"l": round(x, 2), "t": round(y, 2)} for x, y in pts]
+        # 头目/塔主固定位置(叠加显示；栖息刷新点查不到 boss 时靠这个)
+        bs = (self._boss_spawns or {}).get(dev) or {}
+        boss_points = [{"l": round(x, 2), "t": round(y, 2)} for x, y in bs.get("points", [])]
+        blv = ""
+        if bs.get("lv_min"):
+            blv = f"Lv.{bs['lv_min']}" if bs["lv_min"] == bs.get("lv_max") else f"Lv.{bs['lv_min']}~{bs.get('lv_max')}"
         return {"name": p["pal_name"], "index": p.get("pal_index", "?"),
                 "icon": self._pal_icon(dev), "elements": els, "color": color,
                 "mapimg": self._map_img, "points": points, "regions": regions,
                 "nocturnal": bool(p.get("nocturnal")), "count": len(pts),
-                "has_day": bool(day), "has_night": bool(night)}
+                "has_day": bool(day), "has_night": bool(night),
+                "boss_points": boss_points, "boss_is_tower": bool(bs.get("is_tower")),
+                "boss_lv": blv, "boss_label": ("🗼塔主" if bs.get("is_tower") else "👑头目")}
 
     async def _cmd_habitat(self, event: AstrMessageEvent, args: list):
         if not self._pals:
@@ -1868,9 +1883,9 @@ class PalworldPlugin(Star):
             desc = "未找到该帕鲁。" + ("\n你是否想找：" + " / ".join(sug) if sug else "")
             return await self._msg_card(event, "🔍", "查无此帕鲁", desc=desc, color="#F5A623")
         data = self._habitat_data(p)
-        if not data["points"]:
+        if not data["points"] and not data["boss_points"]:
             return await self._msg_card(event, "🗺️", f"{p['pal_name']} 无野外刷新点",
-                                        desc="该帕鲁可能是 BOSS／塔主／配种或活动获取，地图上没有野生栖息点。",
+                                        desc="该帕鲁可能是 塔主／配种或活动获取，地图上没有野生栖息点。",
                                         color="#9a8a91")
         return await self._img(event, self._t("habitat"), data, width=MAP_WIDTH, dsf=1.6)
 
