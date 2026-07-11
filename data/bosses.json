@@ -416,7 +416,7 @@
   "element": "火",
   "location": "",
   "difficulty": "",
-  "level": "",
+  "level": "25",
   "hp": "",
   "drops": [
    {
@@ -445,7 +445,7 @@
   "element": "草",
   "location": "",
   "difficulty": "",
-  "level": "",
+  "level": "58",
   "hp": "",
   "drops": [
    {
@@ -469,7 +469,7 @@
   "element": "火/地",
   "location": "",
   "difficulty": "",
-  "level": "",
+  "level": "50",
   "hp": "",
   "drops": [
    {
@@ -493,7 +493,7 @@
   "element": "无",
   "location": "",
   "difficulty": "",
-  "level": "",
+  "level": "35",
   "hp": "",
   "drops": [
    {
@@ -517,7 +517,7 @@
   "element": "草",
   "location": "",
   "difficulty": "",
-  "level": "",
+  "level": "39",
   "hp": "",
   "drops": [
    {
@@ -546,7 +546,7 @@
   "element": "暗",
   "location": "",
   "difficulty": "",
-  "level": "",
+  "level": "65",
   "hp": "",
   "drops": [
    {
