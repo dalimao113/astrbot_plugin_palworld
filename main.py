@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.4.1",
+    "1.4.2",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -308,6 +308,17 @@ class PalworldPlugin(Star):
                 self._passives = json.loads(_f.read())
         except Exception as e:  # noqa: BLE001
             logger.warning(f"{LOG_PREFIX} 词条数据 data/passives.json 加载失败: {e}")
+        # 植入体(1.0) list + 名字/词条名索引（/帕鲁植入体）
+        self._implants: list = []
+        self._implant_by_name: dict = {}
+        try:
+            with open(os.path.join(base, "implants.json"), encoding="utf-8") as _f:
+                self._implants = json.loads(_f.read())
+            for im in self._implants:
+                self._implant_by_name.setdefault(im["name"], im)
+                self._implant_by_name.setdefault(im["passive"], im)
+        except Exception:  # noqa: BLE001
+            pass
         try:
             with open(os.path.join(base, "wazas.json"), encoding="utf-8") as _f:
                 self._wazas = json.loads(_f.read())
@@ -2414,6 +2425,28 @@ class PalworldPlugin(Star):
                                         desc=f"没有教「{q}」的技能果实。\n可按属性查，如 /帕鲁技能果实 火。", color="#F5A623")
         return await self._skillfruit_detail(event, f)
 
+    def _implant_detail(self, event, im: dict):
+        return self._img(event, self._t("implant"), {
+            "name": im["name"], "passive": im["passive"], "effect": im.get("effect", ""),
+            "rank": im.get("rank", 0), "sign": im.get("sign", 0),
+            "consumable": bool(im.get("consumable")), "icon": self._item_icon(im["item_id"])})
+
+    async def _cmd_implant(self, event: AstrMessageEvent, args: list):
+        if not self._implants:
+            return await self._msg_card(event, "🧬", "植入体数据未加载",
+                                        desc="data/implants.json 缺失或损坏。", color="#E5484D")
+        q, page = self._parse_page_args(args)
+        if not q:
+            entries = [{"no": ("★" * min(im.get("rank", 0), 5)) if im.get("rank", 0) > 0 else "",
+                        "name": im["passive"], "k": "item", "ik": im["item_id"]} for im in self._implants]
+            return await self._render_grid(event, "植入体图鉴", "🧬", entries, page, "/帕鲁植入体", "")
+        im = self._implant_by_name.get(q) or next(
+            (x for x in self._implants if q in x["name"] or q in x["passive"]), None)
+        if not im:
+            return await self._msg_card(event, "🔍", "查无此植入体",
+                                        desc=f"没有名字含「{q}」的植入体或词条。", color="#F5A623")
+        return await self._implant_detail(event, im)
+
     # ------------------------------------------------------------------
     # 渲染封装：优先用本地 Playwright(快、可并行、无网络往返)，失败回退 AstrBot 远程 t2i
     # ------------------------------------------------------------------
@@ -2525,7 +2558,7 @@ class PalworldPlugin(Star):
                 return alias, (([rest] + list(args)) if rest else list(args))
         return sub, args
 
-    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
+    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
     async def palworld(self, event: AstrMessageEvent):
         raw = (event.message_str or "").strip()
         # 去掉可选的「/」前缀和指令词「帕鲁」，剩余既可能是「在线」也可能是「在线 参数」

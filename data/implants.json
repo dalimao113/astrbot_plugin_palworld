@@ -1,0 +1,682 @@
+[
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_WorldTree_Sanity",
+  "name": "耗材植入体：仙人",
+  "passive": "仙人",
+  "effect": "SAN值下降速度 -50% 工作速度 -20%",
+  "rank": 5,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_WorldTree_ATK",
+  "name": "耗材植入体：双刃圣剑",
+  "passive": "双刃圣剑",
+  "effect": "攻击 +50% 防御 -30%",
+  "rank": 5,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_WorldTree_DEF",
+  "name": "耗材植入体：守护圣盾",
+  "passive": "守护圣盾",
+  "effect": "防御 +50% 攻击 -30%",
+  "rank": 5,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_WorldTree_CraftSpeed",
+  "name": "耗材植入体：恶魔之手",
+  "passive": "恶魔之手",
+  "effect": "工作速度 +90% SAN值下降速度 +15%",
+  "rank": 5,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_WorldTree_MoveSpeed",
+  "name": "耗材植入体：次元跳跃",
+  "passive": "次元跳跃",
+  "effect": "移动速度 +50% 饱腹度下降速度 +15%",
+  "rank": 5,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_WorldTree_ATK_DEF",
+  "name": "耗材植入体：破坏神",
+  "passive": "破坏神",
+  "effect": "攻击 +40% 防御 +20% 最大HP -50%",
+  "rank": 5,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_WorldTree_FullStomach",
+  "name": "耗材植入体：神树苗床",
+  "passive": "神树苗床",
+  "effect": "饱腹度下降速度 -50% 最大HP -20%",
+  "rank": 5,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_CraftSpeed_up3",
+  "name": "植入体：卓绝技艺",
+  "passive": "卓绝技艺",
+  "effect": "工作速度+75%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_PAL_Sanity_Down_3",
+  "name": "植入体：明镜止水",
+  "passive": "明镜止水",
+  "effect": "减少SAN值下降速度+20.0%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_PAL_FullStomach_Down_3",
+  "name": "植入体：极限绝食",
+  "passive": "极限绝食",
+  "effect": "减少饱腹度下降速度+20.0%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Stamina_Up_3",
+  "name": "植入体：永动机",
+  "passive": "永动机",
+  "effect": "最大耐力+75% ※此效果仅对可骑乘的帕鲁有效。",
+  "rank": 4,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_MoveSpeed_up_3",
+  "name": "植入体：神速",
+  "passive": "神速",
+  "effect": "移动速度提升30%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Deffence_up3",
+  "name": "植入体：金刚之躯",
+  "passive": "金刚之躯",
+  "effect": "防御+30%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_PAL_ALLAttack_up3",
+  "name": "植入体：鬼神",
+  "passive": "鬼神",
+  "effect": "攻击+30% 防御+5%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_MutationPal_Immortal",
+  "name": "耗材植入体：不死之身",
+  "passive": "不死之身",
+  "effect": "吸血 +5% HP自动恢复 +100% 攻击 +15%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_Legend",
+  "name": "耗材植入体：传说",
+  "passive": "传说",
+  "effect": "攻击+20% 防御+20% 移动速度提升15%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_Invader",
+  "name": "耗材植入体：侵略者",
+  "passive": "侵略者",
+  "effect": "暗属性攻击伤害增加30% 龙属性攻击伤害增加30%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_RideJumpCount_Increase2",
+  "name": "耗材植入体：凌空微步",
+  "passive": "凌空微步",
+  "effect": "骑乘连续跳跃次数 +2",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_CraftSpeed_up3",
+  "name": "耗材植入体：卓绝技艺",
+  "passive": "卓绝技艺",
+  "effect": "工作速度+75%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_Vampire",
+  "name": "耗材植入体：吸血鬼",
+  "passive": "吸血鬼",
+  "effect": "会吸收造成伤害的一部分恢复自身的HP。 即使到夜晚也不会睡觉，可以一直工作。",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_Salvation",
+  "name": "耗材植入体：救世主",
+  "passive": "救世主",
+  "effect": "无属性攻击伤害增加30% 草属性攻击伤害增加30%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_PAL_Sanity_Down_3",
+  "name": "耗材植入体：明镜止水",
+  "passive": "明镜止水",
+  "effect": "减少SAN值下降速度+20.0%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_PAL_FullStomach_Down_3",
+  "name": "耗材植入体：极限绝食",
+  "passive": "极限绝食",
+  "effect": "减少饱腹度下降速度+20.0%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_Stamina_Up_3",
+  "name": "耗材植入体：永动机",
+  "passive": "永动机",
+  "effect": "最大耐力+75% ※此效果仅对可骑乘的帕鲁有效。",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_EternalFlame",
+  "name": "耗材植入体：永炎",
+  "passive": "永炎",
+  "effect": "火属性攻击伤害增加30% 雷属性攻击伤害增加30%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_Nushi",
+  "name": "耗材植入体：湖之主",
+  "passive": "湖之主",
+  "effect": "水属性攻击伤害增加20% 冰属性攻击伤害增加20% 防御+20%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_MutationPal_Mutant",
+  "name": "耗材植入体：特殊体质",
+  "passive": "特殊体质",
+  "effect": "HP自动恢复 +50% 点燃抗性 +100% 中毒抗性 +100% 防御 +25%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_SwimSpeed_up_3",
+  "name": "耗材植入体：破浪王者",
+  "passive": "破浪王者",
+  "effect": "水上移动速度提升50%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_MoveSpeed_up_3",
+  "name": "耗材植入体：神速",
+  "passive": "神速",
+  "effect": "移动速度提升30%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_Rare",
+  "name": "耗材植入体：稀有",
+  "passive": "稀有",
+  "effect": "工作速度+15% 攻击+15%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_MutationPal_Babysitter",
+  "name": "耗材植入体：育婴师",
+  "passive": "育婴师",
+  "effect": "配种孵蛋速度 +30% 基地配种速度 +30%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_MutationPal_ExplosionResist",
+  "name": "耗材植入体：重装甲",
+  "passive": "重装甲",
+  "effect": "爆炸伤害抗性 +100%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_Deffence_up3",
+  "name": "耗材植入体：金刚之躯",
+  "passive": "金刚之躯",
+  "effect": "防御+30%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_PAL_ALLAttack_up3",
+  "name": "耗材植入体：鬼神",
+  "passive": "鬼神",
+  "effect": "攻击+30% 防御+5%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Consumable_Witch",
+  "name": "耗材植入体：魔女",
+  "passive": "魔女",
+  "effect": "暗属性攻击伤害增加30% 冰属性攻击伤害增加30%",
+  "rank": 4,
+  "sign": 1,
+  "consumable": true,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_PAL_ALLAttack_up2",
+  "name": "植入体：凶猛",
+  "passive": "凶猛",
+  "effect": "攻击+20%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_HatchingSpeed_Up",
+  "name": "植入体：博爱主义者",
+  "passive": "博爱主义者",
+  "effect": "当分配到配种牧场时，产出蛋的速度将加快100%。",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_TrainerWorkSpeed_UP_1",
+  "name": "植入体：啦啦队",
+  "passive": "啦啦队",
+  "effect": "玩家的工作速度提升25%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_PAL_Sanity_Down_2",
+  "name": "植入体：工作狂",
+  "passive": "工作狂",
+  "effect": "减少SAN值下降速度+15.0%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_CraftSpeed_up2",
+  "name": "植入体：工匠精神",
+  "passive": "工匠精神",
+  "effect": "工作速度+50%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Stamina_Up_1",
+  "name": "植入体：无限精力",
+  "passive": "无限精力",
+  "effect": "最大耐力+50% ※此效果仅对可骑乘的帕鲁有效。",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_CoolTimeReduction_Up_1",
+  "name": "植入体：沉着冷静",
+  "passive": "沉着冷静",
+  "effect": "主动技能的冷却时间缩短30% 攻击+10%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_SwimSpeed_up_2",
+  "name": "植入体：游泳健将",
+  "passive": "游泳健将",
+  "effect": "水上移动速度提升40%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_AutoHPRegeneRate_Passive",
+  "name": "植入体：疗愈教练",
+  "passive": "疗愈教练",
+  "effect": "HP自动恢复 +5%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_TrainerMining_up1",
+  "name": "植入体：矿山首领",
+  "passive": "矿山首领",
+  "effect": "玩家的挖掘速度提升25%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_TrainerATK_UP_1",
+  "name": "植入体：突袭指挥官",
+  "passive": "突袭指挥官",
+  "effect": "玩家的攻击提升10%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_PAL_FullStomach_Down_2",
+  "name": "植入体：节食大师",
+  "passive": "节食大师",
+  "effect": "减少饱腹度下降速度+15.0%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_ReloadSpeedUp_Passive",
+  "name": "植入体：装填大师",
+  "passive": "装填大师",
+  "effect": "装填速度 +4%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_MoveSpeed_up_2",
+  "name": "植入体：运动健将",
+  "passive": "运动健将",
+  "effect": "移动速度提升20%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_TrainerLogging_up1",
+  "name": "植入体：采伐领袖",
+  "passive": "采伐领袖",
+  "effect": "玩家的采伐速度提升25%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_TrainerDEF_UP_1",
+  "name": "植入体：铁壁军师",
+  "passive": "铁壁军师",
+  "effect": "玩家的防御提升10%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_PlayerSP_DecreaseRate_Passive",
+  "name": "植入体：防过劳帮手",
+  "passive": "防过劳帮手",
+  "effect": "玩家耐力消耗速度 -5%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Deffence_up2",
+  "name": "植入体：顽强肉体",
+  "passive": "顽强肉体",
+  "effect": "防御+20%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_SalePrice_Up_1",
+  "name": "植入体：高贵",
+  "passive": "高贵",
+  "effect": "改善交易价格+5%",
+  "rank": 3,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Stamina_Up_2",
+  "name": "植入体：健康宝宝",
+  "passive": "健康宝宝",
+  "effect": "最大耐力+25% ※此效果仅对可骑乘的帕鲁有效。",
+  "rank": 2,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_CoolTimeReduction_Up_2",
+  "name": "植入体：急性子",
+  "passive": "急性子",
+  "effect": "主动技能的冷却时间缩短15%",
+  "rank": 2,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Noukin",
+  "name": "植入体：脑筋",
+  "passive": "脑筋",
+  "effect": "攻击+30% 工作速度-50%",
+  "rank": 2,
+  "sign": 0,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_SalePrice_Up_2",
+  "name": "植入体：贵族",
+  "passive": "贵族",
+  "effect": "改善交易价格+3%",
+  "rank": 2,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_PAL_ALLAttack_up1",
+  "name": "植入体：勇敢",
+  "passive": "勇敢",
+  "effect": "攻击+10%",
+  "rank": 1,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Deffence_up1",
+  "name": "植入体：坚硬皮肤",
+  "passive": "坚硬皮肤",
+  "effect": "防御+10%",
+  "rank": 1,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_PAL_FullStomach_Down_1",
+  "name": "植入体：小胃",
+  "passive": "小胃",
+  "effect": "减少饱腹度下降速度+10.0%",
+  "rank": 1,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_SwimSpeed_up_1",
+  "name": "植入体：悠然泳姿",
+  "passive": "悠然泳姿",
+  "effect": "水上移动速度提升30%",
+  "rank": 1,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_MoveSpeed_up_1",
+  "name": "植入体：灵活",
+  "passive": "灵活",
+  "effect": "移动速度提升10%",
+  "rank": 1,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_PAL_CorporateSlave",
+  "name": "植入体：社畜",
+  "passive": "社畜",
+  "effect": "工作速度+30% 攻击-30%",
+  "rank": 1,
+  "sign": 0,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_PAL_Sanity_Down_1",
+  "name": "植入体：积极思维",
+  "passive": "积极思维",
+  "effect": "减少SAN值下降速度+10.0%",
+  "rank": 1,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_CraftSpeed_up1",
+  "name": "植入体：认真",
+  "passive": "认真",
+  "effect": "工作速度+20%",
+  "rank": 1,
+  "sign": 1,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_Nocturnal",
+  "name": "植入体：不眠",
+  "passive": "夜行性",
+  "effect": "即使到夜晚也不会睡觉，会一直工作。",
+  "rank": 0,
+  "sign": 0,
+  "consumable": false,
+  "has_icon": true
+ },
+ {
+  "item_id": "PalPassiveSkillChange_NonKilling",
+  "name": "植入体：手下留情",
+  "passive": "手下留情",
+  "effect": "攻击不会击杀目标（便于捕捉）",
+  "rank": 0,
+  "sign": 0,
+  "consumable": false,
+  "has_icon": true
+ }
+]
