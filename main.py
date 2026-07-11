@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.6.9",
+    "1.7.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2796,25 +2796,40 @@ class PalworldPlugin(Star):
     async def _cmd_stats(self, event: AstrMessageEvent):
         return await self._img(event, self._t("stats"), self._stats_data())
 
+    @staticmethod
+    def _combat_stats(bhp: int, batk: int, bdef: int, level: int,
+                      iv_hp: int = 0, iv_atk: int = 0, iv_def: int = 0, rank: int = 1):
+        """按游戏公式算当前属性(HP/攻击/防御)。公式经存档 568 只帕鲁实测验证
+        (HP rank1 精确命中 85%，余下偏差来自灵魂强化/被动/受伤)：
+          HP  = 500 + 5×Lv + 种族HP  × 0.5   × Lv × (1 + 0.3×天赋HP/100)
+          攻击 = 100        + 种族攻击 × 0.075 × Lv × (1 + 0.3×天赋攻/100)
+          防御 = 50         + 种族防御 × 0.075 × Lv × (1 + 0.3×天赋防/100)
+        浓缩(Rank)每级约 +5%。灵魂强化/被动技能加成另计。"""
+        hp = int(500 + 5 * level + bhp * 0.5 * level * (1 + 0.3 * iv_hp / 100))
+        atk = int(100 + 0.075 * batk * level * (1 + 0.3 * iv_atk / 100))
+        dfn = int(50 + 0.075 * bdef * level * (1 + 0.3 * iv_def / 100))
+        if rank > 1:
+            m = 1 + (rank - 1) * 0.05
+            hp, atk, dfn = int(hp * m), int(atk * m), int(dfn * m)
+        return hp, atk, dfn
+
     def _pal_power(self, brief: dict) -> int:
-        """帕鲁综合战力评分(社区近似:基础三围×天赋×等级×浓缩×被动×alpha)。仅用于横向排序对比。"""
+        """玩家帕鲁综合战力：按游戏公式算真实 HP/攻/防(等级+天赋+浓缩) + 被动 + 头目加成。"""
         p = self._pal_by_dev.get(str(brief.get("char_id", "")).lower())
         st = (p or {}).get("stats") or {}
-        base = st.get("hp", 0) * 0.5 + st.get("shot_attack", 0) + st.get("defense", 0)
-        if base <= 0:
-            base = 100.0
-        lvl = int(brief.get("level", 1) or 1)
-        ivsum = (int(brief.get("iv_hp", 0) or 0) + int(brief.get("iv_atk", 0) or 0)
-                 + int(brief.get("iv_def", 0) or 0))
-        iv_factor = 1 + ivsum / 300.0          # 天赋 0~100 三项 → 最高 ×2
-        lvl_factor = 1 + lvl * 0.04            # 等级成长(50级≈3倍)
-        rank_factor = 1 + (int(brief.get("rank", 1) or 1) - 1) * 0.1   # 浓缩 1~5
+        bhp = int(st.get("hp", 0) or 0) or 100
+        batk = max(int(st.get("melee_attack", 0) or 0), int(st.get("shot_attack", 0) or 0)) or 100
+        bdef = int(st.get("defense", 0) or 0) or 50
+        hp, atk, dfn = self._combat_stats(
+            bhp, batk, bdef, int(brief.get("level", 1) or 1),
+            int(brief.get("iv_hp", 0) or 0), int(brief.get("iv_atk", 0) or 0),
+            int(brief.get("iv_def", 0) or 0), int(brief.get("rank", 1) or 1))
         pb = 0.0
         for pid in brief.get("passives", []):
             sign = self._passive_view(pid).get("sign", 0)
             pb += 0.05 if sign > 0 else (-0.05 if sign < 0 else 0)
         alpha = 1.2 if brief.get("is_alpha") else 1.0
-        return int(base * iv_factor * lvl_factor * rank_factor * (1 + pb) * alpha)
+        return int((hp * 0.5 + atk + dfn) * (1 + pb) * alpha)
 
     # 无主(据点公会共享)帕鲁在存档里被复制进每个成员档案，跨玩家聚合时需按 iid 去重，
     # 归到统一的"据点共享"名下只计一次，避免同一只被计 N 次 / 挂 N 个主人。
@@ -2873,12 +2888,15 @@ class PalworldPlugin(Star):
     # ------------------------------------------------------------------
     # 帕鲁战力等级排行（/帕鲁战力榜）：基于图鉴种族值的战力，全帕鲁排名，翻页+详细
     # ------------------------------------------------------------------
-    @staticmethod
-    def _species_power(p: dict) -> int:
-        """种族战力评分(基于图鉴基础三围:血量×0.5 + 主攻[近战/远程取高] + 防御)。仅用于横向排序。"""
+    _POWER_REF_LV = 50   # 帕鲁战力榜基准等级(满级战力，无天赋/浓缩)
+
+    def _species_power(self, p: dict) -> int:
+        """帕鲁战力等级：以满级 Lv50、无天赋/浓缩为基准，用游戏公式算 HP/攻/防综合(仅横向对比)。"""
         st = p.get("stats") or {}
-        atk = max(int(st.get("melee_attack", 0) or 0), int(st.get("shot_attack", 0) or 0))
-        return round((int(st.get("hp", 0) or 0)) * 0.5 + atk + int(st.get("defense", 0) or 0))
+        batk = max(int(st.get("melee_attack", 0) or 0), int(st.get("shot_attack", 0) or 0))
+        hp, atk, dfn = self._combat_stats(int(st.get("hp", 0) or 0), batk,
+                                          int(st.get("defense", 0) or 0), self._POWER_REF_LV)
+        return round(hp * 0.5 + atk + dfn)
 
     def _power_ranked(self) -> list:
         """全图鉴按种族战力降序缓存 [(power, pal), ...]。"""
@@ -2903,18 +2921,22 @@ class PalworldPlugin(Star):
             pw = self._species_power(p)
             rank = next((i for i, (_, pp) in enumerate(ranked, 1) if pp is p), "?")
             st = p.get("stats") or {}
-            hp, me, sh, df = (int(st.get(k, 0) or 0) for k in ("hp", "melee_attack", "shot_attack", "defense"))
-            mx = max(hp, me, sh, df, 1)
+            bhp = int(st.get("hp", 0) or 0)
+            bme = int(st.get("melee_attack", 0) or 0)
+            bsh = int(st.get("shot_attack", 0) or 0)
+            bdf = int(st.get("defense", 0) or 0)
+            hp50, atk50, def50 = self._combat_stats(bhp, max(bme, bsh), bdf, self._POWER_REF_LV)
+            mx = max(hp50, atk50, def50, 1)
             data = {
                 "name": _esc(p.get("pal_name", "?")), "icon": self._pal_icon(p.get("pal_dev_name", "")),
                 "elements": p.get("elements", []), "rarity": int(p.get("rarity", 0) or 0),
-                "power": pw, "rank": rank, "total": len(ranked),
+                "power": pw, "rank": rank, "total": len(ranked), "reflv": self._POWER_REF_LV,
                 "partner": _esc(p.get("partner_skill_title", "") or ""),
+                "base": {"hp": bhp, "melee": bme, "shot": bsh, "df": bdf},
                 "stats": [
-                    {"k": "生命", "v": hp, "pct": int(hp / mx * 100)},
-                    {"k": "近战", "v": me, "pct": int(me / mx * 100)},
-                    {"k": "远程", "v": sh, "pct": int(sh / mx * 100)},
-                    {"k": "防御", "v": df, "pct": int(df / mx * 100)},
+                    {"k": "生命 HP", "v": hp50, "pct": int(hp50 / mx * 100)},
+                    {"k": "攻击", "v": atk50, "pct": int(atk50 / mx * 100)},
+                    {"k": "防御", "v": def50, "pct": int(def50 / mx * 100)},
                 ]}
             return await self._img(event, self._t("palpowerdetail"), data)
         # 排行翻页：每页 14

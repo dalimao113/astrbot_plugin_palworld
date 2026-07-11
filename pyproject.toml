@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "astrbot_plugin_palworld"
-version = "1.6.9"
+version = "1.7.0"
 description = "AstrBot 帕鲁(Palworld)服务器查询与管理插件，输出精美卡片图片"
 readme = "README.md"
 requires-python = ">=3.10"

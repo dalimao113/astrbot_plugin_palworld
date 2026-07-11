@@ -45,7 +45,7 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("设置", "_cmd_settings", ("settings",), cooldown=True, description="查看服务器设置", category="server"),
     CommandSpec("统计", "_cmd_stats", ("stats",), cooldown=True, description="查看统计", category="server"),
     CommandSpec("热力", "_cmd_heatmap", ("热力图", "在线热力", "热度", "heatmap"), cooldown=True, description="在线热力图", category="server"),
-    CommandSpec("玩家帕鲁战力榜", "_cmd_power_rank", ("玩家战力榜", "玩家帕鲁战力", "玩家最强帕鲁", "全服战力榜", "服务器战力榜"), cooldown=True, description="玩家拥有/抓捕帕鲁战力榜", category="rank"),
+    CommandSpec("玩家战力榜", "_cmd_power_rank", ("玩家帕鲁战力榜", "玩家帕鲁战力", "玩家最强帕鲁", "全服战力榜", "服务器战力榜"), cooldown=True, description="玩家拥有/抓捕帕鲁战力榜", category="rank"),
     CommandSpec("战力榜", "_cmd_paldex_power", ("战力", "战力排行", "帕鲁战力", "帕鲁战力榜", "帕鲁战力排行", "最强帕鲁", "power"), cooldown=True, pass_args=True, description="帕鲁战力等级排行", category="rank"),
     CommandSpec("闪光墙", "_cmd_shiny", ("闪光", "闪光帕鲁", "幸运帕鲁", "shiny", "lucky"), cooldown=True, description="闪光帕鲁墙", category="rank"),
     CommandSpec("头目墙", "_cmd_alpha", ("头目帕鲁", "alpha", "alpha墙", "头目收集"), cooldown=True, description="头目收集墙", category="rank"),

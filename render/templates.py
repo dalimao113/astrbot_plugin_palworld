@@ -204,7 +204,7 @@ HELP_TMPL = _HEAD + """
     <div class="cmd"><div class="c"><b>/帕鲁统计</b></div><div class="d">今日峰值/平均 + 近7日趋势</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁热力</b></div><div class="d">7×24 在线热力图·看高峰时段</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁战力榜</b></div><div class="d">已知帕鲁战力等级排行(翻页/详情)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁玩家帕鲁战力榜</b></div><div class="d">玩家拥有/抓捕帕鲁战力排行</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁玩家战力榜</b></div><div class="d">玩家拥有/抓捕帕鲁战力排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁闪光墙</b></div><div class="d">全服闪光帕鲁收藏展示</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁头目墙</b></div><div class="d">全服头目(Alpha)收藏展示</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁图鉴榜</b></div><div class="d">全服图鉴收集进度排行</div></div>
@@ -738,7 +738,7 @@ HELP_PIX = _PH + """
     <div class="cmd"><div class="c"><b>/帕鲁统计</b></div><div class="d">今日峰值/平均 + 近7日趋势</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁热力</b></div><div class="d">7×24 在线热力图·看高峰时段</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁战力榜</b></div><div class="d">已知帕鲁战力等级排行(翻页/详情)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁玩家帕鲁战力榜</b></div><div class="d">玩家拥有/抓捕帕鲁战力排行</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁玩家战力榜</b></div><div class="d">玩家拥有/抓捕帕鲁战力排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁闪光墙</b></div><div class="d">全服闪光帕鲁收藏展示</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁头目墙</b></div><div class="d">全服头目(Alpha)收藏展示</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁图鉴榜</b></div><div class="d">全服图鉴收集进度排行</div></div>
@@ -1851,7 +1851,7 @@ PALPOWER_TMPL = _HEAD + """</style></head><body><div class="page">
 PALPOWERDETAIL_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div>
     <div class="title">⚔️ {{ name }} · 战力详情</div>
-    <div class="subtitle">全帕鲁战力排名 #{{ rank }} / {{ total }}</div>
+    <div class="subtitle">战力排名 #{{ rank }} / {{ total }} · Lv{{ reflv }} 满级属性</div>
   </div></div>
   <div class="glass">""" + _GEMS + """
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
@@ -1872,7 +1872,7 @@ PALPOWERDETAIL_TMPL = _HEAD + """</style></head><body><div class="page">
     </div>
     {% endfor %}
     {% if partner %}<div style="margin-top:14px;font-size:13px;color:#c2b2dd">🤝 伙伴技能：{{ partner }}</div>{% endif %}
-    <div style="margin-top:11px;text-align:center;font-size:11.5px;color:#9c8fc0">种族战力 = 生命×0.5 + 主攻(近战/远程取高) + 防御 · 发「/帕鲁战力榜」看总榜</div>
+    <div style="margin-top:13px;padding-top:10px;border-top:1px solid rgba(232,198,106,0.15);text-align:center;font-size:11.5px;color:#9c8fc0;line-height:1.7">种族值 生命{{ base.hp }} · 近战{{ base.melee }} · 远程{{ base.shot }} · 防御{{ base.df }}<br>战力 = Lv{{ reflv }}满级(HP×0.5 + 攻击 + 防御) · 游戏公式实测校准 · 发「/帕鲁战力榜」看总榜</div>
   </div>
   """ + _FOOT + """
 </div></body></html>"""
