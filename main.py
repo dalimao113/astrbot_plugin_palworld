@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.8.1",
+    "1.8.2",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -1954,6 +1954,77 @@ class PalworldPlugin(Star):
             desc = "未找到该帕鲁。" + ("\n你是否想找：" + " / ".join(sug) if sug else "")
             return await self._msg_card(event, "🔍", "查无此帕鲁", desc=desc, color="#F5A623")
         return await self._img(event, self._t("passrec"), self._passrec_data(p))
+
+    # ------------------------------------------------------------------
+    # 词条大全（/帕鲁词条大全）：全部被动词条按类别查询 + 详情
+    # ------------------------------------------------------------------
+    _PASSDEX_CATS = ["攻击", "防御", "生命", "工作", "移动", "元素", "生存", "训练师", "其他"]
+    _PASSDEX_ICON = {"攻击": "⚔️", "防御": "🛡️", "生命": "❤️", "工作": "🔨",
+                     "移动": "💨", "元素": "🔮", "生存": "🍖", "训练师": "🧑", "其他": "✨"}
+
+    @staticmethod
+    def _passive_category(pid: str, effect: str) -> str:
+        p = str(pid).lower(); e = effect or ""
+        if p.startswith("trainer"):
+            return "训练师"
+        if "element" in p or "属性" in e or "抗性" in e:
+            return "元素"
+        if "attack" in p or "atk" in p or "攻击" in e:
+            return "攻击"
+        if "deffence" in p or "defense" in p or "防御" in e:
+            return "防御"
+        if p.startswith("hp") or "_hp" in p or "生命" in e or "体力" in e:
+            return "生命"
+        if any(w in p for w in ("workspeed", "craftspeed", "mining", "logging", "collection", "handcraft", "farm")) \
+                or any(w in e for w in ("工作", "采集", "挖矿", "砍伐", "制作", "农")):
+            return "工作"
+        if any(w in p for w in ("movespeed", "swimspeed", "ridespeed", "dash", "muteki")) \
+                or any(w in e for w in ("移动", "游泳", "骑乘", "冲刺")):
+            return "移动"
+        if any(w in p for w in ("sanity", "stomach", "stamina")) \
+                or any(w in e for w in ("理智", "饱食", "耐力", "SAN")):
+            return "生存"
+        return "其他"
+
+    def _passdex_group(self) -> dict:
+        if getattr(self, "_passdex_cache", None) is None:
+            from collections import defaultdict
+            g = defaultdict(list)
+            for pid, v in (self._passives or {}).items():
+                cat = self._passive_category(pid, v.get("effect", ""))
+                g[cat].append({"name": v.get("name", pid), "effect": v.get("effect", ""),
+                               "rank": int(v.get("rank", 0) or 0), "sign": int(v.get("sign", 0) or 0)})
+            for c in g:
+                g[c].sort(key=lambda x: (-x["rank"], x["name"]))
+            self._passdex_cache = dict(g)
+        return self._passdex_cache
+
+    async def _cmd_passive_dex(self, event: AstrMessageEvent, args: list):
+        if not self._passives:
+            return await self._msg_card(event, "📜", "词条数据缺失",
+                                        desc="data/passives.json 未就绪。", color="#E5484D")
+        g = self._passdex_group()
+        q = " ".join(args).strip().rstrip("类")
+        if not q:
+            cats = [{"name": c, "icon": self._PASSDEX_ICON.get(c, "✨"), "count": len(g.get(c, [])),
+                     "sample": "、".join(x["name"] for x in g.get(c, [])[:4])}
+                    for c in self._PASSDEX_CATS if g.get(c)]
+            return await self._img(event, self._t("passdex"),
+                                   {"cats": cats, "total": sum(len(v) for v in g.values())})
+        if q in self._PASSDEX_CATS:
+            items = g.get(q, [])
+            return await self._img(event, self._t("passlist"),
+                                   {"cat": q + "类词条", "icon": self._PASSDEX_ICON.get(q, "✨"),
+                                    "items": items, "count": len(items)})
+        # 词条名模糊查询 → 命中列表
+        hits = [{**x, "cat": c} for c, lst in g.items() for x in lst
+                if q in x["name"] or x["name"] in q]
+        if hits:
+            return await self._img(event, self._t("passlist"),
+                                   {"cat": f"含「{q}」的词条", "icon": "🔍",
+                                    "items": hits, "count": len(hits)})
+        return await self._msg_card(event, "🔍", "查无此词条",
+                                    desc=f"没有名字含「{q}」的词条。\n发「/帕鲁词条大全」看全部分类。", color="#F5A623")
 
     # ------------------------------------------------------------------
     # 任务（/帕鲁任务 /帕鲁主线 /帕鲁支线）

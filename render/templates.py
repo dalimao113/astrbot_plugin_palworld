@@ -225,6 +225,7 @@ HELP_TMPL = _HEAD + """
     <div class="cmd"><div class="c"><b>/帕鲁研究所</b> [类/名]</div><div class="d">🆕 全局增益研究·9大适性·材料/前置</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁栖息区域</b> 帕鲁名</div><div class="d">地图上涂出它的刷新热区</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁推荐词条</b> 帕鲁名</div><div class="d">按角色推荐高价值词条</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁词条大全</b> [分类]</div><div class="d">全部词条分类查询详情</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁属性克制</b></div><div class="d">九系属性克制关系图</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁主线</b> [页]</div><div class="d">按剧情顺序列出主线任务</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁支线</b> [NPC]</div><div class="d">支线任务（可按 NPC 筛选）</div></div>
@@ -759,6 +760,7 @@ HELP_PIX = _PH + """
     <div class="cmd"><div class="c"><b>/帕鲁研究所</b> [类/名]</div><div class="d">🆕 全局增益研究/9适性/材料</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁栖息区域</b> 帕鲁名</div><div class="d">地图上涂出刷新热区</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁推荐词条</b> 帕鲁名</div><div class="d">按角色推荐词条</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁词条大全</b> [分类]</div><div class="d">全部词条分类查询</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁属性克制</b></div><div class="d">九系属性克制图</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁主线</b> [页]</div><div class="d">主线任务列表(剧情序)</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁支线</b> [NPC]</div><div class="d">支线任务(可筛选NPC)</div></div>
@@ -2700,6 +2702,49 @@ PASSREC_TMPL = _HEAD + """</style></head><body><div class="page">
   """ + _FOOT + """
 </div></body></html>"""
 
+
+# 词条大全·分类总览（/帕鲁词条大全）
+PASSDEX_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">📜 词条大全</div>
+    <div class="subtitle">共 {{ total }} 个词条 · 按类别浏览</div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+    {% for c in cats %}
+      <div style="padding:12px 14px;border-radius:14px;background:rgba(12,8,38,.5);border:1px solid rgba(232,198,106,.2)">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:21px">{{ c.icon }}</span><span style="font-size:16px;font-weight:800;color:#e8c466">{{ c.name }}</span><span class="pill soft" style="margin-left:auto">{{ c.count }}</span></div>
+        <div style="margin-top:6px;font-size:11.5px;color:#b9a9d6;line-height:1.5;height:2.3em;overflow:hidden">{{ c.sample }}…</div>
+      </div>
+    {% endfor %}
+    </div>
+    <div style="margin-top:12px;text-align:center;font-size:11.5px;color:#9c8fc0">发「/帕鲁词条大全 攻击」看该类全部 · 「/帕鲁词条大全 词条名」查具体效果</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+
+# 词条大全·分类列表/搜索结果（/帕鲁词条大全 <分类/词条名>）
+PASSLIST_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">{{ icon }} {{ cat }}</div>
+    <div class="subtitle">{{ count }} 个词条</div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    {% for it in items %}
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 2px;{% if not loop.last %}border-bottom:1px solid rgba(232,198,106,.1){% endif %}">
+      <span style="flex:none;width:8px;height:8px;margin-top:6px;border-radius:50%;background:{% if it.sign>0 %}#4ade80{% elif it.sign<0 %}#f87171{% else %}#9c8fc0{% endif %}"></span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14.5px;font-weight:700;color:#f3ecd2">{{ it.name }}{% if it.rank %} <span style="font-size:11px;color:#9c8fc0">Lv{{ it.rank }}</span>{% endif %}{% if it.cat %} <span class="pill soft" style="font-size:10px">{{ it.cat }}</span>{% endif %}</div>
+        {% if it.effect %}<div style="font-size:12.5px;color:#c2b2dd;margin-top:2px;line-height:1.5">{{ it.effect }}</div>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+    <div style="margin-top:11px;text-align:center;font-size:11.5px;color:#9c8fc0">🟢正面 🔴负面 · 发「/帕鲁词条大全」看全部分类</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
 PASSREC_PIX = _PH + """</style></head><body><div class="page">
   <div class="head"><div style="display:flex;align-items:center;gap:12px;width:100%">
     {% if icon %}<div style="flex:none;width:80px;height:80px;background:{{color}}33;border:3px solid #6b4a24;box-shadow:inset 0 0 0 2px rgba(255,247,224,.5);display:flex;align-items:center;justify-content:center"><img src="{{ icon }}" style="width:66px;height:66px;object-fit:contain;image-rendering:pixelated"></div>{% endif %}
@@ -3288,6 +3333,7 @@ STYLES = {
                 "bag": BAG_TMPL, "team": TEAM_TMPL, "palbox": PALBOX_TMPL, "guild": GUILD_TMPL,
                 "basecamp": BASECAMP_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
+                "passdex": PASSDEX_TMPL, "passlist": PASSLIST_TMPL,
                 "mission": MISSION_TMPL, "missionlist": MISSIONLIST_TMPL, "boss": BOSS_TMPL,
                 "merchant": MERCHANT_TMPL, "skill": SKILL_TMPL, "skillfruit": SKILLFRUIT_TMPL, "implant": IMPLANT_TMPL, "worldtree": WORLDTREE_TMPL, "v10": V10_TMPL, "compare": COMPARE_TMPL,
                 "hatch": HATCH_TMPL, "inherit": INHERIT_TMPL,
