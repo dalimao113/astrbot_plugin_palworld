@@ -236,12 +236,6 @@
 "PAL_ElementPassive_4": {
 "atk": 30.0
 },
-"TrainerATK_UP_1": {
-"atk": 10.0
-},
-"TrainerDEF_UP_1": {
-"def": 10.0
-},
 "PAL_TribePassive_Test": {
 "atk": 12.0,
 "def": 12.0
@@ -261,63 +255,6 @@
 "PAL_TribePassive_4": {
 "atk": 24.0,
 "def": 24.0
-},
-"TrainerATK_UP_PartnerSkill_1": {
-"atk": 10.0
-},
-"TrainerATK_UP_PartnerSkill_2": {
-"atk": 11.0
-},
-"TrainerATK_UP_PartnerSkill_3": {
-"atk": 13.0
-},
-"TrainerATK_UP_PartnerSkill_4": {
-"atk": 16.0
-},
-"TrainerATK_UP_PartnerSkill_5": {
-"atk": 20.0
-},
-"TrainerDEF_UP_PartnerSkill_1": {
-"def": 5.0
-},
-"TrainerDEF_UP_PartnerSkill_2": {
-"def": 6.0
-},
-"TrainerDEF_UP_PartnerSkill_3": {
-"def": 7.0
-},
-"TrainerDEF_UP_PartnerSkill_4": {
-"def": 8.0
-},
-"TrainerDEF_UP_PartnerSkill_5": {
-"def": 10.0
-},
-"TrainerDEF_UP_PartnerSkill_6": {
-"def": 12.0
-},
-"TrainerDEF_UP_PartnerSkill_7": {
-"def": 14.0
-},
-"TrainerDEF_UP_PartnerSkill_Otomo_1": {
-"def": 5.0
-},
-"TrainerDEF_UP_PartnerSkill_Otomo_2": {
-"def": 6.0
-},
-"TrainerDEF_UP_PartnerSkill_Otomo_3": {
-"def": 7.0
-},
-"TrainerDEF_UP_PartnerSkill_Otomo_4": {
-"def": 8.0
-},
-"TrainerDEF_UP_PartnerSkill_Otomo_5": {
-"def": 10.0
-},
-"TrainerDEF_UP_PartnerSkill_Otomo_6": {
-"def": 12.0
-},
-"TrainerDEF_UP_PartnerSkill_Otomo_7": {
-"def": 14.0
 },
 "GiveElement_TrainerATK_UP_PartnerSkill_1": {
 "atk": 5.0
@@ -761,21 +698,6 @@
 "Defense_ShotAttack_MopKing_PartnerSkill_5": {
 "atk": 24.0,
 "def": 24.0
-},
-"TrainerATK_UP_PartnerSkill_KendoFrog_1": {
-"atk": 50.0
-},
-"TrainerATK_UP_PartnerSkill_KendoFrog_2": {
-"atk": 56.0
-},
-"TrainerATK_UP_PartnerSkill_KendoFrog_3": {
-"atk": 64.0
-},
-"TrainerATK_UP_PartnerSkill_KendoFrog_4": {
-"atk": 74.0
-},
-"TrainerATK_UP_PartnerSkill_KendoFrog_5": {
-"atk": 86.0
 },
 "GrassMinotaur_PartnerSkill_1": {
 "atk": 10.0,
