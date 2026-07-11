@@ -46,7 +46,7 @@
   "objective": "设置原始的作业台",
   "coords": "",
   "exp": 8,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_UnlockPalSphere",
   "group": "",
   "order": ""
@@ -199,7 +199,16 @@
   "objective": "捕获5只棉悠悠",
   "coords": "",
   "exp": 35,
-  "rewards": "[]",
+  "rewards": [
+   {
+    "name": "羊毛",
+    "qty": "10"
+   },
+   {
+    "name": "棉悠悠的羊肉",
+    "qty": "5"
+   }
+  ],
   "next": "Main_CraftShield",
   "group": "",
   "order": ""
@@ -256,7 +265,7 @@
   "objective": "制作翠叶鼠的冲锋枪",
   "coords": "",
   "exp": 45,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_DefeatWildBoss",
   "group": "",
   "order": ""
@@ -376,7 +385,7 @@
   "exp": 1500,
   "rewards": [
    {
-    "name": "觉醒星果☆1",
+    "name": "升段苹果☆1",
     "qty": "1"
    },
    {
@@ -648,7 +657,7 @@
   "exp": 1925,
   "rewards": [
    {
-    "name": "觉醒星果☆1",
+    "name": "升段苹果☆1",
     "qty": "1"
    },
    {
@@ -670,7 +679,7 @@
   "exp": 25350,
   "rewards": [
    {
-    "name": "觉醒星果☆3",
+    "name": "升段苹果☆3",
     "qty": "1"
    }
   ],
@@ -688,7 +697,7 @@
   "exp": 12170,
   "rewards": [
    {
-    "name": "觉醒星果☆2",
+    "name": "升段苹果☆2",
     "qty": "1"
    },
    {
@@ -710,8 +719,12 @@
   "exp": 35490,
   "rewards": [
    {
-    "name": "洗脑药",
-    "qty": "3"
+    "name": "豪华蔬菜蛋糕",
+    "qty": "10"
+   },
+   {
+    "name": "特制蛋糕",
+    "qty": "5"
    }
   ],
   "next": "",
@@ -860,11 +873,11 @@
   "exp": 940,
   "rewards": [
    {
-    "name": "半自动霰弹枪设计图2",
-    "qty": "1"
+    "name": "高级帕鲁球",
+    "qty": "5"
    },
    {
-    "name": "火箭发射器设计图2",
+    "name": "毛皮盔甲设计图2",
     "qty": "1"
    }
   ],
@@ -1081,7 +1094,16 @@
   "objective": "被囚禁的冒险家",
   "coords": "",
   "exp": 330,
-  "rewards": "[]",
+  "rewards": [
+   {
+    "name": "升段苹果☆1",
+    "qty": "1"
+   },
+   {
+    "name": "药品",
+    "qty": "5"
+   }
+  ],
   "next": "",
   "group": "",
   "order": ""
@@ -1094,7 +1116,12 @@
   "objective": "打倒通缉犯",
   "coords": "",
   "exp": 17745,
-  "rewards": "[]",
+  "rewards": [
+   {
+    "name": "金币",
+    "qty": "80000"
+   }
+  ],
   "next": "",
   "group": "",
   "order": ""
@@ -1107,7 +1134,16 @@
   "objective": "代行者",
   "coords": "",
   "exp": 48165,
-  "rewards": "[]",
+  "rewards": [
+   {
+    "name": "金币",
+    "qty": "30000"
+   },
+   {
+    "name": "猛击灵药",
+    "qty": "1"
+   }
+  ],
   "next": "",
   "group": "",
   "order": ""
@@ -1120,7 +1156,7 @@
   "objective": "过往",
   "coords": "",
   "exp": 48165,
-  "rewards": "[]",
+  "rewards": [],
   "next": "",
   "group": "",
   "order": ""
@@ -1133,7 +1169,20 @@
   "objective": "骑士的终焉",
   "coords": "",
   "exp": 65910,
-  "rewards": "[]",
+  "rewards": [
+   {
+    "name": "羁绊宝桃",
+    "qty": "1"
+   },
+   {
+    "name": "刚力之果",
+    "qty": "3"
+   },
+   {
+    "name": "成熟的升段苹果",
+    "qty": "1"
+   }
+  ],
   "next": "",
   "group": "",
   "order": ""
@@ -1146,7 +1195,7 @@
   "objective": "第一岛民",
   "coords": "",
   "exp": 6,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_OpenSurvivalGuide",
   "group": "",
   "order": ""
@@ -1159,7 +1208,7 @@
   "objective": "设置工作台",
   "coords": "",
   "exp": 6,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_CraftTools",
   "group": "",
   "order": ""
@@ -1172,7 +1221,7 @@
   "objective": "强化属性",
   "coords": "",
   "exp": 15,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_CatchPal",
   "group": "",
   "order": ""
@@ -1185,7 +1234,7 @@
   "objective": "捕获帕鲁",
   "coords": "",
   "exp": 15,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_WorkPal",
   "group": "",
   "order": ""
@@ -1198,7 +1247,7 @@
   "objective": "安排帕鲁工作",
   "coords": "",
   "exp": 15,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_EatFood",
   "group": "",
   "order": ""
@@ -1211,7 +1260,7 @@
   "objective": "填饱肚子",
   "coords": "",
   "exp": 15,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_CaptureSheepBall",
   "group": "",
   "order": ""
@@ -1224,16 +1273,7 @@
   "objective": "捕获5只棉悠悠",
   "coords": "",
   "exp": 45,
-  "rewards": [
-   {
-    "name": "羊毛",
-    "qty": "10"
-   },
-   {
-    "name": "棉悠悠的羊肉",
-    "qty": "5"
-   }
-  ],
+  "rewards": [],
   "next": "Main_PrepareEquipment",
   "group": "",
   "order": 15
@@ -1246,7 +1286,7 @@
   "objective": "整理装备",
   "coords": "",
   "exp": 45,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_SmallVillage",
   "group": "",
   "order": ""
@@ -1259,7 +1299,7 @@
   "objective": "冒险的开始",
   "coords": "",
   "exp": 45,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_SmallVillage",
   "group": "",
   "order": ""
@@ -1272,7 +1312,7 @@
   "objective": "小型聚落",
   "coords": "",
   "exp": 66,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_CraftPalGear",
   "group": "",
   "order": ""
@@ -1285,7 +1325,7 @@
   "objective": "制作帕鲁装备",
   "coords": "",
   "exp": 99,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_RayneSyndicate",
   "group": "",
   "order": ""
@@ -1298,7 +1338,7 @@
   "objective": "雷恩盗猎集团",
   "coords": "",
   "exp": 198,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_ReturnSmallVillage",
   "group": "",
   "order": ""
@@ -1311,7 +1351,7 @@
   "objective": "密钥球",
   "coords": "",
   "exp": 288,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_TalkGrassBoss",
   "group": "",
   "order": ""
@@ -1324,7 +1364,7 @@
   "objective": "佐伊·雷恩",
   "coords": "",
   "exp": 288,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_DefeatForestBoss",
   "group": "",
   "order": ""
@@ -1337,7 +1377,7 @@
   "objective": "收集密钥球",
   "coords": "",
   "exp": 39546,
-  "rewards": "[]",
+  "rewards": [],
   "next": "",
   "group": "",
   "order": ""
@@ -1350,7 +1390,7 @@
   "objective": "知晓天空之人",
   "coords": "",
   "exp": 39546,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_TalkSkyBossAgain",
   "group": "",
   "order": ""
@@ -1363,7 +1403,7 @@
   "objective": "灾厄",
   "coords": "",
   "exp": 39546,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_DefeatKingWhale",
   "group": "",
   "order": ""
@@ -1376,7 +1416,12 @@
   "objective": "奥沧鲸",
   "coords": "",
   "exp": 63882,
-  "rewards": "[]",
+  "rewards": [
+   {
+    "name": "应用灌溉学Ⅰ",
+    "qty": "1"
+   }
+  ],
   "next": "Main_ReachWorldTree",
   "group": "",
   "order": ""
@@ -1389,7 +1434,7 @@
   "objective": "前往世界树",
   "coords": "",
   "exp": 63882,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_TalkWorldTreeNPC",
   "group": "",
   "order": ""
@@ -1402,7 +1447,7 @@
   "objective": "罪孽",
   "coords": "",
   "exp": 102669,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_WorldTreeAbyss",
   "group": "",
   "order": ""
@@ -1415,7 +1460,7 @@
   "objective": "被封印的灾厄",
   "coords": "",
   "exp": 102669,
-  "rewards": "[]",
+  "rewards": [],
   "next": "",
   "group": "",
   "order": ""
@@ -1428,7 +1473,7 @@
   "objective": "苏醒",
   "coords": "",
   "exp": 143736,
-  "rewards": "[]",
+  "rewards": [],
   "next": "",
   "group": "",
   "order": ""
@@ -1441,7 +1486,7 @@
   "objective": "制作斧头和十字镐",
   "coords": "",
   "exp": 15,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_StatusUp",
   "group": "",
   "order": ""
@@ -1454,7 +1499,7 @@
   "objective": "望穿秋水，盼得春来",
   "coords": "",
   "exp": 39546,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Main_TalkSkyBoss",
   "group": "",
   "order": ""
@@ -1467,7 +1512,7 @@
   "objective": "通往深渊之路",
   "coords": "",
   "exp": 102669,
-  "rewards": "[]",
+  "rewards": [],
   "next": "",
   "group": "",
   "order": ""
@@ -1480,7 +1525,7 @@
   "objective": "初出茅庐的调查队",
   "coords": "",
   "exp": 330,
-  "rewards": "[]",
+  "rewards": [],
   "next": "None",
   "group": "",
   "order": ""
@@ -1493,7 +1538,7 @@
   "objective": "找到并击败袭击调查队的帕鲁",
   "coords": "",
   "exp": 5575,
-  "rewards": "[]",
+  "rewards": [],
   "next": "",
   "group": "",
   "order": ""
@@ -1506,7 +1551,7 @@
   "objective": "交付猛击秘药",
   "coords": "",
   "exp": 12170,
-  "rewards": "[]",
+  "rewards": [],
   "next": "",
   "group": "",
   "order": ""
@@ -1519,7 +1564,20 @@
   "objective": "击败菲亚",
   "coords": "",
   "exp": 35490,
-  "rewards": "[]",
+  "rewards": [
+   {
+    "name": "羁绊宝桃",
+    "qty": "1"
+   },
+   {
+    "name": "生命之果",
+    "qty": "3"
+   },
+   {
+    "name": "成熟的升段苹果",
+    "qty": "1"
+   }
+  ],
   "next": "",
   "group": "",
   "order": ""
@@ -1532,7 +1590,7 @@
   "objective": "黑色独狼",
   "coords": "",
   "exp": 25350,
-  "rewards": "[]",
+  "rewards": [],
   "next": "Sub_LoneWolf02",
   "group": "",
   "order": ""
@@ -1545,7 +1603,7 @@
   "objective": "在追忆中彷徨",
   "coords": "",
   "exp": 35490,
-  "rewards": "[]",
+  "rewards": [],
   "next": "",
   "group": "",
   "order": ""
@@ -1558,7 +1616,20 @@
   "objective": "无鞘之刀",
   "coords": "",
   "exp": 35490,
-  "rewards": "[]",
+  "rewards": [
+   {
+    "name": "羁绊宝桃",
+    "qty": "1"
+   },
+   {
+    "name": "坚壁之果",
+    "qty": "3"
+   },
+   {
+    "name": "成熟的升段苹果",
+    "qty": "1"
+   }
+  ],
   "next": "",
   "group": "",
   "order": ""
@@ -1571,7 +1642,12 @@
   "objective": "收集硫磺",
   "coords": "",
   "exp": 3550,
-  "rewards": "[]",
+  "rewards": [
+   {
+    "name": "金币",
+    "qty": "3000"
+   }
+  ],
   "next": "",
   "group": "",
   "order": ""
@@ -1584,7 +1660,12 @@
   "objective": "收集硬木材",
   "coords": "",
   "exp": 3550,
-  "rewards": "[]",
+  "rewards": [
+   {
+    "name": "金币",
+    "qty": "3000"
+   }
+  ],
   "next": "",
   "group": "",
   "order": ""
@@ -1597,7 +1678,12 @@
   "objective": "收集纯水晶",
   "coords": "",
   "exp": 12170,
-  "rewards": "[]",
+  "rewards": [
+   {
+    "name": "金币",
+    "qty": "5000"
+   }
+  ],
   "next": "",
   "group": "",
   "order": ""
@@ -1610,7 +1696,12 @@
   "objective": "收集六棱晶矿",
   "coords": "",
   "exp": 25350,
-  "rewards": "[]",
+  "rewards": [
+   {
+    "name": "金币",
+    "qty": "10000"
+   }
+  ],
   "next": "",
   "group": "",
   "order": ""
@@ -1623,7 +1714,12 @@
   "objective": "收集烈阳金属",
   "coords": "",
   "exp": 48165,
-  "rewards": "[]",
+  "rewards": [
+   {
+    "name": "金币",
+    "qty": "20000"
+   }
+  ],
   "next": "",
   "group": "",
   "order": ""
@@ -1636,7 +1732,7 @@
   "objective": "世界树中的生存之道",
   "coords": "",
   "exp": 106470,
-  "rewards": "[]",
+  "rewards": [],
   "next": "",
   "group": "",
   "order": ""
