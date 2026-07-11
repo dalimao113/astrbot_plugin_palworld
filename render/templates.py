@@ -233,7 +233,8 @@ HELP_TMPL = _HEAD + """
     <div class="cmd"><div class="c"><b>/帕鲁竞技场</b> [段位]</div><div class="d">竞技场对手阵容/段位奖励</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁商人</b> [名]</div><div class="d">各商店卖什么 + 价格/货币</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁哪里买</b> 物品</div><div class="d">某物品在哪个商店买、多少钱</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁技能</b> 名/属性</div><div class="d">主动技能威力/冷却/效果·技能果实</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁技能</b> 名/属性</div><div class="d">主动技能威力/冷却/效果</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁技能果实</b> [属性/名]</div><div class="d">🆕 92种果实图鉴·带图标·教什么技能</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁钓鱼</b></div><div class="d">钓鱼能钓到什么 + 概率</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁工作</b> 工种</div><div class="d">某工种(采矿/搬运…)最强帕鲁排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁坐骑</b></div><div class="d">可骑乘帕鲁按奔跑速度排行</div></div>
@@ -762,7 +763,8 @@ HELP_PIX = _PH + """
     <div class="cmd"><div class="c"><b>/帕鲁竞技场</b> [段位]</div><div class="d">对手阵容/段位奖励</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁商人</b> [名]</div><div class="d">商店卖什么+价格</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁哪里买</b> 物品</div><div class="d">物品在哪买/多少钱</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁技能</b> 名/属性</div><div class="d">技能威力/冷却/果实</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁技能</b> 名/属性</div><div class="d">技能威力/冷却/效果</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁技能果实</b> [属性/名]</div><div class="d">🆕 92种果实图鉴/带图标</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁钓鱼</b></div><div class="d">钓鱼可获得物+概率</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁工作</b> 工种</div><div class="d">工种最强帕鲁排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁坐骑</b></div><div class="d">坐骑奔跑速度榜</div></div>
@@ -2254,6 +2256,29 @@ LAB_DETAIL_TMPL = _HEAD + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+# ---------------- 技能果实详情(1.0) ----------------
+SKILLFRUIT_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:15px;width:100%">
+    {% if icon %}<div style="flex:none;width:108px;height:108px;border-radius:20px;background:radial-gradient(circle at 50% 38%,{{ color }}44,rgba(18,12,48,.55) 72%);border:2px solid {{ color }}99;box-shadow:0 3px 15px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center"><img src="{{ icon }}" style="width:90px;height:90px;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(0,0,0,.6))"></div>{% else %}<div style="flex:none;font-size:72px">🍐</div>{% endif %}
+    <div style="flex:1;min-width:0">
+      <div class="title">{{ fruit_name }}</div>
+      <div class="subtitle">
+        <span class="pill" style="background:{{ color }}33;border-color:{{ color }}88">{{ emoji }} {{ element }}属性</span>
+        {% if power and power != "0" %}<span class="pill soft">⚔ 威力 {{ power }}</span>{% endif %}
+        {% if cooldown %}<span class="pill soft">⏱ 冷却 {{ cooldown }}s</span>{% endif %}
+      </div>
+    </div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    {% if effect %}<span class="pill" style="background:rgba(124,252,154,.16);border-color:rgba(124,252,154,.4);color:#9effb6;margin-bottom:11px">{{ effect }}</span>{% endif %}
+    <div style="font-size:15px;color:#e9e0f5;line-height:1.9;white-space:pre-line;word-break:break-word">{{ desc or "（暂无描述）" }}</div>
+    <div class="sec-t" style="margin-top:15px">用法</div>
+    <div style="font-size:14px;color:#cfc1ea;line-height:1.75;background:rgba(99,102,241,.14);border:1px solid rgba(232,198,106,.22);border-radius:13px;padding:12px 15px">🍐 将此技能果实喂给帕鲁，即可让它学会主动技能<b style="color:#e8c466">「{{ tech }}」</b>。技能果实可在世界各地的<b>宝箱</b>等处获得。</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+
 # ---------------- 网格列表(模糊搜索/全表浏览，分页) ----------------
 GRID_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div>
@@ -3112,7 +3137,7 @@ STYLES = {
                 "basecamp": BASECAMP_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "mission": MISSION_TMPL, "missionlist": MISSIONLIST_TMPL, "boss": BOSS_TMPL,
-                "merchant": MERCHANT_TMPL, "skill": SKILL_TMPL, "compare": COMPARE_TMPL,
+                "merchant": MERCHANT_TMPL, "skill": SKILL_TMPL, "skillfruit": SKILLFRUIT_TMPL, "compare": COMPARE_TMPL,
                 "hatch": HATCH_TMPL, "inherit": INHERIT_TMPL,
                 "arena": ARENA_TMPL, "arena_tier": ARENA_TIER_TMPL},
     "pixel": {"status": STATUS_PIX, "players": PLAYERS_PIX, "settings": SETTINGS_PIX,

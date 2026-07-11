@@ -1,0 +1,922 @@
+[
+ {
+  "tech": "光击阵",
+  "element": "无",
+  "power": "700",
+  "cooldown": "30",
+  "effect": "",
+  "desc": "在敌人脚下和四周引发大范围的光柱爆炸。",
+  "fruit_id": "SkillCard_HolyBlast",
+  "fruit_name": "技能果实：光击阵"
+ },
+ {
+  "tech": "帕鲁光束",
+  "element": "无",
+  "power": "450",
+  "cooldown": "20",
+  "effect": "",
+  "desc": "积蓄破坏性的能量，朝前方大范围射出威力惊人的光束。",
+  "fruit_id": "SkillCard_HyperBeam",
+  "fruit_name": "技能果实：帕鲁光束"
+ },
+ {
+  "tech": "自爆",
+  "element": "无",
+  "power": "300",
+  "cooldown": "16",
+  "effect": "点燃",
+  "desc": "赌上性命引发爆炸。使用后会陷入无法战斗的状态。",
+  "fruit_id": "SkillCard_SelfDestruct",
+  "fruit_name": "技能果实：自爆"
+ },
+ {
+  "tech": "真空刃",
+  "element": "无",
+  "power": "160",
+  "cooldown": "8",
+  "effect": "",
+  "desc": "扇形发射锋利的气刃。",
+  "fruit_id": "SkillCard_AirBlade",
+  "fruit_name": "技能果实：真空刃"
+ },
+ {
+  "tech": "元气弹",
+  "element": "无",
+  "power": "120",
+  "cooldown": "8",
+  "effect": "",
+  "desc": "积蓄大量能量，并将其化作巨大球体射出。",
+  "fruit_id": "SkillCard_PowerBall",
+  "fruit_name": "技能果实：元气弹"
+ },
+ {
+  "tech": "能量射击",
+  "element": "无",
+  "power": "80",
+  "cooldown": "4",
+  "effect": "",
+  "desc": "积蓄能量，并将其化作子弹射出。",
+  "fruit_id": "SkillCard_PowerShot",
+  "fruit_name": "技能果实：能量射击"
+ },
+ {
+  "tech": "空气弹",
+  "element": "无",
+  "power": "40",
+  "cooldown": "2",
+  "effect": "",
+  "desc": "以急速射出空气团块。",
+  "fruit_id": "SkillCard_AirCanon",
+  "fruit_name": "技能果实：空气弹"
+ },
+ {
+  "tech": "烈焰球",
+  "element": "火",
+  "power": "600",
+  "cooldown": "30",
+  "effect": "点燃",
+  "desc": "在头上生成巨大火球，并向敌人发射。中弹后会爆炸，造成大范围爆炸冲击波。",
+  "fruit_id": "SkillCard_FireBall",
+  "fruit_name": "炎之技能果实：烈焰球"
+ },
+ {
+  "tech": "地狱火",
+  "element": "火",
+  "power": "500",
+  "cooldown": "24",
+  "effect": "点燃",
+  "desc": "使敌人周围地面活性化，并在一定时间后爆炸。",
+  "fruit_id": "SkillCard_Inferno",
+  "fruit_name": "炎之技能果实：地狱火"
+ },
+ {
+  "tech": "熔岩爆发",
+  "element": "火",
+  "power": "450",
+  "cooldown": "20",
+  "effect": "点燃",
+  "desc": "向上空喷射无数熔岩弹。一段时间后，射出的熔岩弹将如雨一般散落在周围。",
+  "fruit_id": "SkillCard_Eruption",
+  "fruit_name": "炎之技能果实：熔岩爆发"
+ },
+ {
+  "tech": "流火",
+  "element": "火",
+  "power": "300",
+  "cooldown": "16",
+  "effect": "点燃",
+  "desc": "使用火焰的力量做出复数个球体，然后向敌人发射无数火球。",
+  "fruit_id": "SkillCard_FlameFunnel",
+  "fruit_name": "炎之技能果实：流火"
+ },
+ {
+  "tech": "爆烈火墙",
+  "element": "火",
+  "power": "250",
+  "cooldown": "12",
+  "effect": "点燃",
+  "desc": "在敌人的位置燃起火焰之墙。火墙将持续一段时间，对碰到的敌人造成伤害。",
+  "fruit_id": "SkillCard_FlameWall",
+  "fruit_name": "炎之技能果实：爆烈火墙"
+ },
+ {
+  "tech": "烈焰风暴",
+  "element": "火",
+  "power": "200",
+  "cooldown": "12",
+  "effect": "点燃",
+  "desc": "在左右两侧生成炙热的龙卷风，并扇向敌人。",
+  "fruit_id": "SkillCard_FlareTornado",
+  "fruit_name": "炎之技能果实：烈焰风暴"
+ },
+ {
+  "tech": "烈焰放射",
+  "element": "火",
+  "power": "160",
+  "cooldown": "8",
+  "effect": "点燃",
+  "desc": "面向敌人释放火焰，持续对目标造成伤害。",
+  "fruit_id": "SkillCard_Flamethrower",
+  "fruit_name": "炎之技能果实：烈焰放射"
+ },
+ {
+  "tech": "烈焰箭",
+  "element": "火",
+  "power": "120",
+  "cooldown": "8",
+  "effect": "点燃",
+  "desc": "连续发射3支高速火箭并追击敌人。",
+  "fruit_id": "SkillCard_FlareArrow",
+  "fruit_name": "炎之技能果实：烈焰箭"
+ },
+ {
+  "tech": "烈焰溅射",
+  "element": "火",
+  "power": "80",
+  "cooldown": "4",
+  "effect": "点燃",
+  "desc": "向敌人发射火球。稍作飞行后会破裂并向前方放射小型火球。",
+  "fruit_id": "SkillCard_FireSeed",
+  "fruit_name": "炎之技能果实：烈焰溅射"
+ },
+ {
+  "tech": "烈焰射击",
+  "element": "火",
+  "power": "40",
+  "cooldown": "2",
+  "effect": "点燃",
+  "desc": "瞄准后发射可笔直飞向敌人的火焰弹。",
+  "fruit_id": "SkillCard_FireBlast",
+  "fruit_name": "炎之技能果实：烈焰射击"
+ },
+ {
+  "tech": "潮涌迸发",
+  "element": "水",
+  "power": "600",
+  "cooldown": "30",
+  "effect": "浸湿",
+  "desc": "在敌人所在位置及其周围区域喷出大量水柱。",
+  "fruit_id": "SkillCard_SeaGush",
+  "fruit_name": "水之技能果实：潮涌迸发"
+ },
+ {
+  "tech": "漩涡新星",
+  "element": "水",
+  "power": "500",
+  "cooldown": "24",
+  "effect": "浸湿",
+  "desc": "在敌人四周掀起波浪并涌向敌人，最后在中心点爆炸，喷出高高的水柱。",
+  "fruit_id": "SkillCard_RipTide",
+  "fruit_name": "水之技能果实：漩涡新星"
+ },
+ {
+  "tech": "高压水炮",
+  "element": "水",
+  "power": "450",
+  "cooldown": "20",
+  "effect": "浸湿",
+  "desc": "猛烈地释放出水流并向前方大范围横扫。",
+  "fruit_id": "SkillCard_HydroPump",
+  "fruit_name": "水之技能果实：高压水炮"
+ },
+ {
+  "tech": "水刀切割",
+  "element": "水",
+  "power": "350",
+  "cooldown": "16",
+  "effect": "浸湿",
+  "desc": "用压缩水流一扫前方。被扫过的区域会在片刻后喷出水柱。",
+  "fruit_id": "SkillCard_HydroSlicer",
+  "fruit_name": "水之技能果实：水刀切割"
+ },
+ {
+  "tech": "间隙潮",
+  "element": "水",
+  "power": "300",
+  "cooldown": "16",
+  "effect": "浸湿",
+  "desc": "连续在敌人的脚下生成水柱结成的墙壁。",
+  "fruit_id": "SkillCard_WallSplash",
+  "fruit_name": "水之技能果实：间隙潮"
+ },
+ {
+  "tech": "分流水炮",
+  "element": "水",
+  "power": "250",
+  "cooldown": "12",
+  "effect": "浸湿",
+  "desc": "向前方发射高压水流。片刻后，水流会向左右分岔。",
+  "fruit_id": "SkillCard_DiversionLaser",
+  "fruit_name": "水之技能果实：分流水炮"
+ },
+ {
+  "tech": "爆裂水球",
+  "element": "水",
+  "power": "200",
+  "cooldown": "12",
+  "effect": "浸湿",
+  "desc": "在头上生成巨大水球瞄准敌人并发射。",
+  "fruit_id": "SkillCard_WaterBall",
+  "fruit_name": "水之技能果实：爆裂水球"
+ },
+ {
+  "tech": "瀑流击",
+  "element": "水",
+  "power": "160",
+  "cooldown": "8",
+  "effect": "浸湿",
+  "desc": "召唤一束直线前进的水柱。",
+  "fruit_id": "SkillCard_LineGeyser",
+  "fruit_name": "水之技能果实：瀑流击"
+ },
+ {
+  "tech": "酸雨",
+  "element": "水",
+  "power": "120",
+  "cooldown": "8",
+  "effect": "浸湿",
+  "desc": "生成酸性云朵在敌人头上下酸雨。",
+  "fruit_id": "SkillCard_AcidRain",
+  "fruit_name": "水之技能果实：酸雨"
+ },
+ {
+  "tech": "泡泡射击",
+  "element": "水",
+  "power": "80",
+  "cooldown": "4",
+  "effect": "浸湿",
+  "desc": "发射大量泡沫并缓慢追击敌人。",
+  "fruit_id": "SkillCard_BubbleShot",
+  "fruit_name": "水之技能果实：泡泡射击"
+ },
+ {
+  "tech": "水枪",
+  "element": "水",
+  "power": "50",
+  "cooldown": "2",
+  "effect": "浸湿",
+  "desc": "发射水弹笔直飞向对方。",
+  "fruit_id": "SkillCard_WaterGun",
+  "fruit_name": "水之技能果实：水枪"
+ },
+ {
+  "tech": "水流射击",
+  "element": "水",
+  "power": "40",
+  "cooldown": "2",
+  "effect": "浸湿",
+  "desc": "朝敌人发射高速水弹。",
+  "fruit_id": "SkillCard_AquaJet",
+  "fruit_name": "水之技能果实：水流射击"
+ },
+ {
+  "tech": "雷霆飓风",
+  "element": "雷",
+  "power": "600",
+  "cooldown": "30",
+  "effect": "",
+  "desc": "召唤巨大的雷属性龙卷风。龙卷风将追踪敌人缓慢移动。",
+  "fruit_id": "SkillCard_ThunderStorm",
+  "fruit_name": "雷之技能果实：雷霆飓风"
+ },
+ {
+  "tech": "雷动八方",
+  "element": "雷",
+  "power": "500",
+  "cooldown": "24",
+  "effect": "感电",
+  "desc": "向八个方向召唤直线推进的雷击。",
+  "fruit_id": "SkillCard_RangeThunder",
+  "fruit_name": "雷之技能果实：雷动八方"
+ },
+ {
+  "tech": "闪电伏特",
+  "element": "雷",
+  "power": "450",
+  "cooldown": "20",
+  "effect": "感电",
+  "desc": "积蓄雷电之力瞄准敌人释放强劲电击。",
+  "fruit_id": "SkillCard_Thunderbolt",
+  "fruit_name": "雷之技能果实：闪电伏特"
+ },
+ {
+  "tech": "广域雷击",
+  "element": "雷",
+  "power": "400",
+  "cooldown": "20",
+  "effect": "感电",
+  "desc": "召唤雷电在一定时间后生成大量落电。",
+  "fruit_id": "SkillCard_ThunderRain",
+  "fruit_name": "雷之技能果实：广域雷击"
+ },
+ {
+  "tech": "闪电冲击",
+  "element": "雷",
+  "power": "300",
+  "cooldown": "16",
+  "effect": "感电",
+  "desc": "让自己化作避雷针引来雷电，并在原地引发闪电爆炸。",
+  "fruit_id": "SkillCard_LightningStrike",
+  "fruit_name": "雷之技能果实：闪电冲击"
+ },
+ {
+  "tech": "三相火花",
+  "element": "雷",
+  "power": "250",
+  "cooldown": "12",
+  "effect": "感电",
+  "desc": "同时发射直线飞行的高速雷球，和追踪敌人的慢速雷球。",
+  "fruit_id": "SkillCard_TriSpark",
+  "fruit_name": "雷之技能果实：三相火花"
+ },
+ {
+  "tech": "三重雷击",
+  "element": "雷",
+  "power": "200",
+  "cooldown": "12",
+  "effect": "感电",
+  "desc": "在敌人头上生成3次落雷。",
+  "fruit_id": "SkillCard_ThreeThunder",
+  "fruit_name": "雷之技能果实：三重雷击"
+ },
+ {
+  "tech": "雷击",
+  "element": "雷",
+  "power": "160",
+  "cooldown": "8",
+  "effect": "感电",
+  "desc": "生成可笔直前进的雷击。",
+  "fruit_id": "SkillCard_LineThunder",
+  "fruit_name": "雷之技能果实：雷击"
+ },
+ {
+  "tech": "锁定雷射",
+  "element": "雷",
+  "power": "140",
+  "cooldown": "8",
+  "effect": "感电",
+  "desc": "瞄准敌人后发射超高速的雷电激光。",
+  "fruit_id": "SkillCard_LockonLaser",
+  "fruit_name": "雷之技能果实：锁定雷射"
+ },
+ {
+  "tech": "闪电球",
+  "element": "雷",
+  "power": "100",
+  "cooldown": "8",
+  "effect": "感电",
+  "desc": "发射雷电球并缓慢追击敌人。",
+  "fruit_id": "SkillCard_ThunderBall",
+  "fruit_name": "雷之技能果实：闪电球"
+ },
+ {
+  "tech": "冲击波",
+  "element": "雷",
+  "power": "80",
+  "cooldown": "4",
+  "effect": "感电",
+  "desc": "快速放电给周围造成冲击。",
+  "fruit_id": "SkillCard_ElecWave",
+  "fruit_name": "雷之技能果实：冲击波"
+ },
+ {
+  "tech": "电火花",
+  "element": "雷",
+  "power": "50",
+  "cooldown": "2",
+  "effect": "感电",
+  "desc": "向前方发射呈扇形扩散的雷电球。",
+  "fruit_id": "SkillCard_SpreadPulse",
+  "fruit_name": "雷之技能果实：电火花"
+ },
+ {
+  "tech": "雷矛",
+  "element": "雷",
+  "power": "40",
+  "cooldown": "2",
+  "effect": "感电",
+  "desc": "向敌人发射高速直线飞行的雷枪。",
+  "fruit_id": "SkillCard_ThunderSpear",
+  "fruit_name": "雷之技能果实：雷矛"
+ },
+ {
+  "tech": "翠耀罡风",
+  "element": "草",
+  "power": "600",
+  "cooldown": "30",
+  "effect": "缠绕",
+  "desc": "以自身为中心掀起巨大的风暴漩涡，发动强力攻击。",
+  "fruit_id": "SkillCard_WindBurst",
+  "fruit_name": "草之技能果实：翠耀罡风"
+ },
+ {
+  "tech": "十字风切",
+  "element": "草",
+  "power": "500",
+  "cooldown": "24",
+  "effect": "缠绕",
+  "desc": "在敌人前方生成风刃，并对其发动十字斩击。",
+  "fruit_id": "SkillCard_CrossWind",
+  "fruit_name": "草之技能果实：十字风切"
+ },
+ {
+  "tech": "太阳光束",
+  "element": "草",
+  "power": "450",
+  "cooldown": "20",
+  "effect": "缠绕",
+  "desc": "积蓄太阳之力瞄准敌人发射强劲光线。",
+  "fruit_id": "SkillCard_SolarBeam",
+  "fruit_name": "草之技能果实：太阳光束"
+ },
+ {
+  "tech": "连锁叶刃",
+  "element": "草",
+  "power": "400",
+  "cooldown": "20",
+  "effect": "缠绕",
+  "desc": "发射风刃，在击中敌人或树木时反弹并连续造成攻击，最多可反弹4次。",
+  "fruit_id": "SkillCard_ReflectiveShuriken",
+  "fruit_name": "草之技能果实：连锁叶刃"
+ },
+ {
+  "tech": "缠根牢狱",
+  "element": "草",
+  "power": "300",
+  "cooldown": "16",
+  "effect": "缠绕",
+  "desc": "在敌人的位置和其周围刺出尖锐的根刺。",
+  "fruit_id": "SkillCard_RootLance",
+  "fruit_name": "草之技能果实：纏根牢獄"
+ },
+ {
+  "tech": "缠绕地刺",
+  "element": "草",
+  "power": "250",
+  "cooldown": "12",
+  "effect": "缠绕",
+  "desc": "用地下尖锐的根部追击敌人并从脚下贯穿敌人。",
+  "fruit_id": "SkillCard_RootAttack",
+  "fruit_name": "草之技能果实：缠绕地刺"
+ },
+ {
+  "tech": "绿野飓风",
+  "element": "草",
+  "power": "200",
+  "cooldown": "12",
+  "effect": "缠绕",
+  "desc": "在左右两侧生成龙卷风，并扇向敌人。",
+  "fruit_id": "SkillCard_GrassTornado",
+  "fruit_name": "草之技能果实：绿野飓风"
+ },
+ {
+  "tech": "三重风刃",
+  "element": "草",
+  "power": "160",
+  "cooldown": "8",
+  "effect": "缠绕",
+  "desc": "瞄准敌人发射3发直线飞行的超高速风刃。",
+  "fruit_id": "SkillCard_SpecialCutter",
+  "fruit_name": "草之技能果实：三重风刃"
+ },
+ {
+  "tech": "种子地雷",
+  "element": "草",
+  "power": "120",
+  "cooldown": "8",
+  "effect": "缠绕",
+  "desc": "发射危险的种子。碰到敌人会绽开并爆炸。",
+  "fruit_id": "SkillCard_SeedMine",
+  "fruit_name": "草之技能果实：种子地雷"
+ },
+ {
+  "tech": "种子机关枪",
+  "element": "草",
+  "power": "80",
+  "cooldown": "4",
+  "effect": "缠绕",
+  "desc": "释放大量坚硬的种子攻击前方的敌人。",
+  "fruit_id": "SkillCard_SeedMachinegun",
+  "fruit_name": "草之技能果实：种子机关枪"
+ },
+ {
+  "tech": "风刃",
+  "element": "草",
+  "power": "40",
+  "cooldown": "2",
+  "effect": "缠绕",
+  "desc": "发射超高速风刃瞄准后笔直飞向敌人。",
+  "fruit_id": "SkillCard_WindCutter",
+  "fruit_name": "草之技能果实：风刃"
+ },
+ {
+  "tech": "冰极冻域",
+  "element": "冰",
+  "power": "700",
+  "cooldown": "30",
+  "effect": "冻结",
+  "desc": "大范围的在敌人脚下生成冰柱穿刺。",
+  "fruit_id": "SkillCard_IceAge",
+  "fruit_name": "冰之技能果实：冰极冻域"
+ },
+ {
+  "tech": "晶钻之雨",
+  "element": "冰",
+  "power": "600",
+  "cooldown": "30",
+  "effect": "冻结",
+  "desc": "在敌人头顶生无数个冰块，随后接连落下攻击目标。",
+  "fruit_id": "SkillCard_DiamondFall",
+  "fruit_name": "冰之技能果实：晶钻之雨"
+ },
+ {
+  "tech": "钻石星辰",
+  "element": "冰",
+  "power": "450",
+  "cooldown": "20",
+  "effect": "冻结",
+  "desc": "生成巨大的冰块瞄准敌人后高速发射。中弹时，可同时给周围造成冲击。",
+  "fruit_id": "SkillCard_IcicleThrow",
+  "fruit_name": "冰之技能果实：钻石星辰"
+ },
+ {
+  "tech": "冰锋之路",
+  "element": "冰",
+  "power": "300",
+  "cooldown": "16",
+  "effect": "冻结",
+  "desc": "召唤朝前方三个方向推进的冰柱",
+  "fruit_id": "SkillCard_IcicleLine",
+  "fruit_name": "冰之技能果实：冰锋之路"
+ },
+ {
+  "tech": "冰霜连弹",
+  "element": "冰",
+  "power": "250",
+  "cooldown": "12",
+  "effect": "冻结",
+  "desc": "在空中生成复数个冰锥，瞄准敌人一齐射出。",
+  "fruit_id": "SkillCard_IciclePierce",
+  "fruit_name": "冰之技能果实：冰霜连弹"
+ },
+ {
+  "tech": "寒冰之壁",
+  "element": "冰",
+  "power": "200",
+  "cooldown": "12",
+  "effect": "冻结",
+  "desc": "从地面召唤出冰墙。冰墙会持续一段时间，并在承受一定伤害后碎裂。",
+  "fruit_id": "SkillCard_IceWall",
+  "fruit_name": "冰之技能果实：寒冰之壁"
+ },
+ {
+  "tech": "凛冬之息",
+  "element": "冰",
+  "power": "160",
+  "cooldown": "8",
+  "effect": "冻结",
+  "desc": "朝敌人喷出冰冷空气，持续对目标造成伤害。",
+  "fruit_id": "SkillCard_FrostBreath",
+  "fruit_name": "冰之技能果实：凛冬之息"
+ },
+ {
+  "tech": "冰刺",
+  "element": "冰",
+  "power": "120",
+  "cooldown": "8",
+  "effect": "冻结",
+  "desc": "在敌人的脚边生成尖锐的冰刃。",
+  "fruit_id": "SkillCard_BlizzardLance",
+  "fruit_name": "冰之技能果实：冰刺"
+ },
+ {
+  "tech": "冰刃",
+  "element": "冰",
+  "power": "80",
+  "cooldown": "4",
+  "effect": "冻结",
+  "desc": "制造出新月型的冰刃，将之射向前方。",
+  "fruit_id": "SkillCard_IceBlade",
+  "fruit_name": "冰之技能果实：冰刃"
+ },
+ {
+  "tech": "冰雪飞弹",
+  "element": "冰",
+  "power": "40",
+  "cooldown": "2",
+  "effect": "冻结",
+  "desc": "在上空生成尖锐的冰柱瞄准敌人后发射冰柱。",
+  "fruit_id": "SkillCard_IceMissile",
+  "fruit_name": "冰之技能果实：冰雪飞弹"
+ },
+ {
+  "tech": "震岩",
+  "element": "地",
+  "power": "600",
+  "cooldown": "30",
+  "effect": "泥泞",
+  "desc": "震动地面，并令巨大的岩石飞起。",
+  "fruit_id": "SkillCard_RockBeat",
+  "fruit_name": "地之技能果实：震岩"
+ },
+ {
+  "tech": "沙尘暴",
+  "element": "地",
+  "power": "500",
+  "cooldown": "24",
+  "effect": "泥泞",
+  "desc": "生成复数个砂龙卷。龙卷风们将一边自旋一边绕中心旋转。",
+  "fruit_id": "SkillCard_SandTwister",
+  "fruit_name": "地之技能果实：沙尘暴"
+ },
+ {
+  "tech": "岩石锐矛",
+  "element": "地",
+  "power": "400",
+  "cooldown": "20",
+  "effect": "泥泞",
+  "desc": "在敌人的脚边生成尖锐的岩石长矛。",
+  "fruit_id": "SkillCard_RockLance",
+  "fruit_name": "地之技能果实：岩石锐矛"
+ },
+ {
+  "tech": "岩爆",
+  "element": "地",
+  "power": "300",
+  "cooldown": "16",
+  "effect": "泥泞",
+  "desc": "撼动地面， 使大块岩石射向四面八方",
+  "fruit_id": "SkillCard_Tremor",
+  "fruit_name": "地之技能果实：岩爆"
+ },
+ {
+  "tech": "沙尘旋风",
+  "element": "地",
+  "power": "200",
+  "cooldown": "12",
+  "effect": "泥泞",
+  "desc": "在左右两侧生成砂砾龙卷风，并扇向敌人。",
+  "fruit_id": "SkillCard_SandTornado",
+  "fruit_name": "地之技能果实：沙尘旋风"
+ },
+ {
+  "tech": "投石",
+  "element": "地",
+  "power": "120",
+  "cooldown": "8",
+  "effect": "泥泞",
+  "desc": "将岩石从眼前的地上吸附起来瞄准敌人并发射。",
+  "fruit_id": "SkillCard_ThrowRock",
+  "fruit_name": "地之技能果实：投石"
+ },
+ {
+  "tech": "碎石霰弹",
+  "element": "地",
+  "power": "80",
+  "cooldown": "4",
+  "effect": "泥泞",
+  "desc": "向前方射出大量的小石头碎屑。",
+  "fruit_id": "SkillCard_StoneShotgun",
+  "fruit_name": "地之技能果实：碎石霰弹"
+ },
+ {
+  "tech": "泥浆投掷",
+  "element": "地",
+  "power": "40",
+  "cooldown": "2",
+  "effect": "泥泞",
+  "desc": "用黏糊糊的泥巴瞄准敌人并发射。",
+  "fruit_id": "SkillCard_MudShot",
+  "fruit_name": "地之技能果实：泥浆投掷"
+ },
+ {
+  "tech": "念动引力",
+  "element": "暗",
+  "power": "700",
+  "cooldown": "30",
+  "effect": "",
+  "desc": "用重力剥夺敌人的行动自由，并将其从高处砸向地面。",
+  "fruit_id": "SkillCard_Psychokinesis",
+  "fruit_name": "暗之技能果实：念动引力"
+ },
+ {
+  "tech": "黑暗之拥",
+  "element": "暗",
+  "power": "600",
+  "cooldown": "30",
+  "effect": "黑暗",
+  "desc": "发射多个可以追击敌人的黑暗之球。",
+  "fruit_id": "SkillCard_DarkLegion",
+  "fruit_name": "暗之技能果实：黑暗之拥"
+ },
+ {
+  "tech": "暗黑雷射",
+  "element": "暗",
+  "power": "450",
+  "cooldown": "20",
+  "effect": "黑暗",
+  "desc": "积蓄黑暗之力瞄准敌人发射强劲光线。",
+  "fruit_id": "SkillCard_DarkLaser",
+  "fruit_name": "暗之技能果实：暗黑雷射"
+ },
+ {
+  "tech": "启示录",
+  "element": "暗",
+  "power": "400",
+  "cooldown": "20",
+  "effect": "黑暗",
+  "desc": "于敌人周围生成数个暗黑龙卷风。",
+  "fruit_id": "SkillCard_Apocalypse",
+  "fruit_name": "暗之技能果实：启示录"
+ },
+ {
+  "tech": "恶梦球",
+  "element": "暗",
+  "power": "300",
+  "cooldown": "16",
+  "effect": "黑暗",
+  "desc": "生成巨大的黑暗之球瞄准敌人并高速发射。",
+  "fruit_id": "SkillCard_ShadowBall",
+  "fruit_name": "暗之技能果实：恶梦球"
+ },
+ {
+  "tech": "鬼火",
+  "element": "暗",
+  "power": "200",
+  "cooldown": "12",
+  "effect": "点燃",
+  "desc": "发射3个怨念并执着追击敌人。",
+  "fruit_id": "SkillCard_GhostFlame",
+  "fruit_name": "暗之技能果实：鬼火"
+ },
+ {
+  "tech": "毒雨",
+  "element": "暗",
+  "power": "160",
+  "cooldown": "8",
+  "effect": "中毒",
+  "desc": "使出浑身力量向各个方向喷洒毒球。",
+  "fruit_id": "SkillCard_BubbleShower",
+  "fruit_name": "暗之技能果实：毒雨"
+ },
+ {
+  "tech": "黑暗箭",
+  "element": "暗",
+  "power": "120",
+  "cooldown": "8",
+  "effect": "黑暗",
+  "desc": "使用暗之力连续发射数支高速箭追击敌人。",
+  "fruit_id": "SkillCard_DarkArrow",
+  "fruit_name": "暗之技能果实：黑暗箭"
+ },
+ {
+  "tech": "暗影波动",
+  "element": "暗",
+  "power": "80",
+  "cooldown": "4",
+  "effect": "黑暗",
+  "desc": "快速释放黑暗之力给周围造成冲击。",
+  "fruit_id": "SkillCard_DarkWave",
+  "fruit_name": "暗之技能果实：暗影波动"
+ },
+ {
+  "tech": "黑暗弹",
+  "element": "暗",
+  "power": "70",
+  "cooldown": "4",
+  "effect": "黑暗",
+  "desc": "将带有黑暗力量的高速能量弹射向敌人。",
+  "fruit_id": "SkillCard_DarkCanon",
+  "fruit_name": "暗之技能果实：黑暗弹"
+ },
+ {
+  "tech": "黑暗霰射",
+  "element": "暗",
+  "power": "60",
+  "cooldown": "4",
+  "effect": "黑暗",
+  "desc": "向前方发射呈扇形扩散的高速暗黑球。",
+  "fruit_id": "SkillCard_DarkPulse",
+  "fruit_name": "暗之技能果实：黑暗霰射"
+ },
+ {
+  "tech": "暗能弹",
+  "element": "暗",
+  "power": "40",
+  "cooldown": "2",
+  "effect": "黑暗",
+  "desc": "发射逐渐加速的黑暗能量弹",
+  "fruit_id": "SkillCard_GravityShot",
+  "fruit_name": "暗之技能果实：暗能弹"
+ },
+ {
+  "tech": "剧毒射击",
+  "element": "暗",
+  "power": "30",
+  "cooldown": "2",
+  "effect": "中毒",
+  "desc": "用蕴藏剧毒之力的淤泥瞄准敌人并发射。",
+  "fruit_id": "SkillCard_PoisonShot",
+  "fruit_name": "暗之技能果实：剧毒射击"
+ },
+ {
+  "tech": "龙彗星",
+  "element": "龙",
+  "power": "600",
+  "cooldown": "30",
+  "effect": "点燃",
+  "desc": "召唤大量小陨石瞄准敌人并发射。",
+  "fruit_id": "SkillCard_DragonMeteor",
+  "fruit_name": "龙之技能果实：龙彗星"
+ },
+ {
+  "tech": "龙息炮",
+  "element": "龙",
+  "power": "400",
+  "cooldown": "20",
+  "effect": "点燃",
+  "desc": "向敌人发射积蓄着龙属性力量的能量弹。能量弹在着弹时将引发大范围爆炸。",
+  "fruit_id": "SkillCard_ChargeCanon",
+  "fruit_name": "龙之技能果实：龙息炮"
+ },
+ {
+  "tech": "切割龙息",
+  "element": "龙",
+  "power": "350",
+  "cooldown": "16",
+  "effect": "点燃",
+  "desc": "用龙属性的射线一扫前方。被扫过地方将产生延迟爆炸。",
+  "fruit_id": "SkillCard_BeamSlicer",
+  "fruit_name": "龙之技能果实：切割龙息"
+ },
+ {
+  "tech": "绽裂龙息",
+  "element": "龙",
+  "power": "200",
+  "cooldown": "12",
+  "effect": "点燃",
+  "desc": "向敌人的位置发射充满龙属性的能量弹。能量弹在着弹时将向周围扩散，在前方广范围引发爆炸。",
+  "fruit_id": "SkillCard_BlastCanon",
+  "fruit_name": "龙之技能果实：绽裂龙息"
+ },
+ {
+  "tech": "陨星",
+  "element": "龙",
+  "power": "180",
+  "cooldown": "8",
+  "effect": "点燃",
+  "desc": "召唤陨石垂直落下，并在撞击点产生冲击波。",
+  "fruit_id": "SkillCard_Commet",
+  "fruit_name": "龙之技能果实：陨星"
+ },
+ {
+  "tech": "龙息",
+  "element": "龙",
+  "power": "160",
+  "cooldown": "8",
+  "effect": "点燃",
+  "desc": "向前方呼出蕴含龙之力的气息，持续对目标造成伤害。",
+  "fruit_id": "SkillCard_DragonBreath",
+  "fruit_name": "龙之技能果实：龙息"
+ },
+ {
+  "tech": "龙之波动",
+  "element": "龙",
+  "power": "80",
+  "cooldown": "4",
+  "effect": "点燃",
+  "desc": "快速释放龙之力给周围造成冲击。",
+  "fruit_id": "SkillCard_DragonWave",
+  "fruit_name": "龙之技能果实：龙之波动"
+ },
+ {
+  "tech": "龙息弹",
+  "element": "龙",
+  "power": "40",
+  "cooldown": "2",
+  "effect": "点燃",
+  "desc": "用蕴藏龙之力的能量弹瞄准敌人并发射。",
+  "fruit_id": "SkillCard_DragonCanon",
+  "fruit_name": "龙之技能果实：龙息弹"
+ }
+]

@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.4.0",
+    "1.4.1",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -378,6 +378,18 @@ class PalworldPlugin(Star):
             with open(os.path.join(base, "skills.json"), encoding="utf-8") as _f:
                 self._skills = json.loads(_f.read())
             self._skill_full = {s["name"]: s for s in self._skills}
+        except Exception:  # noqa: BLE001
+            pass
+        # 技能果实(1.0) list + 技能名/元素索引（/帕鲁技能果实）
+        self._skill_fruits: list = []
+        self._sf_by_tech: dict = {}
+        self._sf_by_element: dict = {}
+        try:
+            with open(os.path.join(base, "skill_fruits.json"), encoding="utf-8") as _f:
+                self._skill_fruits = json.loads(_f.read())
+            for f in self._skill_fruits:
+                self._sf_by_tech.setdefault(f["tech"], f)
+                self._sf_by_element.setdefault(f["element"], []).append(f)
         except Exception:  # noqa: BLE001
             pass
         # 钓鱼战利品 {spot, catch:[{name,qty,rate}]}（/帕鲁钓鱼）
@@ -2372,6 +2384,35 @@ class PalworldPlugin(Star):
                                 "element": s["element"], "color": color, "power": s["power"],
                                 "cooldown": s["cooldown"], "effect": s.get("effect", ""),
                                 "desc": s.get("desc", ""), "is_fruit": s.get("is_fruit", False)})
+
+    def _skillfruit_detail(self, event, f: dict):
+        color = (self._elements or {}).get(f["element"], {}).get("color") or "#e8c466"
+        return self._img(event, self._t("skillfruit"), {
+            "tech": f["tech"], "fruit_name": f["fruit_name"], "element": f["element"],
+            "emoji": ELEM_EMOJI.get(f["element"], "✨"), "color": color,
+            "power": f["power"], "cooldown": f["cooldown"], "effect": f.get("effect", ""),
+            "desc": f.get("desc", ""), "icon": self._item_icon(f["fruit_id"])})
+
+    async def _cmd_skillfruit(self, event: AstrMessageEvent, args: list):
+        if not self._skill_fruits:
+            return await self._msg_card(event, "🍐", "技能果实数据未加载",
+                                        desc="data/skill_fruits.json 缺失或损坏。", color="#E5484D")
+        q, page = self._parse_page_args(args)
+        ELS = ("无", "火", "水", "雷", "草", "冰", "地", "暗", "龙")
+
+        def _ent(pool):
+            return [{"no": f["element"], "name": f["tech"], "k": "item", "ik": f["fruit_id"]} for f in pool]
+        if not q:
+            return await self._render_grid(event, "技能果实图鉴", "🍐",
+                                           _ent(self._skill_fruits), page, "/帕鲁技能果实", "")
+        if q in ELS:
+            return await self._render_grid(event, f"{q}属性技能果实", "🍐",
+                                           _ent(self._sf_by_element.get(q, [])), page, "/帕鲁技能果实", q)
+        f = self._sf_by_tech.get(q) or next((x for x in self._skill_fruits if q in x["tech"]), None)
+        if not f:
+            return await self._msg_card(event, "🔍", "查无此技能果实",
+                                        desc=f"没有教「{q}」的技能果实。\n可按属性查，如 /帕鲁技能果实 火。", color="#F5A623")
+        return await self._skillfruit_detail(event, f)
 
     # ------------------------------------------------------------------
     # 渲染封装：优先用本地 Playwright(快、可并行、无网络往返)，失败回退 AstrBot 远程 t2i
