@@ -2,6 +2,13 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.8.6] - 2026-07-12
+
+### 数据
+- **帕鲁数量口径修正（1.0 适配·阶段3）**：用游戏 DT（`ZukanIndex`/`IsPal`）权威定位 **289 数据实体 vs 287 官方可收集**，精确锁定差异 2 条 —— **枯星龙**（世界树剧情最终 boss，无属性）+ **花叶泥泥**（叶泥泥花变种，DT Suffix 空、与基础共享图鉴位 12），**按要求标记不删除**。
+- paldex 派生口径字段：`is_collectible`/`is_variant`/`is_boss_only`/`is_story_only`/`is_internal`/`available_version`。
+- `/帕鲁1.0`、README、图鉴收集度分母**统一双口径**（287 可收集 / 289 数据实体，含 85 变体），不再武断把 DataTable 行数当正式图鉴数。
+
 ## [1.8.5] - 2026-07-12
 
 ### 修复

@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.8.5",
+    "1.8.6",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -481,9 +481,12 @@ class PalworldPlugin(Star):
                     self._skill_by_name[nm] = {"power": s.get("power") or 0,
                                                "elem": ELEM_CN.get(s.get("element_type"), ""),
                                                "cd": s.get("cool_down_time") or 0, "desc": desc[:34]}
-        logger.info(f"{LOG_PREFIX} 图鉴 {len(self._pals)} 只 / 配种 {len(self._breed)} 组合 / "
-                    f"物品 {len(self._items)} / 设施 {len(self._buildings)} / 科技 {len(self._tech)} / "
-                    f"词条 {len(self._passives)} / 技能 {len(self._wazas)} 已加载")
+        # 帕鲁数量统一口径：可收集(官方正式图鉴,287) vs 数据实体(含变体/剧情boss,289)
+        self._dex_total = len(self._pals)
+        self._dex_collectible = sum(1 for p in self._pals if p.get("is_collectible", True))
+        logger.info(f"{LOG_PREFIX} 图鉴 {self._dex_collectible} 只可收集(数据实体 {self._dex_total}) / "
+                    f"配种 {len(self._breed)} 组合 / 物品 {len(self._items)} / 设施 {len(self._buildings)} / "
+                    f"科技 {len(self._tech)} / 词条 {len(self._passives)} / 技能 {len(self._wazas)} 已加载")
 
     def _find_pal(self, q: str):
         q = (q or "").strip()
@@ -2635,7 +2638,9 @@ class PalworldPlugin(Star):
         """/帕鲁1.0：插件对幻兽帕鲁 1.0 正式版的数据与功能支持总览。"""
         def _n(a):
             return len(getattr(self, a, []) or [])
-        stats = {"pals": _n("_pals"), "items": _n("_items"), "skills": _n("_skills"),
+        stats = {"pals": getattr(self, "_dex_collectible", _n("_pals")),
+                 "pals_total": getattr(self, "_dex_total", _n("_pals")),
+                 "items": _n("_items"), "skills": _n("_skills"),
                  "tech": _n("_tech"), "buildings": _n("_buildings"), "recipes": _n("_recipes"),
                  "lab": _n("_lab"), "fruits": _n("_skill_fruits"), "implants": _n("_implants")}
         return await self._img(event, self._t("v10"), {"stats": stats})
@@ -3202,7 +3207,7 @@ class PalworldPlugin(Star):
             return await self._msg_card(
                 event, "🛰️", "暂时读不到存档",
                 desc="未挂载 docker.sock 或存档读取失败，稍后再试。", color="#F5A623")
-        total = len(self._pals) or 1
+        total = getattr(self, "_dex_collectible", 0) or len(self._pals) or 1   # 收集度以官方可收集287为满
         board = []
         seen_shared = set()
         for prof in profiles.values():

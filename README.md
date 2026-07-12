@@ -10,7 +10,7 @@
 图鉴配种攻略随手查；管理员可公告 / 踢封 / 存档 / 关服。<br>
 **所有回复一律输出精美卡片图片**，附一键部署脚本。
 
-![version](https://img.shields.io/badge/version-1.8.5-6366F1?style=flat-square)
+![version](https://img.shields.io/badge/version-1.8.6-6366F1?style=flat-square)
 ![AstrBot](https://img.shields.io/badge/AstrBot-4.25%2B-8B5CF6?style=flat-square)
 ![OneBot](https://img.shields.io/badge/OneBot-v11-4ade80?style=flat-square)
 ![NapCat](https://img.shields.io/badge/adapter-NapCat-22c55e?style=flat-square)
@@ -235,9 +235,9 @@
 - `/帕鲁图鉴 <帕鲁名>`：查帕鲁中文名/属性/主动技能/工作适性/伙伴技能/描述（支持模糊匹配，查无给建议）。
 - `/帕鲁配种 <亲A> <亲B>`：查两只帕鲁的配种后代（精确，含同种与特殊组合）。
 - **代码与数据分离**：数据放插件 `data/` 子目录，启动时加载，换数据文件不用改代码。
-  - `data/paldex.json`：图鉴主数据（**214 只帕鲁，含樱岛/Feybreak 新帕鲁，编号 1–156，简体中文全字段**）。来源：**从服务器游戏 pak 直接解析**（v0.7.3），含技能/适性/伙伴技能/描述。
+  - `data/paldex.json`：图鉴主数据（**287 只官方可收集帕鲁**；含变体/剧情 boss 共 **289 个数据实体**，编号 1–204，简体中文全字段）。数据实体与可收集口径差异 2 条为**枯星龙**（世界树剧情最终 boss）与**花叶泥泥**（叶泥泥花变种，与基础共享图鉴位）——已用 `is_collectible` 字段标记、不计入正式可收集数，未删除。来源：**从游戏客户端 pak 直接解析**（含技能/适性/伙伴技能/描述/口径字段）。
   - `data/breeding.json`：配种组合表（**21321 组**，按游戏当前 CombiRank 算法生成，全覆盖）。
-  - `data/images/<pal_dev_name>.png`：**帕鲁透明头像**（214 张，128px）。图鉴卡名旁、配种卡每只帕鲁上方自动显示。来源 [paldb.cc](https://paldb.cc) 当前版图标（专用服务器 pak 的贴图像素被剥离了，无法本地提取，故走 CDN）。
+  - `data/images/<pal_dev_name>.png`：**帕鲁透明头像**（289 张，128px）。图鉴卡名旁、配种卡每只帕鲁上方自动显示。来源：**从游戏客户端 pak 提取的官方贴图**（含 1.0 新帕鲁/变体）。
   - 游戏更新出新帕鲁后想刷新数据：解析工具链备份在仓库外 `../../../../_palworld_extract_tools/`（repak 解包 + 自研纯 Python UE5.1 DataTable 解析器）；图标可按 `https://cdn.paldb.cc/image/Pal/Texture/PalIcon/Normal/T_<DevName>_icon_normal.webp` 补拉。`.bak` 是上一版数据备份。
   - 想更新/替换：保持同样的字段结构覆盖这两个文件，再「重载插件」即可。
 
@@ -324,7 +324,7 @@ networks:
 | `README.md` · `docs/DEPLOY.md` | Markdown | 说明文档 / 从零部署教程（含服务器全参数参考）|
 | `docs/screenshots/` | 图片目录 | README 功能展示用的卡片截图 |
 | `bg.jpg` · `bg_*.jpg` | 图片 | 卡片顶部背景插画（`bg.jpg` 默认；`bg_<卡名>.jpg` 专属）|
-| `data/paldex.json` | JSON 数据 | 帕鲁图鉴（214 只：属性/技能/工作适性/伙伴技能/描述）|
+| `data/paldex.json` | JSON 数据 | 帕鲁图鉴（**287 只可收集**/289 数据实体：属性/技能/工作适性/伙伴技能/描述/口径字段）|
 | `data/breeding.json` | JSON 数据 | 配种组合表（21321 组）|
 | `data/items.json` | JSON 数据 | 物品图鉴（名称/描述/类型/图标）|
 | `data/recipes.json` | JSON 数据 | 物品制作配方（材料 + 制作台）|

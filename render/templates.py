@@ -2405,7 +2405,7 @@ V10_TMPL = _HEAD + """</style></head><body><div class="page">
     <div class="subtitle"><span class="pill" style="background:rgba(124,252,154,.2);border-color:rgba(124,252,154,.45)">正式版数据已更新</span></div>
   </div></div>
   <div class="glass">""" + _GEMS + """
-    <div class="sec-t">数据收录</div>
+    <div class="sec-t">数据收录 <span style="font-size:11px;font-weight:400;color:#9c8fc0">· 帕鲁 {{ stats['pals'] }} 只可收集（官方正式图鉴），含变体共 {{ stats['pals_total'] }} 个数据实体</span></div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px">
       {% set cells = [("帕鲁图鉴",stats['pals'],"🐾"),("物品",stats['items'],"🎒"),("主动技能",stats['skills'],"✨"),("科技",stats['tech'],"🔬"),("建筑设施",stats['buildings'],"🏛️"),("制作配方",stats['recipes'],"🛠️"),("研究所",stats['lab'],"🧪"),("技能果实",stats['fruits'],"🍐"),("植入体",stats['implants'],"🧬")] %}
       {% for label,num,emo in cells %}
