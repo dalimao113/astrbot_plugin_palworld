@@ -10,7 +10,7 @@
 图鉴配种攻略随手查；管理员可公告 / 踢封 / 存档 / 关服。<br>
 **所有回复一律输出精美卡片图片**，附一键部署脚本。
 
-![version](https://img.shields.io/badge/version-1.2.2-6366F1?style=flat-square)
+![version](https://img.shields.io/badge/version-1.8.5-6366F1?style=flat-square)
 ![AstrBot](https://img.shields.io/badge/AstrBot-4.25%2B-8B5CF6?style=flat-square)
 ![OneBot](https://img.shields.io/badge/OneBot-v11-4ade80?style=flat-square)
 ![NapCat](https://img.shields.io/badge/adapter-NapCat-22c55e?style=flat-square)
@@ -153,6 +153,8 @@
 
 > **绑定说明**：内部以帕鲁 `userId`（基于 Steam64 的稳定账号 id）为主键，名字仅作显示、改名也认得。
 > `/帕鲁绑定 名字` 会在在线/历史中定位你的 userId；**同名多人**时会列出候选，让你用 `/帕鲁绑定 <userId>` 精确绑。
+>
+> **适用场景**：角色绑定是面向**熟人私人群**的**信任机制**（同一游戏角色不能被多个 QQ 重复绑定，避免顶替），**不含验证码/审核**。若在陌生人大群使用，应由**管理员统一管理绑定**，不要开放自助绑定。
 
 > 非白名单用户触发管理指令 → 回复「无权限」卡片，不执行。
 > 危险操作（封禁/关服）需在 `confirm_timeout` 秒内回复 `/帕鲁确认` 才执行，超时作废。

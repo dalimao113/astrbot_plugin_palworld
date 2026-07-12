@@ -1,6 +1,8 @@
-"""版本号一致性护栏：metadata.yaml / pyproject.toml / main.py @register 必须相同。
+"""版本号一致性护栏：metadata.yaml / pyproject.toml / main.py @register /
+README 徽章 / CHANGELOG 最新条目 必须相同。
 
-防止“改了一处忘了另一处”导致的版本漂移（历史上 pyproject 曾停在 1.1.2）。
+防止“改了一处忘了另一处”导致的版本漂移（历史上 pyproject 曾停在 1.1.2，
+README 徽章与 CHANGELOG 曾停在 1.2.2 而实际到 1.8.4）。
 """
 import ast
 import pathlib
@@ -38,9 +40,27 @@ def _register_version() -> str:
     raise AssertionError("main.py 未找到 @register 的版本号")
 
 
+def _readme_badge_version() -> str:
+    txt = (ROOT / "README.md").read_text(encoding="utf-8")
+    m = re.search(r"badge/version-(\d+\.\d+\.\d+)", txt)
+    assert m, "README.md 未找到 version 徽章"
+    return m.group(1)
+
+
+def _changelog_latest_version() -> str:
+    """CHANGELOG 里第一个(最新) ## [X.Y.Z] 条目。"""
+    txt = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    m = re.search(r"(?m)^##\s*\[(\d+\.\d+\.\d+)\]", txt)
+    assert m, "CHANGELOG.md 未找到版本条目"
+    return m.group(1)
+
+
 def test_versions_consistent():
     m, p, r = _metadata_version(), _pyproject_version(), _register_version()
-    assert m == p == r, f"版本号不一致: metadata={m} pyproject={p} @register={r}"
+    rd, cl = _readme_badge_version(), _changelog_latest_version()
+    assert m == p == r == rd == cl, (
+        f"版本号不一致: metadata={m} pyproject={p} @register={r} "
+        f"README徽章={rd} CHANGELOG最新={cl}")
 
 
 def test_version_is_semver():

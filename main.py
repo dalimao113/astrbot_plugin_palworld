@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.8.4",
+    "1.8.5",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -69,6 +69,7 @@ class PalworldPlugin(Star):
         self._session: Optional[aiohttp.ClientSession] = None
         self._cooldown: dict[str, float] = {}          # group_id -> 上次查询时间戳
         self._pending: dict[str, dict] = {}            # sender_id -> 待确认操作
+        self._cooldown_map: dict[str, float] = {}      # sender_id -> 上次受冷却查询的时间戳(查询冷却)
         self._shout_cd: dict[str, float] = {}          # qq -> 上次喊话时间(冷却)
         self._call_cd: dict[str, float] = {}           # 目标qq -> 上次被喊时间(冷却)
         self._bg = self._load_bg()                     # 头部背景图(默认+每卡专属)，空则头部回退纯色
@@ -105,12 +106,25 @@ class PalworldPlugin(Star):
     # 持久化状态
     # ------------------------------------------------------------------
     def _load_state(self) -> dict:
+        def fresh() -> dict:   # 每次新建，避免默认 list/dict 被共享引用
+            return {"groups": [], "online": {}, "server_up": None, "fail_count": 0,
+                    "initialized": False, "state_version": 1}
         try:
             if self._state_path.exists():
-                return json.loads(self._state_path.read_text("utf-8"))
+                d = json.loads(self._state_path.read_text("utf-8"))
+                if isinstance(d, dict):
+                    for k, v in fresh().items():   # 向后兼容：补全旧版本缺失的字段
+                        d.setdefault(k, v)
+                    d["state_version"] = 1
+                    return d
         except Exception as e:  # noqa: BLE001
-            logger.warning(f"{LOG_PREFIX} 状态文件读取失败，重置: {e}")
-        return {"groups": [], "online": {}, "server_up": None, "fail_count": 0, "initialized": False}
+            logger.warning(f"{LOG_PREFIX} 状态文件读取失败，重置(损坏副本已保留供排查): {e}")
+            try:   # 保留损坏副本，不直接丢弃(可能含绑定/审计)
+                self._state_path.replace(
+                    self._state_path.with_name(f"{self._state_path.name}.corrupt.{int(time.time())}"))
+            except Exception:  # noqa: BLE001
+                pass
+        return fresh()
 
     def _save_state(self):
         # 原子写：先写同目录临时文件再 os.replace() 替换，避免写一半崩溃损坏 state.json
@@ -1467,7 +1481,9 @@ class PalworldPlugin(Star):
         return int(self.config.get("confirm_timeout", 60))
 
     def _effective_cooldown(self) -> int:
-        return max(int(self.config.get("query_cooldown", 10)), HARD_MIN_COOLDOWN)
+        # query_cooldown<=0 显式关闭冷却(私人小群可关)；否则不低于硬下限。
+        cd = int(self.config.get("query_cooldown", 10))
+        return 0 if cd <= 0 else max(cd, HARD_MIN_COOLDOWN)
 
     def _admins(self) -> list[str]:
         return [str(q).strip() for q in (self.config.get("admin_qq") or []) if str(q).strip()]
@@ -2811,8 +2827,19 @@ class PalworldPlugin(Star):
     # 冷却
     # ------------------------------------------------------------------
     def _pass_cooldown(self, event: AstrMessageEvent) -> bool:
-        # 不限流：任何人都能连发同样/不同样的指令，同群多人并发也各自都出图。
-        # (服务器压力由存档服务(SaveService)的拉取锁 + 缓存 TTL 兜底，不需要前端冷却)
+        """用户级查询冷却：同一用户两次受冷却的查询指令间隔 < query_cooldown 秒则拦截(返回 False)。
+        query_cooldown<=0 关闭(私人小群可关)；管理/绑定等 cooldown=False 的指令不经过这里。
+        目的：避免一个人连续刷图拖慢 t2i 渲染，服务器压力另由 SaveService 拉取锁+缓存兜底。"""
+        cd = self._effective_cooldown()
+        if cd <= 0:
+            return True
+        uid = str(event.get_sender_id() or "")
+        now = time.time()
+        if now - self._cooldown_map.get(uid, 0.0) < cd:
+            return False
+        self._cooldown_map[uid] = now
+        if len(self._cooldown_map) > 300:   # 防内存无界增长，清理过期项
+            self._cooldown_map = {k: v for k, v in self._cooldown_map.items() if now - v < cd}
         return True
 
     # ------------------------------------------------------------------
@@ -5815,15 +5842,22 @@ class PalworldPlugin(Star):
         return titles
 
     async def terminate(self):
-        if getattr(self, "_poll_task", None):
-            self._poll_task.cancel()
-        if getattr(self, "_prewarm_task", None):
-            self._prewarm_task.cancel()
+        # 先取消后台任务并 await 到真正退出(否则重载后旧轮询残留、重复播报/拉档)。
+        for _attr in ("_poll_task", "_prewarm_task"):
+            t = getattr(self, _attr, None)
+            if t and not t.done():
+                t.cancel()
+                try:
+                    await t
+                except asyncio.CancelledError:
+                    pass
+                except Exception as e:  # noqa: BLE001
+                    logger.debug(f"{LOG_PREFIX} 后台任务 {_attr} 退出异常(忽略): {e}")
+        # 任务停稳后再关网络/渲染资源
         if self._session and not self._session.closed:
             await self._session.close()
-        # 关闭本地渲染器(Chromium)
         try:
-            await self._renderer.close()
+            await self._renderer.close()   # 关闭本地渲染器(Chromium)
         except Exception:  # noqa: BLE001
             pass
-        logger.info(f"{LOG_PREFIX} 插件已卸载，轮询已停止，HTTP 会话已关闭")
+        logger.info(f"{LOG_PREFIX} 插件已卸载：后台任务已结束，HTTP 会话与渲染器已关闭")
