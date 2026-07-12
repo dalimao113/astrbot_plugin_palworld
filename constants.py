@@ -129,4 +129,18 @@ SETTINGS_FIELDS = [
     ("白天速度", "DayTimeSpeedRate", "x"),
     ("夜晚速度", "NightTimeSpeedRate", "x"),
     ("死亡惩罚", "DeathPenalty", ""),
+    ("孵蛋时间", "PalEggDefaultHatchingTime", "x"),
+    ("补给箱间隔", "SupplyDropSpan", "秒"),
+    ("据点工人上限", "BaseCampWorkerMaxNum", "人"),
+    ("公会人数上限", "GuildPlayerMaxNum", "人"),
+]
+
+# 布尔类开关设置：缺失时**不显示**，绝不把"API 未返回"误判成"关闭"(§三.7)
+SETTINGS_BOOL = [
+    ("PvP 对战", "bIsPvP"),
+    ("玩家互伤", "bEnablePlayerToPlayerDamage"),
+    ("游戏内语音", "bEnableVoiceChat"),
+    ("快速旅行", "bEnableFastTravel"),
+    ("硬核模式", "bHardcore"),
+    ("入侵敌人", "bEnableInvaderEnemy"),
 ]

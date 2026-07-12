@@ -168,7 +168,7 @@ SETTINGS_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head">
     <div>
       <div class="title">⚙️ 服务器设置</div>
-      <div class="subtitle">当前帕鲁世界规则与倍率配置</div>
+      <div class="subtitle">当前帕鲁世界规则与倍率配置{% if server_version %} · 服务端 {{ server_version }}{% endif %}</div>
     </div>
   </div>
   <div class="glass">""" + _GEMS + """
@@ -711,7 +711,7 @@ PLAYERS_PIX = _PH + """</style></head><body><div class="page">
 
 
 SETTINGS_PIX = _PH + """</style></head><body><div class="page">
-  <div class="head"><div><div class="title">⚙ 服务器设置</div><div class="subtitle">当前帕鲁世界规则与倍率</div></div></div>
+  <div class="head"><div><div class="title">⚙ 服务器设置</div><div class="subtitle">当前帕鲁世界规则与倍率{% if server_version %} · 服务端 {{ server_version }}{% endif %}</div></div></div>
   <div class="frame">
     <div class="m2">
       {% for it in items %}

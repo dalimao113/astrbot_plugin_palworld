@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.8.9",
+    "1.8.10",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2984,15 +2984,21 @@ class PalworldPlugin(Star):
                 if isinstance(val, float):
                     val = round(val, 2)
                 items.append({"k": label, "v": f"{val}{suffix}"})
-        # PVP 开关单独处理(布尔)
-        pvp = s.get("bEnablePlayerToPlayerDamage")
-        if pvp is not None:
-            items.append({"k": "PVP", "v": "开启" if pvp else "关闭"})
-        if not items:
+        # 布尔开关：字段缺失时不显示，绝不把"API 未返回"误判成"关闭"
+        for label, key in SETTINGS_BOOL:
+            if key in s and s[key] is not None:
+                items.append({"k": label, "v": "开启" if s[key] else "关闭"})
+        # 服务端版本/Build(来自 /v1/api/info)
+        server_version = ""
+        ok_i, info, _ = await self._api_get("/v1/api/info")
+        if ok_i and isinstance(info, dict):
+            server_version = str(info.get("version") or "")
+        if not items and not server_version:
             return await self._msg_card(
                 event, "⚙️", "暂无可显示的设置",
                 desc="服务器未返回可识别的设置字段。", head="⚙️ 服务器设置")
-        return await self._img(event, self._t("settings"), {"items": items})
+        return await self._img(event, self._t("settings"),
+                               {"items": items, "server_version": server_version})
 
     async def _cmd_stats(self, event: AstrMessageEvent):
         return await self._img(event, self._t("stats"), self._stats_data())
