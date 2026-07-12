@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.8.8",
+    "1.8.9",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -1767,6 +1767,17 @@ class PalworldPlugin(Star):
                 with open(os.path.join(base, "worldmap_render.jpg"), "rb") as _f:
                     img = _f.read()
                 self._map_img = "data:image/jpeg;base64," + base64.b64encode(img).decode("ascii")
+            # 世界树(Sunreach)独立地图 + 变换(栖息地/boss 在世界树区域时用；缺失则回退主图)
+            self._tree_map_img = None
+            self._tree_mu = self._tree_mv = None
+            tree_hd = os.path.join(base, "treemap_hd.jpg")
+            tree_tf = os.path.join(base, "map_transform_tree.json")
+            if os.path.exists(tree_hd) and os.path.exists(tree_tf):
+                with open(tree_hd, "rb") as _f:
+                    self._tree_map_img = "data:image/jpeg;base64," + base64.b64encode(_f.read()).decode("ascii")
+                with open(tree_tf, encoding="utf-8") as _f:
+                    _tt = json.loads(_f.read())
+                self._tree_mu, self._tree_mv = _tt["mu"], _tt["mv"]
             self._map_ready = True
         except Exception as e:  # noqa: BLE001
             logger.warning(f"{LOG_PREFIX} 地图素材加载失败: {e}")
@@ -1883,9 +1894,13 @@ class PalworldPlugin(Star):
         blv = ""
         if bs.get("lv_min"):
             blv = f"Lv.{bs['lv_min']}" if bs["lv_min"] == bs.get("lv_max") else f"Lv.{bs['lv_min']}~{bs.get('lv_max')}"
+        # 世界树(Sunreach)区域帕鲁：无主图刷新点、boss 标为 tree 区域 → 用世界树独立底图
+        use_tree = (bs.get("region") == "tree" and not points and getattr(self, "_tree_map_img", None))
         return {"name": p["pal_name"], "index": p.get("pal_index", "?"),
                 "icon": self._pal_icon(dev), "elements": els, "color": color,
-                "mapimg": self._map_img, "points": points, "regions": regions,
+                "mapimg": (self._tree_map_img if use_tree else self._map_img),
+                "map_label": ("世界树 · Sunreach" if use_tree else ""),
+                "points": points, "regions": regions,
                 "nocturnal": bool(p.get("nocturnal")), "count": len(pts),
                 "has_day": bool(day), "has_night": bool(night),
                 "boss_points": boss_points, "boss_is_tower": bool(bs.get("is_tower")),

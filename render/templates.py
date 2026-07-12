@@ -2609,7 +2609,7 @@ HABITAT_TMPL = _HEAD + """</style></head><body><div class="page">
     {% if icon %}<div style="flex:none;width:84px;height:84px;border-radius:18px;background:radial-gradient(circle at 50% 38%,{{color}}44,rgba(18,12,48,.5) 72%);border:2px solid {{color}}aa;display:flex;align-items:center;justify-content:center"><img src="{{ icon }}" style="width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))"></div>{% endif %}
     <div style="flex:1;min-width:0">
       <div class="title">🗺️ {{ name }} · 栖息分布</div>
-      <div class="subtitle"><span class="pill soft">No.{{ index }}</span>{% for e in elements %}<span class="pill soft">{{ e }}</span>{% endfor %}{% if nocturnal %}<span class="pill soft">🌙 夜行</span>{% endif %}</div>
+      <div class="subtitle"><span class="pill soft">No.{{ index }}</span>{% for e in elements %}<span class="pill soft">{{ e }}</span>{% endfor %}{% if nocturnal %}<span class="pill soft">🌙 夜行</span>{% endif %}{% if map_label %}<span class="pill" style="background:rgba(92,201,122,.25);border-color:rgba(92,201,122,.5);color:#8fe0a8">🗺️ {{ map_label }}</span>{% endif %}</div>
     </div>
   </div></div>
   <div style="position:relative;width:100%;border-radius:16px;overflow:hidden;border:1px solid {{color}}66;box-shadow:0 4px 16px rgba(0,0,0,.45)">
