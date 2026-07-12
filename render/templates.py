@@ -226,6 +226,8 @@ HELP_TMPL = _HEAD + """
     <div class="cmd"><div class="c"><b>/帕鲁栖息区域</b> 帕鲁名</div><div class="d">地图上涂出它的刷新热区</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁推荐词条</b> 帕鲁名</div><div class="d">按角色推荐高价值词条</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁词条大全</b> [分类]</div><div class="d">全部词条分类查询详情</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁觉醒</b></div><div class="d">1.0 觉醒材料与机制</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁突变</b></div><div class="d">1.0 突变机制与特殊蛋糕</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁属性克制</b></div><div class="d">九系属性克制关系图</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁主线</b> [页]</div><div class="d">按剧情顺序列出主线任务</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁支线</b> [NPC]</div><div class="d">支线任务（可按 NPC 筛选）</div></div>
@@ -761,6 +763,8 @@ HELP_PIX = _PH + """
     <div class="cmd"><div class="c"><b>/帕鲁栖息区域</b> 帕鲁名</div><div class="d">地图上涂出刷新热区</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁推荐词条</b> 帕鲁名</div><div class="d">按角色推荐词条</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁词条大全</b> [分类]</div><div class="d">全部词条分类查询</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁觉醒</b></div><div class="d">觉醒材料与机制</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁突变</b></div><div class="d">突变机制与特殊蛋糕</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁属性克制</b></div><div class="d">九系属性克制图</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁主线</b> [页]</div><div class="d">主线任务列表(剧情序)</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁支线</b> [NPC]</div><div class="d">支线任务(可筛选NPC)</div></div>
@@ -3336,6 +3340,64 @@ MERCHANT_PIX = _PH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+# 觉醒系统（/帕鲁觉醒）
+AWAKENING_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:13px;width:100%">
+    <div style="flex:none;width:64px;height:64px;border-radius:16px;background:radial-gradient(circle at 50% 40%,rgba(232,198,106,.4),rgba(18,12,48,.5) 72%);border:2px solid rgba(232,198,106,.6);display:flex;align-items:center;justify-content:center;font-size:32px">🌟</div>
+    <div style="flex:1;min-width:0"><div class="title">帕鲁觉醒</div>
+      <div class="subtitle">1.0 觉醒系统 · 世界树能量解放隐藏能力</div></div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    <div class="sec-t">九系觉醒晶石</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
+    {% for g in gems %}
+      <div style="padding:10px 6px;border-radius:12px;background:linear-gradient(135deg,{{g.color}}22,rgba(18,12,48,.5) 78%);border:1px solid {{g.color}}55;text-align:center">
+        {% if g.gem_icon %}<img src="{{g.gem_icon}}" style="width:40px;height:40px;object-fit:contain">{% else %}<div style="font-size:26px">💎</div>{% endif %}
+        <div style="font-size:12.5px;font-weight:800;color:{{g.color}};margin-top:3px">{{g.elem}}系</div>
+        <div style="font-size:10px;color:#b9a9d6;margin-top:1px">{{g.mat}}→晶石</div>
+      </div>
+    {% endfor %}
+    </div>
+    <div style="margin-top:13px;padding:11px 14px;border-radius:12px;background:rgba(12,8,38,.5);border:1px solid rgba(232,198,106,.18);font-size:12.5px;color:#cbbde8;line-height:1.75">
+      💡 <b style="color:#e8c466">觉醒机制</b>：击败世界树 Boss 后解锁。用对应属性的<b>辉石</b>加工成<b>觉醒晶石</b>，让该属性帕鲁「觉醒」、解放隐藏能力。<br>
+      ⚠️ 具体觉醒提升数值与所需晶石数量，游戏文件未以数据表明确提供，以游戏内为准；<b>暂不支持读取玩家存档中的觉醒状态</b>。
+    </div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+
+# 突变系统（/帕鲁突变）
+MUTATION_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:13px;width:100%">
+    <div style="flex:none;width:64px;height:64px;border-radius:16px;background:radial-gradient(circle at 50% 40%,rgba(180,110,224,.45),rgba(18,12,48,.5) 72%);border:2px solid rgba(180,110,224,.7);display:flex;align-items:center;justify-content:center;font-size:32px">🧬</div>
+    <div style="flex:1;min-width:0"><div class="title">帕鲁突变</div>
+      <div class="subtitle">1.0 突变机制 · 特殊蛋糕影响配种结果</div></div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    <div class="sec-t">特殊蛋糕（放入繁殖牧场影响后代）</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+    {% for c in cakes %}
+      <div style="display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:12px;background:rgba(12,8,38,.45);border:1px solid rgba(232,198,106,.13)">
+        {% if c.icon %}<img src="{{c.icon}}" style="width:40px;height:40px;object-fit:contain;flex-shrink:0">{% else %}<span style="font-size:26px">🍰</span>{% endif %}
+        <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:800;color:#e8c466">{{c.name}}</div>
+          <div style="font-size:12px;color:#c2b2dd;margin-top:2px;line-height:1.45">{{c.effect}}</div></div>
+      </div>
+    {% endfor %}
+    </div>
+    {% if eggs %}<div class="sec-t" style="margin-top:14px">突变帕鲁蛋</div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap">
+    {% for e in eggs %}<span class="pill soft" style="font-size:12px">{% if e.icon %}<img src="{{e.icon}}" style="width:18px;height:18px;vertical-align:middle;margin-right:3px">{% endif %}{{e.name}}</span>{% endfor %}
+    </div>{% endif %}
+    <div style="margin-top:13px;padding:11px 14px;border-radius:12px;background:rgba(12,8,38,.5);border:1px solid rgba(180,110,224,.2);font-size:12.5px;color:#cbbde8;line-height:1.75">
+      💡 <b style="color:#b06ee0">突变机制</b>：<b>豪华蔬菜蛋糕</b>提升后代突变概率；突变帕鲁外观/属性与普通不同，可能带专属词条。<b>蘑菇蛋糕</b>提升天赋、<b>蔬菜蛋糕</b>一次产 2 蛋、<b>特制蛋糕</b>提升被动继承。<br>
+      ⚠️ 突变<b>准确概率游戏未公开</b>，此处仅说明机制、不猜测数值。
+    </div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+
 STYLES = {
     "fantasy": {"status": STATUS_TMPL, "players": PLAYERS_TMPL, "settings": SETTINGS_TMPL,
                 "help": HELP_TMPL, "message": MSG_TMPL, "stats": STATS_TMPL, "rank": RANK_TMPL,
@@ -3351,6 +3413,7 @@ STYLES = {
                 "basecamp": BASECAMP_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "passdex": PASSDEX_TMPL, "passlist": PASSLIST_TMPL,
+                "awakening": AWAKENING_TMPL, "mutation": MUTATION_TMPL,
                 "mission": MISSION_TMPL, "missionlist": MISSIONLIST_TMPL, "boss": BOSS_TMPL,
                 "merchant": MERCHANT_TMPL, "skill": SKILL_TMPL, "skillfruit": SKILLFRUIT_TMPL, "implant": IMPLANT_TMPL, "worldtree": WORLDTREE_TMPL, "v10": V10_TMPL, "compare": COMPARE_TMPL,
                 "hatch": HATCH_TMPL, "inherit": INHERIT_TMPL,
