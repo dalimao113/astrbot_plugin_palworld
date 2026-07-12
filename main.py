@@ -59,7 +59,7 @@ from .render.renderer import Renderer
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.8.6",
+    "1.8.7",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -216,6 +216,7 @@ class PalworldPlugin(Star):
         self._name_idx: dict = {}        # 中文名 -> 归一化图鉴号
         self._breed: dict = {}           # frozenset({亲A号,亲B号}) -> 子代号
         self._breed_rev: dict = {}       # 子代号 -> [(亲A号,亲B号), ...]  (反向配种用)
+        self._breed_meta: dict = {}      # 配种数据版本/来源元信息(game_version/generated_at/source)
         self._drop_index: dict = {}      # 物品中文名 -> [{pal,index,dev,rate,min,max}] (掉落反查)
         base = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
         try:
@@ -248,7 +249,10 @@ class PalworldPlugin(Star):
         try:
             with open(os.path.join(base, "breeding.json"), encoding="utf-8") as _f:
                 bd = json.loads(_f.read())
+            self._breed_meta = bd.get("_meta", {})   # 数据版本/来源元信息(game_version/generated_at/source)
             for child, pairs in bd.items():
+                if str(child).startswith("_"):   # _meta 等元数据键，非配种数据
+                    continue
                 c = self._norm_idx(child)
                 for pa, pb in pairs:
                     a, b = self._norm_idx(pa), self._norm_idx(pb)
