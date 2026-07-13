@@ -2201,7 +2201,10 @@ HELP_ING = _IH + """</style></head><body><div class="page">
 
 # ---- ingame 版据点帕鲁。变量契约与 BASECAMP_TMPL 一致 ----
 BASECAMP_ING = _IH + """</style></head><body><div class="page">
-  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ name }} 的据点帕鲁</div><div class="ig-sub">据点工作帕鲁状态{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %} · 数据来自存档</div></div></div>
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ name }} 的据点帕鲁{% if multi %} · {{ sel_label }}{% endif %}</div><div class="ig-sub">据点工作帕鲁状态{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %} · 数据来自存档</div></div></div>
+  {% if multi %}<div class="ig-panel"><div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+    {% for b in bases %}<span class="ig-pill{% if b.no==selected %} gold{% endif %}">据点{{ b.no }} · {{ b.count }}只</span>{% endfor %}
+    <span style="font-size:11px;color:var(--pal-dim)">发 /帕鲁据点 &lt;号&gt; 切换</span></div></div>{% endif %}
   <div class="ig-panel">
     <div class="ig-stiles" style="margin-bottom:12px">
       <div class="ig-stile"><div class="v">{{ total }}</div><div class="k">工作帕鲁</div></div>
@@ -2666,8 +2669,12 @@ BASECAMP_TMPL = _HEAD + """
   .cure .citem .cph { width:34px; height:34px; display:flex; align-items:center; justify-content:center; font-size:20px; }
   .cure .citem span { font-size:11px; color:#f3ecd2; font-weight:600; }
 </style></head><body><div class="page">
-  <div class="head"><div><div class="title">🏕️ {{ name }} 的据点帕鲁</div><div class="subtitle">据点工作帕鲁状态{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %} · 数据来自存档</div></div></div>
+  <div class="head"><div><div class="title">🏕️ {{ name }} 的据点帕鲁{% if multi %} · {{ sel_label }}{% endif %}</div><div class="subtitle">据点工作帕鲁状态{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %} · 数据来自存档</div></div></div>
   <div class="glass">""" + _GEMS + """
+    {% if multi %}<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;align-items:center">
+      {% for b in bases %}<span class="pill {% if b.no==selected %}gold{% else %}soft{% endif %}">据点{{ b.no }} · {{ b.count }}只</span>{% endfor %}
+      <span style="font-size:11px;color:#9c8fc0">发 /帕鲁据点 &lt;号&gt; 切换</span>
+    </div>{% endif %}
     <div class="m3" style="margin-bottom:14px">
       <div class="tile tc"><div class="v gold">{{ total }}</div><div class="k">工作帕鲁</div></div>
       <div class="tile tc"><div class="v gold" style="{% if hurt %}color:#ff7a7a{% endif %}">{{ hurt }}</div><div class="k">受伤</div></div>
@@ -2742,8 +2749,12 @@ BASECAMP_PIX = _PH + """
   .cure .citem .cph { width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:18px; }
   .cure .citem span { font-size:11px; color:#46200a; }
 </style></head><body><div class="page">
-  <div class="head"><div><div class="title">☖ {{ name }} 的据点帕鲁</div><div class="subtitle">据点工作帕鲁状态{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %} · 数据来自存档</div></div></div>
+  <div class="head"><div><div class="title">☖ {{ name }} 的据点帕鲁{% if multi %} · {{ sel_label }}{% endif %}</div><div class="subtitle">据点工作帕鲁状态{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %} · 数据来自存档</div></div></div>
   <div class="frame">
+    {% if multi %}<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px;align-items:center">
+      {% for b in bases %}<span class="pill"{% if b.no==selected %} style="background:#6b4a24;color:#fff7e0"{% endif %}>据点{{ b.no }}·{{ b.count }}</span>{% endfor %}
+      <span style="font-size:11px;color:#7a6a4a">/帕鲁据点 &lt;号&gt;</span>
+    </div>{% endif %}
     <div class="m3" style="margin-bottom:13px">
       <div class="tile tc"><div class="v">{{ total }}</div><div class="k">工作帕鲁</div></div>
       <div class="tile tc"><div class="v" style="{% if hurt %}color:#c0291f{% endif %}">{{ hurt }}</div><div class="k">受伤</div></div>
@@ -5434,10 +5445,15 @@ SQUAD_ING = _IH + """</style></head><body><div class="page">
 # ---------------- 据点体检(首选2)。变量:workers,working,coverage[{cn,count,maxlv,essential,gap}],hurt,hungry,low_san,sick,advices[],source ----------------
 BASEHEALTH_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div>
-    <div class="title">🏰 据点体检</div>
+    <div class="title">🏰 据点体检{% if multi %} · {{ sel_label }}{% endif %}</div>
     <div class="subtitle"><span class="pill soft">工人 {{ workers }}</span><span class="pill soft">工作中 {{ working }}</span></div>
   </div></div>
   <div class="glass">""" + _GEMS + """
+    {% if multi %}<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:11px">
+      <span class="pill {% if not selected %}gold{% else %}soft{% endif %}">全部</span>
+      {% for b in bases %}<span class="pill {% if b.no==selected %}gold{% else %}soft{% endif %}">据点{{ b.no }} · {{ b.count }}只</span>{% endfor %}
+      <span style="font-size:11px;color:#9c8fc0;align-self:center">发 /帕鲁据点体检 &lt;号&gt; 看单个据点</span>
+    </div>{% endif %}
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
       <span class="pill" style="background:{% if hurt %}rgba(255,120,120,.2){% else %}rgba(124,252,154,.14){% endif %}">残血 {{ hurt }}</span>
       <span class="pill" style="background:{% if hungry %}rgba(255,180,80,.2){% else %}rgba(124,252,154,.14){% endif %}">饥饿 {{ hungry }}</span>
@@ -5462,10 +5478,15 @@ BASEHEALTH_TMPL = _HEAD + """</style></head><body><div class="page">
 
 BASEHEALTH_PIX = _PH + """</style></head><body><div class="page">
   <div class="head"><div>
-    <div class="title">■ 据点体检</div>
+    <div class="title">■ 据点体检{% if multi %} · {{ sel_label }}{% endif %}</div>
     <div class="subtitle"><span class="pill">工人 {{ workers }}</span><span class="pill">工作中 {{ working }}</span></div>
   </div></div>
   <div class="frame">
+    {% if multi %}<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">
+      <span class="pill"{% if not selected %} style="background:#6b4a24;color:#fff7e0"{% endif %}>全部</span>
+      {% for b in bases %}<span class="pill"{% if b.no==selected %} style="background:#6b4a24;color:#fff7e0"{% endif %}>据点{{ b.no }}·{{ b.count }}</span>{% endfor %}
+      <span style="font-size:11px;color:#7a6a4a;align-self:center">/帕鲁据点体检 &lt;号&gt;</span>
+    </div>{% endif %}
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:11px">
       <span class="pill">残血 {{ hurt }}</span><span class="pill">饥饿 {{ hungry }}</span><span class="pill">理智低 {{ low_san }}</span><span class="pill">工作病 {{ sick }}</span>
     </div>
@@ -5486,7 +5507,12 @@ BASEHEALTH_PIX = _PH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 BASEHEALTH_ING = _IH + """</style></head><body><div class="page">
-  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">据点体检</div><div class="ig-sub"><span class="ig-pill">工人 {{ workers }}</span><span class="ig-pill">工作中 {{ working }}</span></div></div></div>
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">据点体检{% if multi %} · {{ sel_label }}{% endif %}</div><div class="ig-sub"><span class="ig-pill">工人 {{ workers }}</span><span class="ig-pill">工作中 {{ working }}</span></div></div></div>
+  {% if multi %}<div class="ig-panel"><div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+    <span class="ig-pill{% if not selected %} gold{% endif %}">全部</span>
+    {% for b in bases %}<span class="ig-pill{% if b.no==selected %} gold{% endif %}">据点{{ b.no }} · {{ b.count }}只</span>{% endfor %}
+    <span style="font-size:11px;color:var(--pal-dim)">发 /帕鲁据点体检 &lt;号&gt;</span>
+  </div></div>{% endif %}
   <div class="ig-panel">
     <div style="display:flex;flex-wrap:wrap;gap:6px">
       <span class="ig-pill"{% if hurt %} style="color:var(--pal-danger)"{% endif %}>残血 {{ hurt }}</span><span class="ig-pill"{% if hungry %} style="color:var(--pal-gold)"{% endif %}>饥饿 {{ hungry }}</span>

@@ -288,6 +288,7 @@ def extract_profiles(save_dir):
     # 据点工作帕鲁：在"非玩家队伍/帕鲁箱"的容器里(即据点工作容器)。
     # 有 OwnerPlayerUId 的归对应主人；据点是公会共享，工作帕鲁的 OwnerPlayerUId 常为空
     # (属于据点/公会而非个人)，这些收为 shared，最后分给所有玩家(公会成员都看得到)。
+    # 每个非玩家角色容器 = 一个据点的工作容器。tag base_cid(容器ID)以便按据点分组(一个公会最多4个据点)。
     shared_base = []
     for cid, slots in char_cont.items():
         if cid in player_cont_ids:
@@ -299,10 +300,12 @@ def extract_profiles(save_dir):
                 continue
             owner = str(_vv(pal.get('OwnerPlayerUId', {})) or '')
             prof = out.get(owner) if owner else None
+            brief = _pal_brief(pal, iid, shared=(prof is None))
+            brief['base_cid'] = cid                                     # 所属据点(工作容器ID)
             if prof is not None:
-                prof['basecamp'].append(_pal_brief(pal, iid))
+                prof['basecamp'].append(brief)
             else:
-                shared_base.append(_pal_brief(pal, iid, shared=True))   # 无主(据点公会共享)的工作帕鲁
+                shared_base.append(brief)                              # 无主(据点公会共享)的工作帕鲁
     if shared_base:
         for prof in out.values():
             prof['basecamp'].extend(shared_base)

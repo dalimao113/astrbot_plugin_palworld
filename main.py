@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.14.2",
+    "1.15.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -3700,10 +3700,29 @@ class PalworldPlugin(Star):
             prof = self._match_save_profile(bindings.get(qq), profiles)   # 绑定→存档档案(uid2pid/昵称)
             for pal in (prof or {}).get("basecamp", []):
                 workers.setdefault(pal.get("iid") or id(pal), pal)
-        views = self._safe_views(self._basecamp_view, list(workers.values()), "据点体检")
+        # 每只算一次 view,保留所属据点(base_cid);一个公会最多 4 个据点
+        views = []
+        for pal in workers.values():
+            try:
+                v = self._basecamp_view(pal)
+            except Exception:  # noqa: BLE001
+                continue
+            v["base_cid"] = pal.get("base_cid") or ""
+            views.append(v)
+        return views
+
+    def _group_bases(self, views: list) -> list:
+        """把 views 按 base_cid 分组,按 cid 排序分配稳定据点号。返回 [{no, cid, views}]。"""
+        by: dict = {}
+        for v in views:
+            by.setdefault(v.get("base_cid") or "", []).append(v)
+        return [{"no": i, "cid": cid, "views": by[cid]} for i, cid in enumerate(sorted(by), 1)]
+
+    def _base_health_metrics(self, views: list) -> dict:
+        """一组据点工作帕鲁的体检指标:工作适性覆盖/缺口 + 伤病/饥饿/理智/工作病计数 + 建议。"""
         rules = self._load_basecamp_rules()
         th = rules.get("health_thresholds", {})
-        hp_low, san_low, stom_low = th.get("hp_low_pct", 50), th.get("sanity_low", 40), th.get("stomach_low_pct", 30)
+        hp_low, stom_low = th.get("hp_low_pct", 50), th.get("stomach_low_pct", 30)
         coverage = []
         for wt in rules.get("work_types", []):
             cn = wt["cn"]
@@ -3730,25 +3749,31 @@ class PalworldPlugin(Star):
             advices.append(f"有 {hurt} 只残血(<{hp_low}%) —— 撤下休养或喂治疗药。")
         if not advices and views:
             advices.append("据点状态良好：关键适性齐全,无明显伤病/饥饿。")
-        return {
-            "workers": len(views), "working": sum(1 for v in views if v.get("working")),
-            "coverage": coverage, "gaps": gaps,
-            "hurt": hurt, "hungry": hungry, "low_san": low_san, "sick": sick, "low_stom": low_stom,
-            "advices": advices,
-            "source": "工作适性来自客户端 DataTable;体检只读,不改存档",
-        }
+        return {"workers": len(views), "working": sum(1 for v in views if v.get("working")),
+                "coverage": coverage, "gaps": gaps, "hurt": hurt, "hungry": hungry,
+                "low_san": low_san, "sick": sick, "low_stom": low_stom, "advices": advices}
 
-    async def _cmd_basecamp_health(self, event: AstrMessageEvent):
+    async def _cmd_basecamp_health(self, event: AstrMessageEvent, args: list[str]):
         gid = str(event.get_group_id() or "")
         if not gid:
             return await self._msg_card(event, "🏰", "请在群里用", desc="据点体检按群小队聚合，请在群聊里发 /帕鲁据点体检。", color="#F5A623")
-        d = await self._basecamp_health_data(gid)
-        if d is None:
+        views = await self._basecamp_health_data(gid)
+        if views is None:
             return await self._msg_card(event, "🛰️", "暂时读不到存档",
                                         desc="未挂载 docker.sock 或存档读取失败，稍后再试。", color="#F5A623")
-        if not d["workers"]:
+        if not views:
             return await self._msg_card(event, "🏰", "据点里还没有工作帕鲁",
                                         desc="让群友先 /帕鲁绑定 并上线一次；或把帕鲁从帕鲁箱放到据点工作后再体检。", color="#9a8a91")
+        bases = self._group_bases(views)
+        sel = int(args[0]) if args and args[0].isdigit() else 0     # 0=全部;N=第N据点
+        sel = sel if 1 <= sel <= len(bases) else 0
+        scope = next((b["views"] for b in bases if b["no"] == sel), views) if sel else views
+        d = self._base_health_metrics(scope)
+        d["bases"] = [{"no": b["no"], "count": len(b["views"])} for b in bases]
+        d["selected"] = sel
+        d["sel_label"] = f"据点{sel}" if sel else ("全部据点" if len(bases) > 1 else "据点")
+        d["multi"] = len(bases) > 1
+        d["source"] = "工作适性来自客户端 DataTable;体检只读,不改存档。多据点可发 /帕鲁据点体检 <据点号>"
         return await self._img(event, self._t("basehealth"), d)
 
     # ------------------------------------------------------------------
@@ -4464,37 +4489,47 @@ class PalworldPlugin(Star):
         return v
 
     async def _cmd_basecamp(self, event: AstrMessageEvent, args: list[str]):
-        """据点工作帕鲁状态（分页）。末位数字=页码；其余参数(管理员)=目标玩家名。"""
-        page = 1
+        """据点工作帕鲁状态。一个公会最多 4 个据点:第1个数字=据点号,第2个数字=页码;非数字(管理员)=目标玩家名。"""
         a = list(args)
-        if a and a[-1].isdigit():
-            page = max(1, int(a[-1])); a = a[:-1]
+        digits = [x for x in a if x.isdigit()]
+        a = [x for x in a if not x.isdigit()]
+        base_no = int(digits[0]) if digits else 0        # 0=未指定(多据点默认第1个)
+        page = int(digits[1]) if len(digits) > 1 else 1
         sp, name, err = await self._resolve_target_sp(event, a)
         if err:
             return err
-        base = sp.get("basecamp", [])
-        # 闪光/头目优先，再按等级降序
-        base = sorted(base, key=lambda p: (not p.get("lucky"), not p.get("is_alpha"), -(p.get("level") or 0)))
-        cells = self._safe_views(self._basecamp_view, base, "据点")
-        # 统计口径覆盖全部据点帕鲁（不随分页变化）
+        # 按 base_cid 分组成各据点(稳定编号)
+        allbase = sorted(sp.get("basecamp", []),
+                         key=lambda p: (not p.get("lucky"), not p.get("is_alpha"), -(p.get("level") or 0)))
+        groups: dict = {}
+        for p in allbase:
+            groups.setdefault(p.get("base_cid") or "", []).append(p)
+        base_order = sorted(groups)                       # cid 排序 -> 稳定据点号
+        bases = [{"no": i, "count": len(groups[cid])} for i, cid in enumerate(base_order, 1)]
+        multi = len(base_order) > 1
+        base_no = base_no if 1 <= base_no <= len(base_order) else (1 if multi else 0)
+        sel_pals = groups[base_order[base_no - 1]] if base_no else allbase
+        cells = self._safe_views(self._basecamp_view, sel_pals, "据点")
         hurt = sum(1 for c in cells if c["health"]["hurt"])
         hungry = sum(1 for c in cells if c["starving"])
         low_san = sum(1 for c in cells if c["low_san"])
         total = len(cells)
         pages = max(1, (total + BASECAMP_PAGE_SIZE - 1) // BASECAMP_PAGE_SIZE)
-        page = min(page, pages)
-        start = (page - 1) * BASECAMP_PAGE_SIZE
-        shown = cells[start:start + BASECAMP_PAGE_SIZE]
+        page = min(max(1, page), pages)
+        shown = cells[(page - 1) * BASECAMP_PAGE_SIZE: page * BASECAMP_PAGE_SIZE]
         tgt = " ".join(a)
         tgt_part = (" " + tgt) if tgt else ""
+        b_part = f" {base_no}" if base_no else ""
         pager = ""
         if pages > 1:
             nxt = page + 1 if page < pages else 1
-            pager = f"发「/帕鲁据点{tgt_part} {nxt}」翻到第 {nxt} 页（共 {pages} 页）"
+            pager = f"发「/帕鲁据点{tgt_part}{b_part} {nxt}」翻到第 {nxt} 页（共 {pages} 页）"
         return await self._img(event, self._t("basecamp"),
                                {"name": name, "total": total, "hurt": hurt,
                                 "hungry": hungry, "low_san": low_san, "cells": shown,
-                                "page": page, "pages": pages, "pager": pager})
+                                "page": page, "pages": pages, "pager": pager,
+                                "bases": bases, "selected": base_no, "multi": multi,
+                                "sel_label": (f"据点{base_no}" if base_no else "据点")})
 
     def _symptom_items(self, ids: list) -> list:
         """治疗道具 id 列表 -> [{name, icon}] (带游戏物品图标)。"""
