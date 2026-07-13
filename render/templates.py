@@ -5606,6 +5606,57 @@ GROWTH_ING = _IH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+MATROUTE_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:13px;width:100%">
+    {% if icon %}<img src="{{ icon }}" style="flex:none;width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))">{% endif %}
+    <div style="flex:1;min-width:0">
+      <div class="title" style="font-size:23px">材料路线 · {{ name }}</div>
+      <div class="subtitle"><span class="pill soft">制作 ×{{ mult }}</span><span class="pill soft">原料 {{ base|length }} 种</span>{% if inter %}<span class="pill soft">中间产物 {{ inter|length }} 种</span>{% endif %}</div>
+    </div>
+  </div></div>
+  <div class="glass">
+    <div class="sec-t">直接配方</div>
+    <div style="display:flex;flex-wrap:wrap;gap:7px">{% for m in direct %}<span class="pill soft">{% if m.icon %}<img src="{{ m.icon }}" style="width:15px;height:15px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ m.name }} ×{{ m.count }}{% if m.craftable %} <span style="color:#8fd3ff;font-size:10px">·可制作</span>{% endif %}</span>{% endfor %}</div>
+    {% if benches %}<div style="margin-top:8px;font-size:12px;color:#cfc1ea">🔧 制作台(全链路)：{% for b in benches %}{{ b }}{% if not loop.last %} / {% endif %}{% endfor %}</div>{% endif %}
+    {% if inter %}<div class="sec-t" style="margin-top:15px">中间产物(需先制作)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:7px">{% for m in inter %}<span class="pill soft">{% if m.icon %}<img src="{{ m.icon }}" style="width:15px;height:15px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ m.name }} ×{{ m.count }}</span>{% endfor %}</div>{% endif %}
+    <div class="sec-t" style="margin-top:15px">原料总需求(展开到底) <span style="font-size:11px;color:#9c8fc0">共 {{ base|length }} 种</span></div>
+    <div style="display:flex;flex-wrap:wrap;gap:7px">{% for m in base %}<span class="pill soft">{% if m.icon %}<img src="{{ m.icon }}" style="width:15px;height:15px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ m.name }} ×{{ m.count }}</span>{% endfor %}</div>
+    <div style="margin-top:12px;font-size:11px;color:#8a82a8;line-height:1.6">{{ source }}</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+MATROUTE_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:12px;width:100%">
+    {% if icon %}<img src="{{ icon }}" style="flex:none;width:60px;height:60px;object-fit:contain;image-rendering:pixelated">{% endif %}
+    <div style="flex:1;min-width:0">
+      <div class="title" style="font-size:21px">材料路线 · {{ name }}</div>
+      <div class="subtitle"><span class="pill">制作 ×{{ mult }}</span><span class="pill">原料 {{ base|length }} 种</span>{% if inter %}<span class="pill">中间产物 {{ inter|length }} 种</span>{% endif %}</div>
+    </div>
+  </div></div>
+  <div class="frame">
+    <div class="sec-t">直接配方</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for m in direct %}<span class="pill">{% if m.icon %}<img src="{{ m.icon }}" style="width:15px;height:15px;object-fit:contain;vertical-align:-3px;margin-right:3px;image-rendering:pixelated">{% endif %}{{ m.name }} ×{{ m.count }}{% if m.craftable %} <span style="color:#7a3604;font-size:10px">·可制作</span>{% endif %}</span>{% endfor %}</div>
+    {% if benches %}<div style="margin-top:8px;font-size:12px;color:#523f10">🔧 制作台(全链路)：{% for b in benches %}{{ b }}{% if not loop.last %} / {% endif %}{% endfor %}</div>{% endif %}
+    {% if inter %}<div class="sec-t" style="margin-top:13px">中间产物(需先制作)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for m in inter %}<span class="pill">{% if m.icon %}<img src="{{ m.icon }}" style="width:15px;height:15px;object-fit:contain;vertical-align:-3px;margin-right:3px;image-rendering:pixelated">{% endif %}{{ m.name }} ×{{ m.count }}</span>{% endfor %}</div>{% endif %}
+    <div class="sec-t" style="margin-top:13px">原料总需求(展开到底) {{ base|length }} 种</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for m in base %}<span class="pill">{% if m.icon %}<img src="{{ m.icon }}" style="width:15px;height:15px;object-fit:contain;vertical-align:-3px;margin-right:3px;image-rendering:pixelated">{% endif %}{{ m.name }} ×{{ m.count }}</span>{% endfor %}</div>
+    <div style="margin-top:11px;font-size:11px;color:#7a6a4a;line-height:1.6">{{ source }}</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+MATROUTE_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">{% if icon %}<div class="ig-portrait" style="width:60px;height:60px;border-width:8px"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">材料路线 · {{ name }}</div><div class="ig-sub"><span class="ig-pill">制作 ×{{ mult }}</span><span class="ig-pill">原料 {{ base|length }} 种</span>{% if inter %}<span class="ig-pill">中间产物 {{ inter|length }} 种</span>{% endif %}</div></div></div>
+  <div class="ig-panel"><div class="ig-sec">直接配方</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for m in direct %}<span class="ig-pill">{% if m.icon %}<img src="{{ m.icon }}" style="width:15px;height:15px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ m.name }} ×{{ m.count }}{% if m.craftable %} <span style="color:var(--pal-accent);font-size:10px">·可制作</span>{% endif %}</span>{% endfor %}</div>{% if benches %}<div style="margin-top:8px;font-size:12px;color:var(--pal-sub)">制作台(全链路)：{% for b in benches %}{{ b }}{% if not loop.last %} / {% endif %}{% endfor %}</div>{% endif %}</div>
+  {% if inter %}<div class="ig-panel hi"><div class="ig-sec">中间产物(需先制作)</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for m in inter %}<span class="ig-pill">{% if m.icon %}<img src="{{ m.icon }}" style="width:15px;height:15px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ m.name }} ×{{ m.count }}</span>{% endfor %}</div></div>{% endif %}
+  <div class="ig-panel"><div class="ig-sec">原料总需求(展开到底) · {{ base|length }} 种</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for m in base %}<span class="ig-pill">{% if m.icon %}<img src="{{ m.icon }}" style="width:15px;height:15px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ m.name }} ×{{ m.count }}</span>{% endfor %}</div><div style="margin-top:9px;font-size:11px;color:var(--pal-dim)">{{ source }}</div></div>
+  """ + _IF + """
+</div></body></html>"""
+
+
 STYLES = {
     "fantasy": {"status": STATUS_TMPL, "players": PLAYERS_TMPL, "settings": SETTINGS_TMPL,
                 "help": HELP_TMPL, "message": MSG_TMPL, "stats": STATS_TMPL, "rank": RANK_TMPL,
@@ -5618,7 +5669,7 @@ STYLES = {
                 "facility": FACILITY_TMPL, "tech": TECH_TMPL, "grid": GRID_TMPL, "map": MAP_TMPL,
                 "lab_overview": LAB_OVERVIEW_TMPL, "lab_list": LAB_LIST_TMPL, "lab_detail": LAB_DETAIL_TMPL,
                 "bag": BAG_TMPL, "team": TEAM_TMPL, "palbox": PALBOX_TMPL, "guild": GUILD_TMPL,
-                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL,
+                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL, "matroute": MATROUTE_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "passdex": PASSDEX_TMPL, "passlist": PASSLIST_TMPL,
                 "awakening": AWAKENING_TMPL, "mutation": MUTATION_TMPL,
@@ -5637,7 +5688,7 @@ STYLES = {
               "facility": FACILITY_PIX, "tech": TECH_PIX, "grid": GRID_PIX, "map": MAP_PIX,
               "lab_overview": LAB_OVERVIEW_PIX, "lab_list": LAB_LIST_PIX, "lab_detail": LAB_DETAIL_PIX,
               "bag": BAG_PIX, "team": TEAM_PIX, "palbox": PALBOX_PIX, "guild": GUILD_PIX,
-              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX,
+              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX, "matroute": MATROUTE_PIX,
               "element": ELEMENT_PIX, "habitat": HABITAT_PIX, "passrec": PASSREC_PIX,
               "passdex": PASSDEX_PIX, "passlist": PASSLIST_PIX,
               "awakening": AWAKENING_PIX, "mutation": MUTATION_PIX,
@@ -5655,6 +5706,7 @@ STYLES["ingame"] = dict(STYLES["fantasy"])
 STYLES["ingame"]["squad"] = SQUAD_ING
 STYLES["ingame"]["basehealth"] = BASEHEALTH_ING
 STYLES["ingame"]["growth"] = GROWTH_ING
+STYLES["ingame"]["matroute"] = MATROUTE_ING
 # 阶段D:已改造为 ingame 专属布局的卡(其余仍临时回退 fantasy,见 INGAME_ICON_COVERAGE.md)
 STYLES["ingame"]["paldex"] = PALDEX_ING
 STYLES["ingame"]["passlist"] = PASSLIST_ING
