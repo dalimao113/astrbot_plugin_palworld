@@ -53,13 +53,14 @@ from .services.save_service import SaveService
 from .api import palworld_api, docker_api
 # 卡片渲染引擎(Jinja 缓存 + Playwright + html_render 兜底)。
 from .render.renderer import Renderer
+from .render.assets import AssetResolver
 
 
 @register(
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.8.10",
+    "1.9.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -83,6 +84,7 @@ class PalworldPlugin(Star):
         self._client = None                            # aiocqhttp 客户端缓存
         self._save = SaveService(self)                 # 存档拉取/缓存/负缓存/强制存盘编排
         self._renderer = Renderer(self)                # 卡片渲染引擎
+        self._assets = AssetResolver(os.path.dirname(os.path.abspath(__file__)))  # ingame 图标/组件解析器
         self._poll_task = asyncio.create_task(self._poll_loop())  # 后台轮询(上下线播报/掉线告警)
         self._last_save_use = 0.0                       # 上次有人用存档类指令(背包/队伍/我)的时间
         self._prewarm_task = asyncio.create_task(self._prewarm_loop())  # 预热浏览器+存档缓存
@@ -3905,12 +3907,14 @@ class PalworldPlugin(Star):
             return await self._msg_card(event, "🥚", f"{name} 还没有出战帕鲁",
                                         desc="队伍是空的，去抓几只帕鲁带上吧～", color="#9a8a91")
         # 多只出战时用 2 列宽卡(920)压高宽比，单只用窄单列(540)避免半张空白
+        # ingame 主题为手机竖屏统一单列窄卡(540)
         multi = len(pals) > 1
-        width = 920 if multi else CARD_WIDTH
+        ingame = self._style() == "ingame"
+        width = CARD_WIDTH if ingame else (920 if multi else CARD_WIDTH)
         return await self._img(event, self._t("team"),
                                {"title": f"🐾 {name} 的出战队伍",
                                 "subtitle": f"共 {len(pals)} 只帕鲁 · 数据来自存档",
-                                "pals": pals, "team_cols": 2 if multi else 1},
+                                "pals": pals, "team_cols": 1 if ingame else (2 if multi else 1)},
                                width=width)
 
     @staticmethod

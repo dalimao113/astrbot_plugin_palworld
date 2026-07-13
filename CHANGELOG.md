@@ -2,6 +2,19 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.9.0] - 2026-07-13
+
+### 新增
+- **独立 ingame 游戏原生主题**：`card_style: ingame` 第三套主题，全部 56 张卡片转为游戏原生风格（冷调蓝灰 UI + 真实游戏图标）。
+  - 素材：从客户端 pak 提取真实游戏图标（属性/工作/数值/状态/货币/闪光/头目/浓缩/等级箭头）+ UI 组件纹理（八角节点框/切角物品槽/帕鲁卡框/进度条等）+ 插件扩展线性 SVG（server/plugin 概念）；`data/ingame/manifest.json` 统一清单 + `render/assets.py` 解析器 + `tools/game_data/` 提取脚本。
+  - 配色采自 pak 真值（面板蓝灰 #1f1f2a、金 #f0e070、青 #2ec6ff、属性色）。
+  - 手机竖屏单列；动态 Emoji 在渲染层清理（标题去 Emoji、message icon 的 Emoji→插件 SVG）。
+- **pixel 补齐 13 键**：三套主题模板键集合完全一致（各 56 键）。
+
+### 说明
+- fantasy / pixel 主题视觉逐字未动；ingame 素材缺失安全回退，未知 card_style 回退 fantasy。
+- 测试 `tests/test_theme.py`：三主题键一致 / 全模板编译 / 素材存在 / 解析器行为。
+
 ## [1.8.10] - 2026-07-12
 
 ### 优化

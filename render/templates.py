@@ -644,6 +644,1588 @@ _PH = """<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>""
 _PF = '<footer class="footer">[ {{ now }} · <span>大狸猫 · 帕鲁服务器管家</span> ]</footer>'
 
 
+# ====================================================================
+# ingame 游戏原生主题 · 通用 UI 组件系统(阶段C)
+# 用真实游戏 UI 纹理(data/ingame/parts/,经 {{ parts.* }} 由渲染层注入 base64)
+# 拼装 border-image 九宫格组件;图标经 asset() 走 manifest。
+# ⚠️ 配色/间距/slice 为**临时值**,标 PROVISIONAL,待游戏截图校准(见 INGAME_UI_REFERENCE.md)。
+# 不改 fantasy/pixel。三套主题模板键仍一致(ingame 卡逐步接入,当前重点卡先用)。
+# ====================================================================
+_INGAME_CSS = """
+  /* ---- 冷调「古代科技终端」配色。面板色阶采自游戏 UI 蓝灰(button #484860 推导)---- */
+  :root{
+    --pal-ink:#15151c; --pal-panel:#1f1f2a; --pal-panel-hi:#2b2b39;   /* 游戏 UI 蓝灰色相 */
+    --pal-line:rgba(255,255,255,.10); --pal-line-soft:rgba(255,255,255,.06);
+    --pal-gold:#f0e070; --pal-gold-dim:#c9a94e;      /* 采自游戏 node_gold(#f0e070);仅稀有度/专属技能/头目 */
+    --pal-cyan:#2ec6ff;                              /* 采自游戏 node_selected(#00a8f0/#14caff);选中/科技点缀 */
+    --pal-text:#ffffff; --pal-text-2:#e2e8f0; --pal-sub:#9ca3af; --pal-dim:#6b7280;
+    --pal-danger:#e0664f; --pal-good:#8bd06a;
+    --pal-slot:url({{ parts.slot_item }}); --pal-slotpal:url({{ parts.slot_pal }});
+    --pal-tab:url({{ parts.tab_base }}); --pal-btn:url({{ parts.button }});
+    --pal-node:url({{ parts.node_dark }}); --pal-node-gold:url({{ parts.node_gold }});
+    --pal-node-sel:url({{ parts.node_selected }});
+  }
+  *{ margin:0; padding:0; box-sizing:border-box;
+     font-family:"HarmonyOS Sans SC","Microsoft YaHei","PingFang SC","Noto Sans SC",system-ui,sans-serif; }
+  html{ zoom:{{ zoom }}; } html,body{ width:{{ cw|default(540) }}px; }
+  body{ color:var(--pal-text-2); position:relative; display:flex; flex-direction:column;
+    background:
+      radial-gradient(120% 78% at 50% -12%, rgba(46,198,255,.06), transparent 55%),
+      linear-gradient(170deg,#1c1c26,#15151c 62%,#0f0f16); }
+  body::after{ content:""; position:absolute; inset:0; pointer-events:none;
+    box-shadow: inset 0 0 100px 26px rgba(0,0,0,.4); }
+  .page{ position:relative; z-index:2; flex:1 1 auto; display:flex; flex-direction:column;
+    min-height:300px; padding:22px 18px 16px; }
+
+  /* ---- GameWindow / GameHeader ---- */
+  .ig-head{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+  .ig-crest{ flex:none; width:46px; height:46px; background:var(--pal-node) center/contain no-repeat;
+    display:flex; align-items:center; justify-content:center; }
+  .ig-crest img{ width:26px; height:26px; object-fit:contain; }
+  .ig-title{ font-size:22px; font-weight:800; letter-spacing:.5px; color:var(--pal-text);
+    line-height:1.15; text-wrap:balance; }
+  .ig-sub{ font-size:12.5px; color:var(--pal-sub); margin-top:4px; display:flex; gap:7px;
+    flex-wrap:wrap; align-items:center; }
+  .ig-badge-on{ flex:none; margin-left:auto; font-size:12px; font-weight:700; color:#0e1015;
+    background:var(--pal-good); padding:5px 13px; border-radius:3px; }
+
+  /* ---- GamePanel(冷灰面板 + 极细扁平描边,去发光)---- */
+  .ig-panel{ position:relative; background:var(--pal-panel); margin-bottom:12px; padding:15px 16px;
+    border:1px solid var(--pal-line); border-radius:3px; }
+  .ig-panel.hi{ background:var(--pal-panel-hi); }
+
+  /* ---- GameSectionTitle(纤细实线,冷青色标记)---- */
+  .ig-sec{ display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:700;
+    color:var(--pal-text-2); letter-spacing:1.5px; margin:0 0 12px; padding-bottom:9px;
+    border-bottom:1px solid var(--pal-line); }
+  .ig-sec::before{ content:""; width:3px; height:13px; background:var(--pal-cyan); border-radius:1px; }
+
+  /* ---- GameItemSlot / grid(切角物品槽)---- */
+  .ig-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:9px; }
+  .ig-slot{ position:relative; aspect-ratio:1; border:15px solid transparent;
+    border-image:var(--pal-slot) 30 fill stretch; display:flex; align-items:center; justify-content:center; }
+  .ig-slot img{ width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 1px 2px rgba(0,0,0,.6)); }
+  .ig-slot .qty{ position:absolute; right:2px; bottom:0; font-size:12px; font-weight:800;
+    color:var(--pal-text); text-shadow:0 1px 2px #000; font-variant-numeric:tabular-nums; }
+  .ig-slot.sel{ border-image:var(--pal-node-sel) 30 fill stretch; }
+
+  /* ---- GamePalSlot(帕鲁卡)---- */
+  .ig-palcard{ position:relative; border:16px solid transparent; border-image:var(--pal-slotpal) 26 fill stretch;
+    padding:2px; display:flex; flex-direction:column; align-items:center; }
+  .ig-palcard img{ width:100%; aspect-ratio:1; object-fit:contain; }
+  .ig-palcard .nm{ font-size:12px; color:var(--pal-text-2); margin-top:2px; max-width:100%;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ig-corner{ position:absolute; top:5px; left:5px; font-size:13px; }
+
+  /* ---- GameNode(八角节点,承载属性/科技图标)---- */
+  .ig-node{ position:relative; width:52px; height:52px; background:var(--pal-node) center/contain no-repeat;
+    display:flex; align-items:center; justify-content:center; flex:none; }
+  .ig-node.gold{ background-image:var(--pal-node-gold); }
+  .ig-node.sel{ background-image:var(--pal-node-sel); }
+  .ig-node img{ width:56%; height:56%; object-fit:contain; }
+
+  /* ---- GameElementBadge / GameWorkChip ---- */
+  .ig-badge{ display:inline-flex; align-items:center; gap:5px; font-size:12.5px; color:var(--pal-text-2);
+    background:rgba(255,255,255,.05); border:1px solid var(--pal-line); border-radius:3px; padding:3px 9px 3px 5px; }
+  .ig-badge img{ width:18px; height:18px; object-fit:contain; }
+  .ig-work{ display:inline-flex; align-items:center; gap:5px; font-size:12px; color:var(--pal-sub);
+    background:rgba(255,255,255,.04); border-radius:3px; padding:3px 8px 3px 4px; }
+  .ig-work img{ width:17px; height:17px; object-fit:contain; }
+
+  /* ---- GameStatBar ---- */
+  .ig-stat{ margin-bottom:9px; }
+  .ig-stat .lab{ display:flex; align-items:center; justify-content:space-between; font-size:12.5px;
+    color:var(--pal-sub); margin-bottom:4px; }
+  .ig-stat .lab b{ color:var(--pal-text); font-variant-numeric:tabular-nums; }
+  .ig-stat .lab .ic{ display:inline-flex; align-items:center; gap:5px; }
+  .ig-stat .lab img{ width:15px; height:15px; }
+  .ig-track{ height:12px; border:1px solid var(--pal-line); border-radius:2px;
+    background:rgba(0,0,0,.35); overflow:hidden; }
+  .ig-fill{ height:100%; background:linear-gradient(180deg,#e2e8f0,#94a3b8); }
+  .ig-fill.hp{ background:linear-gradient(180deg,#8bd06a,#4f9a3c); }
+  .ig-fill.san{ background:linear-gradient(180deg,#7dd3e0,#3f97ab); }
+
+  /* ---- GameTabs / GameButton / pill ---- */
+  .ig-tabs{ display:flex; gap:6px; margin-bottom:10px; }
+  .ig-tab{ font-size:12.5px; color:var(--pal-sub); border:10px solid transparent;
+    border-image:var(--pal-tab) 12 fill stretch; padding:0 4px; line-height:1; }
+  .ig-tab.on{ color:var(--pal-text); font-weight:700; filter:brightness(1.3); }
+  .ig-btn{ display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--pal-text-2);
+    border:9px solid transparent; border-image:var(--pal-btn) 9 fill stretch; padding:2px 6px; }
+  .ig-pill{ display:inline-flex; align-items:center; gap:4px; font-size:11.5px; color:var(--pal-sub);
+    background:rgba(30,41,59,.6); border:1px solid transparent; border-radius:3px; padding:2px 9px; }
+  .ig-pill.gold{ color:var(--pal-gold); background:rgba(240,207,122,.10); border-color:rgba(240,207,122,.28); }
+
+  .ig-foot{ margin-top:auto; padding-top:12px; text-align:center; font-size:11.5px; color:var(--pal-sub);
+    border-top:1px solid var(--pal-line); }
+  .ig-foot b{ color:var(--pal-dim); }
+
+  /* ---- 头部立绘框(帕鲁卡框):与 fantasy/pixel 一致——头部左侧、醒目 ---- */
+  .ig-head{ align-items:flex-start; }
+  .ig-portrait{ flex:none; width:108px; height:108px; border:15px solid transparent;
+    border-image:var(--pal-slotpal) 26 fill stretch; display:flex; align-items:center; justify-content:center; }
+  .ig-portrait img{ width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 3px 7px rgba(0,0,0,.6)); }
+  .ig-boss{ font-size:13px; vertical-align:middle; font-weight:800; color:#0e0b07;
+    background:linear-gradient(180deg,#f0cf7a,#c99a48); padding:2px 10px; border-radius:2px; }
+  .ig-boss.tower{ background:linear-gradient(180deg,#e0664f,#b23b2a); color:#fff; }
+
+  /* ---- 3×3 数值瓦片(纯白数值,极细描边)---- */
+  .ig-stiles{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .ig-stile{ background:rgba(255,255,255,.03); border:1px solid var(--pal-line-soft); border-radius:3px;
+    padding:10px 4px 8px; text-align:center; }
+  .ig-stile .v{ font-size:22px; font-weight:700; color:var(--pal-text); line-height:1;
+    font-variant-numeric:tabular-nums; }
+  .ig-stile .k{ font-size:11px; color:var(--pal-sub); margin-top:5px; display:flex; align-items:center;
+    justify-content:center; gap:4px; }
+  .ig-stile .k img{ width:13px; height:13px; opacity:.85; }
+
+  /* ---- 技能行(名左 + 斜切属性牌+威力右):主次拉开 ---- */
+  .ig-sk{ display:flex; align-items:center; gap:10px; padding:8px 2px;
+    border-bottom:1px solid var(--pal-line-soft); }
+  .ig-sk:last-child{ border-bottom:none; }
+  .ig-sk .nm{ flex:1; min-width:0; font-size:14.5px; font-weight:700; color:var(--pal-text);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ig-sk .pw{ flex:none; display:flex; align-items:center; gap:8px; font-size:12px; color:var(--pal-dim);
+    font-variant-numeric:tabular-nums; }
+  /* 斜切属性牌:承载游戏原生属性 PNG,居中贴在威力数值左侧 */
+  .ig-eplate{ display:inline-flex; align-items:center; justify-content:center; width:34px; height:24px;
+    background:rgba(255,255,255,.06); border:1px solid var(--pal-line-soft);
+    clip-path:polygon(14% 0,100% 0,86% 100%,0 100%); }
+  .ig-eplate img{ width:20px; height:20px; object-fit:contain; vertical-align:middle; }
+  .ig-drop{ display:flex; align-items:center; justify-content:space-between; padding:6px 0;
+    border-bottom:1px solid var(--pal-line-soft); }
+  .ig-drop .l{ display:flex; align-items:center; gap:7px; font-size:14px; color:var(--pal-text-2); }
+  .ig-drop .l img{ width:24px; height:24px; object-fit:contain; }
+  .ig-drop .r{ font-size:12px; color:var(--pal-dim); font-variant-numeric:tabular-nums; }
+
+  /* ---- 被动词条块(右侧等级箭头 PNG)---- */
+  .ig-passrow{ position:relative; display:flex; align-items:center; gap:10px; padding:11px 44px 11px 13px;
+    margin-bottom:8px; background:rgba(255,255,255,.03); border:1px solid var(--pal-line-soft);
+    border-left:3px solid var(--pal-line); border-radius:3px; }
+  .ig-passrow.pos{ border-left-color:var(--pal-good); }
+  .ig-passrow.neg{ border-left-color:var(--pal-danger); }
+  .ig-passrow .pn{ font-size:14.5px; font-weight:700; color:var(--pal-text); }
+  .ig-passrow .pe{ font-size:12.5px; color:var(--pal-sub); margin-top:3px; line-height:1.45; }
+  .ig-passrow .tag{ font-size:10px; color:var(--pal-sub); background:rgba(30,41,59,.6);
+    border-radius:2px; padding:1px 6px; margin-left:6px; vertical-align:middle; }
+  /* 游戏原生等级箭头:限高 20px,宽度自适应,绝对定位悬浮右缘 */
+  .ig-rank{ position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    height:20px; width:auto; object-fit:contain; }
+  .ig-rank.pos{ filter:brightness(0) saturate(100%) invert(84%) sepia(28%) saturate(560%)
+    hue-rotate(2deg) brightness(103%) contrast(94%); }   /* 白遮罩→金 */
+  .ig-rank.neg{ filter:brightness(0) saturate(100%) invert(46%) sepia(58%) saturate(3200%)
+    hue-rotate(332deg) brightness(97%) contrast(93%); }   /* 白遮罩→红 */
+
+  /* ---- 词条大全分类行 / 推荐词条行(单列,手机竖屏)---- */
+  .ig-catrow{ display:flex; flex-direction:column; padding:11px 13px; margin-bottom:8px;
+    background:rgba(255,255,255,.03); border:1px solid var(--pal-line-soft);
+    border-left:3px solid var(--pal-line); border-radius:3px; }
+  .ig-catrow .cn{ font-size:15px; font-weight:700; color:var(--pal-text); }
+  .ig-catrow .cc{ font-size:11px; font-weight:700; margin-left:8px; }
+  .ig-catrow .cs{ font-size:11.5px; color:var(--pal-sub); margin-top:5px; line-height:1.5;
+    max-height:2.2em; overflow:hidden; }
+  .ig-recrow{ display:flex; align-items:center; gap:10px; margin-bottom:7px; background:rgba(255,255,255,.03);
+    border:1px solid var(--pal-line-soft); border-radius:3px; padding:8px 12px; }
+  .ig-recrow .rn{ flex:none; min-width:74px; font-size:14px; font-weight:700; color:var(--pal-text); }
+  .ig-recrow .re{ flex:1; min-width:0; font-size:12.5px; color:var(--pal-sub); line-height:1.45; }
+  .ig-recrow .rs{ flex:none; font-size:12px; color:var(--pal-gold); letter-spacing:1px; }
+
+  /* ---- 服务器状态 / 在线玩家 ---- */
+  .ig-stile .si{ height:20px; margin-bottom:2px; display:flex; align-items:center; justify-content:center; }
+  .ig-stile .si img{ width:18px; height:18px; object-fit:contain; opacity:.85; }
+  .ig-prow{ display:flex; align-items:center; gap:9px; padding:9px 4px;
+    border-bottom:1px solid var(--pal-line-soft); }
+  .ig-prow:last-child{ border-bottom:none; }
+  .ig-prow .pnm{ flex:1; min-width:0; font-size:14.5px; font-weight:700; color:var(--pal-text);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ig-prow .pdur{ font-size:12px; color:var(--pal-sub); font-variant-numeric:tabular-nums;
+    min-width:56px; text-align:right; }
+  .ig-ping{ font-size:11px; color:#fff; border-radius:2px; padding:2px 7px; min-width:52px;
+    text-align:center; font-variant-numeric:tabular-nums; }
+  .ig-fill.hot{ background:linear-gradient(180deg,#e0664f,#b23b2a); }
+  .ig-badge-off{ flex:none; margin-left:auto; font-size:12px; font-weight:700; color:#fff;
+    background:var(--pal-danger); padding:5px 13px; border-radius:3px; }
+
+  /* ---- 背包物品格(切角槽 + 名 + 数量)---- */
+  .ig-bgrid{ display:grid; grid-template-columns:repeat(4,1fr); gap:9px; }
+  .ig-bcell{ text-align:center; min-width:0; }
+  .ig-bcell .bn{ font-size:11.5px; color:var(--pal-sub); margin-top:5px; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis; }
+
+  /* ---- 帕鲁箱格(稀有度边框 + 立绘 + 闪光/头目标)---- */
+  .ig-pbgrid{ display:grid; grid-template-columns:repeat(4,1fr); gap:9px; }
+  .ig-palcell{ position:relative; background:rgba(255,255,255,.03); border:1.5px solid var(--pal-line);
+    border-radius:4px; padding:9px 4px 7px; text-align:center; min-width:0; }
+  .ig-palcell .no{ position:absolute; top:3px; left:4px; font-size:10px; font-weight:700; color:var(--pal-sub);
+    background:rgba(0,0,0,.4); border-radius:3px; padding:0 5px; z-index:2; font-variant-numeric:tabular-nums; }
+  .ig-palcell .mk{ position:absolute; top:-5px; right:-3px; width:20px; height:20px; object-fit:contain; z-index:2;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,.7)); }
+  .ig-palcell .pv{ height:54px; display:flex; align-items:center; justify-content:center; }
+  .ig-palcell .pv img{ width:54px; height:54px; object-fit:contain; }
+  .ig-palcell .pn{ font-size:11.5px; color:var(--pal-text-2); margin-top:3px; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis; }
+  .ig-palcell .pl{ font-size:11px; color:var(--pal-sub); }
+  .ig-palcell .cd{ color:var(--pal-gold); }
+  .ig-palcell.rt-common{ border-color:#6b7280; }
+  .ig-palcell.rt-uncommon{ border-color:#4a90d9; }
+  .ig-palcell.rt-rare{ border-color:#9b5cd9; }
+  .ig-palcell.rt-epic{ border-color:#e0a83a; box-shadow:0 0 8px rgba(224,168,58,.28); }
+  .ig-palcell.rt-legend{ border-color:#e0664f; box-shadow:0 0 8px rgba(224,102,79,.28); }
+  .ig-palcell.hurt{ box-shadow:0 0 0 2px #e0664f inset; }
+  .ig-palcell .hb{ display:inline-block; margin-top:3px; font-size:9.5px; font-weight:700;
+    border-radius:3px; padding:0 5px; line-height:15px; }
+  .ig-palcell .hb-bad{ background:#d42c2c; color:#fff; }
+  .ig-palcell .hb-warn{ background:#e07a1a; color:#fff; }
+
+  /* ---- 玩家档案:头像 / 状态点 KV / 出战队伍 ---- */
+  .ig-avatar{ width:90px; height:90px; margin:0 auto; border-radius:50%; padding:3px;
+    background:rgba(255,255,255,.08); border:1px solid var(--pal-line); }
+  .ig-avatar img{ width:100%; height:100%; border-radius:50%; object-fit:cover; display:block; }
+  .ig-avatar.ph{ display:flex; align-items:center; justify-content:center; }
+  .ig-avatar.ph img{ width:44px; height:44px; border-radius:0; opacity:.65; }
+  .ig-kv{ display:flex; justify-content:space-between; align-items:baseline;
+    background:rgba(255,255,255,.03); border:1px solid var(--pal-line-soft); border-radius:3px; padding:8px 11px; }
+  .ig-kv .kn{ font-size:12px; color:var(--pal-sub); }
+  .ig-kv .kp{ font-size:15px; font-weight:800; color:var(--pal-gold); font-variant-numeric:tabular-nums; }
+  .ig-party{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+  .ig-pmini{ width:78px; text-align:center; }
+  .ig-pmini .pv{ position:relative; width:64px; height:64px; margin:0 auto; background:rgba(255,255,255,.03);
+    border:1px solid var(--pal-line); border-radius:4px; display:flex; align-items:center; justify-content:center; }
+  .ig-pmini .pv img{ width:54px; height:54px; object-fit:contain; }
+  .ig-pmini .pv .mk{ position:absolute; top:-6px; right:-6px; width:18px; height:18px; z-index:2;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,.7)); }
+  .ig-pmini .pn{ font-size:11.5px; color:var(--pal-text-2); margin-top:5px; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis; }
+  .ig-pmini .pl{ font-size:11px; color:var(--pal-sub); }
+
+  /* ---- 队伍卡(单列,每只详情)---- */
+  .ig-teamcard{ display:flex; gap:13px; }
+  .ig-teamcard .tpic{ flex:none; width:90px; height:90px; border:13px solid transparent;
+    border-image:var(--pal-slotpal) 26 fill stretch; display:flex; align-items:center; justify-content:center;
+    position:relative; }
+  .ig-teamcard .tpic img{ width:100%; height:100%; object-fit:contain; }
+  .ig-teamcard .tpic .mk{ position:absolute; top:-4px; right:-4px; width:20px; height:20px; z-index:2;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,.7)); }
+  .ig-ivr{ display:flex; gap:6px; margin-top:9px; }
+  .ig-ivb{ flex:1; background:rgba(255,255,255,.03); border:1px solid var(--pal-line-soft); border-radius:3px;
+    padding:5px 4px; text-align:center; }
+  .ig-ivb .ivk{ font-size:10.5px; color:var(--pal-sub); }
+  .ig-ivb .ivv{ font-size:15px; font-weight:800; color:var(--pal-text); font-variant-numeric:tabular-nums; }
+  .ig-ivb.tal .ivv{ color:var(--pal-gold); }
+  .ig-subsec{ font-size:12px; font-weight:700; color:var(--pal-sub); letter-spacing:.5px; margin:12px 0 5px; }
+  .ig-partner{ display:flex; align-items:center; gap:9px; background:rgba(240,207,122,.08);
+    border:1px solid rgba(240,207,122,.28); border-radius:3px; padding:8px 11px; }
+  .ig-partner .pt{ flex:none; font-size:13.5px; font-weight:800; color:var(--pal-gold); }
+  .ig-partner .pd{ flex:1; min-width:0; font-size:12px; color:var(--pal-sub); line-height:1.4; }
+
+  /* ---- 图鉴/物品网格(编号+图标+名+头目标)---- */
+  .ig-dexgrid{ display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+  .ig-dexcell{ position:relative; display:flex; flex-direction:column; align-items:center; padding:10px 3px 7px;
+    background:rgba(255,255,255,.03); border:1px solid var(--pal-line-soft); border-radius:4px; min-width:0; }
+  .ig-dexcell .no{ position:absolute; top:3px; left:4px; font-size:9.5px; font-weight:700; color:var(--pal-sub);
+    background:rgba(0,0,0,.4); border-radius:3px; padding:0 4px; font-variant-numeric:tabular-nums; }
+  .ig-dexcell .bmk{ position:absolute; top:2px; right:3px; width:16px; height:16px; object-fit:contain; z-index:2;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,.8)); }
+  .ig-dexcell .pv{ width:58px; height:58px; display:flex; align-items:center; justify-content:center; }
+  .ig-dexcell .pv img{ width:58px; height:58px; object-fit:contain; }
+  .ig-dexcell .nm{ margin-top:5px; font-size:11px; color:var(--pal-text-2); text-align:center; line-height:1.2;
+    height:2.4em; overflow:hidden; word-break:break-all; }
+
+  /* ---- 排行榜行(肝帝/战力/财富/公会)---- */
+  .ig-rankrow{ display:flex; align-items:center; gap:10px; padding:9px 10px; margin-bottom:7px;
+    background:rgba(255,255,255,.03); border:1px solid var(--pal-line-soft); border-radius:3px; }
+  .ig-rankrow.top{ border-color:rgba(240,207,122,.35); background:rgba(240,207,122,.06); }
+  .ig-rankrow .mdl{ width:30px; flex:none; text-align:center; font-size:16px; font-weight:800; color:var(--pal-gold); }
+  .ig-rankrow .pic{ width:40px; height:40px; flex:none; object-fit:contain; }
+  .ig-rankrow .rn{ font-size:14.5px; font-weight:700; color:var(--pal-text); display:flex; align-items:center;
+    gap:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ig-rankrow .rn .inl{ width:16px; height:16px; object-fit:contain; }
+  .ig-rankrow .rs{ font-size:12px; color:var(--pal-sub); margin-top:2px; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis; }
+  .ig-rankrow .rv{ font-size:15px; font-weight:800; color:var(--pal-gold); font-variant-numeric:tabular-nums; }
+  .ig-rankrow .dot{ width:8px; height:8px; border-radius:50%; background:var(--pal-good); flex:none; }
+
+  /* ---- 闪光/头目墙(3列)/ 反配种行 ---- */
+  .ig-shwall{ display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+  .ig-shcell{ display:flex; flex-direction:column; align-items:center; padding:10px 6px;
+    background:rgba(240,207,122,.06); border:1px solid rgba(240,207,122,.28); border-radius:4px; min-width:0; }
+  .ig-shcell .pv{ width:52px; height:52px; display:flex; align-items:center; justify-content:center; }
+  .ig-shcell .pv img{ width:52px; height:52px; object-fit:contain; }
+  .ig-shcell .nm{ font-size:12.5px; font-weight:700; color:var(--pal-text); margin-top:5px; text-align:center;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+  .ig-shcell .ow{ font-size:11px; color:var(--pal-sub); white-space:nowrap; overflow:hidden;
+    text-overflow:ellipsis; max-width:100%; }
+  .ig-breedrow{ display:flex; align-items:center; gap:8px; padding:8px 4px;
+    border-bottom:1px solid var(--pal-line-soft); }
+  .ig-breedrow:last-child{ border-bottom:none; }
+  .ig-breedrow .pa{ flex:1; display:flex; align-items:center; gap:7px; justify-content:flex-end; min-width:0; }
+  .ig-breedrow .pb{ flex:1; display:flex; align-items:center; gap:7px; min-width:0; }
+  .ig-breedrow img{ width:34px; height:34px; object-fit:contain; flex:none; }
+  .ig-breedrow .nm{ font-size:13.5px; font-weight:700; color:var(--pal-text); white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis; }
+  .ig-breedrow .plus{ color:var(--pal-gold); font-weight:800; flex:none; }
+
+  /* ---- 属性克制图(2列)---- */
+  .ig-elemgrid{ display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+  .ig-ecard{ background:rgba(255,255,255,.03); border:1px solid var(--pal-line); border-radius:4px; padding:11px 12px; }
+  .ig-ecard .er{ display:flex; align-items:center; gap:5px; flex-wrap:wrap; font-size:12.5px;
+    color:var(--pal-text-2); margin-top:7px; }
+  .ig-ecard .lb{ font-weight:700; min-width:34px; }
+  .ig-ecard .et{ display:inline-flex; align-items:center; gap:3px; padding:1px 7px; border-radius:2px;
+    font-size:12px; background:rgba(255,255,255,.05); border:1px solid var(--pal-line-soft); }
+  .ig-ecard .et img{ width:15px; height:15px; object-fit:contain; }
+
+  /* ---- 帮助命令 / 词条继承 / 对比 ---- */
+  .ig-cmd{ display:inline-block; width:49%; box-sizing:border-box; vertical-align:top; padding:6px 4px; }
+  .ig-cmd .c{ display:block; font-size:13.5px; font-weight:700; color:var(--pal-text); }
+  .ig-cmd .c b{ color:var(--pal-gold); background:rgba(240,207,122,.1); border:1px solid rgba(240,207,122,.25);
+    padding:1px 7px; border-radius:2px; }
+  .ig-cmd .d{ display:block; font-size:11.5px; color:var(--pal-sub); margin-top:3px; }
+  .ig-new{ font-size:9px; font-weight:800; color:#0e1015; background:var(--pal-cyan); border-radius:2px;
+    padding:0 4px; margin-left:3px; vertical-align:middle; }
+  .ig-chip{ display:inline-flex; align-items:center; gap:3px; font-size:12px; font-weight:700; padding:2px 8px;
+    border-radius:2px; background:rgba(255,255,255,.05); border:1px solid var(--pal-line-soft); color:var(--pal-text-2); }
+  .ig-chip.legend{ color:var(--pal-gold); border-color:var(--pal-gold-dim); }
+  .ig-chip.epic{ color:#c49bff; border-color:#9b5cd9; }
+  .ig-chip.rare{ color:#7dc0ff; border-color:#4a90d9; }
+  .ig-chip.bad{ color:#ff9b9b; border-color:var(--pal-danger); }
+  .ig-vs{ width:48px; height:48px; border-radius:50%; background:var(--pal-gold); color:#0e1015; font-size:18px;
+    font-weight:900; font-style:italic; display:flex; align-items:center; justify-content:center; flex:none; }
+  .ig-cmprow{ display:flex; align-items:center; padding:8px 4px; border-bottom:1px solid var(--pal-line-soft); }
+  .ig-cmprow:last-child{ border-bottom:none; }
+  .ig-cmprow .cv{ flex:1; font-size:16px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .ig-cmprow .cl{ flex:none; width:96px; text-align:center; font-size:12.5px; color:var(--pal-sub); }
+  .cv.win{ color:var(--pal-good); } .cv.lose{ color:var(--pal-dim); } .cv.eq{ color:var(--pal-text-2); }
+  .ig-inbar{ flex:1; height:10px; border-radius:2px; background:rgba(0,0,0,.35); overflow:hidden; }
+  .ig-inbar > span{ display:block; height:100%; background:linear-gradient(90deg,#7dd3e0,#3f97ab); }
+
+  /* ---- 据点工作帕鲁 ---- */
+  .ig-wk{ display:flex; align-items:flex-start; gap:11px; padding:10px 2px; border-bottom:1px solid var(--pal-line-soft); }
+  .ig-wk:last-child{ border-bottom:none; }
+  .ig-wk .wpic{ flex:none; width:50px; height:50px; border-radius:4px; background:rgba(255,255,255,.03);
+    border:1px solid var(--pal-line); display:flex; align-items:center; justify-content:center; position:relative; }
+  .ig-wk .wpic img{ width:42px; height:42px; object-fit:contain; }
+  .ig-wk .wpic .mk{ position:absolute; top:-5px; right:-5px; width:17px; height:17px; z-index:2; }
+  .ig-hpill{ font-size:10.5px; font-weight:800; border-radius:2px; padding:1px 6px; color:#fff; }
+  .ig-wtag{ font-size:10.5px; color:var(--pal-sub); background:rgba(255,255,255,.04); border-radius:2px; padding:1px 6px; }
+  .ig-cure{ margin-top:8px; border-left:3px solid var(--pal-gold-dim); background:rgba(255,255,255,.03);
+    border-radius:0 3px 3px 0; padding:8px 11px; }
+  .ig-cure .cs{ font-size:12.5px; font-weight:800; color:var(--pal-gold); }
+  .ig-cure .cd{ font-size:11.5px; color:var(--pal-sub); line-height:1.55; margin-top:3px; }
+  .ig-cure .citem{ display:inline-flex; align-items:center; gap:5px; background:rgba(255,255,255,.04);
+    border:1px solid var(--pal-line-soft); border-radius:2px; padding:2px 8px 2px 3px; margin:5px 5px 0 0; }
+  .ig-cure .citem img{ width:30px; height:30px; object-fit:contain; }
+  .ig-cure .citem span{ font-size:11px; color:var(--pal-text-2); }
+"""
+_IH = """<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>""" + _INGAME_CSS
+_IF = ('<footer class="ig-foot">◈ {{ now }} · '
+       '<b>大狸猫 · 帕鲁服务器管家</b> · <span style="opacity:.7">ingame 主题(开发中)</span></footer>')
+
+
+# ---- ingame 版帕鲁详情(阶段D 第一张真卡)。变量契约与 PALDEX_TMPL 完全一致 + 注入 icons 图标映射 ----
+PALDEX_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">
+    {% if icon %}<div class="ig-portrait"><img src="{{ icon }}"></div>{% endif %}
+    <div style="flex:1;min-width:0">
+      <div class="ig-title">{{ name }}{% if is_tower_boss %} <span class="ig-boss tower">塔主</span>{% elif is_boss %} <span class="ig-boss">头目</span>{% endif %}</div>
+      <div class="ig-sub">
+        <span class="ig-pill">图鉴 #{{ index }}</span>
+        {% for e in elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}
+        <span class="ig-pill gold">{{ "★" * (rarity if rarity <= 5 else 5) if rarity else "★" }}</span>
+        {% if nocturnal %}<span class="ig-pill">夜行</span>{% endif %}
+      </div>
+    </div>
+  </div>
+  {% if desc %}<div class="ig-panel" style="padding:12px 14px"><div style="font-size:13px;color:var(--pal-sub);line-height:1.65">{{ desc }}</div></div>{% endif %}
+  {% if egg or lv or price or cap or size %}<div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px">
+    {% if egg %}<span class="ig-pill">{{ egg }}</span>{% endif %}
+    {% if lv %}<span class="ig-pill">刷新 {{ lv }}</span>{% endif %}
+    {% if cap %}<span class="ig-pill">捕获率 ×{{ cap }}</span>{% endif %}
+    {% if price %}<span class="ig-pill">贩卖价 {{ price }}金币</span>{% endif %}
+    {% if size %}<span class="ig-pill">体型 {{ size }}</span>{% endif %}
+  </div>{% endif %}
+  <div class="ig-panel">
+    <div class="ig-sec">基础数值</div>
+    <div class="ig-stiles">
+      <div class="ig-stile"><div class="v">{{ hp }}</div><div class="k">{% if icons.stat.hp %}<img src="{{ icons.stat.hp }}">{% endif %}生命</div></div>
+      <div class="ig-stile"><div class="v">{{ atk }}</div><div class="k">近战攻击</div></div>
+      <div class="ig-stile"><div class="v">{{ shot }}</div><div class="k">远程攻击</div></div>
+      <div class="ig-stile"><div class="v">{{ defense }}</div><div class="k">{% if icons.stat.defense %}<img src="{{ icons.stat.defense }}">{% endif %}防御力</div></div>
+      <div class="ig-stile"><div class="v">{{ stamina }}</div><div class="k">耐力</div></div>
+      <div class="ig-stile"><div class="v">{{ food }}</div><div class="k">{% if icons.stat.hunger %}<img src="{{ icons.stat.hunger }}">{% endif %}进食量</div></div>
+      <div class="ig-stile"><div class="v">{{ walk }}</div><div class="k">走路速度</div></div>
+      <div class="ig-stile"><div class="v">{{ run }}</div><div class="k">奔跑速度</div></div>
+      <div class="ig-stile"><div class="v">{{ ride }}</div><div class="k">骑乘速度</div></div>
+    </div>
+  </div>
+  {% if ranch %}<div class="ig-panel hi"><div class="ig-sec">牧场产出</div>
+    <div style="display:flex;flex-wrap:wrap;gap:7px">{% for r in ranch %}<span class="ig-work">{% if r.icon %}<img src="{{ r.icon }}">{% endif %}{{ r.name }}</span>{% endfor %}</div></div>{% endif %}
+  <div class="ig-panel">
+    <div class="ig-sec">主动技能</div>
+    {% for s in skills %}<div class="ig-sk"><div class="nm">{{ s.name }}</div><div class="pw">{% if s.elem and icons.element[s.elem] %}<span class="ig-eplate"><img src="{{ icons.element[s.elem] }}"></span>{% endif %}威力 {{ s.power }} · CD {{ s.cd }}s</div></div>{% endfor %}
+  </div>
+  {% if works %}<div class="ig-panel hi"><div class="ig-sec">工作适性</div>
+    <div style="display:flex;flex-wrap:wrap;gap:7px">{% for w in works %}<span class="ig-work">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div></div>{% endif %}
+  {% if drops %}<div class="ig-panel"><div class="ig-sec">掉落物品</div>
+    {% for d in drops %}<div class="ig-drop"><span class="l">{% if d.icon %}<img src="{{ d.icon }}">{% endif %}{{ d.name }}</span><span class="r">{% if d.qty %}×{{ d.qty }} · {% endif %}{{ d.rate }}%</span></div>{% endfor %}</div>{% endif %}
+  {% if partner_title %}<div class="ig-panel hi"><div class="ig-sec">伙伴技能</div>
+    <div style="font-size:14.5px;font-weight:800;color:var(--pal-gold)">{{ partner_title }}</div>
+    <div style="font-size:13px;color:var(--pal-sub);line-height:1.6;margin-top:5px">{{ partner_desc }}</div></div>{% endif %}
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版被动词条列表(阶段D)。变量契约与 PASSLIST_TMPL 一致 + 用游戏原生等级箭头 PNG ----
+PASSLIST_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">
+    <div style="flex:1;min-width:0">
+      <div class="ig-title">{{ cat }}</div>
+      <div class="ig-sub"><span class="ig-pill">{{ count }} 个词条</span></div>
+    </div>
+  </div>
+  <div class="ig-panel">
+    {% set rk = icons.passive_rank %}
+    {% for it in items %}
+    <div class="ig-passrow {% if it.sign>0 %}pos{% elif it.sign<0 %}neg{% endif %}">
+      <div style="flex:1;min-width:0">
+        <div><span class="pn">{{ it.name }}</span>{% if it.rank %}<span class="tag">Lv{{ it.rank }}</span>{% endif %}{% if it.cat %}<span class="tag">{{ it.cat }}</span>{% endif %}</div>
+        {% if it.effect %}<div class="pe">{{ it.effect }}</div>{% endif %}
+      </div>
+      {% set lv = it.rank if it.rank else 1 %}
+      {% if it.sign < 0 %}<img class="ig-rank neg" src="{{ rk.rank_down }}">
+      {% elif it.sign > 0 %}<img class="ig-rank pos" src="{{ rk.rank_up3 if lv >= 3 else (rk.rank_up2 if lv == 2 else rk.rank_up1) }}">
+      {% else %}<img class="ig-rank" src="{{ rk.rank_up1 }}">{% endif %}
+    </div>
+    {% endfor %}
+    <div style="margin-top:6px;text-align:center;font-size:11px;color:var(--pal-dim)">↑金=增益 · ↓红=减益 · 箭头层数=词条等级 — 发「/帕鲁词条大全」看全部分类</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版词条大全总览(单列,不用两列网格)。变量契约与 PASSDEX_TMPL 一致 ----
+PASSDEX_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0">
+    <div class="ig-title">词条大全</div>
+    <div class="ig-sub">帕鲁被动词条百科 · 共 <b style="color:var(--pal-text)">{{ total }}</b> 个 · 9 大类别</div>
+  </div></div>
+  <div class="ig-panel">
+    {% for c in cats %}
+    <div class="ig-catrow" style="border-left-color:{{ c.color }}">
+      <div><span class="cn">{{ c.name }}</span><span class="cc" style="color:{{ c.color }}">{{ c.count }} 个词条</span></div>
+      {% if c.sample %}<div class="cs">{{ c.sample }}…</div>{% endif %}
+    </div>
+    {% endfor %}
+    <div style="margin-top:6px;text-align:center;font-size:11.5px;color:var(--pal-dim)">发「/帕鲁词条大全 攻击」看该类全部词条 · 「/帕鲁词条大全 力量」查具体效果</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版推荐词条(单列)。变量契约与 PASSREC_TMPL 一致 ----
+PASSREC_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">
+    {% if icon %}<div class="ig-portrait"><img src="{{ icon }}"></div>{% endif %}
+    <div style="flex:1;min-width:0">
+      <div class="ig-title">{{ name }} · 推荐词条</div>
+      <div class="ig-sub"><span class="ig-pill">No.{{ index }}</span>{% for e in elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}{% for r in roles %}<span class="ig-pill">{{ r }}型</span>{% endfor %}</div>
+    </div>
+  </div>
+  {% for sec in sections %}
+  <div class="ig-panel {% if not loop.first %}hi{% endif %}">
+    <div class="ig-sec">{{ sec.title }}</div>
+    {% for it in sec['items'] %}
+    <div class="ig-recrow"><span class="rn">{{ it.name }}</span><span class="re">{{ it.effect }}</span><span class="rs">{{ it.stars }}</span></div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+  <div class="ig-panel"><div style="font-size:12px;color:var(--pal-sub);line-height:1.75">词条 ★ 越多越稀有。战斗帕鲁优先攻击/元素增伤,基地帕鲁优先工作速度,搬运/骑乘优先移速;「吸血鬼」让帕鲁夜间不睡持续干活。词条可在配种时遗传或用书本洗练。</div></div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版服务器状态。变量契约与 STATUS_TMPL 一致 + server.* 插件扩展 SVG ----
+STATUS_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">
+    <div style="flex:1;min-width:0">
+      <div class="ig-title">{{ servername }}</div>
+      <div class="ig-sub">{{ version }}</div>
+    </div>
+    {% if online %}<span class="ig-badge-on">在线</span>{% else %}<span class="ig-badge-off">离线</span>{% endif %}
+  </div>
+  <div class="ig-panel">
+    <div style="text-align:center">
+      <div style="color:var(--pal-sub);font-size:12px;letter-spacing:2px">当前在线人数</div>
+      <div style="line-height:1;margin-top:6px">
+        <span style="font-size:64px;font-weight:800;color:var(--pal-text);font-variant-numeric:tabular-nums">{{ cur }}</span>
+        <span style="font-size:30px;font-weight:700;color:var(--pal-dim)">/{{ maxn }}</span>
+        <span style="font-size:14px;color:var(--pal-dim);margin-left:4px">人</span>
+      </div>
+    </div>
+    <div class="ig-stiles" style="margin-top:16px">
+      <div class="ig-stile"><div class="si"><img src="{{ icons.server.fps }}"></div><div class="v">{{ fps }}</div><div class="k">服务器FPS</div></div>
+      <div class="ig-stile"><div class="si"><img src="{{ icons.server.world_day }}"></div><div class="v">{{ days }}</div><div class="k">游戏天数</div></div>
+      <div class="ig-stile"><div class="si"><img src="{{ icons.server.uptime }}"></div><div class="v">{{ uptime }}</div><div class="k">运行时长</div></div>
+    </div>
+  </div>
+  {% if players %}<div class="ig-panel hi">
+    <div class="ig-sec">在线玩家</div>
+    {% for p in players %}
+    <div class="ig-prow">
+      <span class="pnm">{{ p.name }}</span>
+      <span class="ig-pill">Lv.{{ p.level }}</span>
+      <span class="pdur">{% if p.dur %}{{ p.dur }}{% else %}—{% endif %}</span>
+      <span class="ig-ping" style="background:{{ p.ping_color }}">{{ p.ping }}ms</span>
+    </div>
+    {% endfor %}
+  </div>{% endif %}
+  {% if load %}<div class="ig-panel">
+    <div class="ig-sec">服务器负载</div>
+    <div class="ig-stat"><div class="lab"><span class="ic"><img src="{{ icons.server.cpu }}">CPU</span><b>{{ load.cpu }}%</b></div><div class="ig-track"><div class="ig-fill {{ 'hot' if load.cpu_bar>=80 else '' }}" style="width:{{ load.cpu_bar }}%"></div></div></div>
+    <div class="ig-stat"><div class="lab"><span class="ic"><img src="{{ icons.server.memory }}">内存</span><b>{{ load.mem_text }} · {{ load.mem_pct }}%</b></div><div class="ig-track"><div class="ig-fill {{ 'hot' if load.mem_bar>=80 else '' }}" style="width:{{ load.mem_bar }}%"></div></div></div>
+  </div>{% endif %}
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版在线玩家。变量契约与 PLAYERS_TMPL 一致 ----
+PLAYERS_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">
+    <div style="flex:1;min-width:0">
+      <div class="ig-title">在线玩家</div>
+      <div class="ig-sub">实时帕鲁岛冒险者名单</div>
+    </div>
+    <span class="ig-pill gold">{{ count }} 人在线</span>
+  </div>
+  {% if not players %}
+  <div class="ig-panel" style="flex:1;display:flex;align-items:center;justify-content:center;min-height:220px">
+    <div style="text-align:center"><div style="font-size:16px;color:var(--pal-text-2)">暂无玩家在线</div><div style="font-size:12.5px;color:var(--pal-sub);margin-top:6px">帕鲁岛静悄悄～ 快喊小伙伴上线冒险吧!</div></div>
+  </div>
+  {% else %}
+  <div class="ig-panel">
+    {% for p in players %}
+    <div class="ig-prow">
+      <span style="width:26px;height:26px;flex:none;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--pal-line);color:var(--pal-sub);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums">{{ loop.index }}</span>
+      <span class="pnm">{{ p.name }}</span>
+      <span class="ig-pill">Lv.{{ p.level }}</span>
+      <span class="ig-ping" style="background:{{ p.ping_color }}">{{ p.ping }}ms</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版背包(切角物品槽 + 游戏物品图标)。变量契约与 BAG_TMPL 一致 ----
+BAG_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0">
+    <div class="ig-title">{{ name }} 的背包</div>
+    <div class="ig-sub">共 {{ total }} 种物品{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %} · 背包/装备/饰品栏</div>
+  </div></div>
+  <div class="ig-panel">
+    {% if cells %}<div class="ig-bgrid">
+    {% for c in cells %}<div class="ig-bcell"><div class="ig-slot">{% if c.icon %}<img src="{{ c.icon }}">{% endif %}<span class="qty">×{{ c.count }}</span></div><div class="bn">{{ c.name }}</div></div>{% endfor %}
+    </div>{% else %}<div style="color:var(--pal-sub);text-align:center;padding:24px">背包空空如也～</div>{% endif %}
+    {% if pager %}<div style="margin-top:13px;text-align:center;font-size:12.5px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版帕鲁箱(稀有度边框 + 立绘 + 闪光/头目游戏图标)。变量契约与 PALBOX_TMPL 一致 ----
+PALBOX_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0">
+    <div class="ig-title">{{ name }} 的帕鲁箱</div>
+    <div class="ig-sub">共 {{ total }} 只 · 第 {{ page }}/{{ pages }} 页 · 发「/帕鲁箱查询 编号」看详情</div>
+  </div></div>
+  <div class="ig-panel">
+    {% if cells %}<div class="ig-pbgrid">
+    {% for c in cells %}<div class="ig-palcell rt-{{ c.rtier }}{% if c.health.hurt %} hurt{% endif %}">
+      <span class="no">{{ c.no }}</span>
+      {% if c.lucky %}<img class="mk" src="{{ icons.pal.lucky }}">{% elif c.alpha %}<img class="mk" src="{{ icons.pal.alpha }}">{% endif %}
+      <div class="pv">{% if c.icon %}<img src="{{ c.icon }}">{% endif %}</div>
+      <div class="pn">{{ c.name }}</div><div class="pl">Lv.{{ c.level }}{% if c.condense %} <span class="cd">{{ "★"*c.condense }}</span>{% endif %}</div>
+      {% if c.health.hurt %}<div class="hb hb-{{ c.health.tone }}">{{ c.health.label }}</div>{% endif %}
+    </div>{% endfor %}
+    </div>{% else %}<div style="color:var(--pal-sub);text-align:center;padding:24px">帕鲁箱空空如也～</div>{% endif %}
+    {% if pager %}<div style="margin-top:13px;text-align:center;font-size:12.5px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版玩家档案。变量契约与 PROFILE_TMPL 一致 ----
+PROFILE_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0">
+    <div class="ig-title">我的帕鲁档案</div>
+    <div class="ig-sub">绑定角色的在线数据</div>
+  </div></div>
+  <div class="ig-panel">
+    <div style="text-align:center;padding:4px 0 10px">
+      {% if avatar %}<div class="ig-avatar"><img src="{{ avatar }}"></div>
+      {% else %}<div class="ig-avatar ph"><img src="{{ icons.server.player_count }}"></div>{% endif %}
+      <div style="font-size:24px;font-weight:800;color:var(--pal-text);margin-top:8px;word-break:break-word">{{ name }}</div>
+      <div style="margin-top:10px">{% if online %}<span class="ig-badge-on" style="margin-left:0">在线 · Lv.{{ level }}</span>{% else %}<span class="ig-badge-off" style="margin-left:0">离线中</span>{% endif %}</div>
+      {% if titles %}<div style="margin-top:11px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center">{% for t in titles %}<span class="ig-pill">{{ t }}</span>{% endfor %}</div>{% endif %}
+    </div>
+    <div class="ig-stiles">
+      <div class="ig-stile"><div class="v">{{ week_dur }}</div><div class="k">本周在线</div></div>
+      <div class="ig-stile"><div class="v">{{ total_dur }}</div><div class="k">累计在线</div></div>
+      <div class="ig-stile"><div class="v">{{ rank }}</div><div class="k">本周排名</div></div>
+    </div>
+  </div>
+  {% if has_save %}
+  <div class="ig-panel hi">
+    <div class="ig-sec">存档实况</div>
+    <div class="ig-stiles">
+      <div class="ig-stile"><div class="v">Lv.{{ s_level }}</div><div class="k">角色等级</div></div>
+      <div class="ig-stile"><div class="v">{{ tech }}</div><div class="k">技术点</div></div>
+      <div class="ig-stile"><div class="v">{{ recipes }}</div><div class="k">解锁配方</div></div>
+    </div>
+    <div class="ig-stiles" style="margin-top:8px">
+      <div class="ig-stile"><div class="v">{{ max_hp }}</div><div class="k">{% if icons.stat.hp %}<img src="{{ icons.stat.hp }}">{% endif %}最大生命</div></div>
+      <div class="ig-stile"><div class="v">{{ max_sp }}</div><div class="k">最大耐力</div></div>
+      <div class="ig-stile"><div class="v">{{ weight }}</div><div class="k">{% if icons.stat.weight %}<img src="{{ icons.stat.weight }}">{% endif %}负重上限</div></div>
+    </div>
+    <div class="ig-stiles" style="margin-top:8px">
+      <div class="ig-stile"><div class="v">{{ hp|int }}</div><div class="k">当前生命</div></div>
+      <div class="ig-stile"><div class="v">{{ shield|int }}</div><div class="k">护盾值</div></div>
+      <div class="ig-stile"><div class="v">{{ stomach|int }}</div><div class="k">{% if icons.stat.hunger %}<img src="{{ icons.stat.hunger }}">{% endif %}饱食度</div></div>
+    </div>
+    <div class="ig-stiles" style="margin-top:8px">
+      <div class="ig-stile"><div class="v">{{ pal_total }}</div><div class="k">帕鲁总数</div></div>
+      <div class="ig-stile"><div class="v">{{ dex_owned }}<span style="font-size:12px;color:var(--pal-dim)">/{{ dex_total }}</span></div><div class="k">图鉴收集</div></div>
+      <div class="ig-stile"><div class="v" style="{% if hurt_n %}color:var(--pal-danger){% endif %}">{{ hurt_n }}</div><div class="k">受伤帕鲁</div></div>
+    </div>
+    {% if status %}
+    <div class="ig-sec" style="margin-top:14px">状态点强化</div>
+    <div class="ig-stiles">
+      {% for s in status %}<div class="ig-kv"><span class="kn">{{ s.name }}</span><span class="kp" style="{% if not s.points %}color:var(--pal-dim){% endif %}">+{{ s.points }}</span></div>{% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  {% if party %}
+  <div class="ig-panel">
+    <div class="ig-sec">出战队伍 · {{ party_n }} 只</div>
+    <div class="ig-party">
+      {% for p in party %}
+      <div class="ig-pmini">
+        <div class="pv">{% if p.icon %}<img src="{{ p.icon }}">{% endif %}{% if p.lucky %}<img class="mk" src="{{ icons.pal.lucky }}">{% elif p.alpha %}<img class="mk" src="{{ icons.pal.alpha }}">{% endif %}</div>
+        <div class="pn">{{ p.name }}</div><div class="pl">Lv.{{ p.level }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>{% endif %}
+  <div class="ig-panel"><div style="font-size:12.5px;color:var(--pal-sub);line-height:1.7">背包 <b style="color:var(--pal-text)">{{ bag_n }}</b> 种物品,发 /帕鲁背包 看明细;帕鲁箱 <b style="color:var(--pal-text)">{{ palbox_n }}</b> 只,发 /帕鲁箱 浏览{% if party %};发 /帕鲁队伍 看出战面板{% endif %}</div></div>
+  {% endif %}
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版出战队伍(单列,每只详情)。变量契约与 TEAM_TMPL 一致 ----
+TEAM_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0">
+    <div class="ig-title">{{ title }}</div>
+    <div class="ig-sub">{{ subtitle }}</div>
+  </div></div>
+  {% for p in pals %}
+  <div class="ig-panel {% if not loop.first %}hi{% endif %}">
+    <div class="ig-teamcard">
+      <div class="tpic">{% if p.icon %}<img src="{{ p.icon }}">{% endif %}{% if p.lucky %}<img class="mk" src="{{ icons.pal.lucky }}">{% elif p.alpha %}<img class="mk" src="{{ icons.pal.alpha }}">{% endif %}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+          <span style="font-size:19px;font-weight:800;color:var(--pal-text)">{{ p.name }}</span>
+          {% if p.nickname %}<span style="font-size:12.5px;color:var(--pal-sub);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">「{{ p.nickname }}」</span>{% endif %}
+          {% if p.condense %}<span style="font-size:12.5px;color:var(--pal-gold);letter-spacing:1px">{{ "★" * p.condense }}</span>{% endif %}
+        </div>
+        <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px">
+          <span class="ig-pill">Lv.{{ p.level }}</span>
+          {% if p.gender %}<span class="ig-pill">{{ p.gender }}</span>{% endif %}
+          {% for e in p.elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}
+          {% if p.health.hurt %}<span class="ig-pill" style="background:{% if p.health.tone=='bad' %}#d42c2c{% else %}#e07a1a{% endif %};color:#fff">{{ p.health.label }}{% if p.health.tone=='bad' %}·放终端可恢复{% endif %}</span>{% endif %}
+        </div>
+        <div class="ig-ivr">
+          <div class="ig-ivb"><div class="ivv">{{ p.hp }}</div><div class="ivk">生命</div></div>
+          <div class="ig-ivb"><div class="ivv">{{ p.cur_atk }}</div><div class="ivk">攻击</div></div>
+          <div class="ig-ivb"><div class="ivv">{{ p.cur_def }}</div><div class="ivk">防御</div></div>
+          <div class="ig-ivb"><div class="ivv">{{ p.craft_speed }}</div><div class="ivk">工作速度</div></div>
+        </div>
+        <div class="ig-ivr">
+          <div class="ig-ivb tal"><div class="ivv">{{ p.iv_hp }}</div><div class="ivk">生命天赋</div></div>
+          <div class="ig-ivb tal"><div class="ivv">{{ p.iv_atk }}</div><div class="ivk">攻击天赋</div></div>
+          <div class="ig-ivb tal"><div class="ivv">{{ p.iv_def }}</div><div class="ivk">防御天赋</div></div>
+        </div>
+        {% if p.works %}<div class="ig-subsec">工作适性</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">{% for w in p.works %}<span class="ig-work">{% if icons.work[w.name] %}<img src="{{ icons.work[w.name] }}">{% endif %}{{ w.name }} Lv{{ w.level }}</span>{% endfor %}</div>{% endif %}
+        {% if p.partner.title %}<div class="ig-subsec">伙伴技能</div>
+        <div class="ig-partner"><span class="pt">{{ p.partner.title }}</span>{% if p.partner.desc %}<span class="pd">{{ p.partner.desc }}</span>{% endif %}</div>{% endif %}
+        {% if p.passives %}<div class="ig-subsec">词条</div>
+        {% for s in p.passives %}<div class="ig-passrow {% if s.color=='bad' %}neg{% elif s.color in ['legend','epic','rare'] %}pos{% endif %}" style="padding:8px 40px 8px 11px;margin-bottom:6px">
+          <div style="flex:1;min-width:0"><span class="pn" style="font-size:13.5px">{{ s.name }}</span>{% if s.effect %}<div class="pe">{{ s.effect }}</div>{% endif %}</div>
+          {% if s.color=='bad' %}<img class="ig-rank neg" src="{{ icons.passive_rank.rank_down }}">{% else %}<img class="ig-rank pos" src="{{ icons.passive_rank.rank_up3 if (s.arrows|length)>=3 else (icons.passive_rank.rank_up2 if (s.arrows|length)==2 else icons.passive_rank.rank_up1) }}">{% endif %}
+        </div>{% endfor %}{% endif %}
+        {% if p.wazas %}<div class="ig-subsec">技能</div>
+        {% for w in p.wazas %}<div class="ig-sk"><div class="nm" style="font-size:13.5px">{{ w.name }}</div><div class="pw">{% if w.elem and icons.element[w.elem] %}<span class="ig-eplate"><img src="{{ icons.element[w.elem] }}"></span>{% endif %}{% if w.power %}威力 {{ w.power }}{% endif %}</div></div>{% endfor %}{% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版消息卡(错误/空态/确认/成功)。变量契约与 MSG_TMPL 一致。icon 为 handler 动态传入 ----
+MSG_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ head }}</div></div></div>
+  <div class="ig-panel" style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 24px">
+    {% if icon %}<div style="width:52px;height:52px;margin-bottom:16px;opacity:.9"><img src="{{ icon }}" style="width:100%;height:100%;object-fit:contain"></div>{% endif %}
+    <div style="font-size:23px;font-weight:800;color:var(--pal-text);line-height:1.35;word-break:break-word">{{ title }}</div>
+    {% if desc %}<div style="margin-top:16px;font-size:14px;line-height:1.7;color:var(--pal-sub);white-space:pre-line;word-break:break-word;background:rgba(255,255,255,.03);border:1px solid var(--pal-line);border-radius:3px;padding:14px 16px;text-align:left;max-width:400px">{{ desc }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版在线统计。变量契约与 STATS_TMPL 一致 ----
+STATS_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0">
+    <div class="ig-title">在线统计</div><div class="ig-sub">今日数据与近 7 日在线峰值</div>
+  </div></div>
+  <div class="ig-panel">
+    <div class="ig-stiles">
+      <div class="ig-stile"><div class="v">{{ peak }}</div><div class="k">今日峰值</div></div>
+      <div class="ig-stile"><div class="v">{{ avg }}</div><div class="k">今日平均</div></div>
+      <div class="ig-stile"><div class="v">{{ cur }}</div><div class="k">当前在线</div></div>
+    </div>
+  </div>
+  <div class="ig-panel hi">
+    <div class="ig-sec">近 7 日在线峰值</div>
+    <div style="display:flex;align-items:flex-end;gap:9px;height:160px;padding:6px 2px 0">
+      {% for d in days %}
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+        <div style="font-size:12px;font-weight:700;color:var(--pal-text-2);margin-bottom:4px">{{ d.peak }}</div>
+        <div style="width:70%;min-height:4px;height:{{ d.h }}%;border-radius:2px 2px 0 0;background:linear-gradient(180deg,#7dd3e0,#3f97ab)"></div>
+        <div style="font-size:10.5px;color:var(--pal-sub);margin-top:7px">{{ d.label }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版服务器设置(单列)。变量契约与 SETTINGS_TMPL 一致 ----
+SETTINGS_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0">
+    <div class="ig-title">服务器设置</div>
+    <div class="ig-sub">当前帕鲁世界规则与倍率配置{% if server_version %} · 服务端 {{ server_version }}{% endif %}</div>
+  </div></div>
+  <div class="ig-panel">
+    {% for it in items %}
+    <div class="ig-kv" style="margin-bottom:7px;border-left:3px solid var(--pal-cyan)">
+      <span class="kn">{{ it.k }}</span><span class="kp" style="color:var(--pal-text)">{{ it.v }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版网格列表(图鉴/物品/武器/坐骑等浏览)。变量契约与 GRID_TMPL 一致 ----
+GRID_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0">
+    <div class="ig-title">{{ title }}</div><div class="ig-sub">{{ sub }}</div>
+  </div></div>
+  <div class="ig-panel">
+    <div class="ig-dexgrid">
+      {% for c in cells %}
+      <div class="ig-dexcell">
+        <span class="no">{{ c.no }}</span>
+        {% if c.boss %}<img class="bmk" src="{{ icons.pal.alpha }}">{% endif %}
+        <div class="pv">{% if c.icon %}<img src="{{ c.icon }}">{% endif %}</div>
+        <div class="nm">{{ c.name }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% if pager %}<div style="margin-top:13px;text-align:center;font-size:12.5px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版物品分类总览(单列)。变量契约与 ITEMCAT_TMPL 一致 ----
+ITEMCAT_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0">
+    <div class="ig-title">物品图鉴</div><div class="ig-sub">共 {{ total }} 件 · 选择分类浏览</div>
+  </div></div>
+  <div class="ig-panel">
+    {% for c in cats %}
+    <div class="ig-catrow" style="flex-direction:row;align-items:center;gap:10px;border-left-color:var(--pal-cyan)">
+      <span class="cn" style="flex:1;min-width:0">{{ c.name }}</span>
+      <span style="color:var(--pal-sub);font-size:13px;font-variant-numeric:tabular-nums">{{ c.count }}</span>
+    </div>
+    {% endfor %}
+    <div style="margin-top:8px;text-align:center;font-size:12px;color:var(--pal-dim)">发「/帕鲁物品 武器」浏览某类 · 「/帕鲁物品 羊毛」查详情</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版科技详情。变量契约与 TECH_TMPL 一致 ----
+TECH_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">
+    {% if icon %}<div class="ig-portrait"><img src="{{ icon }}"></div>{% endif %}
+    <div style="flex:1;min-width:0"><div class="ig-title">{{ name }}</div>
+      <div class="ig-sub">
+        {% if is_boss %}<span class="ig-pill gold">古代科技</span>{% endif %}
+        {% if level %}<span class="ig-pill">解锁 Lv.{{ level }}</span>{% endif %}
+        {% if points %}<span class="ig-badge">{% if icons.currency.tech_point %}<img src="{{ icons.currency.tech_point }}">{% endif %}{{ points }} 技术点</span>{% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="ig-panel"><div style="font-size:14.5px;color:var(--pal-text-2);line-height:1.85;white-space:pre-line;word-break:break-word">{{ description or "（暂无描述）" }}</div></div>
+  {% if unlock %}<div class="ig-panel hi"><div class="ig-sec">解锁条件</div><div style="font-size:14px;color:var(--pal-sub);line-height:1.75;white-space:pre-line">{{ unlock }}</div></div>{% endif %}
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版物品详情。变量契约与 ITEM_TMPL 一致 ----
+ITEM_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">
+    {% if icon %}<div class="ig-portrait"><img src="{{ icon }}"></div>{% endif %}
+    <div style="flex:1;min-width:0"><div class="ig-title">{{ name }}</div>
+      <div class="ig-sub"><span class="ig-pill">{{ type }}</span></div></div>
+  </div>
+  <div class="ig-panel"><div style="font-size:14.5px;color:var(--pal-text-2);line-height:1.85;white-space:pre-line;word-break:break-word">{{ description or "（暂无描述）" }}</div>
+    {% if price or sphere %}<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:12px">
+      {% if price %}<span class="ig-badge">{% if icons.currency.gold %}<img src="{{ icons.currency.gold }}">{% endif %}商人价 <b style="color:var(--pal-gold);margin-left:2px">{{ price }}</b> 金币</span>{% endif %}
+      {% if sphere %}<span class="ig-pill">捕获力 ×{{ sphere.cap }}</span><span class="ig-pill">品阶 {{ sphere.rank }}</span>{% endif %}
+    </div>{% endif %}
+  </div>
+  {% if materials %}<div class="ig-panel hi"><div class="ig-sec">制作材料</div>
+    {% for m in materials %}<div class="ig-drop"><span class="l">{% if m.icon %}<img src="{{ m.icon }}">{% endif %}{{ m.name }}</span><span class="r" style="color:var(--pal-gold);font-weight:800">×{{ m.count }}</span></div>{% endfor %}
+    {% if benches %}<div class="ig-subsec">制作台</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for b in benches %}<span class="ig-pill">{{ b }}</span>{% endfor %}</div>{% endif %}
+  </div>{% endif %}
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版设施详情。变量契约与 FACILITY_TMPL 一致 ----
+FACILITY_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">
+    {% if icon %}<div class="ig-portrait"><img src="{{ icon }}"></div>{% endif %}
+    <div style="flex:1;min-width:0"><div class="ig-title">{{ name }}</div>
+      <div class="ig-sub">{% if category %}<span class="ig-pill">{{ category }}</span>{% endif %}</div></div>
+  </div>
+  <div class="ig-panel"><div style="font-size:14.5px;color:var(--pal-text-2);line-height:1.85;white-space:pre-line;word-break:break-word">{{ description or "（暂无描述）" }}</div></div>
+  {% if materials %}<div class="ig-panel hi"><div class="ig-sec">建造材料</div>
+    {% for m in materials %}<div class="ig-drop"><span class="l">{% if m.icon %}<img src="{{ m.icon }}">{% endif %}{{ m.name }}</span><span class="r" style="color:var(--pal-gold);font-weight:800">×{{ m.count }}</span></div>{% endfor %}
+    {% if build %}<div style="margin-top:10px;font-size:13px;color:var(--pal-sub);line-height:1.6">{{ build }}</div>{% endif %}
+  </div>{% endif %}
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版主动技能详情。变量契约与 SKILL_TMPL 一致 ----
+SKILL_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">
+    <div class="ig-node" style="width:60px;height:60px">{% if icons.element[element] %}<img src="{{ icons.element[element] }}">{% endif %}</div>
+    <div style="flex:1;min-width:0"><div class="ig-title">{{ name }}</div>
+      <div class="ig-sub"><span class="ig-badge">{% if icons.element[element] %}<img src="{{ icons.element[element] }}">{% endif %}{{ element }}属性</span>{% if is_fruit %}<span class="ig-pill">技能果实可得</span>{% endif %}{% if effect %}<span class="ig-pill">{{ effect }}</span>{% endif %}</div></div>
+  </div>
+  <div class="ig-panel">
+    <div class="ig-ivr" style="margin-top:0">
+      <div class="ig-ivb"><div class="ivv">{{ power or "—" }}</div><div class="ivk">威力</div></div>
+      <div class="ig-ivb"><div class="ivv">{{ cooldown or "—" }}</div><div class="ivk">冷却(秒)</div></div>
+    </div>
+    <div class="ig-sec" style="margin-top:14px">效果</div>
+    <div style="font-size:14.5px;color:var(--pal-text-2);line-height:1.8">{{ desc or "（暂无描述）" }}</div>
+    {% if is_fruit %}<div style="margin-top:12px;font-size:12.5px;color:var(--pal-sub);line-height:1.7">此技能可通过「{{ element }}之技能果实：{{ name }}」喂给帕鲁学会(技能果实在地牢/野外宝箱、商人处获取)。</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版排行榜(肝帝/图鉴/财富等)。变量契约与 RANK_TMPL 一致 ----
+RANK_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ rank_title | default('本周肝帝榜') }}</div>
+    <div class="ig-sub">{{ rank_sub | default('本周在线时长排行 · 看谁最肝～') }}</div></div></div>
+  {% if not rows %}
+  <div class="ig-panel" style="flex:1;display:flex;align-items:center;justify-content:center;min-height:200px"><div style="text-align:center"><div style="font-size:16px;color:var(--pal-text-2)">本周还没有在线记录</div><div style="font-size:12.5px;color:var(--pal-sub);margin-top:6px">玩起来！在线时长会自动统计上榜～</div></div></div>
+  {% else %}
+  <div class="ig-panel">
+    {% for r in rows %}
+    <div class="ig-rankrow{% if loop.index <= 3 %} top{% endif %}">
+      <div class="mdl">{{ r.medal }}</div>
+      <div style="flex:1;min-width:0"><div class="rn">{{ r.name }}{% if r.online %}<span class="dot"></span>{% endif %}</div><div class="ig-track" style="margin-top:6px"><div class="ig-fill" style="width:{{ r.pct }}%"></div></div></div>
+      <div class="rv">{{ r.dur }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版全服战力榜。变量契约与 POWER_TMPL 一致 ----
+POWER_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">全服战力榜</div><div class="ig-sub">{{ sub }}</div></div></div>
+  <div class="ig-panel">
+    {% for r in rows %}
+    <div class="ig-rankrow{% if r.rank <= 3 %} top{% endif %}">
+      <div class="mdl">{{ r.medal }}</div>
+      {% if r.icon %}<img class="pic" src="{{ r.icon }}">{% endif %}
+      <div style="flex:1;min-width:0"><div class="rn">{{ r.name }}{% if r.lucky %}<img class="inl" src="{{ icons.pal.lucky }}">{% elif r.alpha %}<img class="inl" src="{{ icons.pal.alpha }}">{% endif %}</div><div class="rs">Lv.{{ r.level }} · {{ r.owner }}</div></div>
+      <div style="text-align:right;flex:none"><div class="rv">{{ r.power }}</div><div class="ig-track" style="width:56px;margin-top:4px"><div class="ig-fill" style="width:{{ r.pct }}%"></div></div></div>
+    </div>
+    {% endfor %}
+    <div style="margin-top:9px;text-align:center;font-size:11px;color:var(--pal-dim)">战力为综合评分(等级/种族/天赋/浓缩/被动),仅供横向对比</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版帕鲁战力榜。变量契约与 PALPOWER_TMPL 一致 ----
+PALPOWER_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁战力榜</div><div class="ig-sub">{{ sub }}</div></div></div>
+  <div class="ig-panel">
+    {% for r in rows %}
+    <div class="ig-rankrow{% if r.rank <= 3 %} top{% endif %}">
+      <div class="mdl">{{ r.medal }}</div>
+      {% if r.icon %}<img class="pic" src="{{ r.icon }}">{% endif %}
+      <div style="flex:1;min-width:0"><div class="rn">{{ r.name }}{% if r.boss=='tower' %}<img class="inl" src="{{ icons.pal.alpha }}">{% elif r.boss=='boss' %}<img class="inl" src="{{ icons.pal.alpha }}">{% endif %}</div><div class="rs">{{ r.element }} · 稀有度 {{ r.rarity }}</div></div>
+      <div style="text-align:right;flex:none"><div class="rv">{{ r.power }}</div><div class="ig-track" style="width:56px;margin-top:4px"><div class="ig-fill" style="width:{{ r.pct }}%"></div></div></div>
+    </div>
+    {% endfor %}
+    <div style="margin-top:9px;text-align:center;font-size:11px;color:var(--pal-dim)">第 {{ page }}/{{ total_pages }} 页 · 「/帕鲁战力榜 帕鲁名」查详情</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版单帕鲁战力详情。变量契约与 PALPOWERDETAIL_TMPL 一致 ----
+PALPOWERDETAIL_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">
+    {% if icon %}<div class="ig-portrait"><img src="{{ icon }}"></div>{% endif %}
+    <div style="flex:1;min-width:0"><div class="ig-title">{{ name }} · 战力</div>
+      <div class="ig-sub"><span class="ig-pill">#{{ rank }} / {{ total }}</span>{% for e in elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}<span class="ig-pill">稀有度 {{ rarity }}</span></div></div>
+    <div style="text-align:right;flex:none"><div style="font-size:30px;font-weight:800;color:var(--pal-gold);line-height:1">{{ power }}</div><div style="font-size:11px;color:var(--pal-sub)">种族战力</div></div>
+  </div>
+  <div class="ig-panel">
+    {% for s in stats %}
+    <div class="ig-stat"><div class="lab"><span>{{ s.k }}</span><b>{{ s.v }}</b></div><div class="ig-track"><div class="ig-fill" style="width:{{ s.pct }}%"></div></div></div>
+    {% endfor %}
+    {% if partner %}<div style="margin-top:12px;font-size:13px;color:var(--pal-sub)">伙伴技能：{{ partner }}</div>{% endif %}
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--pal-line);text-align:center;font-size:11px;color:var(--pal-dim);line-height:1.7">种族值 生命{{ base.hp }} · 近战{{ base.melee }} · 远程{{ base.shot }} · 防御{{ base.df }} · Lv{{ reflv }}满级战力</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版公会。变量契约与 GUILD_TMPL 一致 ----
+GUILD_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ gname }}</div><div class="ig-sub">公会成员 · 共 {{ total }} 人{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %}</div></div></div>
+  <div class="ig-panel">
+    <div class="ig-stiles" style="margin-bottom:12px">
+      <div class="ig-stile"><div class="v">{{ total }}</div><div class="k">成员数</div></div>
+      <div class="ig-stile"><div class="v" style="font-size:14px">{{ leader }}</div><div class="k">会长</div></div>
+      <div class="ig-stile"><div class="v">{{ rank }}</div><div class="k">成员规模</div></div>
+    </div>
+    {% for m in members %}<div class="ig-prow"><span style="width:26px;height:26px;flex:none;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--pal-line);color:var(--pal-sub);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ m.no }}</span><span class="pnm">{{ m.name }}</span>{% if m.is_leader %}<span class="ig-pill gold">会长</span>{% endif %}</div>{% endfor %}
+    {% if pager %}<div style="margin-top:13px;text-align:center;font-size:12.5px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版掉落查询。变量契约与 DROP_TMPL 一致 ----
+DROP_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">{% if item_icon %}<div class="ig-portrait" style="width:70px;height:70px;border-width:10px"><img src="{{ item_icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">掉落查询</div><div class="ig-sub">掉落「{{ item }}」的帕鲁 · 共 {{ total }} 种{% if pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %}</div></div></div>
+  <div class="ig-panel">
+    {% for r in rows %}<div class="ig-rankrow">{% if r.icon %}<img class="pic" src="{{ r.icon }}">{% endif %}<div style="flex:1;min-width:0"><div class="rn">{{ r.pal }}</div><div class="rs">No.{{ r.index }}</div></div><div style="text-align:right;flex:none"><div class="rv">{{ r.rate }}%</div>{% if r.qty %}<div class="rs">×{{ r.qty }}</div>{% endif %}</div></div>{% endfor %}
+    {% if pager %}<div style="margin-top:12px;text-align:center;font-size:12.5px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版掉落物品目录(单列)。变量契约与 DROPLIST_TMPL 一致 ----
+DROPLIST_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">掉落物品目录</div><div class="ig-sub">{{ sub }}</div></div></div>
+  <div class="ig-panel">
+    {% for r in rows %}<div class="ig-drop"><span class="l">{% if r.icon %}<img src="{{ r.icon }}">{% endif %}{{ r.name }}</span><span class="r">{{ r.count }} 只掉</span></div>{% endfor %}
+    <div style="margin-top:10px;text-align:center;font-size:12px;color:var(--pal-dim)">发 /帕鲁哪里掉 物品名 查掉落的帕鲁{% if pager %} · {{ pager }}{% endif %}</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版闪光/头目墙(3列)。变量契约与 SHINY_TMPL 一致 ----
+SHINY_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ title }}</div><div class="ig-sub">{{ sub }}</div></div></div>
+  <div class="ig-panel">
+    <div class="ig-shwall">
+    {% for r in rows %}<div class="ig-shcell"><div class="pv">{% if r.icon %}<img src="{{ r.icon }}">{% endif %}</div><div class="nm">{{ r.name }}</div><div class="ow">{{ r.owner }}</div></div>{% endfor %}
+    </div>
+    {% if top_owners %}<div style="margin-top:12px;text-align:center;font-size:12.5px;color:var(--pal-sub)">收藏家：{{ top_owners }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版帕鲁伤病治疗。变量契约与 SYMPTOM_TMPL 一致 ----
+SYMPTOM_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁伤病治疗</div><div class="ig-sub">{{ sub }}</div></div></div>
+{% if single %}
+  <div class="ig-panel"><div style="font-size:18px;font-weight:800;color:var(--pal-text);text-align:center">{{ name }}</div>
+    <div style="margin-top:12px;font-size:14.5px;color:var(--pal-text-2);line-height:1.9;white-space:pre-line;word-break:break-word;background:rgba(255,255,255,.03);border:1px solid var(--pal-line);border-radius:3px;padding:12px 15px">{{ desc }}</div>
+  </div>
+  {% if items %}<div class="ig-panel hi"><div class="ig-sec">治疗道具</div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
+    {% for it in items %}<div style="text-align:center;width:100px"><div class="ig-slot" style="width:80px;margin:0 auto">{% if it.icon %}<img src="{{ it.icon }}">{% endif %}</div><div style="margin-top:6px;font-size:13px;color:var(--pal-text-2)">{{ it.name }}</div></div>{% endfor %}
+    </div>
+  </div>{% endif %}
+{% else %}
+  <div class="ig-panel">
+    {% for r in rows %}<div class="ig-rankrow" style="align-items:flex-start">
+      <div style="flex:none;display:flex;gap:6px">{% for it in r.items %}<div class="ig-slot" style="width:46px">{% if it.icon %}<img src="{{ it.icon }}">{% endif %}</div>{% endfor %}</div>
+      <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:800;color:var(--pal-text)">{{ r.name }}</div><div style="font-size:12.5px;color:var(--pal-sub);line-height:1.55;margin-top:2px">{{ r.desc }}</div></div>
+    </div>{% endfor %}
+  </div>
+{% endif %}
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版反配种。变量契约与 REVERSE_TMPL 一致 ----
+REVERSE_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">{% if target_icon %}<div class="ig-portrait" style="width:70px;height:70px;border-width:10px"><img src="{{ target_icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">反配种</div><div class="ig-sub">配出「{{ target }}」#{{ target_index }} 的亲代组合 · 共 {{ total }} 组 · 第 {{ page }}/{{ pages }} 页</div></div></div>
+  <div class="ig-panel">
+    {% for r in rows %}<div class="ig-breedrow">
+      <div class="pa"><span class="nm">{{ r.a }}</span>{% if r.a_icon %}<img src="{{ r.a_icon }}">{% endif %}</div>
+      <span class="plus">＋</span>
+      <div class="pb">{% if r.b_icon %}<img src="{{ r.b_icon }}">{% endif %}<span class="nm">{{ r.b }}</span></div>
+    </div>{% endfor %}
+    {% if pager %}<div style="margin-top:12px;text-align:center;font-size:12.5px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版在线热力图。变量契约与 HEATMAP_TMPL 一致 ----
+HEATMAP_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">在线热力图</div><div class="ig-sub">{{ sub }}</div></div></div>
+  <div class="ig-panel">
+    {% set colors = ['rgba(255,255,255,.05)','rgba(125,211,224,.28)','rgba(125,211,224,.55)','rgba(240,207,122,.55)','#f0cf7a'] %}
+    <div style="display:flex;gap:2px;padding-left:32px;margin-bottom:3px">{% for h in range(24) %}<div style="flex:1;font-size:8px;color:var(--pal-dim);text-align:center">{{ h }}</div>{% endfor %}</div>
+    {% for r in rows %}<div style="display:flex;align-items:center;gap:2px;margin-bottom:2px"><div style="width:30px;font-size:11px;color:var(--pal-sub);flex-shrink:0">{{ r.label }}</div>{% for c in r.cells %}<div style="flex:1;height:16px;border-radius:2px;background:{{ colors[c] }}"></div>{% endfor %}</div>{% endfor %}
+    <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:11px;color:var(--pal-sub)"><span>少</span>{% for c in colors %}<div style="width:18px;height:11px;border-radius:2px;background:{{ c }}"></div>{% endfor %}<span>多</span></div>
+    {% if hint %}<div style="margin-top:11px;text-align:center;font-size:12.5px;color:var(--pal-text-2)">{{ hint }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版属性克制图(2列)。变量契约与 ELEMENT_TMPL 一致 ----
+ELEMENT_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁属性克制图</div><div class="ig-sub"><span class="ig-pill">9 系属性</span><span class="ig-pill">克制方 ×1.5 伤害</span></div></div></div>
+  <div class="ig-panel">
+    <div class="ig-elemgrid">
+    {% for e in elems %}
+      <div class="ig-ecard" style="border-color:{{ e.color }}66">
+        <div style="display:flex;align-items:center;gap:8px"><div class="ig-node" style="width:36px;height:36px">{% if icons.element[e.cn] %}<img src="{{ icons.element[e.cn] }}">{% endif %}</div><span style="font-size:15px;font-weight:800;color:{{ e.color }}">{{ e.cn }}属性</span></div>
+        <div class="er"><span class="lb" style="color:var(--pal-good)">克制</span>{% if e.strong %}{% for s in e.strong %}<span class="et">{% if icons.element[s.cn] %}<img src="{{ icons.element[s.cn] }}">{% endif %}{{ s.cn }}</span>{% endfor %}{% else %}<span style="color:var(--pal-dim)">无</span>{% endif %}</div>
+        <div class="er"><span class="lb" style="color:var(--pal-danger)">被克</span>{% if e.weak %}{% for w in e.weak %}<span class="et">{% if icons.element[w.cn] %}<img src="{{ icons.element[w.cn] }}">{% endif %}{{ w.cn }}</span>{% endfor %}{% else %}<span style="color:var(--pal-dim)">无</span>{% endif %}</div>
+      </div>
+    {% endfor %}
+    </div>
+    <div style="margin-top:13px;font-size:12px;color:var(--pal-sub);line-height:1.7">用克制属性的帕鲁/技能攻击,伤害提升约 50%;被克制时己方更脆。捕捉强力帕鲁时带克制属性更省球。</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版栖息分布(带地图)。变量契约与 HABITAT_TMPL 一致 ----
+HABITAT_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">{% if icon %}<div class="ig-portrait" style="width:76px;height:76px;border-width:11px"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ name }} · 栖息分布</div><div class="ig-sub"><span class="ig-pill">No.{{ index }}</span>{% for e in elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}{% if nocturnal %}<span class="ig-pill">夜行</span>{% endif %}{% if map_label %}<span class="ig-pill">{{ map_label }}</span>{% endif %}</div></div></div>
+  <div style="position:relative;width:100%;border:1px solid var(--pal-line);border-radius:3px;overflow:hidden">
+    <img src="{{ mapimg }}" style="display:block;width:100%">
+    <div style="position:absolute;inset:0;mix-blend-mode:screen">{% for pt in points %}<div style="position:absolute;left:{{pt.l}}%;top:{{pt.t}}%;width:26px;height:26px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,{{color}}d0,{{color}}00 62%)"></div>{% endfor %}</div>
+    {% for pt in boss_points %}<img src="{{ icons.pal.alpha }}" style="position:absolute;left:{{pt.l}}%;top:{{pt.t}}%;transform:translate(-50%,-100%);z-index:6;width:22px;height:22px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.95))">{% endfor %}
+  </div>
+  <div class="ig-panel" style="margin-top:12px">
+    <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:13px;color:var(--pal-text-2)"><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:50%;background:{{color}};display:inline-block"></span>栖息热区</span>{% if boss_points %}<span class="ig-pill" style="background:#d42c2c;color:#fff">{{ boss_label }} {{ boss_lv }} · {{ boss_points|length }}处</span>{% endif %}<span class="ig-pill">{{ count }} 个刷新点</span>{% if has_day and has_night %}<span class="ig-pill">日夜均刷</span>{% elif nocturnal %}<span class="ig-pill">夜间为主</span>{% endif %}</div>
+    {% if regions %}<div class="ig-sec" style="margin-top:13px">主要出没区域</div>
+    <div style="display:flex;flex-direction:column;gap:7px">{% for r in regions %}<div style="display:flex;align-items:center;gap:9px"><span style="flex:none;width:92px;font-size:13px;color:var(--pal-text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</span><span style="flex:1;height:10px;border-radius:2px;background:rgba(0,0,0,.35);overflow:hidden"><span style="display:block;height:100%;width:{{ r.pct }}%;background:linear-gradient(90deg,{{color}}88,{{color}})"></span></span><span style="flex:none;width:36px;text-align:right;font-size:12px;color:var(--pal-sub)">{{ r.pct }}%</span></div>{% endfor %}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版玩家分布地图。变量契约与 MAP_TMPL 一致 ----
+MAP_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">在线玩家分布</div><div class="ig-sub">{{ subtitle }}</div></div></div>
+  <div style="position:relative;width:100%;border:1px solid var(--pal-line);border-radius:3px;overflow:hidden">
+    <img src="{{ mapimg }}" style="display:block;width:100%">
+    {% for p in players %}<div style="position:absolute;left:{{ p.left }}%;top:{{ p.top }}%;transform:translate(-50%,-100%);width:16px;height:21px;z-index:5"><div style="position:absolute;top:0;left:0;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 55% 40%,#ff9a9a,#d12f2f);border:1.5px solid #fff"></div><div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:3.5px solid transparent;border-right:3.5px solid transparent;border-top:6px solid #d12f2f"></div><div style="position:absolute;top:0;left:0;width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800">{{ p.no }}</div></div>{% endfor %}
+  </div>
+  <div class="ig-panel" style="margin-top:12px">
+    {% for p in players %}<div class="ig-prow"><span style="width:24px;height:24px;flex:none;border-radius:50%;background:var(--pal-gold);color:#0e1015;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ p.no }}</span><span class="pnm">{{ p.name }}</span><span class="ig-pill">Lv.{{ p.level }}</span><span style="margin-left:auto;text-align:right"><span style="font-size:13px;color:var(--pal-text-2)">{{ p.region }}</span><span style="display:block;font-size:11px;color:var(--pal-dim)">坐标 {{ p.coord }}</span></span></div>{% endfor %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版任务详情。变量契约与 MISSION_TMPL 一致 ----
+MISSION_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ name }}</div><div class="ig-sub"><span class="ig-pill" style="color:{{tcolor}}">{{ tlabel }}</span>{% if order %}<span class="ig-pill">主线 第 {{ order }}/32</span>{% endif %}{% if group %}<span class="ig-pill">{{ group }}</span>{% endif %}</div></div></div>
+  <div class="ig-panel">{% if desc %}<div style="font-size:14.5px;color:var(--pal-text-2);line-height:1.85;white-space:pre-line">{{ desc }}</div>{% endif %}
+    <div class="ig-sec" style="margin-top:14px">目标</div><div style="font-size:14px;color:var(--pal-text-2);line-height:1.7">{{ objective or "按上方任务说明完成即可" }}{% if coords %}<br><span class="ig-pill" style="margin-top:6px;display:inline-block">地图坐标 <b style="color:var(--pal-gold);margin-left:3px">{{ coords }}</b></span>{% endif %}</div>
+    {% if exp or rewards %}<div class="ig-sec" style="margin-top:14px">任务奖励</div><div style="display:flex;flex-wrap:wrap;gap:7px">{% if exp %}<span class="ig-pill gold">经验 +{{ exp }}</span>{% endif %}{% for r in rewards %}<span class="ig-pill">{{ r.name }} ×{{ r.qty }}</span>{% endfor %}</div>{% endif %}
+    {% if nextname %}<div class="ig-sec" style="margin-top:14px">下一环</div><div style="font-size:14px;color:var(--pal-sub)">{{ nextname }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版任务列表。变量契约与 MISSIONLIST_TMPL 一致 ----
+MISSIONLIST_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ title }}</div><div class="ig-sub"><span class="ig-pill">{{ subtitle }}</span></div></div></div>
+  <div class="ig-panel">
+    {% for it in rows %}<div class="ig-prow"><span class="ig-pill gold" style="min-width:30px;text-align:center;justify-content:center">{{ it.tag }}</span><span style="flex:none;font-size:14px;font-weight:700;color:var(--pal-text);max-width:42%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ it.name }}</span><span style="flex:1;min-width:0;font-size:12.5px;color:var(--pal-sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ it.brief }}</span></div>{% endfor %}
+    <div style="margin-top:10px;font-size:12px;color:var(--pal-dim);line-height:1.7">发「{{ detailhint }}」看某个任务的详细攻略{% if pagehint %};{{ pagehint }}{% endif %}</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版 Boss/塔主/突袭 详情。变量契约与 BOSS_TMPL 一致 ----
+BOSS_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">{% if icon %}<div class="ig-portrait" style="width:78px;height:78px;border-width:11px"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ name }}</div><div class="ig-sub"><span class="ig-pill" style="color:{{color}}">{{ catlabel }}</span>{% for e in elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}{% if difficulty %}<span class="ig-pill">{{ difficulty }}</span>{% endif %}</div></div></div>
+  <div class="ig-panel">
+    <div class="ig-ivr" style="margin-top:0"><div class="ig-ivb"><div class="ivv">Lv.{{ level or "—" }}</div><div class="ivk">等级</div></div><div class="ig-ivb"><div class="ivv" style="color:var(--pal-danger)">{{ hp or "—" }}</div><div class="ivk">生命值</div></div></div>
+    {% if location %}<div class="ig-sec" style="margin-top:13px">所在</div><div style="font-size:14px;color:var(--pal-text-2)">{{ location }}</div>{% endif %}
+    {% if drops %}<div class="ig-sec" style="margin-top:13px">掉落</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for d in drops %}<span class="ig-pill">{{ d }}</span>{% endfor %}</div>{% endif %}
+    <div class="ig-sec" style="margin-top:13px">攻略提示</div><div style="font-size:13px;color:var(--pal-sub);line-height:1.8">{{ tip }}</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版商人。变量契约与 MERCHANT_TMPL 一致 ----
+MERCHANT_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">{% if icon %}<div class="ig-portrait" style="width:74px;height:74px;border-width:10px"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ title }}</div><div class="ig-sub">{% for b in badges %}<span class="ig-pill">{{ b }}</span>{% endfor %}</div></div></div>
+  <div class="ig-panel">{% if note %}<div style="font-size:13px;color:var(--pal-sub);margin-bottom:10px">{{ note }}</div>{% endif %}
+    {% for r in rows %}<div class="ig-prow"><span style="flex:1;min-width:0;font-size:14.5px;color:var(--pal-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.name }}</span>{% if r.sub %}<span style="flex:none;font-size:12px;color:var(--pal-sub)">{{ r.sub }}</span>{% endif %}{% if r.right %}<span style="flex:none;font-size:14px;font-weight:800;color:var(--pal-gold)">{{ r.right }}</span>{% endif %}</div>{% endfor %}
+    {% if foot %}<div style="margin-top:10px;font-size:12px;color:var(--pal-dim);line-height:1.7">{{ foot }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版技能果实。变量契约与 SKILLFRUIT_TMPL 一致 ----
+SKILLFRUIT_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">{% if icon %}<div class="ig-portrait"><img src="{{ icon }}"></div>{% else %}<div class="ig-node" style="width:60px;height:60px">{% if icons.element[element] %}<img src="{{ icons.element[element] }}">{% endif %}</div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ fruit_name }}</div><div class="ig-sub"><span class="ig-badge">{% if icons.element[element] %}<img src="{{ icons.element[element] }}">{% endif %}{{ element }}属性</span>{% if power and power != "0" %}<span class="ig-pill">威力 {{ power }}</span>{% endif %}{% if cooldown %}<span class="ig-pill">冷却 {{ cooldown }}s</span>{% endif %}</div></div></div>
+  <div class="ig-panel">{% if effect %}<span class="ig-pill gold" style="margin-bottom:10px;display:inline-block">{{ effect }}</span>{% endif %}<div style="font-size:14.5px;color:var(--pal-text-2);line-height:1.9;white-space:pre-line;word-break:break-word">{{ desc or "（暂无描述）" }}</div>
+    <div class="ig-sec" style="margin-top:14px">用法</div><div style="font-size:14px;color:var(--pal-sub);line-height:1.75;background:rgba(255,255,255,.03);border:1px solid var(--pal-line);border-radius:3px;padding:12px 14px">将此技能果实喂给帕鲁,即可让它学会主动技能<b style="color:var(--pal-gold)">「{{ tech }}」</b>。技能果实可在世界各地的宝箱等处获得。</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版植入体。变量契约与 IMPLANT_TMPL 一致 ----
+IMPLANT_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">{% if icon %}<div class="ig-portrait"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ name }}</div><div class="ig-sub">{% if rank %}<span class="ig-pill gold">稀有度 {{ "★" * (rank if rank <= 5 else 5) }}</span>{% endif %}{% if consumable %}<span class="ig-pill" style="background:#e07a1a;color:#fff">耗材·一次性</span>{% else %}<span class="ig-pill">可反复植入</span>{% endif %}</div></div></div>
+  <div class="ig-panel"><div class="ig-sec">赋予词条</div>
+    <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.03);border:1px solid var(--pal-line);border-radius:3px;padding:12px 14px"><span style="font-size:16px;font-weight:800;color:var(--pal-text)">「{{ passive }}」</span>{% if effect %}<span style="font-size:14px;color:{% if sign < 0 %}var(--pal-danger){% else %}var(--pal-good){% endif %}">{{ effect }}</span>{% endif %}</div>
+    <div class="ig-sec" style="margin-top:14px">用法</div><div style="font-size:14px;color:var(--pal-sub);line-height:1.75">在据点的帕鲁改造设备上,用此植入体为帕鲁植入被动词条「{{ passive }}」。{% if consumable %}耗材型使用后消耗,效果通常更强力。{% else %}可反复植入或替换词条。{% endif %}</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版世界树守护者。变量契约与 WORLDTREE_TMPL 一致 ----
+WORLDTREE_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">世界树守护者</div><div class="ig-sub"><span class="ig-pill gold">1.0 最终 Boss</span><span class="ig-pill">世界树·封印之室</span></div></div></div>
+  <div class="ig-panel"><div style="font-size:13.5px;color:var(--pal-sub);line-height:1.75">自古伫立于「世界树」旁的两位守护者,镇守着最深处封印之室。击败它们方能解除屏障、抵达世界树的真相。</div></div>
+  {% for b in bosses %}
+  <div class="ig-panel hi"><div class="ig-teamcard">
+    {% if b.icon %}<div class="tpic"><img src="{{ b.icon }}"></div>{% endif %}
+    <div style="flex:1;min-width:0"><div style="font-size:18px;font-weight:800;color:var(--pal-text)">{{ b.name }} <span style="font-size:12px;color:var(--pal-sub);font-weight:400">#{{ b.index }}</span></div>
+      <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}<span class="ig-pill">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="ig-pill">HP {{ b.hp }}</span>{% endif %}</div>
+      {% if b.partner %}<div style="font-size:12.5px;color:var(--pal-good);margin-top:2px">伙伴技能：{{ b.partner }}</div>{% endif %}
+      <div style="font-size:12px;color:var(--pal-text-2);margin-top:4px;line-height:1.6"><b style="color:var(--pal-sub)">技能</b> {{ b.skills|join('、') }}</div>
+      <div style="font-size:12px;color:var(--pal-gold);margin-top:3px"><b style="color:var(--pal-sub)">掉落</b> {{ b.drops|join('、') }}</div>
+    </div>
+  </div></div>
+  {% endfor %}
+  <div class="ig-panel"><div style="font-size:12.5px;color:var(--pal-sub)">发 /帕鲁图鉴 {{ bosses[0].name }} 看完整属性/工作适性/伙伴技能详情。</div></div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版 1.0 总览。变量契约与 V10_TMPL 一致 ----
+V10_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">幻兽帕鲁 1.0 · 全面支持</div><div class="ig-sub"><span class="ig-pill gold">正式版数据已更新</span></div></div></div>
+  <div class="ig-panel"><div class="ig-sec">数据收录 <span style="font-size:11px;color:var(--pal-sub);font-weight:400">· 帕鲁 {{ stats['pals'] }} 只可收集,含变体共 {{ stats['pals_total'] }} 个数据实体</span></div>
+    <div class="ig-stiles">
+      {% set cells = [("帕鲁图鉴",stats['pals']),("物品",stats['items']),("主动技能",stats['skills']),("科技",stats['tech']),("建筑设施",stats['buildings']),("制作配方",stats['recipes']),("研究所",stats['lab']),("技能果实",stats['fruits']),("植入体",stats['implants'])] %}
+      {% for label,num in cells %}<div class="ig-stile"><div class="v">{{ num }}</div><div class="k">{{ label }}</div></div>{% endfor %}
+    </div>
+  </div>
+  <div class="ig-panel hi"><div class="ig-sec">1.0 新增查询</div>
+    <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;color:var(--pal-text-2)">
+      <div><b style="color:var(--pal-gold)">/帕鲁研究所</b> — 全局增益研究,按「手工1」编号查</div>
+      <div><b style="color:var(--pal-gold)">/帕鲁技能果实</b> — 92种果实按元素分类</div>
+      <div><b style="color:var(--pal-gold)">/帕鲁植入体</b> — 68种改造词条</div>
+      <div><b style="color:var(--pal-gold)">/帕鲁世界树</b> — 最终boss专题</div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--pal-dim)">全部查询支持:名称 / 模糊 / 编号 / 分类浏览。</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版帕鲁觉醒。变量契约与 AWAKENING_TMPL 一致 ----
+AWAKENING_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁觉醒</div><div class="ig-sub">1.0 觉醒系统 · 世界树能量解放隐藏能力</div></div></div>
+  <div class="ig-panel"><div class="ig-sec">九系觉醒晶石</div>
+    <div class="ig-stiles">
+    {% for g in gems %}<div class="ig-stile" style="border-color:{{g.color}}66"><div style="height:40px;display:flex;align-items:center;justify-content:center">{% if g.gem_icon %}<img src="{{g.gem_icon}}" style="width:36px;height:36px;object-fit:contain">{% elif icons.element[g.elem] %}<img src="{{ icons.element[g.elem] }}" style="width:32px;height:32px;object-fit:contain">{% endif %}</div><div style="font-size:12.5px;font-weight:800;color:{{g.color}}">{{g.elem}}系</div><div style="font-size:10px;color:var(--pal-dim);margin-top:1px">{{g.mat}}→晶石</div></div>{% endfor %}
+    </div>
+    <div style="margin-top:13px;padding:11px 13px;background:rgba(255,255,255,.03);border:1px solid var(--pal-line);border-radius:3px;font-size:12.5px;color:var(--pal-sub);line-height:1.75"><b style="color:var(--pal-gold)">觉醒机制</b>:击败世界树 Boss 后解锁。用对应属性的辉石加工成觉醒晶石,让该属性帕鲁「觉醒」、解放隐藏能力。<br>具体觉醒提升数值与所需晶石数量,游戏文件未以数据表明确提供,以游戏内为准;暂不支持读取存档中的觉醒状态。</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版帕鲁突变。变量契约与 MUTATION_TMPL 一致 ----
+MUTATION_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁突变</div><div class="ig-sub">1.0 突变机制 · 特殊蛋糕影响配种结果</div></div></div>
+  <div class="ig-panel"><div class="ig-sec">特殊蛋糕(放入繁殖牧场影响后代)</div>
+    {% for c in cakes %}<div class="ig-drop"><span class="l">{% if c.icon %}<img src="{{c.icon}}">{% endif %}<span style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;font-weight:700;color:var(--pal-text)">{{c.name}}</span><span style="font-size:11.5px;color:var(--pal-sub);line-height:1.4">{{c.effect}}</span></span></span></div>{% endfor %}
+    {% if eggs %}<div class="ig-sec" style="margin-top:14px">突变帕鲁蛋</div><div style="display:flex;gap:8px;flex-wrap:wrap">{% for e in eggs %}<span class="ig-pill">{% if e.icon %}<img src="{{e.icon}}" style="width:16px;height:16px;vertical-align:middle;margin-right:3px">{% endif %}{{e.name}}</span>{% endfor %}</div>{% endif %}
+    <div style="margin-top:13px;padding:11px 13px;background:rgba(255,255,255,.03);border:1px solid var(--pal-line);border-radius:3px;font-size:12.5px;color:var(--pal-sub);line-height:1.75"><b style="color:var(--pal-gold)">突变机制</b>:豪华蔬菜蛋糕提升后代突变概率;突变帕鲁外观/属性与普通不同,可能带专属词条。蘑菇蛋糕提升天赋、蔬菜蛋糕一次产2蛋、特制蛋糕提升被动继承。<br>突变准确概率游戏未公开,此处仅说明机制、不猜测数值。</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版研究所总览。变量契约与 LAB_OVERVIEW_TMPL 一致 ----
+LAB_OVERVIEW_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁研究所</div><div class="ig-sub"><span class="ig-pill">共 {{ total }} 项研究</span><span class="ig-pill">9 大工作适性</span></div></div></div>
+  <div class="ig-panel"><div style="font-size:13.5px;color:var(--pal-sub);line-height:1.75;margin-bottom:13px">在据点建造「研究所」后,投入材料与帕鲁工时研究各类工作适性的<b style="color:var(--pal-gold)">全局增益</b>(工作速度/据点战力/孵化/远征等),效果对全服帕鲁生效。</div>
+    <div class="ig-stiles">
+    {% for c in cats %}<div class="ig-stile"><div style="height:36px;display:flex;align-items:center;justify-content:center">{% if icons.work[c.name] %}<img src="{{ icons.work[c.name] }}" style="width:30px;height:30px;object-fit:contain">{% endif %}</div><div style="font-size:14px;font-weight:800;color:var(--pal-text)">{{ c.name }}</div><div style="font-size:11px;color:var(--pal-sub);margin-top:3px">{{ c.count }} 项 · <span style="color:var(--pal-good)">{{ c.essential }} 必需</span></div></div>{% endfor %}
+    </div>
+    <div style="margin-top:13px;font-size:12.5px;color:var(--pal-dim);line-height:1.7">发 /帕鲁研究所 手工 看某类全部研究;发 /帕鲁研究所 &lt;研究名&gt; 看单项材料/前置。</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版研究所分类列表(单列)。变量契约与 LAB_LIST_TMPL 一致 ----
+LAB_LIST_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ category }}</div><div class="ig-sub"><span class="ig-pill">{{ items|length }} 项研究</span></div></div></div>
+  <div class="ig-panel">
+    {% for it in items %}<div class="ig-prow"><span class="ig-pill gold" style="min-width:24px;justify-content:center">{{ loop.index }}</span>{% if it.essential %}<span class="ig-pill" style="background:#5cc97a;color:#0e1015">必需</span>{% endif %}<div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:700;color:var(--pal-text)">{{ it.name }}</div>{% if it.effect %}<div style="font-size:12px;color:var(--pal-good);margin-top:2px">{{ it.effect }}</div>{% endif %}</div></div>{% endfor %}
+    <div style="margin-top:10px;font-size:12.5px;color:var(--pal-dim)">按编号查:发 /帕鲁研究所 {{ cat_short }}1;或 /帕鲁研究所 &lt;研究名&gt; 查详情。</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版研究所详情。变量契约与 LAB_DETAIL_TMPL 一致 ----
+LAB_DETAIL_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ name }}</div><div class="ig-sub"><span class="ig-pill">{{ category }}</span>{% if essential %}<span class="ig-pill" style="background:#5cc97a;color:#0e1015">必需研究</span>{% endif %}{% if work %}<span class="ig-pill">{{ work }} 工时</span>{% endif %}</div></div></div>
+  {% if effect %}<div class="ig-panel"><div class="ig-sec">研究效果</div><div style="font-size:15px;color:var(--pal-good);font-weight:700;background:rgba(139,208,106,.1);border:1px solid rgba(139,208,106,.3);border-radius:3px;padding:11px 14px">{{ effect }}</div></div>{% endif %}
+  {% if materials %}<div class="ig-panel hi"><div class="ig-sec">所需材料</div><div style="display:flex;flex-wrap:wrap;gap:7px">{% for m in materials %}<span class="ig-pill">{{ m.name }} <b style="color:var(--pal-gold);margin-left:3px">×{{ m.count }}</b></span>{% endfor %}</div></div>{% endif %}
+  {% if prereq %}<div class="ig-panel"><div class="ig-sec">前置研究</div><div style="font-size:14px;color:var(--pal-sub)">需先完成「{{ prereq }}」</div></div>{% endif %}
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版帕鲁配种。变量契约与 BREED_TMPL 一致 ----
+BREED_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁配种</div><div class="ig-sub">亲代组合的后代</div></div></div>
+  <div class="ig-panel">
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;padding:4px 0 12px">
+      <div class="ig-stile" style="flex:1;max-width:150px;padding:14px 8px">{% if a.icon %}<img src="{{ a.icon }}" style="width:50px;height:50px;object-fit:contain;display:block;margin:0 auto 6px">{% endif %}<div style="font-size:17px;font-weight:800;color:var(--pal-text)">{{ a.name }}</div><div style="font-size:11px;color:var(--pal-sub);margin-top:3px">#{{ a.index }}</div><div style="margin-top:7px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for e in a.elements %}<span class="ig-badge" style="font-size:11px;padding:1px 6px 1px 4px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}</div></div>
+      <div style="font-size:26px;font-weight:900;color:var(--pal-gold);flex:none">＋</div>
+      <div class="ig-stile" style="flex:1;max-width:150px;padding:14px 8px">{% if b.icon %}<img src="{{ b.icon }}" style="width:50px;height:50px;object-fit:contain;display:block;margin:0 auto 6px">{% endif %}<div style="font-size:17px;font-weight:800;color:var(--pal-text)">{{ b.name }}</div><div style="font-size:11px;color:var(--pal-sub);margin-top:3px">#{{ b.index }}</div><div style="margin-top:7px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for e in b.elements %}<span class="ig-badge" style="font-size:11px;padding:1px 6px 1px 4px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}</div></div>
+    </div>
+    <div style="text-align:center;font-size:13px;color:var(--pal-gold);font-weight:800;margin:2px 0">═══ 后代 ═══</div>
+    <div style="text-align:center;padding:6px 0">{% if c.icon %}<img src="{{ c.icon }}" style="width:70px;height:70px;object-fit:contain;display:block;margin:0 auto 4px">{% endif %}<div style="font-size:26px;font-weight:800;color:var(--pal-text)">{{ c.name }}</div><div style="font-size:12px;color:var(--pal-sub);margin-top:4px">图鉴 #{{ c.index }} · <span style="color:var(--pal-gold)">{{ "★" * (c.rarity if c.rarity <= 5 else 5) if c.rarity else "★" }}</span></div><div style="display:flex;gap:6px;justify-content:center;margin-top:9px">{% for e in c.elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}</div></div>
+  </div>
+  {% if child_breeds %}<div class="ig-panel hi"><div class="ig-sec">用 {{ child_name }} 继续配</div>
+    {% for cb in child_breeds %}<div class="ig-breedrow"><div class="pa"><span class="nm" style="font-size:12.5px">{{ child_name }} ＋ {{ cb.partner }}</span></div><span class="plus">→</span><div class="pb">{% if cb.result_icon %}<img src="{{ cb.result_icon }}">{% endif %}<span class="nm" style="font-size:12.5px">{{ cb.result }}</span></div></div>{% endfor %}
+  </div>{% endif %}
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版配种路线。变量契约与 ROUTE_TMPL 一致 ----
+ROUTE_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">{% if target_icon %}<div class="ig-portrait" style="width:66px;height:66px;border-width:9px"><img src="{{ target_icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">配种路线 → {{ target }}</div><div class="ig-sub">{{ sub }}</div></div></div>
+  <div class="ig-panel">
+    {% for s in steps %}<div class="ig-rankrow{% if s.is_target %} top{% endif %}" style="gap:5px;padding:8px 8px">
+      <span style="width:18px;flex:none;color:var(--pal-gold);font-weight:800;font-size:12px">{{ s.n }}</span>
+      <div style="flex:1;display:flex;align-items:center;gap:4px;justify-content:flex-end;min-width:0"><span style="font-size:12px;color:var(--pal-text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.a }}{% if s.a_owned %}<span style="color:var(--pal-good)">✓</span>{% endif %}</span>{% if s.a_icon %}<img src="{{ s.a_icon }}" style="width:28px;height:28px;object-fit:contain;flex:none">{% endif %}</div>
+      <span style="color:var(--pal-sub);flex:none;font-size:11px">＋</span>
+      <div style="flex:1;display:flex;align-items:center;gap:4px;min-width:0">{% if s.b_icon %}<img src="{{ s.b_icon }}" style="width:28px;height:28px;object-fit:contain;flex:none">{% endif %}<span style="font-size:12px;color:var(--pal-text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.b }}{% if s.b_owned %}<span style="color:var(--pal-good)">✓</span>{% endif %}</span></div>
+      <span style="color:var(--pal-gold);flex:none;font-weight:800">→</span>
+      <div style="flex:1;display:flex;align-items:center;gap:4px;min-width:0">{% if s.c_icon %}<img src="{{ s.c_icon }}" style="width:30px;height:30px;object-fit:contain;flex:none">{% endif %}<span style="font-size:12.5px;font-weight:700;color:{% if s.is_target %}var(--pal-gold){% else %}var(--pal-text){% endif %};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.c }}</span></div>
+    </div>{% endfor %}
+    <div style="margin-top:10px;text-align:center;font-size:11px;color:var(--pal-dim)">✓=你已拥有 · 按顺序配,每步产物用于下一步</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版可孵化列表。变量契约与 HATCH_TMPL 一致 ----
+HATCH_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ title }}</div><div class="ig-sub"><span class="ig-pill">{{ subtitle }}</span></div></div></div>
+  <div class="ig-panel">
+    {% for r in rows %}<div class="ig-rankrow" style="gap:8px">
+      <div style="flex:none;display:flex;align-items:center;gap:7px;width:44%;min-width:0">{% if r.icon %}<img src="{{ r.icon }}" style="width:40px;height:40px;object-fit:contain;flex:none">{% endif %}<span style="font-size:14.5px;font-weight:800;color:var(--pal-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</span></div>
+      <span style="flex:none;color:var(--pal-sub);font-size:12px">←</span>
+      <div style="flex:1;display:flex;align-items:center;gap:4px;min-width:0;justify-content:flex-end">{% if r.a_icon %}<img src="{{ r.a_icon }}" style="width:26px;height:26px;object-fit:contain;flex:none">{% endif %}<span style="font-size:12px;color:var(--pal-sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.a }}</span><span style="color:var(--pal-gold);flex:none">＋</span>{% if r.b_icon %}<img src="{{ r.b_icon }}" style="width:26px;height:26px;object-fit:contain;flex:none">{% endif %}<span style="font-size:12px;color:var(--pal-sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.b }}</span></div>
+    </div>{% endfor %}
+    {% if pager %}<div style="margin-top:10px;text-align:center;font-size:12px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版词条继承概率。变量契约与 INHERIT_TMPL 一致 ----
+INHERIT_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">词条继承概率</div><div class="ig-sub">两只亲代配种,孩子继承词条的概率(社区实测模型)</div></div></div>
+  <div class="ig-panel">
+    <div style="display:flex;gap:10px">
+      <div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:800;color:var(--pal-sub);margin-bottom:7px">父代词条</div><div style="display:flex;flex-wrap:wrap;gap:5px">{% if a_chips %}{% for c in a_chips %}<span class="ig-chip {{ c.color }}">{{ c.stars }} {{ c.name }}</span>{% endfor %}{% else %}<span style="color:var(--pal-dim);font-size:12px">(未填)</span>{% endif %}</div></div>
+      <div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:800;color:var(--pal-sub);margin-bottom:7px">母代词条</div><div style="display:flex;flex-wrap:wrap;gap:5px">{% if b_chips %}{% for c in b_chips %}<span class="ig-chip {{ c.color }}">{{ c.stars }} {{ c.name }}</span>{% endfor %}{% else %}<span style="color:var(--pal-dim);font-size:12px">(未填)</span>{% endif %}</div></div>
+    </div>
+    {% if feasible %}<div style="margin-top:14px;text-align:center;background:rgba(125,211,224,.08);border:1px solid rgba(125,211,224,.3);border-radius:3px;padding:15px 14px">
+      <div style="font-size:13px;color:var(--pal-sub)">同时继承这 {{ n }} 个词条的概率</div>
+      <div style="font-size:44px;font-weight:800;color:var(--pal-text);line-height:1.1;margin-top:2px">{{ p_all }}<span style="font-size:22px;color:var(--pal-sub)">%</span></div>
+    </div>{% endif %}
+    <div class="ig-sec" style="margin-top:16px">继承「父母词条」数量的概率</div>
+    {% for d in dist %}<div style="display:flex;align-items:center;gap:10px;padding:5px 0"><span style="flex:none;width:80px;font-size:13px;color:var(--pal-text-2)">{{ d.j }} 个词条</span><div class="ig-inbar"><span style="width:{{ d.p }}%"></span></div><span style="flex:none;width:42px;text-align:right;font-size:13px;font-weight:800;color:var(--pal-gold)">{{ d.p }}%</span></div>{% endfor %}
+    <div class="ig-sec" style="margin-top:16px">每个词条单独的继承率</div>
+    {% for c in pool %}<div style="display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid var(--pal-line-soft)"><span class="ig-chip {{ c.color }}" style="flex:none">{{ c.stars }} {{ c.name }}</span>{% if c.effect %}<span style="flex:1;min-width:0;font-size:11.5px;color:var(--pal-sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.effect }}</span>{% else %}<span style="flex:1"></span>{% endif %}<span style="flex:none;font-size:14px;font-weight:800;color:var(--pal-good)">{{ c.p_single }}%</span></div>{% endfor %}
+    {% if shared %}<div style="margin-top:12px;font-size:12px;color:var(--pal-gold)">双亲都带「{{ shared|join('、') }}」,词条池中只算一份。</div>{% endif %}
+    {% if unknown %}<div style="margin-top:6px;font-size:12px;color:var(--pal-danger)">没认出：{{ unknown|join('、') }}(已忽略,请用游戏内全名)</div>{% endif %}
+    <div style="margin-top:12px;font-size:11.5px;color:var(--pal-dim);line-height:1.65">模型:孩子从父母去重词条池里继承 1/2/3/4 个的概率为 40%/30%/20%/10%;空余格子还可能随机刷出新词条。实际为概率,多孵几窝更稳。</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版帕鲁对比。变量契约与 COMPARE_TMPL 一致 ----
+COMPARE_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head" style="align-items:center">
+    <div style="flex:1;text-align:center;min-width:0"><div class="ig-portrait" style="margin:0 auto;width:82px;height:82px;border-width:11px"><img src="{{ left.icon }}"></div><div style="font-size:16px;font-weight:800;color:var(--pal-text);margin-top:6px">{{ left.name }}</div><div style="font-size:11px;color:var(--pal-sub)">{{ left.elements }}</div></div>
+    <div class="ig-vs">VS</div>
+    <div style="flex:1;text-align:center;min-width:0"><div class="ig-portrait" style="margin:0 auto;width:82px;height:82px;border-width:11px"><img src="{{ right.icon }}"></div><div style="font-size:16px;font-weight:800;color:var(--pal-text);margin-top:6px">{{ right.name }}</div><div style="font-size:11px;color:var(--pal-sub)">{{ right.elements }}</div></div>
+  </div>
+  <div class="ig-panel">
+    {% for s in stats %}<div class="ig-cmprow"><span class="cv {{ 'win' if s.lwin else ('lose' if s.rwin else 'eq') }}" style="text-align:right">{{ s.lval }}{% if s.lwin %} ▲{% endif %}</span><span class="cl">{{ s.label }}</span><span class="cv {{ 'win' if s.rwin else ('lose' if s.lwin else 'eq') }}" style="text-align:left">{% if s.rwin %}▲ {% endif %}{{ s.rval }}</span></div>{% endfor %}
+    {% if works %}<div class="ig-sec" style="margin-top:13px">工作适性(左 ‹ › 右)</div>
+    <div style="display:flex;flex-direction:column;gap:5px">{% for w in works %}<div style="display:flex;align-items:center;font-size:13px"><span style="flex:1;text-align:right;color:{{ 'var(--pal-good)' if w.l>w.r else 'var(--pal-dim)' }}">{{ w.l or '-' }}</span><span style="flex:none;width:96px;text-align:center;color:var(--pal-sub)">{{ w.label }}</span><span style="flex:1;text-align:left;color:{{ 'var(--pal-good)' if w.r>w.l else 'var(--pal-dim)' }}">{{ w.r or '-' }}</span></div>{% endfor %}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版竞技场总览。变量契约与 ARENA_TMPL 一致 ----
+ARENA_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁竞技场</div><div class="ig-sub">单人挑战 NPC 训练家 · 6 段位 · 赢「战斗券」兑换稀有装备</div></div></div>
+  <div class="ig-panel"><div style="font-size:13px;color:var(--pal-sub);line-height:1.7;margin-bottom:12px">在岛上的竞技场入口报名,用自己的帕鲁队伍轮流挑战各段位的训练家。胜利获得 <b style="color:var(--pal-gold)">战斗券</b>,可在竞技场商店兑换设计图/帕鲁球等。发「/帕鲁竞技场 段位名」看对手阵容。</div>
+    {% for t in tiers %}<div class="ig-prow"><span style="flex:1;min-width:0"><span style="font-size:15px;font-weight:800;color:var(--pal-text)">{{ t.tier }}</span> <span style="font-size:11px;color:var(--pal-sub)">推荐 Lv.{{ t.level }} · {{ t.count }} 位对手</span><span style="display:block;font-size:11.5px;color:var(--pal-sub);margin-top:2px">首通 {{ t.first }}</span></span></div>{% endfor %}
+    <div style="margin-top:12px;text-align:center;font-size:12px;color:var(--pal-dim)">发「/帕鲁竞技场 {{ tiers[4].tier }}」看对手阵容 · 「/帕鲁商人 竞技场商店」看战斗券兑换</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版竞技场段位。变量契约与 ARENA_TIER_TMPL 一致 ----
+ARENA_TIER_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">竞技场 · {{ tier }}</div><div class="ig-sub"><span class="ig-pill">推荐 Lv.{{ level }}</span><span class="ig-pill">{{ teams|length }} 位对手</span></div></div></div>
+  <div class="ig-panel">
+    <div style="display:flex;gap:9px;flex-wrap:wrap">
+      <div style="flex:1;min-width:140px;background:rgba(240,207,122,.06);border:1px solid rgba(240,207,122,.28);border-radius:3px;padding:9px 11px"><div style="font-size:12px;color:var(--pal-gold);margin-bottom:3px">首通奖励</div><div style="font-size:12.5px;color:var(--pal-text-2);line-height:1.5">{% for r in first %}{{ r.name }}×{{ r.qty }}{% if not loop.last %} · {% endif %}{% endfor %}</div></div>
+      <div style="flex:1;min-width:140px;background:rgba(255,255,255,.03);border:1px solid var(--pal-line);border-radius:3px;padding:9px 11px"><div style="font-size:12px;color:var(--pal-sub);margin-bottom:3px">重复奖励</div><div style="font-size:12.5px;color:var(--pal-sub);line-height:1.5">{% for r in repeat %}{{ r.name }}×{{ r.qty }}{% if not loop.last %} · {% endif %}{% endfor %}</div></div>
+    </div>
+    <div class="ig-sec" style="margin-top:14px">对手阵容</div>
+    {% for tm in teams %}<div style="padding:9px 2px;border-bottom:1px solid var(--pal-line-soft)"><div style="font-size:14px;font-weight:800;color:var(--pal-text);margin-bottom:5px">{{ tm.trainer }} <span style="font-size:12px;color:var(--pal-sub);font-weight:600">Lv.{{ tm.level }}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for p in tm.pals %}<span class="ig-work">{% if p.icon %}<img src="{{ p.icon }}">{% endif %}{{ p.name }}</span>{% endfor %}</div></div>{% endfor %}
+    <div style="margin-top:12px;font-size:12px;color:var(--pal-dim);line-height:1.6">对手等级 Lv.{{ level }};带克制属性的帕鲁、配高威力主动技能更稳。胜利得「战斗券」→ /帕鲁商人 竞技场商店 兑换。</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版早晚报/周结算。变量契约与 DAILY_TMPL 一致 ----
+DAILY_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ title }}</div><div class="ig-sub">{{ now }}</div></div></div>
+  <div class="ig-panel">
+    <div style="color:var(--pal-text-2);font-size:14px;line-height:1.6;margin-bottom:13px">{{ greeting }}</div>
+    <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid var(--pal-line);border-radius:3px;font-size:14px;font-weight:700;color:var(--pal-text)">
+      {% if online %}<span class="ig-badge-on" style="margin-left:0">在线</span>当前 {{ cur }}/{{ maxn }} 人 · FPS {{ fps }} · 世界第 {{ days }} 天{% else %}<span class="ig-badge-off" style="margin-left:0">离线</span>服务器当前连不上{% endif %}
+    </div>
+    <div class="ig-stiles" style="margin-top:13px">
+      <div class="ig-stile"><div class="v">{{ today_peak }}</div><div class="k">今日峰值</div></div>
+      <div class="ig-stile"><div class="v">{{ today_avg }}</div><div class="k">今日平均</div></div>
+      {% if show_yday %}<div class="ig-stile"><div class="v">{{ yday_peak }}</div><div class="k">昨日峰值</div></div>{% else %}<div class="ig-stile"><div class="v">{{ record }}</div><div class="k">历史纪录</div></div>{% endif %}
+    </div>
+  </div>
+  <div class="ig-panel hi">
+    <div class="ig-sec">今日肝帝 TOP3</div>
+    {% if today_top %}{% for p in today_top %}<div class="ig-prow"><span style="width:22px;flex:none;color:var(--pal-gold);font-weight:800;text-align:center">{{ loop.index }}</span><span class="pnm">{{ p.name }}</span><span style="color:var(--pal-gold);font-weight:800;font-size:14px">{{ p.dur }}</span></div>{% endfor %}{% else %}<div style="color:var(--pal-dim);font-size:13px;padding:4px 0">今天还没有人上线哦～</div>{% endif %}
+    <div class="ig-sec" style="margin-top:15px">本周肝帝榜 TOP3</div>
+    {% if week_top %}{% for p in week_top %}<div class="ig-prow"><span style="width:22px;flex:none;color:var(--pal-gold);font-weight:800;text-align:center">{{ loop.index }}</span><span class="pnm">{{ p.name }}</span><span style="color:var(--pal-gold);font-weight:800;font-size:14px">{{ p.dur }}</span></div>{% endfor %}{% else %}<div style="color:var(--pal-dim);font-size:13px;padding:4px 0">本周还没有在线记录～</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版帮助菜单(静态命令表)。无动态数据 ----
+_IGN = '<span class="ig-new">NEW</span>'
+HELP_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁指令帮助</div><div class="ig-sub">指令一行一条,看清楚再发哦～</div></div></div>
+  <div class="ig-panel">
+    <div class="ig-sec">查询(所有人可用)</div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁</b></div><div class="d">查看服务器状态</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁状态</b></div><div class="d">同上,服务器状态总览</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁在线</b></div><div class="d">查看在线玩家列表</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁设置</b></div><div class="d">查看服务器倍率与规则</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁统计</b></div><div class="d">今日峰值/平均 + 近7日趋势</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁热力</b></div><div class="d">7×24 在线热力图·看高峰时段</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁战力榜</b></div><div class="d">已知帕鲁战力等级排行(翻页/详情)</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁玩家战力榜</b></div><div class="d">玩家拥有/抓捕帕鲁战力排行</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁闪光墙</b></div><div class="d">全服闪光帕鲁收藏展示</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁头目墙</b></div><div class="d">全服头目(Alpha)收藏展示</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁图鉴榜</b></div><div class="d">全服图鉴收集进度排行</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁资产榜</b></div><div class="d">全服帕鲁身价排行</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁公会战力</b></div><div class="d">各公会战力总和排行</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁更新公告</b></div><div class="d">官方最新更新公告(中文)</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁肝帝榜</b></div><div class="d">本周在线时长排行</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁图鉴</b> [名/字]</div><div class="d">详情或模糊列表·空=全部·翻页</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁编号</b> 13B</div><div class="d">按图鉴编号查(支持变种)</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁配种</b> 亲A 亲B</div><div class="d">查后代 + 子代继续配</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁反配种</b> 帕鲁名</div><div class="d">列出能配成它的组合</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁怎么配</b> 帕鲁名</div><div class="d">用你现有帕鲁算配种路线</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁继承</b> 词条A｜词条B</div><div class="d">算后代继承词条的概率</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁哪里掉</b> 物品</div><div class="d">查哪些帕鲁掉落该物品</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁物品</b> [名/类]</div><div class="d">详情/分类浏览/翻页</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁设施</b> [名/字]</div><div class="d">详情或模糊列表·空=全部·翻页</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁科技</b> [名/字]</div><div class="d">详情或模糊列表·空=全部·翻页</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁研究所</b> [类/名]</div><div class="d">""" + _IGN + """ 全局增益研究·9大适性·材料/前置</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁栖息区域</b> 帕鲁名</div><div class="d">地图上涂出它的刷新热区</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁推荐词条</b> 帕鲁名</div><div class="d">按角色推荐高价值词条</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁词条大全</b> [分类]</div><div class="d">全部词条分类查询详情</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁觉醒</b></div><div class="d">1.0 觉醒材料与机制</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁突变</b></div><div class="d">1.0 突变机制与特殊蛋糕</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁属性克制</b></div><div class="d">九系属性克制关系图</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁主线</b> [页]</div><div class="d">按剧情顺序列出主线任务</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁支线</b> [NPC]</div><div class="d">支线任务(可按 NPC 筛选)</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁任务</b> 任务名</div><div class="d">任务详细攻略：目标/坐标/奖励</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁塔主</b> [名]</div><div class="d">高塔塔主：属性/等级/血量/攻略</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁突袭</b> [名]</div><div class="d">突袭 Boss 数据与打法提示</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁竞技场</b> [段位]</div><div class="d">竞技场对手阵容/段位奖励</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁商人</b> [名]</div><div class="d">各商店卖什么 + 价格/货币</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁哪里买</b> 物品</div><div class="d">某物品在哪个商店买、多少钱</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁技能</b> 名/属性</div><div class="d">主动技能威力/冷却/效果</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁技能果实</b> [属性/名]</div><div class="d">""" + _IGN + """ 92种果实图鉴·带图标·教什么技能</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁植入体</b> [名/页]</div><div class="d">""" + _IGN + """ 68种改造词条·编号查:/帕鲁植入体查询 N</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁世界树</b></div><div class="d">""" + _IGN + """ 1.0最终boss专题:暮尘蛾&夜蔓爵</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁1.0</b></div><div class="d">""" + _IGN + """ 1.0正式版支持总览·数据统计·新功能导览</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁钓鱼</b></div><div class="d">钓鱼能钓到什么 + 概率</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁工作</b> 工种</div><div class="d">某工种(采矿/搬运…)最强帕鲁排行</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁坐骑</b></div><div class="d">可骑乘帕鲁按奔跑速度排行</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁对比</b> A B</div><div class="d">两只帕鲁数值并排对比</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁料理</b> [效果]</div><div class="d">有增益的料理(攻击/工作速度/配种…)</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁武器</b> [名]</div><div class="d">武器攻击力/解锁科技/弹药</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁帮助</b></div><div class="d">显示本帮助卡片</div></div>
+  </div>
+  <div class="ig-panel hi">
+    <div class="ig-sec">玩家自助(所有人可用)</div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁绑定</b> 游戏名</div><div class="d">绑定你的帕鲁角色</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁我</b></div><div class="d">个人档案·等级/技术点/队伍/背包</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁背包</b></div><div class="d">查看自己的背包物品明细</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁队伍</b></div><div class="d">查看自己出战帕鲁的面板</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁箱</b> [页]</div><div class="d">帕鲁箱全部帕鲁·翻页</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁可孵化</b></div><div class="d">用你箱里的帕鲁能配出哪些新帕鲁</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁据点</b></div><div class="d">据点帕鲁：工作/适性/血量/SAN/伤病</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁症状</b> [状态]</div><div class="d">伤病治疗速查(骨折/濒死/低SAN…)</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁公会帕鲁</b> [页]</div><div class="d">公会终端：全公会成员帕鲁汇总</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁箱查询</b> 编号</div><div class="d">看帕鲁箱某只的详细面板</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁公会</b></div><div class="d">查看自己公会的成员/会长</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁公会榜</b></div><div class="d">公会在线时长排行榜</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁订阅</b> 游戏名</div><div class="d">某玩家上线时 @ 你</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁退订</b> 游戏名</div><div class="d">取消上线提醒</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁找人</b> 游戏名</div><div class="d">查某玩家是否在线</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁喊话</b> 内容</div><div class="d">把话广播到游戏内</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁喊</b> 游戏名</div><div class="d">@绑定的玩家喊TA上线</div></div>
+  </div>
+  <div class="ig-panel">
+    <div class="ig-sec">管理(仅管理员)</div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁公告</b> 内容</div><div class="d">向服务器广播公告</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁踢</b> ID [理由]</div><div class="d">踢出指定玩家</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁封</b> ID [理由]</div><div class="d">封禁玩家(需确认)</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁解封</b> ID</div><div class="d">解除封禁</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁存档</b></div><div class="d">立即保存世界存档</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁关服</b> 秒 [提示]</div><div class="d">定时关服(需确认)</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁重启服务器</b></div><div class="d">存档后重启服务器(需确认)</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁备份列表</b></div><div class="d">查看所有自动备份存档</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁回档</b> 编号</div><div class="d">回档到指定备份(需确认)</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁重置存档</b></div><div class="d">删档重开·全新世界(需确认)</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁恢复存档</b></div><div class="d">还原上一次重置前的存档(需确认)</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁审计</b></div><div class="d">查看最近管理操作记录</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁自检</b></div><div class="d">一键体检配置/连接/存档/渲染</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁地图</b></div><div class="d">在线玩家世界地图分布</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁确认</b></div><div class="d">确认上一条危险操作</div></div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- ingame 版据点帕鲁。变量契约与 BASECAMP_TMPL 一致 ----
+BASECAMP_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ name }} 的据点帕鲁</div><div class="ig-sub">据点工作帕鲁状态{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %} · 数据来自存档</div></div></div>
+  <div class="ig-panel">
+    <div class="ig-stiles" style="margin-bottom:12px">
+      <div class="ig-stile"><div class="v">{{ total }}</div><div class="k">工作帕鲁</div></div>
+      <div class="ig-stile"><div class="v" style="{% if hurt %}color:var(--pal-danger){% endif %}">{{ hurt }}</div><div class="k">受伤</div></div>
+      <div class="ig-stile"><div class="v" style="{% if hungry %}color:#e0a01a{% endif %}">{{ hungry }}</div><div class="k">饥饿</div></div>
+    </div>
+    {% if cells %}
+    {% for c in cells %}
+    <div class="ig-wk">
+      <div class="wpic">{% if c.icon %}<img src="{{ c.icon }}">{% endif %}{% if c.lucky %}<img class="mk" src="{{ icons.pal.lucky }}">{% elif c.alpha %}<img class="mk" src="{{ icons.pal.alpha }}">{% endif %}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span style="font-size:15px;font-weight:800;color:var(--pal-text)">{{ c.name }}</span><span style="font-size:12px;color:var(--pal-gold);font-weight:700">Lv.{{ c.level }}</span>{% for e in c.elements %}<span class="ig-badge" style="font-size:10.5px;padding:1px 6px 1px 3px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:14px;height:14px">{% endif %}{{ e }}</span>{% endfor %}{% if c.health.hurt %}<span class="ig-hpill" style="background:{% if c.health.tone=='bad' %}#d42c2c{% else %}#e07a1a{% endif %}">{{ c.health.label }}</span>{% endif %}{% if c.starving %}<span class="ig-hpill" style="background:#e0a01a;color:#0e1015">饥饿</span>{% endif %}{% if c.low_san %}<span class="ig-hpill" style="background:#c05bd0">理智低</span>{% endif %}</div>
+        <div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--pal-text-2)">
+          <span>{% if c.working %}正在{{ c.current_work }}{% else %}{{ c.current_work }}{% endif %}</span>
+          <span style="display:inline-flex;align-items:center;gap:3px;{% if c.max_hp and c.hp_pct < 40 %}color:var(--pal-danger){% endif %}">{% if icons.stat.hp %}<img src="{{ icons.stat.hp }}" style="width:13px;height:13px">{% endif %}{{ c.hp }}{% if c.max_hp %}/{{ c.max_hp }}{% endif %}</span>
+          <span style="display:inline-flex;align-items:center;gap:3px;{% if c.starving %}color:#e0a01a{% endif %}">{% if icons.stat.hunger %}<img src="{{ icons.stat.hunger }}" style="width:13px;height:13px">{% endif %}{{ c.stomach }}%</span>
+          <span style="{% if c.low_san %}color:var(--pal-danger){% endif %}">SAN {{ c.sanity }}</span>
+        </div>
+        <div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:5px">{% if c.works %}{% for w in c.works %}<span class="ig-wtag">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:12px;height:12px;vertical-align:middle;margin-right:2px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}{% else %}<span style="font-size:11px;color:var(--pal-dim)">无基地工作适性</span>{% endif %}</div>
+        {% if c.cure_tips %}<div class="ig-cure">{% for t in c.cure_tips %}<div style="{% if not loop.first %}margin-top:8px{% endif %}"><div class="cs">{{ t.symptom }}</div><div class="cd">{{ t.desc }}</div>{% if t.drugs %}<div>{% for it in t.drugs %}<span class="citem">{% if it.icon %}<img src="{{ it.icon }}">{% endif %}<span>{{ it.name }}</span></span>{% endfor %}</div>{% endif %}</div>{% endfor %}</div>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+    {% if hurt or hungry or low_san %}<div style="margin-top:10px;font-size:12px;color:var(--pal-sub);background:rgba(255,255,255,.03);border:1px solid var(--pal-line);border-radius:3px;padding:9px 12px">有帕鲁受伤/理智低？发 <b style="color:var(--pal-gold)">/帕鲁症状 &lt;状态&gt;</b>(如 /帕鲁症状 骨折)查治疗方法</div>{% endif %}
+    {% if pager %}<div style="margin-top:10px;text-align:center;font-size:12.5px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}
+    {% else %}
+    <div style="text-align:center;padding:22px 10px;line-height:1.8"><div style="font-size:15px;color:var(--pal-text-2)">据点里暂时没有部署帕鲁</div><div style="font-size:12.5px;color:var(--pal-dim);margin-top:6px">在游戏里把帕鲁从帕鲁箱放到据点工作后,这里就会显示它们的状态(属性/工作适性/受伤·饥饿)。</div></div>
+    {% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
 STATUS_PIX = _PH + """</style></head><body><div class="page">
   <div class="head">
     <div>
@@ -3398,6 +4980,335 @@ MUTATION_TMPL = _HEAD + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+# ====================================================================
+# pixel 补齐:此前仅 fantasy 有、pixel 缺失的 13 键(palpower/palpowerdetail/
+# lab_*/passdex/passlist/awakening/mutation/skillfruit/implant/worldtree/v10)。
+# 补齐后三套主题模板键集合一致(见 test_theme_keys)。变量契约与 fantasy 完全一致。
+# ====================================================================
+PALPOWER_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">⚔️ 帕鲁战力榜</div>
+    <div class="subtitle">{{ sub }}</div>
+  </div></div>
+  <div class="frame">
+    {% for r in rows %}
+    <div class="row" style="padding:8px 11px;gap:8px;align-items:center">
+      <div style="width:28px;flex-shrink:0;text-align:center;font-size:16px;color:#7a1f1f">{{ r.medal }}</div>
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:38px;height:38px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% else %}<span style="font-size:22px">🐾</span>{% endif %}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:15px;color:#382207;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.boss=='tower' %} <span class="pill red" style="font-size:10.5px">🗼塔主</span>{% elif r.boss=='boss' %} <span class="pill" style="font-size:10.5px">👑头目</span>{% endif %}</div>
+        <div style="font-size:12px;color:#7a5a1a">{{ r.element }} · 稀有度 {{ r.rarity }}</div>
+      </div>
+      <div style="flex-shrink:0;text-align:right;min-width:58px">
+        <div style="font-size:16px;color:#7a1f1f">{{ r.power }}</div>
+        <div class="bar" style="margin-top:4px;width:52px"><div class="barf" style="width:{{ r.pct }}%"></div></div>
+      </div>
+    </div>
+    {% endfor %}
+    <div style="margin-top:11px;text-align:center;font-size:11.5px;color:#7a5a1a">第 {{ page }}/{{ total_pages }} 页 · 发「/帕鲁战力榜 页码」翻页 · 「/帕鲁战力榜 帕鲁名」查详情</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+PALPOWERDETAIL_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">⚔️ {{ name }} · 战力详情</div>
+    <div class="subtitle">战力排名 #{{ rank }} / {{ total }} · Lv{{ reflv }} 满级属性</div>
+  </div></div>
+  <div class="frame">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+      {% if icon %}<img src="{{ icon }}" style="width:70px;height:70px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% else %}<span style="font-size:38px">🐾</span>{% endif %}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:20px;color:#46200a">{{ name }}</div>
+        <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">{% for e in elements %}<span class="pill" style="font-size:12px">{{ e }}</span>{% endfor %}<span class="pill" style="font-size:12px">稀有度 {{ rarity }}</span></div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="num-big" style="font-size:32px">{{ power }}</div>
+        <div style="font-size:12px;color:#7a5a1a;margin-top:3px">种族战力</div>
+      </div>
+    </div>
+    {% for s in stats %}
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:#574012;margin-bottom:4px"><span>{{ s.k }}</span><span class="gold">{{ s.v }}</span></div>
+      <div class="bar"><div class="barf" style="width:{{ s.pct }}%"></div></div>
+    </div>
+    {% endfor %}
+    {% if partner %}<div style="margin-top:14px;font-size:13px;color:#574012">🤝 伙伴技能：{{ partner }}</div>{% endif %}
+    <div style="margin-top:13px;padding-top:10px;border-top:2px solid rgba(90,58,30,0.35);text-align:center;font-size:11.5px;color:#7a5a1a;line-height:1.7">种族值 生命{{ base.hp }} · 近战{{ base.melee }} · 远程{{ base.shot }} · 防御{{ base.df }}<br>战力 = Lv{{ reflv }}满级(HP×0.5 + 攻击 + 防御) · 发「/帕鲁战力榜」看总榜</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+LAB_OVERVIEW_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">🔬 帕鲁研究所</div>
+    <div class="subtitle"><span class="pill">共 {{ total }} 项研究</span><span class="pill">9 大工作适性</span></div>
+  </div></div>
+  <div class="frame">
+    <div style="font-size:14px;color:#523f10;line-height:1.75;margin-bottom:14px">在据点建造「研究所」后，投入材料与帕鲁工时研究各类工作适性的<b class="ink">全局增益</b>(工作速度 / 据点战力 / 孵化 / 远征 等)，效果对全服帕鲁生效。</div>
+    <div class="m3">
+      {% for c in cats %}
+      <div class="tile" style="display:flex;flex-direction:column;align-items:center;padding:13px 6px 10px">
+        <div style="font-size:34px;line-height:1">{{ c.emoji }}</div>
+        <div style="margin-top:7px;font-size:15px;color:#46200a">{{ c.name }}</div>
+        <div style="margin-top:4px;font-size:12px;color:#7a5a1a">{{ c.count }} 项 · <span class="ink">{{ c.essential }} 必需</span></div>
+      </div>{% endfor %}
+    </div>
+    <div style="margin-top:15px;font-size:13px;color:#7a5a1a;line-height:1.7">发 <b class="gold">/帕鲁研究所 手工</b> 看某类全部研究；发 <b class="gold">/帕鲁研究所 &lt;研究名&gt;</b> 看单项材料/前置。</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+LAB_LIST_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">{{ emoji }} {{ category }}</div>
+    <div class="subtitle"><span class="pill">{{ items|length }} 项研究</span></div>
+  </div></div>
+  <div class="frame">
+    {% for it in items %}
+    <div class="row" style="gap:10px">
+      <span style="flex:none;min-width:24px;text-align:center;font-size:13px;color:#3a2410;background:#caa860;border:2px solid #6a4524">{{ loop.index }}</span>
+      {% if it.essential %}<span class="pill" style="font-size:11px;background:#7c8a46;color:#fff3d0">必需</span>{% endif %}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:15px;color:#382207">{{ it.name }}</div>
+        {% if it.effect %}<div style="font-size:12.5px;color:#5a6a26;margin-top:2px">{{ it.effect }}</div>{% endif %}
+      </div>
+    </div>{% endfor %}
+    <div style="margin-top:13px;font-size:13px;color:#7a5a1a">按编号查:发 <b class="gold">/帕鲁研究所 {{ cat_short }}1</b>(该类第1项);或 <b class="gold">/帕鲁研究所 &lt;研究名&gt;</b> 查详情。</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+LAB_DETAIL_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:14px;width:100%">
+    <div style="flex:none;font-size:60px">{{ emoji }}</div>
+    <div style="flex:1;min-width:0">
+      <div class="title">{{ name }}</div>
+      <div class="subtitle">
+        <span class="pill">{{ emoji }} {{ category }}</span>
+        {% if essential %}<span class="pill" style="background:#7c8a46;color:#fff3d0">✔ 必需研究</span>{% endif %}
+        {% if work %}<span class="pill">⏳ {{ work }} 工时</span>{% endif %}
+      </div>
+    </div>
+  </div></div>
+  <div class="frame">
+    {% if effect %}<div class="sec-t">研究效果</div>
+    <div style="font-size:15px;color:#5a6a26;background:rgba(124,138,70,0.14);border:2px solid #7c8a46;padding:11px 14px">{{ effect }}</div>{% endif %}
+    {% if materials %}<div class="sec-t" style="margin-top:15px">所需材料</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      {% for m in materials %}<span class="pill">{{ m.name }} <b class="gold">×{{ m.count }}</b></span>{% endfor %}
+    </div>{% endif %}
+    {% if prereq %}<div class="sec-t" style="margin-top:15px">前置研究</div>
+    <div style="font-size:14px;color:#523f10;background:rgba(90,58,30,0.12);border:2px solid #6a4524;padding:10px 14px">🔗 需先完成「{{ prereq }}」</div>{% endif %}
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+SKILLFRUIT_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:14px;width:100%">
+    {% if icon %}<img src="{{ icon }}" style="flex:none;width:84px;height:84px;object-fit:contain;image-rendering:pixelated">{% else %}<div style="flex:none;font-size:60px">🍐</div>{% endif %}
+    <div style="flex:1;min-width:0">
+      <div class="title">{{ fruit_name }}</div>
+      <div class="subtitle">
+        <span class="pill">{{ emoji }} {{ element }}属性</span>
+        {% if power and power != "0" %}<span class="pill">⚔ 威力 {{ power }}</span>{% endif %}
+        {% if cooldown %}<span class="pill">⏱ 冷却 {{ cooldown }}s</span>{% endif %}
+      </div>
+    </div>
+  </div></div>
+  <div class="frame">
+    {% if effect %}<span class="pill" style="background:#7c8a46;color:#fff3d0;margin-bottom:11px">{{ effect }}</span>{% endif %}
+    <div style="font-size:15px;color:#382207;line-height:1.9;white-space:pre-line;word-break:break-word">{{ desc or "（暂无描述）" }}</div>
+    <div class="sec-t" style="margin-top:15px">用法</div>
+    <div style="font-size:14px;color:#523f10;line-height:1.75;background:rgba(90,58,30,0.12);border:2px solid #6a4524;padding:12px 14px">🍐 将此技能果实喂给帕鲁，即可让它学会主动技能<b class="gold">「{{ tech }}」</b>。技能果实可在世界各地的<b>宝箱</b>等处获得。</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+IMPLANT_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:14px;width:100%">
+    {% if icon %}<img src="{{ icon }}" style="flex:none;width:84px;height:84px;object-fit:contain;image-rendering:pixelated">{% else %}<div style="flex:none;font-size:60px">🧬</div>{% endif %}
+    <div style="flex:1;min-width:0">
+      <div class="title">{{ name }}</div>
+      <div class="subtitle">
+        {% if rank %}<span class="pill">稀有度 {{ "★" * (rank if rank <= 5 else 5) }}</span>{% endif %}
+        {% if consumable %}<span class="pill red">🔥 耗材·一次性</span>{% else %}<span class="pill">♻ 可反复植入</span>{% endif %}
+      </div>
+    </div>
+  </div></div>
+  <div class="frame">
+    <div class="sec-t">赋予词条</div>
+    <div style="display:flex;align-items:center;gap:10px;background:rgba(90,58,30,0.12);border:2px solid #6a4524;padding:12px 14px">
+      <span style="font-size:17px;color:#7a3604">「{{ passive }}」</span>
+      {% if effect %}<span style="font-size:14px;color:{% if sign < 0 %}#8f1212{% else %}#5a6a26{% endif %}">{{ effect }}</span>{% endif %}
+    </div>
+    <div class="sec-t" style="margin-top:15px">用法</div>
+    <div style="font-size:14px;color:#523f10;line-height:1.75;background:rgba(90,58,30,0.12);border:2px solid #6a4524;padding:12px 14px">🧬 在据点的<b>帕鲁改造设备</b>上，用此植入体为帕鲁植入被动词条<b class="gold">「{{ passive }}」</b>。{% if consumable %}耗材型植入体使用后消耗，效果通常更强力。{% else %}可反复植入或替换词条。{% endif %}</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+WORLDTREE_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">🌳 世界树守护者</div>
+    <div class="subtitle"><span class="pill" style="background:#7c8a46;color:#fff3d0">1.0 最终 Boss</span><span class="pill">世界树·封印之室</span></div>
+  </div></div>
+  <div class="frame">
+    <div style="font-size:13.5px;color:#523f10;line-height:1.75;margin-bottom:6px">自古伫立于「世界树」旁的两位守护者，镇守着最深处封印之室。击败它们方能解除屏障、抵达世界树的真相。</div>
+    {% for b in bosses %}
+    <div class="row" style="align-items:flex-start;gap:12px;padding:12px">
+      {% if b.icon %}<img src="{{ b.icon }}" style="width:78px;height:78px;flex:none;object-fit:contain;image-rendering:pixelated">{% else %}<div style="flex:none;font-size:52px">🌳</div>{% endif %}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:18px;color:#7a3604">{{ b.name }} <span style="font-size:12px;color:#7a5a1a">#{{ b.index }}</span></div>
+        <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="pill" style="font-size:12px">{{ e }}</span>{% endfor %}<span class="pill" style="font-size:12px">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="pill" style="font-size:12px">HP种族值 {{ b.hp }}</span>{% endif %}</div>
+        {% if b.partner %}<div style="font-size:12.5px;color:#5a6a26;margin-top:2px">🛡 伙伴技能：{{ b.partner }}</div>{% endif %}
+        <div style="font-size:12px;color:#382207;margin-top:4px;line-height:1.6"><b style="color:#7a5a1a">技能</b> {{ b.skills|join('、') }}</div>
+        <div style="font-size:12px;color:#7a3604;margin-top:3px"><b style="color:#7a5a1a">掉落</b> {{ b.drops|join('、') }}</div>
+      </div>
+    </div>{% endfor %}
+    <div style="margin-top:13px;font-size:13px;color:#7a5a1a">发 <b class="gold">/帕鲁图鉴 {{ bosses[0].name }}</b> 看完整属性/工作适性/伙伴技能详情。</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+V10_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">🎉 幻兽帕鲁 1.0 · 全面支持</div>
+    <div class="subtitle"><span class="pill" style="background:#7c8a46;color:#fff3d0">正式版数据已更新</span></div>
+  </div></div>
+  <div class="frame">
+    <div class="sec-t">数据收录 <span style="font-size:11px;color:#7a5a1a">· 帕鲁 {{ stats['pals'] }} 只可收集（官方正式图鉴），含变体共 {{ stats['pals_total'] }} 个数据实体</span></div>
+    <div class="m3">
+      {% set cells = [("帕鲁图鉴",stats['pals'],"🐾"),("物品",stats['items'],"🎒"),("主动技能",stats['skills'],"✨"),("科技",stats['tech'],"🔬"),("建筑设施",stats['buildings'],"🏛️"),("制作配方",stats['recipes'],"🛠️"),("研究所",stats['lab'],"🧪"),("技能果实",stats['fruits'],"🍐"),("植入体",stats['implants'],"🧬")] %}
+      {% for label,num,emo in cells %}
+      <div class="tc tile">
+        <div class="i">{{ emo }}</div>
+        <div class="v">{{ num }}</div>
+        <div class="k">{{ label }}</div>
+      </div>{% endfor %}
+    </div>
+    <div class="sec-t" style="margin-top:16px">1.0 新增查询</div>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      <div style="font-size:13.5px;color:#382207"><b class="gold">/帕鲁研究所</b> — 全局增益研究,9大工作适性,按「手工1」编号查</div>
+      <div style="font-size:13.5px;color:#382207"><b class="gold">/帕鲁技能果实</b> — 92种果实按元素分类,按「火1」编号查</div>
+      <div style="font-size:13.5px;color:#382207"><b class="gold">/帕鲁植入体</b> — 68种改造词条,「/帕鲁植入体查询 N」按编号</div>
+      <div style="font-size:13.5px;color:#382207"><b class="gold">/帕鲁世界树</b> — 最终boss暮尘蛾&夜蔓爵专题</div>
+    </div>
+    <div style="margin-top:13px;font-size:12.5px;color:#7a5a1a">全部查询支持:名称 / 模糊(含关键字返列表) / 编号 / 分类浏览。</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+PASSDEX_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:12px;width:100%">
+    <div style="flex:none;width:60px;height:60px;background:#caa860;border:2px solid #6a4524;display:flex;align-items:center;justify-content:center;font-size:30px">📜</div>
+    <div style="flex:1;min-width:0">
+      <div class="title">词条大全</div>
+      <div class="subtitle">帕鲁被动词条百科 · 共 <b class="gold">{{ total }}</b> 个 · 9 大类别</div>
+    </div>
+  </div></div>
+  <div class="frame">
+    <div class="m2">
+    {% for c in cats %}
+      <div class="tile" style="padding:12px 13px 11px 16px;border-left:5px solid {{c.color}}">
+        <div style="display:flex;align-items:center;gap:9px">
+          <div style="flex:none;width:36px;height:36px;background:#caa860;border:2px solid #6a4524;display:flex;align-items:center;justify-content:center;font-size:19px">{{c.icon}}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;color:#46200a">{{c.name}}</div>
+            <div style="font-size:11px;color:#7a3604">{{c.count}} 个词条</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:#7a5a1a;line-height:1.5;height:2.2em;overflow:hidden">{{c.sample}}…</div>
+      </div>
+    {% endfor %}
+    </div>
+    <div style="margin-top:13px;padding:10px 13px;background:rgba(90,58,30,0.12);border:2px solid #6a4524;text-align:center;font-size:12px;color:#523f10;line-height:1.7">🔍 发「<b>/帕鲁词条大全 攻击</b>」看该类全部词条 · 「<b>/帕鲁词条大全 力量</b>」查具体效果</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+PASSLIST_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:12px;width:100%">
+    <div style="flex:none;width:58px;height:58px;background:#caa860;border:2px solid #6a4524;display:flex;align-items:center;justify-content:center;font-size:28px">{{ icon }}</div>
+    <div style="flex:1;min-width:0">
+      <div class="title">{{ cat }}</div>
+      <div class="subtitle"><span class="pill">{{ count }} 个词条</span></div>
+    </div>
+  </div></div>
+  <div class="frame">
+    {% for it in items %}
+    <div class="row" style="gap:11px;border-left:4px solid {% if it.sign>0 %}#7c8a46{% elif it.sign<0 %}#9a4636{% else %}#6a4524{% endif %}">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+          <span style="font-size:14.5px;color:#382207">{{ it.name }}</span>
+          {% if it.rank %}<span class="pill" style="font-size:10px">Lv{{ it.rank }}</span>{% endif %}
+          {% if it.cat %}<span class="pill" style="font-size:10px">{{ it.cat }}</span>{% endif %}
+        </div>
+        {% if it.effect %}<div style="font-size:12.5px;color:#574012;margin-top:3px;line-height:1.45">{{ it.effect }}</div>{% endif %}
+      </div>
+      <span style="flex:none;font-size:14px">{% if it.sign>0 %}🟢{% elif it.sign<0 %}🔴{% else %}⚪{% endif %}</span>
+    </div>
+    {% endfor %}
+    <div style="margin-top:5px;text-align:center;font-size:11.5px;color:#7a5a1a">🟢增益 · 🔴减益 · ⚪中性 — 发「/帕鲁词条大全」看全部分类</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+AWAKENING_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:12px;width:100%">
+    <div style="flex:none;width:58px;height:58px;background:#caa860;border:2px solid #6a4524;display:flex;align-items:center;justify-content:center;font-size:28px">🌟</div>
+    <div style="flex:1;min-width:0"><div class="title">帕鲁觉醒</div>
+      <div class="subtitle">1.0 觉醒系统 · 世界树能量解放隐藏能力</div></div>
+  </div></div>
+  <div class="frame">
+    <div class="sec-t">九系觉醒晶石</div>
+    <div class="m3">
+    {% for g in gems %}
+      <div class="tile" style="padding:10px 6px;text-align:center;border-color:{{g.color}}">
+        {% if g.gem_icon %}<img src="{{g.gem_icon}}" style="width:38px;height:38px;object-fit:contain;image-rendering:pixelated">{% else %}<div style="font-size:24px">💎</div>{% endif %}
+        <div style="font-size:12.5px;color:{{g.color}};margin-top:3px">{{g.elem}}系</div>
+        <div style="font-size:10px;color:#7a5a1a;margin-top:1px">{{g.mat}}→晶石</div>
+      </div>
+    {% endfor %}
+    </div>
+    <div style="margin-top:13px;padding:11px 13px;background:rgba(90,58,30,0.12);border:2px solid #6a4524;font-size:12.5px;color:#523f10;line-height:1.75">
+      💡 <b class="gold">觉醒机制</b>：击败世界树 Boss 后解锁。用对应属性的<b>辉石</b>加工成<b>觉醒晶石</b>，让该属性帕鲁「觉醒」、解放隐藏能力。<br>
+      ⚠️ 具体觉醒提升数值与所需晶石数量，游戏文件未以数据表明确提供，以游戏内为准；<b>暂不支持读取玩家存档中的觉醒状态</b>。
+    </div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+MUTATION_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:12px;width:100%">
+    <div style="flex:none;width:58px;height:58px;background:#caa860;border:2px solid #6a4524;display:flex;align-items:center;justify-content:center;font-size:28px">🧬</div>
+    <div style="flex:1;min-width:0"><div class="title">帕鲁突变</div>
+      <div class="subtitle">1.0 突变机制 · 特殊蛋糕影响配种结果</div></div>
+  </div></div>
+  <div class="frame">
+    <div class="sec-t">特殊蛋糕（放入繁殖牧场影响后代）</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+    {% for c in cakes %}
+      <div class="row" style="gap:11px">
+        {% if c.icon %}<img src="{{c.icon}}" style="width:38px;height:38px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% else %}<span style="font-size:24px">🍰</span>{% endif %}
+        <div style="flex:1;min-width:0"><div style="font-size:14px;color:#7a3604">{{c.name}}</div>
+          <div style="font-size:12px;color:#574012;margin-top:2px;line-height:1.45">{{c.effect}}</div></div>
+      </div>
+    {% endfor %}
+    </div>
+    {% if eggs %}<div class="sec-t" style="margin-top:14px">突变帕鲁蛋</div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap">
+    {% for e in eggs %}<span class="pill" style="font-size:12px">{% if e.icon %}<img src="{{e.icon}}" style="width:18px;height:18px;vertical-align:middle;margin-right:3px;image-rendering:pixelated">{% endif %}{{e.name}}</span>{% endfor %}
+    </div>{% endif %}
+    <div style="margin-top:13px;padding:11px 13px;background:rgba(90,58,30,0.12);border:2px solid #6a4524;font-size:12.5px;color:#523f10;line-height:1.75">
+      💡 <b class="ink">突变机制</b>：<b>豪华蔬菜蛋糕</b>提升后代突变概率；突变帕鲁外观/属性与普通不同，可能带专属词条。<b>蘑菇蛋糕</b>提升天赋、<b>蔬菜蛋糕</b>一次产 2 蛋、<b>特制蛋糕</b>提升被动继承。<br>
+      ⚠️ 突变<b>准确概率游戏未公开</b>，此处仅说明机制、不猜测数值。
+    </div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+
 STYLES = {
     "fantasy": {"status": STATUS_TMPL, "players": PLAYERS_TMPL, "settings": SETTINGS_TMPL,
                 "help": HELP_TMPL, "message": MSG_TMPL, "stats": STATS_TMPL, "rank": RANK_TMPL,
@@ -3423,20 +5334,88 @@ STYLES = {
               "profile": PROFILE_PIX, "daily": DAILY_PIX, "paldex": PALDEX_PIX, "breed": BREED_PIX,
               "reverse": REVERSE_PIX, "drop": DROP_PIX, "droplist": DROPLIST_PIX,
               "heatmap": HEATMAP_PIX, "power": POWER_PIX, "route": ROUTE_PIX, "shiny": SHINY_PIX,
+              "palpower": PALPOWER_PIX, "palpowerdetail": PALPOWERDETAIL_PIX,
               "symptom": SYMPTOM_PIX,
               "item": ITEM_PIX, "itemcat": ITEMCAT_PIX,
               "facility": FACILITY_PIX, "tech": TECH_PIX, "grid": GRID_PIX, "map": MAP_PIX,
+              "lab_overview": LAB_OVERVIEW_PIX, "lab_list": LAB_LIST_PIX, "lab_detail": LAB_DETAIL_PIX,
               "bag": BAG_PIX, "team": TEAM_PIX, "palbox": PALBOX_PIX, "guild": GUILD_PIX,
               "basecamp": BASECAMP_PIX,
               "element": ELEMENT_PIX, "habitat": HABITAT_PIX, "passrec": PASSREC_PIX,
+              "passdex": PASSDEX_PIX, "passlist": PASSLIST_PIX,
+              "awakening": AWAKENING_PIX, "mutation": MUTATION_PIX,
               "mission": MISSION_PIX, "missionlist": MISSIONLIST_PIX, "boss": BOSS_PIX,
-              "merchant": MERCHANT_PIX, "skill": SKILL_PIX, "compare": COMPARE_PIX,
+              "merchant": MERCHANT_PIX, "skill": SKILL_PIX,
+              "skillfruit": SKILLFRUIT_PIX, "implant": IMPLANT_PIX, "worldtree": WORLDTREE_PIX, "v10": V10_PIX,
+              "compare": COMPARE_PIX,
               "hatch": HATCH_PIX, "inherit": INHERIT_PIX,
               "arena": ARENA_PIX, "arena_tier": ARENA_TIER_PIX},
 }
-STYLE_NAMES = {"fantasy": "🌌 奇幻玻璃", "pixel": "📜 像素羊皮纸"}
+# ingame 游戏原生主题(独立第三套)。**开发期临时回退**:各卡尚未逐一改造前,
+# 复用 fantasy 模板串以保证 56 个模板键齐全、指令不异常;逐卡替换后再改为 ingame 专属模板。
+# 该临时回退是**显式记录**的(见 docs/INGAME_ICON_COVERAGE.md),非「悄悄用别的主题」。
+STYLES["ingame"] = dict(STYLES["fantasy"])
+# 阶段D:已改造为 ingame 专属布局的卡(其余仍临时回退 fantasy,见 INGAME_ICON_COVERAGE.md)
+STYLES["ingame"]["paldex"] = PALDEX_ING
+STYLES["ingame"]["passlist"] = PASSLIST_ING
+STYLES["ingame"]["passdex"] = PASSDEX_ING
+STYLES["ingame"]["passrec"] = PASSREC_ING
+STYLES["ingame"]["status"] = STATUS_ING
+STYLES["ingame"]["players"] = PLAYERS_ING
+STYLES["ingame"]["bag"] = BAG_ING
+STYLES["ingame"]["palbox"] = PALBOX_ING
+STYLES["ingame"]["profile"] = PROFILE_ING
+STYLES["ingame"]["team"] = TEAM_ING
+STYLES["ingame"]["message"] = MSG_ING
+STYLES["ingame"]["stats"] = STATS_ING
+STYLES["ingame"]["settings"] = SETTINGS_ING
+STYLES["ingame"]["grid"] = GRID_ING
+STYLES["ingame"]["itemcat"] = ITEMCAT_ING
+STYLES["ingame"]["tech"] = TECH_ING
+STYLES["ingame"]["item"] = ITEM_ING
+STYLES["ingame"]["facility"] = FACILITY_ING
+STYLES["ingame"]["skill"] = SKILL_ING
+STYLES["ingame"]["rank"] = RANK_ING
+STYLES["ingame"]["power"] = POWER_ING
+STYLES["ingame"]["palpower"] = PALPOWER_ING
+STYLES["ingame"]["palpowerdetail"] = PALPOWERDETAIL_ING
+STYLES["ingame"]["guild"] = GUILD_ING
+STYLES["ingame"]["drop"] = DROP_ING
+STYLES["ingame"]["droplist"] = DROPLIST_ING
+STYLES["ingame"]["shiny"] = SHINY_ING
+STYLES["ingame"]["symptom"] = SYMPTOM_ING
+STYLES["ingame"]["reverse"] = REVERSE_ING
+STYLES["ingame"]["heatmap"] = HEATMAP_ING
+STYLES["ingame"]["element"] = ELEMENT_ING
+STYLES["ingame"]["habitat"] = HABITAT_ING
+STYLES["ingame"]["map"] = MAP_ING
+STYLES["ingame"]["mission"] = MISSION_ING
+STYLES["ingame"]["missionlist"] = MISSIONLIST_ING
+STYLES["ingame"]["boss"] = BOSS_ING
+STYLES["ingame"]["merchant"] = MERCHANT_ING
+STYLES["ingame"]["skillfruit"] = SKILLFRUIT_ING
+STYLES["ingame"]["implant"] = IMPLANT_ING
+STYLES["ingame"]["worldtree"] = WORLDTREE_ING
+STYLES["ingame"]["v10"] = V10_ING
+STYLES["ingame"]["awakening"] = AWAKENING_ING
+STYLES["ingame"]["mutation"] = MUTATION_ING
+STYLES["ingame"]["lab_overview"] = LAB_OVERVIEW_ING
+STYLES["ingame"]["lab_list"] = LAB_LIST_ING
+STYLES["ingame"]["lab_detail"] = LAB_DETAIL_ING
+STYLES["ingame"]["breed"] = BREED_ING
+STYLES["ingame"]["route"] = ROUTE_ING
+STYLES["ingame"]["hatch"] = HATCH_ING
+STYLES["ingame"]["inherit"] = INHERIT_ING
+STYLES["ingame"]["compare"] = COMPARE_ING
+STYLES["ingame"]["arena"] = ARENA_ING
+STYLES["ingame"]["arena_tier"] = ARENA_TIER_ING
+STYLES["ingame"]["daily"] = DAILY_ING
+STYLES["ingame"]["help"] = HELP_ING
+STYLES["ingame"]["basecamp"] = BASECAMP_ING
+STYLE_NAMES = {"fantasy": "🌌 奇幻玻璃", "pixel": "📜 像素羊皮纸", "ingame": "游戏原生"}
 STYLE_ALIAS = {"奇幻": "fantasy", "玻璃": "fantasy", "fantasy": "fantasy", "二次元": "fantasy",
-               "像素": "pixel", "羊皮纸": "pixel", "复古": "pixel", "pixel": "pixel"}
+               "像素": "pixel", "羊皮纸": "pixel", "复古": "pixel", "pixel": "pixel",
+               "游戏": "ingame", "原生": "ingame", "游戏原生": "ingame", "ingame": "ingame"}
 
 # 模板字符串 -> 卡名(两套风格都映射，供 _bg_for 查专属背景图)
 TEMPLATE_KEYS = {}

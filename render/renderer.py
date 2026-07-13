@@ -14,9 +14,20 @@ from __future__ import annotations
 
 import asyncio
 import os
+import re
 import time
 from datetime import datetime
 from typing import Optional
+
+# ingame:标题类字段(handler 动态传入)开头的 Emoji 前缀,用于剥离(仅去开头,保留中间的玩家内容)
+_LEAD_EMOJI = re.compile(
+    r"^(?:\s|[\U0001F000-\U0001FAFF\U00002600-\U000027BF\U00002B00-\U00002BFF"
+    r"\U0001F1E6-\U0001F1FF\U0000FE00-\U0000FE0F\U00002190-\U000021FF\U00002300-\U000023FF])+"
+)
+
+
+def _strip_lead_emoji(s):
+    return _LEAD_EMOJI.sub("", s) if isinstance(s, str) else s
 
 from astrbot.api import logger
 
@@ -112,6 +123,17 @@ class Renderer:
         data.setdefault("zoom", SUPERSCALE)
         data.setdefault("cw", width)
         data.setdefault("bg", p._bg_for(tmpl))
+        # ingame 主题:注入组件纹理 {{ parts.* }}(manifest 驱动,缓存);其它主题不需要
+        if getattr(p, "_assets", None) is not None and p._style() == "ingame":
+            data.setdefault("parts", p._assets.component_uris())
+            data.setdefault("icons", p._assets.ingame_icon_map())
+            # 动态 Emoji 清理:标题类字段去开头 Emoji;message 卡的 Emoji icon -> 插件 SVG(未映射则不显示)
+            for _k in ("title", "rank_title", "head"):
+                if isinstance(data.get(_k), str):
+                    data[_k] = _strip_lead_emoji(data[_k])
+            _ic = data.get("icon")
+            if isinstance(_ic, str) and _ic and not _ic.startswith(("data:", "http", "/", "file")):
+                data["icon"] = p._assets.msg_icon(_ic)
         if p.config.get("local_render", False):
             try:
                 path = await self.render_local(tmpl, data, width, dsf)

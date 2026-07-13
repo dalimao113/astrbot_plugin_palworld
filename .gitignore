@@ -14,7 +14,8 @@ dist/
 htmlcov/
 
 # Editor / OS / 本地设置
-.claude/
+.claude/*
+!.claude/rules/
 .vscode/
 .idea/
 *.swp
@@ -35,3 +36,7 @@ data/*.json.bak_*
 _tmp_sav/
 _tmp_*/
 *.sav
+
+# ingame 主题预览(base64 大文件,可由 tools/game_data 重新生成,不入库)
+docs/ingame_*.html
+docs/ingame_预览/

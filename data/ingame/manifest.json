@@ -1,0 +1,702 @@
+{
+  "_meta": {
+    "purpose": "ingame 主题统一图标清单（Asset Manifest）。业务层传语义键，asset(key,style) 解析器据此取图。",
+    "game_version": "1.0",
+    "source": "Pal-Windows.pak（客户端）经 texexport(CUE4Parse) 导出，见 tools/game_data/extract_ingame_icons.py",
+    "generated_at": "2026-07-12",
+    "path_base": "data/ingame/",
+    "status_values": [
+      "verified",
+      "pending-extract",
+      "plugin-ext",
+      "plugin-ext-pending",
+      "text-keep"
+    ],
+    "notes": [
+      "ingame=游戏原生 PNG(base64 内嵌)；fantasy/pixel 用 fallback(原 Emoji/文字，保持不变)。",
+      "ingame 缺失时解析器回退统一 missing 占位，绝不抛异常。",
+      "元素纹理视觉顺序 00无01火02水03雷04草05暗06龙07地08冰(非枚举序，已实测)。",
+      "工作纹理按图标内容绑定(非索引算术)：08=制药药瓶 09=采油油桶(与枚举相反)。",
+      "server.*/plugin.* 游戏无此语义→统一插件扩展线性 SVG(data/ingame/svg/，见 tools/game_data/gen_plugin_svgs.py)，严禁套游戏图标；描边色 AssetResolver.PLUGIN_INK 临时中性暖线，待截图校准。"
+    ]
+  },
+  "element": {
+    "_plugin_key_map": {
+      "无": "neutral",
+      "火": "fire",
+      "水": "water",
+      "雷": "electric",
+      "草": "grass",
+      "冰": "ice",
+      "地": "ground",
+      "暗": "dark",
+      "龙": "dragon"
+    },
+    "neutral": {
+      "ingame": "icons/element/neutral.png",
+      "fallback": "⚪",
+      "game_source": "T_Icon_element_s_00",
+      "status": "verified"
+    },
+    "fire": {
+      "ingame": "icons/element/fire.png",
+      "fallback": "🔥",
+      "game_source": "T_Icon_element_s_01",
+      "status": "verified"
+    },
+    "water": {
+      "ingame": "icons/element/water.png",
+      "fallback": "💧",
+      "game_source": "T_Icon_element_s_02",
+      "status": "verified"
+    },
+    "electric": {
+      "ingame": "icons/element/electric.png",
+      "fallback": "⚡",
+      "game_source": "T_Icon_element_s_03",
+      "status": "verified"
+    },
+    "grass": {
+      "ingame": "icons/element/grass.png",
+      "fallback": "🌿",
+      "game_source": "T_Icon_element_s_04",
+      "status": "verified"
+    },
+    "dark": {
+      "ingame": "icons/element/dark.png",
+      "fallback": "🌑",
+      "game_source": "T_Icon_element_s_05",
+      "status": "verified"
+    },
+    "dragon": {
+      "ingame": "icons/element/dragon.png",
+      "fallback": "🐉",
+      "game_source": "T_Icon_element_s_06",
+      "status": "verified"
+    },
+    "ground": {
+      "ingame": "icons/element/ground.png",
+      "fallback": "⛰️",
+      "game_source": "T_Icon_element_s_07",
+      "status": "verified"
+    },
+    "ice": {
+      "ingame": "icons/element/ice.png",
+      "fallback": "❄️",
+      "game_source": "T_Icon_element_s_08",
+      "status": "verified"
+    }
+  },
+  "work": {
+    "_plugin_key_map": {
+      "emit_flame": "kindling",
+      "watering": "watering",
+      "seeding": "planting",
+      "generate_electricity": "electricity",
+      "handcraft": "handiwork",
+      "collection": "gathering",
+      "deforest": "lumbering",
+      "mining": "mining",
+      "oil_extraction": "oil",
+      "product_medicine": "medicine",
+      "cool": "cooling",
+      "transport": "transport",
+      "monster_farm": "farming",
+      "farming": "farming"
+    },
+    "kindling": {
+      "ingame": "icons/work/kindling.png",
+      "fallback": "🔥",
+      "game_source": "T_icon_palwork_00",
+      "status": "verified"
+    },
+    "watering": {
+      "ingame": "icons/work/watering.png",
+      "fallback": "💧",
+      "game_source": "T_icon_palwork_01",
+      "status": "verified"
+    },
+    "planting": {
+      "ingame": "icons/work/planting.png",
+      "fallback": "🌱",
+      "game_source": "T_icon_palwork_02",
+      "status": "verified"
+    },
+    "electricity": {
+      "ingame": "icons/work/electricity.png",
+      "fallback": "⚡",
+      "game_source": "T_icon_palwork_03",
+      "status": "verified"
+    },
+    "handiwork": {
+      "ingame": "icons/work/handiwork.png",
+      "fallback": "🔨",
+      "game_source": "T_icon_palwork_04",
+      "status": "verified"
+    },
+    "gathering": {
+      "ingame": "icons/work/gathering.png",
+      "fallback": "🧺",
+      "game_source": "T_icon_palwork_05",
+      "status": "verified"
+    },
+    "lumbering": {
+      "ingame": "icons/work/lumbering.png",
+      "fallback": "🪓",
+      "game_source": "T_icon_palwork_06",
+      "status": "verified"
+    },
+    "mining": {
+      "ingame": "icons/work/mining.png",
+      "fallback": "⛏️",
+      "game_source": "T_icon_palwork_07",
+      "status": "verified"
+    },
+    "medicine": {
+      "ingame": "icons/work/medicine.png",
+      "fallback": "💊",
+      "game_source": "T_icon_palwork_08",
+      "status": "verified"
+    },
+    "oil": {
+      "ingame": "icons/work/oil.png",
+      "fallback": "🛢️",
+      "game_source": "T_icon_palwork_09",
+      "status": "verified"
+    },
+    "cooling": {
+      "ingame": "icons/work/cooling.png",
+      "fallback": "❄️",
+      "game_source": "T_icon_palwork_10",
+      "status": "verified"
+    },
+    "transport": {
+      "ingame": "icons/work/transport.png",
+      "fallback": "📦",
+      "game_source": "T_icon_palwork_11",
+      "status": "verified"
+    },
+    "farming": {
+      "ingame": "icons/work/farming.png",
+      "fallback": "🐄",
+      "game_source": "T_icon_palwork_12",
+      "status": "verified"
+    }
+  },
+  "status": {
+    "_note": "元素系状态图标(T_icon_StatusEffect_*)已提取;饱食/饥饿=T_icon_hunger。骨折/扭伤/虚弱/精神萎靡等伤病经 DT_BaseCampWorkerSickDataTable 核实**游戏无专属图标**(以表情+文字表现)→ text-keep。",
+    "burn": {
+      "ingame": "icons/status/Fire.png",
+      "fallback": "🔥",
+      "game_source": "T_icon_StatusEffect_Fire",
+      "status": "verified"
+    },
+    "wet": {
+      "ingame": "icons/status/Water.png",
+      "fallback": "💧",
+      "game_source": "T_icon_StatusEffect_Water",
+      "status": "verified"
+    },
+    "frozen": {
+      "ingame": "icons/status/Ice.png",
+      "fallback": "❄️",
+      "game_source": "T_icon_StatusEffect_Ice",
+      "status": "verified"
+    },
+    "shock": {
+      "ingame": "icons/status/Electric.png",
+      "fallback": "⚡",
+      "game_source": "T_icon_StatusEffect_Electric",
+      "status": "verified"
+    },
+    "ivy": {
+      "ingame": "icons/status/Grass.png",
+      "fallback": "🌿",
+      "game_source": "T_icon_StatusEffect_Grass",
+      "status": "verified"
+    },
+    "muddy": {
+      "ingame": "icons/status/Ground.png",
+      "fallback": "⛰️",
+      "game_source": "T_icon_StatusEffect_Ground",
+      "status": "verified"
+    },
+    "darkness": {
+      "ingame": "icons/status/Dark.png",
+      "fallback": "🌑",
+      "game_source": "T_icon_StatusEffect_Dark",
+      "status": "verified"
+    },
+    "poison": {
+      "ingame": "icons/status/Poison.png",
+      "fallback": "💊",
+      "game_source": "T_icon_StatusEffect_Poison",
+      "status": "verified"
+    },
+    "stun": {
+      "ingame": "icons/status/Stun.png",
+      "fallback": "💫",
+      "game_source": "T_icon_StatusEffect_Stun",
+      "status": "verified"
+    },
+    "fracture": {
+      "ingame": null,
+      "fallback": "🩹",
+      "game_source": null,
+      "status": "text-keep",
+      "_note": "游戏无专属图标(DT_BaseCampWorkerSickDataTable 无 icon 字段,以表情+文字表现)"
+    },
+    "sprain": {
+      "ingame": null,
+      "fallback": "🩹",
+      "game_source": null,
+      "status": "text-keep",
+      "_note": "同上,游戏无伤病专属图标"
+    },
+    "hungry": {
+      "ingame": "icons/stat/hunger.png",
+      "fallback": "🍖",
+      "game_source": "T_icon_hunger",
+      "status": "verified"
+    },
+    "starvation": {
+      "ingame": "icons/stat/hunger.png",
+      "fallback": "🍖",
+      "game_source": "T_icon_hunger",
+      "status": "verified",
+      "_note": "极度饥饿复用饱食图标"
+    },
+    "weakness": {
+      "ingame": null,
+      "fallback": "💤",
+      "game_source": null,
+      "status": "text-keep",
+      "_note": "游戏无专属图标(伤病表无 icon 字段)"
+    },
+    "depression": {
+      "ingame": null,
+      "fallback": "🧠",
+      "game_source": null,
+      "status": "text-keep",
+      "_note": "低SAN,游戏以表情+文字表现,无专属图标"
+    }
+  },
+  "pal": {
+    "gender_male": {
+      "ingame": "icons/ui/gender_male.png",
+      "fallback": "♂",
+      "game_source": "T_Icon_PanGender_Male",
+      "status": "verified"
+    },
+    "gender_female": {
+      "ingame": "icons/ui/gender_female.png",
+      "fallback": "♀",
+      "game_source": "T_Icon_PanGender_Female",
+      "status": "verified"
+    },
+    "rarity": {
+      "ingame": "icons/ui/rarity.png",
+      "fallback": "★",
+      "game_source": "T_icon_pal_rare",
+      "status": "verified"
+    },
+    "lucky": {
+      "ingame": "icons/ui/rarity.png",
+      "fallback": "✨",
+      "game_source": "T_icon_pal_rare",
+      "status": "verified",
+      "_note": "T_icon_pal_rare 即游戏稀有/闪光帕鲁闪光标"
+    },
+    "alpha": {
+      "ingame": "icons/pal/alpha.png",
+      "fallback": "👑",
+      "game_source": "T_icon_compass_boss",
+      "status": "verified"
+    },
+    "condensation": {
+      "ingame": "icons/pal/condensation.png",
+      "fallback": "⭐",
+      "game_source": "T_icon_condense",
+      "status": "verified"
+    },
+    "awakening": {
+      "ingame": null,
+      "fallback": "🌟",
+      "game_source": null,
+      "status": "text-keep",
+      "_note": "未定位到专属纹理,保留 🌟 待核实"
+    },
+    "mutation": {
+      "ingame": "icons/pal/mutation.png",
+      "fallback": "🧬",
+      "game_source": "T_icon_enemy_Mutant",
+      "status": "verified"
+    }
+  },
+  "passive_rank": {
+    "_note": "被动/技能等级箭头(游戏 T_icon_skillstatus_rank_arrow_*,白遮罩可 CSS 重着色)。sign<0→down,rank1/2/3→up1/2/3,顶阶→up3_plus。",
+    "rank_down": {
+      "ingame": "icons/passive/rank_down.png",
+      "role": "减益箭头(↓)",
+      "game_source": "T_icon_skillstatus_rank_arrow_00",
+      "status": "verified"
+    },
+    "rank_up1": {
+      "ingame": "icons/passive/rank_up1.png",
+      "role": "+1(↑)",
+      "game_source": "T_icon_skillstatus_rank_arrow_01",
+      "status": "verified"
+    },
+    "rank_up2": {
+      "ingame": "icons/passive/rank_up2.png",
+      "role": "+2(↑↑)",
+      "game_source": "T_icon_skillstatus_rank_arrow_02",
+      "status": "verified"
+    },
+    "rank_up3": {
+      "ingame": "icons/passive/rank_up3.png",
+      "role": "+3(↑↑↑)",
+      "game_source": "T_icon_skillstatus_rank_arrow_03",
+      "status": "verified"
+    },
+    "rank_up3_plus": {
+      "ingame": "icons/passive/rank_up3_plus.png",
+      "role": "顶阶(↑↑↑+)",
+      "game_source": "T_icon_skillstatus_rank_arrow_04",
+      "status": "verified"
+    }
+  },
+  "currency": {
+    "gold": {
+      "ingame": "icons/ui/money.png",
+      "fallback": "💰",
+      "game_source": "T_icon_money",
+      "status": "verified"
+    },
+    "tech_point": {
+      "ingame": "icons/ui/tech_point.png",
+      "fallback": "💠",
+      "game_source": "T_icon_tech_point_0",
+      "status": "verified"
+    },
+    "ancient_tech_point": {
+      "ingame": "icons/ui/ancient_tech_point.png",
+      "fallback": "💠",
+      "game_source": "T_icon_tech_point_1",
+      "status": "verified"
+    },
+    "dog_coin": {
+      "ingame": "icons/ui/dog_coin.png",
+      "fallback": "💰",
+      "game_source": "T_itemicon_Material_DogCoin",
+      "status": "verified"
+    },
+    "bounty": {
+      "ingame": "icons/ui/bounty.png",
+      "fallback": "💰",
+      "game_source": "T_icon_item_Jewelry_BountyProof_1",
+      "status": "verified"
+    }
+  },
+  "stat": {
+    "_note": "T_icon_status_00..07(Main_Menu)为帕鲁面板数值图标;00心=HP 03盾=防御 04秤=重量 已视觉确认;01脉冲/02爆发/05锤/07帕鲁头 语义未定,待游戏截图核实,不硬绑。",
+    "hp": {
+      "ingame": "icons/stat/hp.png",
+      "fallback": "❤",
+      "game_source": "T_icon_status_00",
+      "status": "verified"
+    },
+    "defense": {
+      "ingame": "icons/stat/defense.png",
+      "fallback": "🛡",
+      "game_source": "T_icon_status_03",
+      "status": "verified"
+    },
+    "weight": {
+      "ingame": "icons/stat/weight.png",
+      "fallback": "📏",
+      "game_source": "T_icon_status_04",
+      "status": "verified"
+    },
+    "hunger": {
+      "ingame": "icons/stat/hunger.png",
+      "fallback": "🍖",
+      "game_source": "T_icon_hunger",
+      "status": "verified"
+    },
+    "san": {
+      "ingame": null,
+      "fallback": "🧠",
+      "game_source": null,
+      "status": "pending-extract",
+      "_note": "候选 T_icon_status_01(脉冲),待截图核实"
+    },
+    "attack": {
+      "ingame": null,
+      "fallback": "⚔",
+      "game_source": null,
+      "status": "pending-extract",
+      "_note": "候选 T_icon_status_02(爆发),待截图核实"
+    },
+    "work_speed": {
+      "ingame": null,
+      "fallback": "",
+      "game_source": null,
+      "status": "pending-extract",
+      "_note": "候选 T_icon_status_05(锤),待截图核实"
+    },
+    "stamina": {
+      "ingame": null,
+      "fallback": "",
+      "game_source": null,
+      "status": "text-keep"
+    },
+    "speed": {
+      "ingame": null,
+      "fallback": "🐎",
+      "game_source": null,
+      "status": "text-keep"
+    }
+  },
+  "component": {
+    "_note": "游戏原生 UI 组件纹理(白色遮罩可 CSS 重着色),供阶段C border-image/background 拼装。详见 data/ingame/parts/README.md。",
+    "panel_glow_h": {
+      "ingame": "parts/panel_glow_h.png",
+      "role": "面板柔光条(横)",
+      "status": "verified"
+    },
+    "panel_glow_v": {
+      "ingame": "parts/panel_glow_v.png",
+      "role": "面板柔光条(纵)",
+      "status": "verified"
+    },
+    "panel_blur": {
+      "ingame": "parts/panel_blur.png",
+      "role": "柔边面板底",
+      "status": "verified"
+    },
+    "panel_info": {
+      "ingame": "parts/panel_info.png",
+      "role": "帕鲁信息大面板底",
+      "status": "verified"
+    },
+    "title_flare": {
+      "ingame": "parts/title_flare.png",
+      "role": "区块标题辉光",
+      "status": "verified"
+    },
+    "frame_thin": {
+      "ingame": "parts/frame_thin.png",
+      "role": "2px 细边框",
+      "status": "verified"
+    },
+    "frame_corner": {
+      "ingame": "parts/frame_corner.png",
+      "role": "角饰∧",
+      "status": "verified"
+    },
+    "operating_frame": {
+      "ingame": "parts/operating_frame.png",
+      "role": "操作面板框",
+      "status": "verified"
+    },
+    "slot_item": {
+      "ingame": "parts/slot_item.png",
+      "role": "物品槽(切角方)",
+      "status": "verified"
+    },
+    "slot_select": {
+      "ingame": "parts/slot_select.png",
+      "role": "选中环",
+      "status": "verified"
+    },
+    "slot_pal": {
+      "ingame": "parts/slot_pal.png",
+      "role": "帕鲁卡框",
+      "status": "verified"
+    },
+    "slot_pal_detail": {
+      "ingame": "parts/slot_pal_detail.png",
+      "role": "帕鲁箱详情框",
+      "status": "verified"
+    },
+    "slot_pal_icon": {
+      "ingame": "parts/slot_pal_icon.png",
+      "role": "帕鲁头像方槽底",
+      "status": "verified"
+    },
+    "slot_pal_circle": {
+      "ingame": "parts/slot_pal_circle.png",
+      "role": "帕鲁头像圆框",
+      "status": "verified"
+    },
+    "node_gold": {
+      "ingame": "parts/node_gold.png",
+      "role": "金色八角节点框",
+      "status": "verified"
+    },
+    "node_dark": {
+      "ingame": "parts/node_dark.png",
+      "role": "暗八角节点框",
+      "status": "verified"
+    },
+    "node_selected": {
+      "ingame": "parts/node_selected.png",
+      "role": "青色八角节点框(选中)",
+      "status": "verified"
+    },
+    "tab_base": {
+      "ingame": "parts/tab_base.png",
+      "role": "标签底",
+      "status": "verified"
+    },
+    "tab_main": {
+      "ingame": "parts/tab_main.png",
+      "role": "主标签条",
+      "status": "verified"
+    },
+    "button": {
+      "ingame": "parts/button.png",
+      "role": "按钮底",
+      "status": "verified"
+    },
+    "button_flare": {
+      "ingame": "parts/button_flare.png",
+      "role": "按钮辉光",
+      "status": "verified"
+    },
+    "bar_hp": {
+      "ingame": "parts/bar_hp.png",
+      "role": "HP/进度条底",
+      "status": "verified"
+    },
+    "bar_frame": {
+      "ingame": "parts/bar_frame.png",
+      "role": "进度条外框",
+      "status": "verified"
+    }
+  },
+  "plugin_ext": {
+    "_note": "游戏无此语义，用统一插件扩展线性 SVG，明确标为插件 UI，严禁套游戏图标。SVG 待阶段C实现。",
+    "server.online": {
+      "ingame": null,
+      "fallback": "🟢",
+      "plugin_svg": "svg/server_online",
+      "status": "plugin-ext"
+    },
+    "server.offline": {
+      "ingame": null,
+      "fallback": "🔴",
+      "plugin_svg": "svg/server_offline",
+      "status": "plugin-ext"
+    },
+    "server.player_count": {
+      "ingame": null,
+      "fallback": "👥",
+      "plugin_svg": "svg/players",
+      "status": "plugin-ext"
+    },
+    "server.fps": {
+      "ingame": null,
+      "fallback": "⚡",
+      "plugin_svg": "svg/fps",
+      "status": "plugin-ext"
+    },
+    "server.uptime": {
+      "ingame": null,
+      "fallback": "⏱",
+      "plugin_svg": "svg/uptime",
+      "status": "plugin-ext"
+    },
+    "server.world_day": {
+      "ingame": null,
+      "fallback": "📅",
+      "plugin_svg": "svg/calendar",
+      "status": "plugin-ext"
+    },
+    "server.load": {
+      "ingame": null,
+      "fallback": "◆",
+      "plugin_svg": "svg/gauge",
+      "status": "plugin-ext"
+    },
+    "server.cpu": {
+      "ingame": null,
+      "fallback": "",
+      "plugin_svg": "svg/cpu",
+      "status": "plugin-ext"
+    },
+    "server.memory": {
+      "ingame": null,
+      "fallback": "",
+      "plugin_svg": "svg/memory",
+      "status": "plugin-ext"
+    },
+    "plugin.selfcheck": {
+      "ingame": null,
+      "fallback": "🔬",
+      "plugin_svg": "svg/selfcheck",
+      "status": "plugin-ext"
+    },
+    "plugin.audit": {
+      "ingame": null,
+      "fallback": "📋",
+      "plugin_svg": "svg/audit",
+      "status": "plugin-ext"
+    },
+    "plugin.backup": {
+      "ingame": null,
+      "fallback": "💾",
+      "plugin_svg": "svg/backup",
+      "status": "plugin-ext"
+    },
+    "plugin.notify_on": {
+      "ingame": null,
+      "fallback": "🔔",
+      "plugin_svg": "svg/bell",
+      "status": "plugin-ext"
+    },
+    "plugin.notify_off": {
+      "ingame": null,
+      "fallback": "🔕",
+      "plugin_svg": "svg/bell_off",
+      "status": "plugin-ext"
+    },
+    "plugin.admin": {
+      "ingame": null,
+      "fallback": "🔒",
+      "plugin_svg": "svg/lock",
+      "status": "plugin-ext"
+    },
+    "plugin.link": {
+      "ingame": null,
+      "fallback": "🔗",
+      "plugin_svg": "svg/link",
+      "status": "plugin-ext"
+    },
+    "plugin.search": {
+      "ingame": null,
+      "fallback": "🔍",
+      "plugin_svg": "svg/search",
+      "status": "plugin-ext"
+    },
+    "plugin.edit": {
+      "ingame": null,
+      "fallback": "✏️",
+      "plugin_svg": "svg/edit",
+      "status": "plugin-ext"
+    },
+    "plugin.error": {
+      "ingame": null,
+      "fallback": "❌",
+      "plugin_svg": "svg/error",
+      "status": "plugin-ext"
+    },
+    "plugin.success": {
+      "ingame": null,
+      "fallback": "✅",
+      "plugin_svg": "svg/success",
+      "status": "plugin-ext"
+    }
+  }
+}

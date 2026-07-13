@@ -228,8 +228,9 @@
     "description": "卡片默认风格",
     "options": [
       "fantasy",
-      "pixel"
+      "pixel",
+      "ingame"
     ],
-    "hint": "fantasy=二次元奇幻玻璃，pixel=像素羊皮纸复古。也可用 /帕鲁皮肤 指令实时切换。"
+    "hint": "fantasy=二次元奇幻玻璃，pixel=像素羊皮纸复古，ingame=游戏原生(开发中，部分卡片暂沿用奇幻布局，图标逐步替换为游戏原图)。也可用 /帕鲁皮肤 指令实时切换。"
   }
 }
