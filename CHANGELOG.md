@@ -2,6 +2,16 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.13.0] - 2026-07-13
+
+### 新增(首选1:小队进度)
+- **`/帕鲁小队进度`**:按群聚合已绑定队员的探索/收集进度,**全部从真实 1.0 玩家存档只读同步、不伪造**:
+  - 图鉴解锁(`PaldeckUnlockFlag`)、传送点/瞭望塔(`FastTravelPointUnlockFlag`)、塔主击败(`TowerBossDefeatFlag`)、野外/地牢 Boss(`NormalBossDefeatFlag`)、地牢清理(`Normal/FixedDungeonClearCount`)、遗物(`RelicObtainForInstanceFlag`)、已发现区域(`FindAreaFlagMap`)。
+  - **下一步建议** = 玩家当前进行中的任务(`OrderedQuestArray_FullRelease`)翻译成中文任务名。
+  - `palwork/palsave.extract_player_progress` / `extract_all_progress`(真实 12 玩家存档验证)。
+- **手动勾选** `/帕鲁小队勾选 <目标>`:存档读不到的探索节点(小岛/聚落/保护区/World Tree 等)由群成员手动记录,**按群隔离**、记录是谁完成、再勾一次取消;管理员 `/帕鲁小队重置` 清空本群清单。
+- **按群隔离**:小队名单 = 在本群用过指令的已绑定成员(`group_members`),无记录时回退全部已绑定(私人小队)。
+
 ## [1.12.0] - 2026-07-13
 
 ### 新增(小队安全 P0)

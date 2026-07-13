@@ -98,6 +98,9 @@ COMMANDS: list[CommandSpec] = [
 
     # ---------------- 玩家自助 ----------------
     CommandSpec("绑定", "_cmd_bind", ("bind",), pass_args=True, description="绑定游戏角色", category="player"),
+    CommandSpec("小队进度", "_cmd_squad", ("小队", "squad", "team_progress"), cooldown=True, description="小队探索/收集/塔主进度聚合", category="player"),
+    CommandSpec("小队勾选", "_cmd_squad_check", ("勾选", "squadcheck"), pass_args=True, description="手动勾选小队探索目标", category="player"),
+    CommandSpec("小队重置", "_cmd_squad_reset", ("squadreset",), admin=True, pass_args=True, log_denied=True, description="重置本群小队手动清单", category="admin"),
     CommandSpec("我", "_cmd_profile", ("档案", "me"), cooldown=True, description="我的档案", category="player"),
     CommandSpec("背包", "_cmd_bag", ("物品栏", "bag", "inventory"), cooldown=True, pass_args=True, description="我的背包", category="player"),
     CommandSpec("队伍", "_cmd_team", ("出战", "team", "party"), cooldown=True, pass_args=True, description="我的出战队伍", category="player"),

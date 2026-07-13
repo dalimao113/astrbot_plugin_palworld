@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.12.0",
+    "1.13.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -1776,7 +1776,12 @@ class PalworldPlugin(Star):
         except Exception as e:  # noqa: BLE001
             logger.warning(f"{LOG_PREFIX} 公会解析失败: {e}")
             guilds = []
-        return {"profiles": profiles, "guilds": guilds}
+        try:
+            progress = palsave.extract_all_progress(save_dir)   # 玩家进度记录(小队进度用)
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"{LOG_PREFIX} 进度记录解析失败: {e}")
+            progress = {}
+        return {"profiles": profiles, "guilds": guilds, "progress": progress}
 
     def _match_save_profile(self, binding: dict, profiles: dict) -> Optional[dict]:
         """绑定记录 -> 该玩家存档档案。先用 userId→playerId 映射，再昵称兜底。"""
@@ -2963,7 +2968,7 @@ class PalworldPlugin(Star):
                 return alias, (([rest] + list(args)) if rest else list(args))
         return sub, args
 
-    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
+    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
     async def palworld(self, event: AstrMessageEvent):
         raw = (event.message_str or "").strip()
         # 去掉可选的「/」前缀和指令词「帕鲁」，剩余既可能是「在线」也可能是「在线 参数」
@@ -2983,6 +2988,13 @@ class PalworldPlugin(Star):
         gid = event.get_group_id()
         if gid:
             self._register_group(str(gid))
+            # 记录本群小队成员(已绑定的发指令者)——供 /帕鲁小队进度 按群隔离名单
+            _sqq = str(event.get_sender_id() or "")
+            if _sqq and _sqq in (self.state.get("bindings", {}) or {}):
+                gm = self.state.setdefault("group_members", {}).setdefault(str(gid), {})
+                if _sqq not in gm:
+                    gm[_sqq] = int(time.time())
+                    self._save_state()
 
         # 顶层异常兜底：单条脏数据/新版本枚举等导致的未预期异常，不把 traceback 抛给玩家
         try:
@@ -3553,6 +3565,111 @@ class PalworldPlugin(Star):
     async def _cmd_help(self, event: AstrMessageEvent):
         # 一行一条指令，玩家一眼看清；指令清单硬编码在 HELP_TMPL 模板里。
         return await self._img(event, self._t("help"), {})
+
+    # ------------------------------------------------------------------
+    # 首选1：小队进度(/帕鲁小队进度)——按群聚合已绑定成员的探索/收集/塔主等进度(存档只读自动同步)
+    #        + 群级手动勾选目标(读不到的探索节点由群成员自己记，不伪造自动完成)
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _norm_uid(u) -> str:
+        return str(u or "").replace("-", "").upper()
+
+    def _squad_roster_qq(self, gid: str) -> list:
+        """本群小队名单:已绑定 且 在本群用过指令的 QQ;群成员记录为空时回退到全部已绑定(私人小队)。"""
+        bindings = self.state.get("bindings", {}) or {}
+        gm = (self.state.get("group_members", {}) or {}).get(str(gid), {}) or {}
+        qqs = [q for q in bindings if str(q) in gm] if gm else list(bindings)
+        return qqs
+
+    async def _squad_progress_data(self, gid: str) -> Optional[dict]:
+        """聚合本群小队进度。返回渲染 data 或 None(读不到存档)。存档只读,不改。"""
+        self._last_save_use = time.time()
+        data = await self._fetch_save_data(force_save=False)
+        if not data:
+            return None
+        progress = data.get("progress") or {}
+        bindings = self.state.get("bindings", {}) or {}
+        members = []
+        for qq in self._squad_roster_qq(gid):
+            b = bindings.get(qq) or {}
+            uid = self._norm_uid(b.get("userId"))
+            pr = progress.get(uid)
+            if not pr:
+                continue
+            # 当前进行中的任务 -> 中文名(下一步建议);去掉隐藏/展示台内部任务
+            nexts = []
+            for qid in pr.get("active_quests", []):
+                if qid.startswith(("Hidden_", "Test_", "Sub_PalDisplay")):
+                    continue
+                m = self._mission_by_id.get(qid)
+                nexts.append(m["name"] if m else qid)
+            members.append({
+                "name": _esc(b.get("name", "玩家")),
+                "paldeck": pr.get("paldeck", 0),
+                "fasttravel": pr.get("fasttravel", 0),
+                "towers": len(pr.get("tower_bosses", [])),
+                "field_bosses": pr.get("field_bosses", 0),
+                "dungeon": pr.get("dungeon_normal", 0) + pr.get("dungeon_fixed", 0),
+                "relics": pr.get("relics", 0),
+                "areas": pr.get("areas_found", 0),
+                "next": nexts[:3],
+            })
+        members.sort(key=lambda m: (-m["towers"], -m["paldeck"]))
+        # 群级手动勾选目标
+        squad = (self.state.get("squad", {}) or {}).get(str(gid), {}) or {}
+        checklist = []
+        for item, whos in (squad.get("checklist") or {}).items():
+            names = [self.state.get("bindings", {}).get(q, {}).get("name") or f"QQ{q}" for q in whos]
+            checklist.append({"item": _esc(item), "done_by": [_esc(n) for n in names], "count": len(whos)})
+        dex_total = getattr(self, "_dex_collectible", 287) or 287
+        return {"members": members, "count": len(members),
+                "dex_total": dex_total, "checklist": checklist,
+                "hint": "存档自动同步:图鉴/传送点/塔主/野外boss/地牢/遗物/区域/当前任务;手动目标用 /帕鲁小队勾选 <目标>"}
+
+    async def _cmd_squad(self, event: AstrMessageEvent, args: list[str]):
+        gid = str(event.get_group_id() or "")
+        if not gid:
+            return await self._msg_card(event, "👥", "请在群里用", desc="小队进度按群聚合，请在群聊里发 /帕鲁小队进度。", color="#F5A623")
+        d = await self._squad_progress_data(gid)
+        if d is None:
+            return await self._msg_card(event, "🛰️", "暂时读不到存档",
+                                        desc="未挂载 docker.sock 或存档读取失败，稍后再试。手动目标仍可用 /帕鲁小队勾选。", color="#F5A623")
+        if not d["members"] and not d["checklist"]:
+            return await self._msg_card(event, "👥", "小队还没有进度",
+                                        desc="让群友先 /帕鲁绑定 <游戏名> 并上线一次；或用 /帕鲁小队勾选 <目标> 手动记录探索目标。", color="#9a8a91")
+        return await self._img(event, self._t("squad"), d)
+
+    async def _cmd_squad_check(self, event: AstrMessageEvent, args: list[str]):
+        """群成员手动勾选/取消一个探索目标(记录是谁完成):/帕鲁小队勾选 <目标>。再发一次=取消自己。"""
+        gid = str(event.get_group_id() or "")
+        qq = str(event.get_sender_id())
+        if not gid:
+            return await self._msg_card(event, "✏️", "请在群里用", desc="请在群聊里发 /帕鲁小队勾选 <目标>。", color="#F5A623")
+        item = " ".join(args).strip()
+        if not item:
+            return await self._msg_card(event, "✏️", "请提供目标",
+                                        desc="用法：/帕鲁小队勾选 <目标>\n例：/帕鲁小队勾选 世界树探索\n再发一次取消你自己的勾选。", color="#E5484D")
+        squad = self.state.setdefault("squad", {}).setdefault(gid, {}).setdefault("checklist", {})
+        whos = squad.setdefault(item, [])
+        if qq in whos:
+            whos.remove(qq)
+            act = "取消勾选"
+            if not whos:
+                squad.pop(item, None)
+        else:
+            whos.append(qq)
+            act = "已勾选"
+        self._save_state()
+        return await self._msg_card(event, "✅", f"{act}「{_esc(item)}」",
+                                    desc=f"发 /帕鲁小队进度 查看小队总览。", color="#30A46C")
+
+    async def _cmd_squad_reset(self, event: AstrMessageEvent, args: list[str]):
+        """管理员重置本群手动勾选清单:/帕鲁小队重置。"""
+        gid = str(event.get_group_id() or "")
+        if gid and gid in (self.state.get("squad", {}) or {}):
+            self.state["squad"].pop(gid, None)
+            self._save_state()
+        return await self._msg_card(event, "🧹", "已重置本群小队清单", desc="本群的手动勾选目标已清空(存档自动同步部分不受影响)。", color="#30A46C")
 
     # ------------------------------------------------------------------
     # Phase 3：玩家绑定 / 个人卡 / 订阅

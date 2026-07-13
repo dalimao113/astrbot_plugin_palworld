@@ -5350,6 +5350,87 @@ MUTATION_PIX = _PH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+# ---------------- 小队进度(首选1)。变量:members[{name,paldeck,fasttravel,towers,field_bosses,dungeon,relics,areas,next[]}] + dex_total + checklist[{item,done_by[],count}] + hint ----------------
+_SQUAD_STATS = ("图鉴 {{ m.paldeck }}/{{ dex_total }}", "传送点 {{ m.fasttravel }}", "塔主 {{ m.towers }}",
+                "野外boss {{ m.field_bosses }}", "地牢 {{ m.dungeon }}", "遗物 {{ m.relics }}", "区域 {{ m.areas }}")
+
+SQUAD_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">👥 小队进度</div>
+    <div class="subtitle"><span class="pill soft">{{ count }} 名队员</span><span class="pill soft">存档自动同步</span></div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    {% for m in members %}
+    <div style="padding:11px 13px;margin-bottom:9px;border-radius:13px;background:rgba(12,8,38,.42);border:1px solid rgba(232,198,106,.18)">
+      <div style="font-size:16px;font-weight:800;color:#f3ecd2">{{ m.name }}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">
+        <span class="pill soft" style="font-size:11.5px">图鉴 {{ m.paldeck }}/{{ dex_total }}</span>
+        <span class="pill soft" style="font-size:11.5px">传送点 {{ m.fasttravel }}</span>
+        <span class="pill soft" style="font-size:11.5px">塔主 {{ m.towers }}</span>
+        <span class="pill soft" style="font-size:11.5px">野外Boss {{ m.field_bosses }}</span>
+        <span class="pill soft" style="font-size:11.5px">地牢 {{ m.dungeon }}</span>
+        <span class="pill soft" style="font-size:11.5px">遗物 {{ m.relics }}</span>
+        <span class="pill soft" style="font-size:11.5px">区域 {{ m.areas }}</span>
+      </div>
+      {% if m.next %}<div style="font-size:12.5px;color:#9effb6;margin-top:6px">🎯 下一步：{{ m.next|join('、') }}</div>{% endif %}
+    </div>
+    {% endfor %}
+    {% if checklist %}<div class="sec-t" style="margin-top:6px">📋 小队手动目标</div>
+    {% for c in checklist %}<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13.5px;color:#cfc1ea">
+      <span style="color:#7cfc9a">✅</span><b style="color:#f3ecd2">{{ c.item }}</b>
+      <span style="margin-left:auto;font-size:12px;color:#9c8fc0">{{ c.done_by|join('、') }}（{{ c.count }}）</span></div>{% endfor %}{% endif %}
+    <div style="margin-top:12px;font-size:11px;color:#8a82a8;line-height:1.6">{{ hint }}</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+SQUAD_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">▦ 小队进度</div>
+    <div class="subtitle"><span class="pill">{{ count }} 名队员</span><span class="pill">存档自动同步</span></div>
+  </div></div>
+  <div class="frame">
+    {% for m in members %}
+    <div style="padding:10px 11px;margin-bottom:8px;border:2px solid #6b4a24;background:rgba(221,198,149,.4)">
+      <div style="font-size:15px;font-weight:700;color:#2c1a0a">{{ m.name }}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:5px">
+        <span class="pill" style="font-size:11px">图鉴 {{ m.paldeck }}/{{ dex_total }}</span>
+        <span class="pill" style="font-size:11px">传送点 {{ m.fasttravel }}</span>
+        <span class="pill" style="font-size:11px">塔主 {{ m.towers }}</span>
+        <span class="pill" style="font-size:11px">野外Boss {{ m.field_bosses }}</span>
+        <span class="pill" style="font-size:11px">地牢 {{ m.dungeon }}</span>
+        <span class="pill" style="font-size:11px">遗物 {{ m.relics }}</span>
+        <span class="pill" style="font-size:11px">区域 {{ m.areas }}</span>
+      </div>
+      {% if m.next %}<div style="font-size:12px;color:#1d7a36;margin-top:5px">下一步：{{ m.next|join('、') }}</div>{% endif %}
+    </div>
+    {% endfor %}
+    {% if checklist %}<div class="sec-t" style="margin-top:6px">小队手动目标</div>
+    {% for c in checklist %}<div style="display:flex;gap:8px;padding:4px 0;font-size:13px;color:#382207"><b>{{ c.item }}</b><span style="margin-left:auto;font-size:11px;color:#7a5a1a">{{ c.done_by|join('、') }}（{{ c.count }}）</span></div>{% endfor %}{% endif %}
+    <div style="margin-top:11px;font-size:11px;color:#7a6a4a;line-height:1.6">{{ hint }}</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+SQUAD_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">小队进度</div><div class="ig-sub"><span class="ig-pill">{{ count }} 名队员</span><span class="ig-pill">存档自动同步</span></div></div></div>
+  {% for m in members %}
+  <div class="ig-panel hi"><div style="font-size:16px;font-weight:800;color:var(--pal-text)">{{ m.name }}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">
+      <span class="ig-pill">图鉴 {{ m.paldeck }}/{{ dex_total }}</span><span class="ig-pill">传送点 {{ m.fasttravel }}</span>
+      <span class="ig-pill">塔主 {{ m.towers }}</span><span class="ig-pill">野外Boss {{ m.field_bosses }}</span>
+      <span class="ig-pill">地牢 {{ m.dungeon }}</span><span class="ig-pill">遗物 {{ m.relics }}</span><span class="ig-pill">区域 {{ m.areas }}</span>
+    </div>
+    {% if m.next %}<div style="font-size:12.5px;color:var(--pal-good);margin-top:6px">下一步：{{ m.next|join('、') }}</div>{% endif %}
+  </div>
+  {% endfor %}
+  {% if checklist %}<div class="ig-panel"><div class="ig-sec">小队手动目标</div>
+    {% for c in checklist %}<div class="ig-prow"><b style="color:var(--pal-text)">{{ c.item }}</b><span style="margin-left:auto;font-size:12px;color:var(--pal-sub)">{{ c.done_by|join('、') }}（{{ c.count }}）</span></div>{% endfor %}</div>{% endif %}
+  <div class="ig-panel"><div style="font-size:11.5px;color:var(--pal-dim);line-height:1.6">{{ hint }}</div></div>
+  """ + _IF + """
+</div></body></html>"""
+
+
 STYLES = {
     "fantasy": {"status": STATUS_TMPL, "players": PLAYERS_TMPL, "settings": SETTINGS_TMPL,
                 "help": HELP_TMPL, "message": MSG_TMPL, "stats": STATS_TMPL, "rank": RANK_TMPL,
@@ -5362,7 +5443,7 @@ STYLES = {
                 "facility": FACILITY_TMPL, "tech": TECH_TMPL, "grid": GRID_TMPL, "map": MAP_TMPL,
                 "lab_overview": LAB_OVERVIEW_TMPL, "lab_list": LAB_LIST_TMPL, "lab_detail": LAB_DETAIL_TMPL,
                 "bag": BAG_TMPL, "team": TEAM_TMPL, "palbox": PALBOX_TMPL, "guild": GUILD_TMPL,
-                "basecamp": BASECAMP_TMPL,
+                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "passdex": PASSDEX_TMPL, "passlist": PASSLIST_TMPL,
                 "awakening": AWAKENING_TMPL, "mutation": MUTATION_TMPL,
@@ -5381,7 +5462,7 @@ STYLES = {
               "facility": FACILITY_PIX, "tech": TECH_PIX, "grid": GRID_PIX, "map": MAP_PIX,
               "lab_overview": LAB_OVERVIEW_PIX, "lab_list": LAB_LIST_PIX, "lab_detail": LAB_DETAIL_PIX,
               "bag": BAG_PIX, "team": TEAM_PIX, "palbox": PALBOX_PIX, "guild": GUILD_PIX,
-              "basecamp": BASECAMP_PIX,
+              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX,
               "element": ELEMENT_PIX, "habitat": HABITAT_PIX, "passrec": PASSREC_PIX,
               "passdex": PASSDEX_PIX, "passlist": PASSLIST_PIX,
               "awakening": AWAKENING_PIX, "mutation": MUTATION_PIX,
@@ -5396,6 +5477,7 @@ STYLES = {
 # 复用 fantasy 模板串以保证 56 个模板键齐全、指令不异常;逐卡替换后再改为 ingame 专属模板。
 # 该临时回退是**显式记录**的(见 docs/INGAME_ICON_COVERAGE.md),非「悄悄用别的主题」。
 STYLES["ingame"] = dict(STYLES["fantasy"])
+STYLES["ingame"]["squad"] = SQUAD_ING
 # 阶段D:已改造为 ingame 专属布局的卡(其余仍临时回退 fantasy,见 INGAME_ICON_COVERAGE.md)
 STYLES["ingame"]["paldex"] = PALDEX_ING
 STYLES["ingame"]["passlist"] = PASSLIST_ING

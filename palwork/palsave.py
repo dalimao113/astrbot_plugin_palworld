@@ -416,6 +416,74 @@ def _parse_guild_1_0(b):
     admin = gname.upper() if _re.fullmatch(r'[0-9a-fA-F]{32}', gname or '') else ''
     return {'guild_name': guild_name, 'members': members, 'admin_uid': admin}
 
+def extract_player_progress(sav_path):
+    """从玩家 <uid>.sav 读**可靠**进度记录(RecordData + 当前活动任务)。真实 1.0 存档已验证字段。
+    字段缺失一律安全降级为 0/[]。返回 dict 或 None(解析失败)。**只读,不臆造完成状态**。
+
+    可靠可读(1.0 实测存在):
+    - paldeck        图鉴解锁数(PaldeckUnlockFlag,true 计数)
+    - fasttravel     传送点/瞭望塔解锁数(FastTravelPointUnlockFlag)
+    - tower_bosses   已击败塔主名列表(TowerBossDefeatFlag,去 BOSS_BATTLE_NAME_ 前缀)
+    - field_bosses   野外/地牢 boss 击败数(NormalBossDefeatFlag)
+    - dungeon_normal / dungeon_fixed  普通/固定地牢清理次数
+    - relics         已获遗物数(RelicObtainForInstanceFlag)
+    - areas_found    已发现区域数(FindAreaFlagMap)
+    - active_quests  **当前进行中**的任务 id 列表(OrderedQuestArray_FullRelease;完成的会移除,故只反映"下一步")
+    """
+    try:
+        j = load_sav(sav_path, full=True)
+        sd = j['properties']['SaveData']['value']
+    except Exception:  # noqa: BLE001
+        return None
+    rd = (sd.get('RecordData', {}) or {}).get('value', {}) or {}
+
+    def _list(k):
+        return (rd.get(k, {}) or {}).get('value') or []
+
+    def _count_true(k):
+        return sum(1 for kv in _list(k) if isinstance(kv, dict) and kv.get('value'))
+
+    def _scalar(k):
+        v = (rd.get(k, {}) or {}).get('value')
+        return v if isinstance(v, int) else 0
+
+    tower = [str(kv.get('key', '')).replace('BOSS_BATTLE_NAME_', '')
+             for kv in _list('TowerBossDefeatFlag') if isinstance(kv, dict) and kv.get('value')]
+    qarr = ((sd.get('OrderedQuestArray_FullRelease', {}) or {}).get('value', {}) or {}).get('values') or []
+    active = [str((e.get('QuestName', {}) or {}).get('value') or '') for e in qarr if isinstance(e, dict)]
+    return {
+        "paldeck": _count_true('PaldeckUnlockFlag'),
+        "fasttravel": _count_true('FastTravelPointUnlockFlag'),
+        "tower_bosses": tower,
+        "field_bosses": _count_true('NormalBossDefeatFlag'),
+        "dungeon_normal": _scalar('NormalDungeonClearCount'),
+        "dungeon_fixed": _scalar('FixedDungeonClearCount'),
+        "relics": _count_true('RelicObtainForInstanceFlag'),
+        "areas_found": _count_true('FindAreaFlagMap'),
+        "active_quests": [q for q in active if q],
+    }
+
+
+def extract_all_progress(save_dir):
+    """遍历 Players/*.sav,返回 {uid_hex: progress}。uid_hex 与档案 playerId/绑定 userId 对齐(大写去横线)。
+    _dps.sav(据点)跳过。单个解析失败不影响其它。"""
+    out = {}
+    pdir = _os.path.join(save_dir, 'Players')
+    if not _os.path.isdir(pdir):
+        return out
+    for fn in _os.listdir(pdir):
+        if not fn.endswith('.sav') or fn.endswith('_dps.sav'):
+            continue
+        uid = fn[:-4].replace('-', '').upper()
+        try:
+            pr = extract_player_progress(_os.path.join(pdir, fn))
+        except Exception:  # noqa: BLE001
+            pr = None
+        if pr:
+            out[uid] = pr
+    return out
+
+
 def extract_guilds(save_dir):
     """解析 Level.sav -> [{guild_name, members:[{name,uid,last_online}], admin_uid}]，按成员数降序。
     优先 1.0 新格式解析(已验证);失败回退旧字节解析(仍无 guild_name 则留空)。"""
