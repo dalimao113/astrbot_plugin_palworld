@@ -1570,16 +1570,17 @@ RANK_ING = _IH + """</style></head><body><div class="page">
 
 # ---- ingame 版全服战力榜。变量契约与 POWER_TMPL 一致 ----
 POWER_ING = _IH + """</style></head><body><div class="page">
-  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">全服战力榜</div><div class="ig-sub">{{ sub }}</div></div></div>
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ title | default('全服战力榜') }}</div><div class="ig-sub">{{ sub }}</div></div></div>
   <div class="ig-panel">
     {% for r in rows %}
     <div class="ig-rankrow{% if r.rank <= 3 %} top{% endif %}">
       <div class="mdl">{{ r.medal }}</div>
       {% if r.icon %}<img class="pic" src="{{ r.icon }}">{% endif %}
-      <div style="flex:1;min-width:0"><div class="rn">{{ r.name }}{% if r.lucky %}<img class="inl" src="{{ icons.pal.lucky }}">{% elif r.alpha %}<img class="inl" src="{{ icons.pal.alpha }}">{% endif %}</div><div class="rs">Lv.{{ r.level }} · {{ r.owner }}</div></div>
+      <div style="flex:1;min-width:0"><div class="rn">{{ r.name }}{% if r.lucky %}<img class="inl" src="{{ icons.pal.lucky }}">{% elif r.alpha %}<img class="inl" src="{{ icons.pal.alpha }}">{% endif %}</div><div class="rs">Lv.{{ r.level }}{% if r.owner %} · {{ r.owner }}{% endif %}{% if r.element %} · {{ r.element }}{% endif %}</div></div>
       <div style="text-align:right;flex:none"><div class="rv">{{ r.power }}</div><div class="ig-track" style="width:56px;margin-top:4px"><div class="ig-fill" style="width:{{ r.pct }}%"></div></div></div>
     </div>
     {% endfor %}
+    {% if pager %}<div style="margin-top:9px;text-align:center;font-size:12px;color:var(--pal-gold)">{{ pager }}</div>{% endif %}
     <div style="margin-top:9px;text-align:center;font-size:11px;color:var(--pal-dim)">战力为综合评分(等级/种族/天赋/浓缩/被动),仅供横向对比</div>
   </div>
   """ + _IF + """
@@ -3404,7 +3405,7 @@ ROUTE_PIX = _PH + """</style></head><body><div class="page">
 
 POWER_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div>
-    <div class="title">🏆 全服战力榜</div>
+    <div class="title">{{ title | default('🏆 全服战力榜') }}</div>
     <div class="subtitle">{{ sub }}</div>
   </div></div>
   <div class="glass">""" + _GEMS + """
@@ -3414,7 +3415,7 @@ POWER_TMPL = _HEAD + """</style></head><body><div class="page">
       {% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;flex-shrink:0">{% else %}<span style="font-size:24px">🐾</span>{% endif %}
       <div style="flex:1;min-width:0">
         <div style="font-size:15px;font-weight:700;color:#f3ecd2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.lucky %} ✨{% elif r.alpha %} 👑{% endif %}</div>
-        <div style="font-size:12px;color:#9c8fc0">Lv.{{ r.level }} · 🧑{{ r.owner }}</div>
+        <div style="font-size:12px;color:#9c8fc0">Lv.{{ r.level }}{% if r.owner %} · 🧑{{ r.owner }}{% endif %}{% if r.element %} · {{ r.element }}{% endif %}</div>
       </div>
       <div style="flex-shrink:0;text-align:right;min-width:62px">
         <div style="font-size:16px;font-weight:800;color:#e8c466">{{ r.power }}</div>
@@ -3422,6 +3423,7 @@ POWER_TMPL = _HEAD + """</style></head><body><div class="page">
       </div>
     </div>
     {% endfor %}
+    {% if pager %}<div style="margin-top:10px;text-align:center;font-size:12px;color:#e8c466">{{ pager }}</div>{% endif %}
     <div style="margin-top:11px;text-align:center;font-size:11.5px;color:#9c8fc0">战力为综合评分(等级/种族/天赋/浓缩/被动),仅供横向对比</div>
   </div>
   """ + _FOOT + """
@@ -3488,7 +3490,7 @@ PALPOWERDETAIL_TMPL = _HEAD + """</style></head><body><div class="page">
 
 POWER_PIX = _PH + """</style></head><body><div class="page">
   <div class="head"><div>
-    <div class="title">🏆 全服战力榜</div>
+    <div class="title">{{ title | default('🏆 全服战力榜') }}</div>
     <div class="subtitle">{{ sub }}</div>
   </div></div>
   <div class="frame">
@@ -3498,11 +3500,12 @@ POWER_PIX = _PH + """</style></head><body><div class="page">
       {% if r.icon %}<img src="{{ r.icon }}" style="width:38px;height:38px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% else %}<span style="font-size:22px">🐾</span>{% endif %}
       <div style="flex:1;min-width:0">
         <div style="font-size:15px;color:#382207;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.lucky %} ✨{% elif r.alpha %} 👑{% endif %}</div>
-        <div style="font-size:12px;color:#7a5a1a">Lv.{{ r.level }} · {{ r.owner }}</div>
+        <div style="font-size:12px;color:#7a5a1a">Lv.{{ r.level }}{% if r.owner %} · {{ r.owner }}{% endif %}{% if r.element %} · {{ r.element }}{% endif %}</div>
       </div>
       <div style="flex-shrink:0;font-size:16px;color:#7a1f1f">{{ r.power }}</div>
     </div>
     {% endfor %}
+    {% if pager %}<div style="margin-top:10px;text-align:center;font-size:12px;color:#7a3604">{{ pager }}</div>{% endif %}
     <div style="margin-top:11px;text-align:center;font-size:11.5px;color:#7a5a1a">战力为综合评分,仅供横向对比</div>
   </div>
   """ + _PF + """

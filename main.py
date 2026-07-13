@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.15.0",
+    "1.16.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2968,7 +2968,7 @@ class PalworldPlugin(Star):
                 return alias, (([rest] + list(args)) if rest else list(args))
         return sub, args
 
-    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点体检|基地体检|据点健康|基地健康|basehealth|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
+    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我的战力|个人战力|我的最强帕鲁|我的帕鲁战力|mypower|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点体检|基地体检|据点健康|基地健康|basehealth|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
     async def palworld(self, event: AstrMessageEvent):
         raw = (event.message_str or "").strip()
         # 去掉可选的「/」前缀和指令词「帕鲁」，剩余既可能是「在线」也可能是「在线 参数」
@@ -3253,6 +3253,46 @@ class PalworldPlugin(Star):
                 "medal": ["🥇", "🥈", "🥉"][i - 1] if i <= 3 else str(i)})
         return await self._img(event, self._t("power"),
                                {"rows": rows, "sub": f"全服最强帕鲁 Top{len(rows)} · 共 {len(allpals)} 只"})
+
+    async def _cmd_my_power(self, event: AstrMessageEvent, args: list[str]):
+        """个人帕鲁战力排行:自己(管理员可查他人)所有捕捉帕鲁按综合战力排序,分页。
+        末位数字=页码;非数字(管理员)=目标玩家名。不含公会共享据点帕鲁。"""
+        a = list(args)
+        page = 1
+        if a and a[-1].isdigit():
+            page = max(1, int(a[-1])); a = a[:-1]
+        sp, name, err = await self._resolve_target_sp(event, a)   # 复用:自己/管理员查他人 + 隐私门控
+        if err:
+            return err
+        pals = [(self._pal_power(p), p) for p, _ in self._iter_prof_pals(sp, set(), include_shared=False)]
+        if not pals:
+            return await self._msg_card(event, "📦", "还没有可统计的帕鲁",
+                                        desc=f"「{_esc(name)}」的队伍/帕鲁箱里还没有帕鲁。", color="#9a8a91")
+        pals.sort(key=lambda x: -x[0])
+        total, mxp = len(pals), (pals[0][0] or 1)
+        size = 15
+        pages = max(1, (total + size - 1) // size)
+        page = min(page, pages)
+        rows = []
+        for i, (pw, pal) in enumerate(pals[(page - 1) * size: page * size], (page - 1) * size + 1):
+            p = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
+            pnm = pal.get("nickname") or (p or {}).get("pal_name") or pal.get("char_id", "?")
+            els = (p or {}).get("elements") or []
+            rows.append({
+                "rank": i, "name": _esc(pnm), "owner": "",
+                "element": "".join(e.replace("属性", "") for e in els[:2]),
+                "level": pal.get("level", 1), "power": pw, "pct": int(pw / mxp * 100),
+                "icon": self._pal_icon((p or {}).get("pal_dev_name", "")),
+                "lucky": bool(pal.get("lucky")), "alpha": bool(pal.get("is_alpha")),
+                "medal": ["🥇", "🥈", "🥉"][i - 1] if i <= 3 else str(i)})
+        pager = ""
+        if pages > 1:
+            nxt = page + 1 if page < pages else 1
+            tgt = " ".join(a)
+            pager = f"发「/帕鲁我的战力{(' ' + tgt) if tgt else ''} {nxt}」翻到第 {nxt}/{pages} 页"
+        return await self._img(event, self._t("power"),
+                               {"title": f"🏆 {name} 的战力榜", "rows": rows, "pager": pager,
+                                "sub": f"共 {total} 只捕捉帕鲁 · 第 {page}/{pages} 页 · 按综合战力排序"})
 
     # ------------------------------------------------------------------
     # 帕鲁战力等级排行（/帕鲁战力榜）：基于图鉴种族值的战力，全帕鲁排名，翻页+详细
