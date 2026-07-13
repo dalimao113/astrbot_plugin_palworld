@@ -35,7 +35,7 @@ import astrbot.api.message_components as Comp
 # 这些名字仍以模块全局形式回到本命名空间，下方业务代码引用方式不变。
 # ----------------------------------------------------------------------
 from .constants import *  # noqa: F401,F403  (LOG_PREFIX/ELEM_CN/CARD_WIDTH/RENDER_OPTIONS/SETTINGS_FIELDS 等)
-from .utils.text import _esc, egg_to_cn  # noqa: F401
+from .utils.text import _esc, clean_text, egg_to_cn  # noqa: F401
 from .utils import security as _security
 from .render.templates import (  # noqa: F401
     STYLES,
@@ -60,7 +60,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.9.0",
+    "1.10.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -109,15 +109,21 @@ class PalworldPlugin(Star):
     # ------------------------------------------------------------------
     def _load_state(self) -> dict:
         def fresh() -> dict:   # 每次新建，避免默认 list/dict 被共享引用
+            # tracking_started_at：累计总榜的统计起点。全新/重置 state 从今天起算(此前无累计数据)。
             return {"groups": [], "online": {}, "server_up": None, "fail_count": 0,
-                    "initialized": False, "state_version": 1}
+                    "initialized": False, "state_version": 1,
+                    "tracking_started_at": datetime.now().strftime("%Y-%m-%d")}
         try:
             if self._state_path.exists():
                 d = json.loads(self._state_path.read_text("utf-8"))
                 if isinstance(d, dict):
+                    had_track = "tracking_started_at" in d
                     for k, v in fresh().items():   # 向后兼容：补全旧版本缺失的字段
                         d.setdefault(k, v)
                     d["state_version"] = 1
+                    # 历史 state:totals 是过去累加的,真实起点未知 → 不臆断日期,标 None(展示为"起点未记录")
+                    if not had_track and d.get("totals"):
+                        d["tracking_started_at"] = None
                     return d
         except Exception as e:  # noqa: BLE001
             logger.warning(f"{LOG_PREFIX} 状态文件读取失败，重置(损坏副本已保留供排查): {e}")
@@ -229,14 +235,18 @@ class PalworldPlugin(Star):
             return
         for p in raw:
             idx = str(p.get("pal_index", ""))
-            nm = p.get("pal_name")
+            nm = (p.get("pal_name") or "").strip()   # 去首尾空格(如「黑月女王 」),防精确查询/关联失败
+            p["pal_name"] = nm                         # 归一后写回内存对象,展示一致
             if not idx or not idx[0].isdigit() or not nm or nm == "zh_Hans_Text":
                 continue   # 排除 Boss/人类(-1/-2)与未翻译占位
             ni = self._norm_idx(idx)
             self._pals.append(p)
-            self._pal_by_name[nm] = p
             self._pal_idx[ni] = p
-            self._name_idx[nm] = ni
+            # 同名(如「叶泥泥」本体 vs 花变种)：中文名索引优先指向可收集本体，不被变种后写覆盖
+            existing = self._pal_by_name.get(nm)
+            if existing is None or (p.get("is_collectible", True) and not existing.get("is_collectible", True)):
+                self._pal_by_name[nm] = p
+                self._name_idx[nm] = ni
             dev = str(p.get("pal_dev_name", "")).lower()
             if dev:
                 self._pal_by_dev.setdefault(dev, p)
@@ -264,7 +274,8 @@ class PalworldPlugin(Star):
             logger.warning(f"{LOG_PREFIX} 配种表 data/breeding.json 加载失败: {e}")
         # 物品图鉴数据
         self._items: list = []
-        self._item_by_name: dict = {}
+        self._item_by_name: dict = {}   # 中文名 -> 主体物品(同名优先无品阶/NPC 后缀的本体)
+        self._items_by_name: dict = {}  # 中文名 -> [同名物品...](重名候选,不静默丢弃品阶/NPC 变体)
         self._item_by_id: dict = {}      # item_id -> item(取中文名/图标)
         self._item_id_ci: dict = {}      # 小写id -> 正确id(存档物品id大小写容错，如 bone->Bone)
         try:
@@ -277,7 +288,10 @@ class PalworldPlugin(Star):
                     self._item_id_ci.setdefault(it["item_id"].lower(), it["item_id"])
                 if nm and nm != "zh_Hans_Text":
                     self._items.append(it)
-                    self._item_by_name.setdefault(nm, it)
+                    self._items_by_name.setdefault(nm, []).append(it)
+            # 名称主键:同名不按文件顺序静默取首个,确定性优先"本体"(item_id 无 _2.._9 品阶、无 _NPC 后缀)
+            for nm, group in self._items_by_name.items():
+                self._item_by_name[nm] = min(group, key=self._item_variant_rank)
         except Exception as e:  # noqa: BLE001
             logger.warning(f"{LOG_PREFIX} 物品数据 data/items.json 加载失败: {e}")
         # 设施图鉴数据
@@ -399,13 +413,21 @@ class PalworldPlugin(Star):
                 self._boss_spawns = json.loads(_f.read())
         except Exception:  # noqa: BLE001
             pass
-        # 任务(主线/支线) [{id,name,type,desc,objective,coords,exp,rewards,next,group,order}]（/帕鲁任务）
+        # 任务(主线/支线) [{id,name,type,desc,objective,coords,exp,rewards,next,next_id,group,order}]（/帕鲁任务）
         self._missions: list = []
-        self._mission_by_name: dict = {}
+        self._mission_by_name: dict = {}       # 名 -> 主任务(重名取确定性主体)
+        self._missions_by_name: dict = {}      # 名 -> [同名任务...](重名不静默丢弃,可列候选)
+        self._mission_by_id: dict = {}         # id -> 任务(稳定主键)
         try:
             with open(os.path.join(base, "missions.json"), encoding="utf-8") as _f:
                 self._missions = json.loads(_f.read())
-            self._mission_by_name = {m["name"]: m for m in self._missions}
+            for m in self._missions:
+                self._missions_by_name.setdefault(m["name"], []).append(m)
+                if m.get("id"):
+                    self._mission_by_id[m["id"]] = m
+            # 名称主键:重名不按列表顺序覆盖,确定性优先主线、再非 _Replay、再 order/id
+            for nm, group in self._missions_by_name.items():
+                self._mission_by_name[nm] = min(group, key=self._mission_variant_rank)
         except Exception:  # noqa: BLE001
             pass
         # boss(塔主/突袭) [{name,category,dev,pal,element,location,difficulty,level,hp,drops}]（/帕鲁塔主 /帕鲁突袭）
@@ -582,8 +604,6 @@ class PalworldPlugin(Star):
         return ""
 
     def _pal_card_data(self, p: dict) -> dict:
-        def clean(s):
-            return (s or "").replace("\r\n", " ").replace("\n", " ").strip()
         skills = sorted(p.get("active_skills", []), key=lambda s: s.get("level_learned", 0))
         sk = [{"name": s.get("name", "?"), "power": s.get("power", 0),
                "cd": s.get("cool_down_time", 0), "elem": ELEM_CN.get(s.get("element_type"), "")}
@@ -638,10 +658,10 @@ class PalworldPlugin(Star):
             "icon": self._pal_icon(dev),
             "rarity": min(int(p.get("rarity", 0) or 0), 5), "nocturnal": bool(p.get("nocturnal")),
             "is_boss": bool(p.get("is_boss")), "is_tower_boss": bool(p.get("is_tower_boss")),
-            "desc": clean(p.get("pal_description"))[:120],
+            "desc": clean_text(p.get("pal_description")),   # 详情页：完整,不截断(模板自动换行)
             "partner_title": p.get("partner_skill_title", ""),
             # 伙伴技能描述：游戏 1.0 未提供中文文本，缺时给诚实占位(不用工作适性瞎编，避免误导)
-            "partner_desc": (clean(p.get("partner_skill_description"))[:90]
+            "partner_desc": (clean_text(p.get("partner_skill_description"))
                              or ("该伙伴技能游戏内暂未提供中文详细说明" if p.get("partner_skill_title") else "")),
             "skills": sk, "works": works, "drops": drops, "ranch": ranch,
             "hp": num(st.get("hp")), "atk": num(st.get("melee_attack")), "defense": num(st.get("defense")),
@@ -837,6 +857,13 @@ class PalworldPlugin(Star):
                 "child_name": child["pal_name"], "child_breeds": child_breeds}
         return await self._img(event, self._t("breed"), data)
 
+    @staticmethod
+    def _item_variant_rank(it: dict):
+        """同名物品排序键:本体(无 _2.._9 品阶、无 _NPC 后缀)排前;再按 item_id 短。用于确定性选主体。"""
+        iid = it.get("item_id", "") or ""
+        suffixed = 1 if re.search(r"_(?:[2-9]|NPC)$", iid) else 0
+        return (suffixed, len(iid), iid)
+
     def _find_item(self, q: str):
         q = (q or "").strip()
         if not q:
@@ -869,7 +896,7 @@ class PalworldPlugin(Star):
             sphere = {"cap": capn, "rank": ex.get("rank")}
         return self._img(event, self._t("item"), {
             "name": it["name"], "type": self._item_type_cn(it.get("type")),
-            "description": (it.get("description") or "").replace("\r\n", "\n"),
+            "description": clean_text(it.get("description")),   # 详情:统一清洗,不截断
             "materials": mats, "benches": rec.get("bench", []),
             "price": price, "sphere": sphere,
             "icon": self._item_icon(it.get("item_id"))})
@@ -893,7 +920,10 @@ class PalworldPlugin(Star):
             if not entries:
                 return await self._msg_card(event, "🎒", "该分类暂无物品", desc=f"「{query}」分类下没有物品。", color="#9a8a91")
             return await self._render_grid(event, query, emoji, entries, page, "/帕鲁物品", query)
-        if query in self._item_by_name:              # 精确名 -> 详情
+        iid = self._canon_iid(query)                 # item_id 直查(大小写容错):精确取重名的某品阶/NPC 变体
+        if iid in self._item_by_id:                  # 物品 id 是 ASCII dev 名,与中文名不冲突
+            return await self._item_detail(event, self._item_by_id[iid])
+        if query in self._item_by_name:              # 精确名 -> 详情(同名取本体)
             return await self._item_detail(event, self._item_by_name[query])
         matches = [e for e in self._ordered_items() if query in e["name"]]
         if len(matches) == 1:
@@ -1056,7 +1086,7 @@ class PalworldPlugin(Star):
                                         desc="data/breeding.json 缺失或损坏。", color="#E5484D")
         if not args:
             return await self._msg_card(event, "✏️", "请输入想配出的帕鲁",
-                                        desc="用法：/帕鲁反配种 <帕鲁名>\n例：/帕鲁反配种 空涡龙", color="#E5484D")
+                                        desc="用法：/帕鲁反配种 <帕鲁名>\n例：/帕鲁反配种 铠格力斯", color="#E5484D")
         q, page = self._parse_page_args(args)   # 末位数字=页码
         p = self._find_pal(q)
         if not p:
@@ -1769,7 +1799,7 @@ class PalworldPlugin(Star):
                 with open(os.path.join(base, "worldmap_render.jpg"), "rb") as _f:
                     img = _f.read()
                 self._map_img = "data:image/jpeg;base64," + base64.b64encode(img).decode("ascii")
-            # 世界树(Sunreach)独立地图 + 变换(栖息地/boss 在世界树区域时用；缺失则回退主图)
+            # 世界树独立地图 + 变换(栖息地/boss 在世界树区域时用；缺失则回退主图)
             self._tree_map_img = None
             self._tree_mu = self._tree_mv = None
             tree_hd = os.path.join(base, "treemap_hd.jpg")
@@ -1792,6 +1822,27 @@ class PalworldPlugin(Star):
         top = (mv[0] * wx + mv[1] * wy + mv[2]) * 100.0
         return left, top, wx, wy
 
+    # 地图注册表:map_id -> (中文名, 图片属性名, 变换属性 mu, 变换属性 mv)。
+    # 主大陆与世界树是**独立坐标系**,按各自仿射把世界坐标归属到所属地图,不 clamp。
+    _MAP_REGISTRY = (
+        ("main", "主大陆", "_map_img", "_map_mu", "_map_mv"),
+        ("tree", "世界树", "_tree_map_img", "_tree_mu", "_tree_mv"),
+    )
+
+    def _classify_map(self, wx: float, wy: float):
+        """按各地图仿射变换判断世界坐标属于哪张地图。返回 (map_id, left%, top%)。
+        都不落在任何已知地图内 -> ('unknown', None, None)。**归类前不 clamp**,越界不压边缘。"""
+        lo, hi = -3.0, 103.0   # 允许边缘少量溢出(玩家贴边)
+        for mid, _label, _img, mu_attr, mv_attr in self._MAP_REGISTRY:
+            mu, mv = getattr(self, mu_attr, None), getattr(self, mv_attr, None)
+            if not mu or not mv:
+                continue
+            left = (mu[0] * wx + mu[1] * wy + mu[2]) * 100.0
+            top = (mv[0] * wx + mv[1] * wy + mv[2]) * 100.0
+            if lo <= left <= hi and lo <= top <= hi:
+                return mid, left, top
+        return "unknown", None, None
+
     def _nearest_region(self, wx: float, wy: float) -> str:
         best, bd = "未知区域", None
         for name, rx, ry in self._map_regions:
@@ -1808,24 +1859,41 @@ class PalworldPlugin(Star):
         if not ok:
             return await self._query_fail_card(event, status)
         raw = (data or {}).get("players", []) if isinstance(data, dict) else []
-        players = []
+        groups: dict = {}     # map_id -> [player...]
+        offmap: list = []     # 无法归类的玩家(不压到主图边缘,单列显示)
+        total = 0
         for i, p in enumerate(raw, 1):
             try:
                 wx = float(p.get("location_x")); wy = float(p.get("location_y"))
             except (TypeError, ValueError):
                 continue
-            left, top, px, py = self._world_to_mappct(wx, wy)
+            total += 1
+            mid, left, top = self._classify_map(wx, wy)   # 不 clamp
             gx = round((wy - 158000) / 459)   # 世界坐标 -> 游戏内地图坐标(与游戏地图一致)
             gy = round((wx + 123888) / 459)
-            players.append({"no": i, "name": p.get("name") or "玩家", "level": p.get("level", "?"),
-                            "region": self._nearest_region(px, py), "coord": f"{gx}, {gy}",
-                            "left": round(max(0, min(100, left)), 2), "top": round(max(0, min(100, top)), 2)})
-        if not players:
+            region = (self._nearest_region(wx, wy) if mid == "main"
+                      else ("世界树" if mid == "tree" else "区域待确认"))
+            pd = {"no": i, "name": p.get("name") or "玩家", "level": p.get("level", "?"),
+                  "region": region, "coord": f"{gx}, {gy}",
+                  "left": round(left, 2) if left is not None else None,
+                  "top": round(top, 2) if top is not None else None}
+            if mid == "unknown":
+                offmap.append(pd)
+            else:
+                groups.setdefault(mid, []).append(pd)
+        if not total:
             return await self._msg_card(event, "🗺️", "当前无人在线",
                                         desc="服务器现在没有在线玩家，地图上没有可标注的位置。", color="#9a8a91")
-        sub = f"{len(players)} 人在线 · {datetime.now().strftime('%H:%M')}"
+        # 按注册表顺序组装每张有玩家的地图面板
+        maps = []
+        for mid, label, img_attr, _mu, _mv in self._MAP_REGISTRY:
+            ps = groups.get(mid)
+            img = getattr(self, img_attr, None)
+            if ps and img:
+                maps.append({"map_id": mid, "label": label, "mapimg": img, "players": ps})
+        sub = f"{total} 人在线 · {datetime.now().strftime('%H:%M')}"
         return await self._img(event, self._t("map"),
-                               {"subtitle": sub, "mapimg": self._map_img, "players": players},
+                               {"subtitle": sub, "maps": maps, "offmap": offmap},
                                width=MAP_WIDTH, dsf=1.6)
 
     # ------------------------------------------------------------------
@@ -1901,7 +1969,7 @@ class PalworldPlugin(Star):
         return {"name": p["pal_name"], "index": p.get("pal_index", "?"),
                 "icon": self._pal_icon(dev), "elements": els, "color": color,
                 "mapimg": (self._tree_map_img if use_tree else self._map_img),
-                "map_label": ("世界树 · Sunreach" if use_tree else ""),
+                "map_label": ("世界树" if use_tree else ""),
                 "points": points, "regions": regions,
                 "nocturnal": bool(p.get("nocturnal")), "count": len(pts),
                 "has_day": bool(day), "has_night": bool(night),
@@ -2073,12 +2141,23 @@ class PalworldPlugin(Star):
     # ------------------------------------------------------------------
     # 任务（/帕鲁任务 /帕鲁主线 /帕鲁支线）
     # ------------------------------------------------------------------
+    @staticmethod
+    def _mission_variant_rank(m: dict):
+        """同名任务排序键:主线优先、非 _Replay 优先、再按 order/id。用于确定性选主体。"""
+        mid = m.get("id", "") or ""
+        return (m.get("type") != "主线", mid.endswith("_Replay"),
+                str(m.get("order") or 9999), mid)
+
     def _find_mission(self, q: str):
+        """按 id / 名 精确定位单个任务;重名(需候选消歧)返回 None。"""
         q = (q or "").strip()
         if not q:
             return None
-        if q in self._mission_by_name:
-            return self._mission_by_name[q]
+        if q in self._mission_by_id:                 # id 主键直查(ASCII dev 名,与中文名不冲突)
+            return self._mission_by_id[q]
+        group = self._missions_by_name.get(q)
+        if group:
+            return group[0] if len(group) == 1 else None   # 重名 -> None,交由候选列表
         hits = [m for m in self._missions if q in m["name"]]
         return hits[0] if len(hits) == 1 else None
 
@@ -2116,11 +2195,15 @@ class PalworldPlugin(Star):
         if not hits:
             return await self._msg_card(event, "🔍", "查无此任务",
                                         desc=f"没有名字含「{q}」的任务。\n发「/帕鲁主线」或「/帕鲁支线」看任务列表。", color="#F5A623")
+        # 重名(同名多条)时用 id 消歧:brief 带 id,提示按 id 精确查,避免其中一条被永久遮蔽
+        ambiguous = len(self._missions_by_name.get(q, [])) > 1
         rows = [{"tag": (str(x["order"]) if x["type"] == "主线" else "支"), "name": x["name"],
-                 "brief": x.get("objective") or (f"经验+{x['exp']}" if x.get("exp") else "")} for x in hits[:30]]
+                 "brief": ((x.get("objective") or (f"经验+{x['exp']}" if x.get("exp") else ""))
+                           + (f" · id:{x['id']}" if ambiguous else ""))} for x in hits[:30]]
+        hint = f"/帕鲁任务 {hits[0]['id']}" if ambiguous else f"/帕鲁任务 {hits[0]['name']}"
         return await self._img(event, self._t("missionlist"),
                                {"title": f"📜 含「{q}」的任务", "subtitle": f"{len(hits)} 个",
-                                "rows": rows, "detailhint": f"/帕鲁任务 {hits[0]['name']}", "pagehint": ""})
+                                "rows": rows, "detailhint": hint, "pagehint": ""})
 
     async def _cmd_mainquest(self, event: AstrMessageEvent, args: list):
         if not self._missions:
@@ -2156,13 +2239,21 @@ class PalworldPlugin(Star):
                 groups = "、".join(v for v in MISSION_GROUP_CN.values() if v != "其它委托")
                 return await self._msg_card(event, "🔍", "没有匹配的支线",
                                             desc=f"可按 NPC 分组查：{groups}\n例：/帕鲁支线 佐伊", color="#F5A623")
+        page = max(1, int(args[-1])) if args and args[-1].isdigit() else 1
+        size = 20
+        total_pages = max(1, (len(subs) + size - 1) // size)
+        page = min(page, total_pages)
+        chunk = subs[(page - 1) * size: page * size]
         rows = [{"tag": MISSION_GROUP_CN.get(m.get("group", ""), "委托")[:2], "name": m["name"],
-                 "brief": (m.get("desc", "")[:22] or m.get("objective", ""))} for m in subs[:30]]
-        sub = f"共 {len(subs)} 个" + (f" · {q}" if q else " · 8 类 NPC 委托")
+                 "brief": (m.get("desc", "")[:22] or m.get("objective", ""))} for m in chunk]
+        sub = f"共 {len(subs)} 个 · 第 {page}/{total_pages} 页" + (f" · {q}" if q else " · 8 类 NPC 委托")
+        nextpage = f"/帕鲁支线 {q + ' ' if q else ''}{page + 1}"
+        pagehint = (f"发「{nextpage}」看下一页" if page < total_pages
+                    else ("可加 NPC 名筛选，如 /帕鲁支线 农民" if not q else ""))
         return await self._img(event, self._t("missionlist"),
                                {"title": "📋 支线任务", "subtitle": sub, "rows": rows,
-                                "detailhint": f"/帕鲁任务 {subs[0]['name']}" if subs else "/帕鲁任务 <名>",
-                                "pagehint": "可加 NPC 名筛选，如 /帕鲁支线 农民" if not q else ""})
+                                "detailhint": f"/帕鲁任务 {chunk[0]['name']}" if chunk else "/帕鲁任务 <名>",
+                                "pagehint": pagehint})
 
     # ------------------------------------------------------------------
     # Boss（/帕鲁塔主 /帕鲁突袭 /帕鲁boss <名>）
@@ -3263,8 +3354,29 @@ class PalworldPlugin(Star):
         return await self._img(event, self._t("heatmap"),
                                {"rows": rows, "sub": sub, "hint": hint})
 
-    async def _cmd_rank(self, event: AstrMessageEvent):
-        raw = self._rank_list(10)
+    # 肝帝榜口径关键词 -> scope(本周为默认)
+    _RANK_SCOPES = {
+        "今日": "today", "日榜": "today", "今天": "today", "today": "today", "day": "today",
+        "总": "total", "总榜": "total", "累计": "total", "累积": "total", "历史": "total",
+        "总排行": "total", "total": "total", "all": "total",
+        "本周": "week", "周榜": "week", "本周榜": "week", "week": "week",
+    }
+
+    def _rank_scope(self, args: list[str]):
+        """解析排行口径。返回 (scope, rank_title, rank_sub);week 用模板默认标题(返回 None)。"""
+        key = args[0].strip().lower() if args else ""   # 中文不受 lower 影响,英文归一化
+        scope = self._RANK_SCOPES.get(key, "week")
+        if scope == "today":
+            return "today", "🏆 今日肝帝榜", "今日在线时长排行 · 看今天谁最肝～"
+        if scope == "total":
+            start = self.state.get("tracking_started_at")
+            since = f"自 {start} 起" if start else "自插件开始统计起（起点未记录）"
+            return "total", "🏆 累计肝帝榜", f"{since}累计在线时长排行 · 历史总肝王～"
+        return "week", None, None   # None -> 模板默认(本周)
+
+    async def _cmd_rank(self, event: AstrMessageEvent, args: list[str]):
+        scope, title, sub = self._rank_scope(args)
+        raw = self._rank_list(10, scope)
         maxsec = raw[0]["sec"] if raw else 1
         medals = {1: "🥇", 2: "🥈", 3: "🥉"}
         rows = []
@@ -3275,7 +3387,10 @@ class PalworldPlugin(Star):
                 "pct": round(r["sec"] / maxsec * 100) if maxsec else 0,
                 "medal": medals.get(i, str(i)),
             })
-        return await self._img(event, self._t("rank"), {"rows": rows})
+        data = {"rows": rows}
+        if title:   # week 用模板默认标题
+            data["rank_title"], data["rank_sub"] = title, sub
+        return await self._img(event, self._t("rank"), data)
 
     async def _cmd_dex_rank(self, event: AstrMessageEvent):
         """图鉴收集榜：全服玩家按拥有的不同帕鲁种类数排行(复用 rank 模板)。"""
@@ -4267,6 +4382,14 @@ class PalworldPlugin(Star):
                                {"name": f"{gname} · 公会终端", "total": total, "page": page, "pages": pages,
                                 "cells": cells, "pager": pager, "tgt": ""})
 
+    @staticmethod
+    def _guild_display_name(g: dict, leader: str) -> str:
+        """公会展示名:玩家自定义了公会名就用真名,否则(游戏默认 Unnamed Guild/空)用「队长」的公会。"""
+        gn = (g.get("guild_name") or "").strip()
+        if gn and gn.lower() != "unnamed guild":
+            return gn
+        return f"「{leader}」的公会"
+
     async def _cmd_guild(self, event: AstrMessageEvent, args: list[str]):
         self._last_save_use = time.time()
         guilds = await self._fetch_guilds(max_age=self._fresh_ttl())
@@ -4318,7 +4441,7 @@ class PalworldPlugin(Star):
             nxt = page + 1 if page < pages else 1
             pager = f"发「/帕鲁公会{tgt_part} {nxt}」翻到第 {nxt} 页（共 {pages} 页）"
         return await self._img(event, self._t("guild"),
-                               {"gname": f"「{leader}」的公会", "leader": leader, "total": total,
+                               {"gname": _esc(self._guild_display_name(g, leader)), "leader": leader, "total": total,
                                 "rank": rank, "members": view,
                                 "page": page, "pages": pages, "pager": pager})
 
@@ -5348,6 +5471,18 @@ class PalworldPlugin(Star):
             else:
                 add("⚠️", "存档解析", "库就绪但暂未解析出数据",
                     "可能空档或刚失败进了负缓存；有人上线存档后重发 /帕鲁我 再看。")
+            # 公会解析(1.0 base_camp 新格式)诊断
+            if prof and prof.get("profiles"):
+                gs = prof.get("guilds") or []
+                if gs:
+                    tot = sum(len(x.get("members", [])) for x in gs)
+                    named = sum(1 for x in gs if (x.get("guild_name") or "").strip()
+                                and x["guild_name"].strip().lower() != "unnamed guild")
+                    add("✅", "公会解析", f"{len(gs)} 个公会 · {tot} 名成员"
+                        + (f" · {named} 个自定义名" if named else " · 均游戏默认名"))
+                else:
+                    add("⚠️", "公会解析", "未解析到公会",
+                        "存档里可能确实没有公会；若游戏内有公会却读不到，可能 1.0 格式又变，请反馈。")
 
         # 7) 渲染是否可用(能出图)
         try:
@@ -5783,16 +5918,22 @@ class PalworldPlugin(Star):
         hb[0] += c
         hb[1] += 1
 
-    def _rank_list(self, top: int = 10) -> list[dict]:
-        """本周在线时长排行(肝帝榜)。"""
+    def _rank_list(self, top: int = 10, scope: str = "week") -> list[dict]:
+        """在线时长排行(肝帝榜)。scope: week 本周 / today 今日 / total 累计总榜。"""
         wk = self._week_id()
+        today = datetime.now().strftime("%Y-%m-%d")
         online = set(self.state.get("online", {}))
         rows = []
         for uid, t in self.state.get("totals", {}).items():
-            wsec = t.get("week", 0) if t.get("week_id") == wk else 0
-            if wsec <= 0:
+            if scope == "total":
+                sec = t.get("total", 0)
+            elif scope == "today":
+                sec = t.get("day", 0) if t.get("day_id") == today else 0
+            else:
+                sec = t.get("week", 0) if t.get("week_id") == wk else 0
+            if sec <= 0:
                 continue
-            rows.append({"name": t.get("name", "玩家"), "sec": int(wsec), "online": uid in online})
+            rows.append({"name": t.get("name", "玩家"), "sec": int(sec), "online": uid in online})
         rows.sort(key=lambda x: x["sec"], reverse=True)
         return rows[:top]
 

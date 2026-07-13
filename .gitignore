@@ -30,6 +30,7 @@ state.json
 data/*.json.bak
 data/*.json.bak[0-9]
 data/*.json.bak_*
+data/*.old.json
 
 # 本地踩坑记录(不上传) / 临时存档副本 / 防玩家存档误提交
 *.local.md

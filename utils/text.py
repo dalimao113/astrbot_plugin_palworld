@@ -3,6 +3,52 @@
 from __future__ import annotations
 
 import html as _html
+import re as _re
+import unicodedata as _ud
+
+# 零宽/BOM 字符(U+200B/C/D、U+2060、U+FEFF)
+_ZERO_WIDTH = dict.fromkeys(map(ord, "​‌‍⁠﻿"), None)
+# UE 本地化语义引用 <itemName id=|X|/>(也兼容 <ItemName id="X"/> 等写法)
+_ITEMNAME = _re.compile(r"<\s*itemName\s+id=[|\"']?([^|\"'>]+)[|\"']?\s*/?>", _re.I)
+# UE RichText 纯样式标签 <xxx ...> / </...>(itemName 先解析,这里只清剩余样式标签)
+_UE_TAG = _re.compile(r"</?[a-zA-Z][^<>]*?>")
+# 占位/缺失文本(视为空):zh-hans text / zh_Hans_Text / None 等
+_PLACEHOLDER = {"zh-hans text", "zh_hans_text", "none", "null", ""}
+
+
+def is_missing_text(s) -> bool:
+    """判断是否为缺失/占位文本(zh-hans text / None / 空)。"""
+    return (str(s).strip().lower() if s is not None else "") in _PLACEHOLDER
+
+
+def clean_text(s, resolve=None) -> str:
+    """统一清洗游戏数据里的用户可见文本(替代各 handler 各自 replace)。
+
+    - `<itemName id=|X|/>` 等语义引用 -> `resolve(X)`(可选,如 item_id->中文名);解析不到则去除,不显示原始标签。
+    - 去 UE RichText 纯样式标签(保留其中文字)。
+    - 统一 CRLF/CR -> LF;去零宽字符与控制字符(保留换行)。
+    - 占位值("zh-hans text"/"None" 等)视为空,返回 ""。
+    - **不删除 Emoji**(Emoji 是 So 类,非控制字符);本函数只用于游戏数据文本,不处理玩家昵称/公告/聊天。
+    """
+    if s is None:
+        return ""
+    s = str(s)
+
+    def _resolve_itemname(m):
+        rid = m.group(1)
+        if resolve:
+            v = resolve(rid)
+            if v:
+                return str(v)
+        return ""
+
+    s = _ITEMNAME.sub(_resolve_itemname, s)
+    s = _UE_TAG.sub("", s)
+    s = s.replace("\r\n", "\n").replace("\r", "\n").translate(_ZERO_WIDTH)
+    s = "".join(ch for ch in s if ch == "\n" or _ud.category(ch)[0] != "C")
+    if is_missing_text(s):
+        return ""
+    return s.strip()
 
 
 # 帕鲁蛋名翻译（尺寸前缀 + 属性类型，覆盖所有组合）

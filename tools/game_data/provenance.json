@@ -1,0 +1,23 @@
+{
+  "collected_at": "2026-07-13T06:05:01.251546+00:00",
+  "steam_build_id": "24088465",
+  "app_id": "2394010",
+  "egame": "GAME_UE5_1",
+  "aes_zero_key": true,
+  "dotnet_version": "10.0.301",
+  "pak_dir": "/opt/palworld-khd/extract",
+  "usmap": {
+    "path": "/opt/palworld-khd/Mappings_10.usmap",
+    "exists": true,
+    "size": 2321933,
+    "mtime": "2026-07-10T07:08:01.563611+00:00",
+    "sha256": "94471f1df4e1775ebf19f18b331bcfa24dfa3d001eb7a5dc971c59b8f26f79b9"
+  },
+  "pak": {
+    "path": "/opt/palworld-khd/extract/Pal-Windows.pak",
+    "exists": true,
+    "size": 40534497563,
+    "mtime": "2026-07-10T03:27:25.885376+00:00"
+  },
+  "exporter_present": true
+}

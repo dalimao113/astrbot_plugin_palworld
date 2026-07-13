@@ -354,8 +354,71 @@ def _parse_guild_bytes(b):
             admin = _guid_hex(b[start - 16:start]) if start >= 16 else ''
             return {'members': members, 'admin_uid': admin}
     return None
+import re as _re
+def _read_fstring_at(b, p):
+    """在 p 处尝试读一个 UE fstring(utf-8 正长度 / utf-16 负长度,含末尾 \\0)。
+    返回 (str, end) 或 (None, None)。用于扫描 1.0 公会尾部的玩家名/公会名。"""
+    try:
+        n = _struct.unpack_from('<i', b, p)[0]
+    except _struct.error:
+        return None, None
+    if 1 <= n <= 512 and p + 4 + n <= len(b) and b[p + 4 + n - 1] == 0:
+        try:
+            s = b[p + 4:p + 4 + n - 1].decode('utf-8')
+            if s.isprintable():
+                return s, p + 4 + n
+        except UnicodeDecodeError:
+            pass
+    if -512 <= n <= -1 and p + 4 - n * 2 <= len(b):
+        try:
+            s = b[p + 4:p + 4 - n * 2 - 2].decode('utf-16-le')
+            if s.isprintable():
+                return s, p + 4 - n * 2
+        except UnicodeDecodeError:
+            pass
+    return None, None
+
+def _parse_guild_1_0(b):
+    """1.0 公会 RawData 解析。1.0 改了 base_camp 段字节格式(官方 0.24.0 的 group.decode_bytes
+    在 base_camp_points 处崩)。策略:头部解析到 base_camp_level(此段未变),之后扫描字符串——
+    玩家记录仍是 PlayerUId(16:4非0+12零) + last_online(i64) + name(fstring),结构未变;
+    第一个不带 uid 前缀的字符串即 guild_name(会长=group_name 字段=owner PlayerUId)。
+    -> {guild_name, members:[{name,uid,last_online}], admin_uid} 或 None。已用真实 1.0 存档验证。"""
+    try:
+        o = 16
+        gname, o = _gstr(b, o)                        # group_name = 会长 PlayerUId hex
+        h = _struct.unpack_from('<i', b, o)[0]; o += 4
+        if not (0 <= h <= 200000):
+            return None
+        o += h * 32 + 1                               # individual_character_handle_ids + org_type
+        bn = _struct.unpack_from('<i', b, o)[0]; o += 4
+        if not (0 <= bn <= 100000):
+            return None
+        o += bn * 16 + 4                              # base_ids + base_camp_level(i32)
+    except (_struct.error, IndexError):
+        return None
+    members, guild_name = [], ''
+    p = o
+    while p < len(b) - 4:
+        s, end = _read_fstring_at(b, p)
+        if s is None:
+            p += 1
+            continue
+        u = p - 24                                    # 玩家记录:name 前 24 字节 = uid16 + last_online8
+        if u >= o and b[u + 4:u + 16] == b'\x00' * 12:
+            members.append({'name': s, 'uid': _guid_hex(b[u:u + 16]),
+                            'last_online': _struct.unpack_from('<q', b, u + 16)[0]})
+        elif not guild_name:
+            guild_name = s                            # 首个非玩家字符串 = 公会名
+        p = end
+    if not members:
+        return None
+    admin = gname.upper() if _re.fullmatch(r'[0-9a-fA-F]{32}', gname or '') else ''
+    return {'guild_name': guild_name, 'members': members, 'admin_uid': admin}
+
 def extract_guilds(save_dir):
-    """解析 Level.sav -> [{members:[{name,uid,last_online}], admin_uid}]，按成员数降序。"""
+    """解析 Level.sav -> [{guild_name, members:[{name,uid,last_online}], admin_uid}]，按成员数降序。
+    优先 1.0 新格式解析(已验证);失败回退旧字节解析(仍无 guild_name 则留空)。"""
     j = load_sav(_os.path.join(save_dir, 'Level.sav'), full=False)
     gm = j['properties']['worldSaveData']['value'].get('GroupSaveDataMap', {}).get('value', [])
     guilds = []
@@ -368,11 +431,17 @@ def extract_guilds(save_dir):
         if not vals:
             continue
         b = bytes(x & 0xff for x in vals)
+        g = None
         try:
-            g = _parse_guild_bytes(b)
+            g = _parse_guild_1_0(b)                   # 1.0 新格式优先
+            if not g:
+                g = _parse_guild_bytes(b)             # 旧格式回退
+                if g:
+                    g.setdefault('guild_name', '')
         except Exception:
             g = None
         if g:
+            g.setdefault('guild_name', '')
             guilds.append(g)
     guilds.sort(key=lambda x: len(x['members']), reverse=True)
     return guilds

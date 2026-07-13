@@ -53,7 +53,7 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("资产榜", "_cmd_wealth", ("身价榜", "财富榜", "土豪榜", "wealth"), cooldown=True, description="资产排行", category="rank"),
     CommandSpec("公会战力", "_cmd_guild_power", ("公会战力榜", "工会战力", "公会榜战力", "guildpower"), cooldown=True, description="公会战力榜", category="rank"),
     CommandSpec("更新公告", "_cmd_patchnotes", ("更新内容", "更新日志", "补丁说明", "patchnotes", "更新资讯"), cooldown=True, description="服务器更新公告", category="server"),
-    CommandSpec("排行", "_cmd_rank", ("肝帝榜", "榜", "排行榜", "rank"), cooldown=True, description="肝帝榜", category="rank"),
+    CommandSpec("排行", "_cmd_rank", ("肝帝榜", "榜", "排行榜", "rank"), cooldown=True, pass_args=True, description="肝帝榜(本周/今日/总榜)", category="rank"),
     CommandSpec("帮助", "_cmd_help", ("help", "菜单"), description="帮助菜单", category="misc"),
 
     # ---------------- 图鉴 / 配种 ----------------

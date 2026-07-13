@@ -211,7 +211,7 @@ HELP_TMPL = _HEAD + """
     <div class="cmd"><div class="c"><b>/帕鲁资产榜</b></div><div class="d">全服帕鲁身价排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁公会战力</b></div><div class="d">各公会战力总和排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁更新公告</b></div><div class="d">官方最新更新公告(中文)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁肝帝榜</b></div><div class="d">本周在线时长排行</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁肝帝榜</b> <span style="opacity:.7">[今日/总榜]</span></div><div class="d">在线时长排行(默认本周,可加 今日/总榜)</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁图鉴</b> [名/字]</div><div class="d">详情或模糊列表·空=全部·翻页</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁编号</b> 13B</div><div class="d">按图鉴编号查(支持变种)</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁配种</b> 亲A 亲B</div><div class="d">查后代 + 子代继续配</div></div>
@@ -1766,13 +1766,22 @@ HABITAT_ING = _IH + """</style></head><body><div class="page">
 # ---- ingame 版玩家分布地图。变量契约与 MAP_TMPL 一致 ----
 MAP_ING = _IH + """</style></head><body><div class="page">
   <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">在线玩家分布</div><div class="ig-sub">{{ subtitle }}</div></div></div>
+  {% for m in maps %}
+  {% if maps|length > 1 %}<div class="ig-sec" style="margin:{% if not loop.first %}16px{% else %}2px{% endif %} 0 8px">{{ m.label }} · {{ m.players|length }} 人</div>{% endif %}
   <div style="position:relative;width:100%;border:1px solid var(--pal-line);border-radius:3px;overflow:hidden">
-    <img src="{{ mapimg }}" style="display:block;width:100%">
-    {% for p in players %}<div style="position:absolute;left:{{ p.left }}%;top:{{ p.top }}%;transform:translate(-50%,-100%);width:16px;height:21px;z-index:5"><div style="position:absolute;top:0;left:0;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 55% 40%,#ff9a9a,#d12f2f);border:1.5px solid #fff"></div><div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:3.5px solid transparent;border-right:3.5px solid transparent;border-top:6px solid #d12f2f"></div><div style="position:absolute;top:0;left:0;width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800">{{ p.no }}</div></div>{% endfor %}
+    <img src="{{ m.mapimg }}" style="display:block;width:100%">
+    {% for p in m.players %}<div style="position:absolute;left:{{ p.left }}%;top:{{ p.top }}%;transform:translate(-50%,-100%);width:16px;height:21px;z-index:5"><div style="position:absolute;top:0;left:0;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 55% 40%,#ff9a9a,#d12f2f);border:1.5px solid #fff"></div><div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:3.5px solid transparent;border-right:3.5px solid transparent;border-top:6px solid #d12f2f"></div><div style="position:absolute;top:0;left:0;width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800">{{ p.no }}</div></div>{% endfor %}
   </div>
   <div class="ig-panel" style="margin-top:12px">
-    {% for p in players %}<div class="ig-prow"><span style="width:24px;height:24px;flex:none;border-radius:50%;background:var(--pal-gold);color:#0e1015;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ p.no }}</span><span class="pnm">{{ p.name }}</span><span class="ig-pill">Lv.{{ p.level }}</span><span style="margin-left:auto;text-align:right"><span style="font-size:13px;color:var(--pal-text-2)">{{ p.region }}</span><span style="display:block;font-size:11px;color:var(--pal-dim)">坐标 {{ p.coord }}</span></span></div>{% endfor %}
+    {% for p in m.players %}<div class="ig-prow"><span style="width:24px;height:24px;flex:none;border-radius:50%;background:var(--pal-gold);color:#0e1015;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ p.no }}</span><span class="pnm">{{ p.name }}</span><span class="ig-pill">Lv.{{ p.level }}</span><span style="margin-left:auto;text-align:right"><span style="font-size:13px;color:var(--pal-text-2)">{{ p.region }}</span><span style="display:block;font-size:11px;color:var(--pal-dim)">坐标 {{ p.coord }}</span></span></div>{% endfor %}
   </div>
+  {% endfor %}
+  {% if offmap %}
+  <div class="ig-panel" style="margin-top:12px">
+    <div class="ig-sec" style="margin-bottom:6px">位置待确认 · 不在已知地图范围</div>
+    {% for p in offmap %}<div class="ig-prow"><span style="width:24px;height:24px;flex:none;border-radius:50%;background:var(--pal-panel-hi);color:var(--pal-text-2);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ p.no }}</span><span class="pnm">{{ p.name }}</span><span class="ig-pill">Lv.{{ p.level }}</span><span style="margin-left:auto;font-size:11px;color:var(--pal-dim)">坐标 {{ p.coord }}</span></div>{% endfor %}
+  </div>
+  {% endif %}
   """ + _IF + """
 </div></body></html>"""
 
@@ -2016,7 +2025,7 @@ INHERIT_ING = _IH + """</style></head><body><div class="page">
     {% for c in pool %}<div style="display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid var(--pal-line-soft)"><span class="ig-chip {{ c.color }}" style="flex:none">{{ c.stars }} {{ c.name }}</span>{% if c.effect %}<span style="flex:1;min-width:0;font-size:11.5px;color:var(--pal-sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.effect }}</span>{% else %}<span style="flex:1"></span>{% endif %}<span style="flex:none;font-size:14px;font-weight:800;color:var(--pal-good)">{{ c.p_single }}%</span></div>{% endfor %}
     {% if shared %}<div style="margin-top:12px;font-size:12px;color:var(--pal-gold)">双亲都带「{{ shared|join('、') }}」,词条池中只算一份。</div>{% endif %}
     {% if unknown %}<div style="margin-top:6px;font-size:12px;color:var(--pal-danger)">没认出：{{ unknown|join('、') }}(已忽略,请用游戏内全名)</div>{% endif %}
-    <div style="margin-top:12px;font-size:11.5px;color:var(--pal-dim);line-height:1.65">模型:孩子从父母去重词条池里继承 1/2/3/4 个的概率为 40%/30%/20%/10%;空余格子还可能随机刷出新词条。实际为概率,多孵几窝更稳。</div>
+    <div style="margin-top:12px;font-size:11.5px;color:var(--pal-dim);line-height:1.65">模型:孩子从父母去重词条池里继承 1/2/3/4 个的概率为 40%/30%/20%/10%;空余格子还可能随机刷出新词条。实际为概率,多孵几窝更稳。<br>此 40/30/20/10 为<b>社区实测模型</b>,游戏未公开官方数值,仅供参考。</div>
   </div>
   """ + _IF + """
 </div></body></html>"""
@@ -2109,7 +2118,7 @@ HELP_ING = _IH + """</style></head><body><div class="page">
     <div class="ig-cmd"><div class="c"><b>/帕鲁资产榜</b></div><div class="d">全服帕鲁身价排行</div></div>
     <div class="ig-cmd"><div class="c"><b>/帕鲁公会战力</b></div><div class="d">各公会战力总和排行</div></div>
     <div class="ig-cmd"><div class="c"><b>/帕鲁更新公告</b></div><div class="d">官方最新更新公告(中文)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁肝帝榜</b></div><div class="d">本周在线时长排行</div></div>
+    <div class="ig-cmd"><div class="c"><b>/帕鲁肝帝榜</b> <span style="opacity:.7">[今日/总榜]</span></div><div class="d">在线时长排行(默认本周,可加 今日/总榜)</div></div>
     <div class="ig-cmd"><div class="c"><b>/帕鲁图鉴</b> [名/字]</div><div class="d">详情或模糊列表·空=全部·翻页</div></div>
     <div class="ig-cmd"><div class="c"><b>/帕鲁编号</b> 13B</div><div class="d">按图鉴编号查(支持变种)</div></div>
     <div class="ig-cmd"><div class="c"><b>/帕鲁配种</b> 亲A 亲B</div><div class="d">查后代 + 子代继续配</div></div>
@@ -2330,7 +2339,7 @@ HELP_PIX = _PH + """
     <div class="cmd"><div class="c"><b>/帕鲁资产榜</b></div><div class="d">全服帕鲁身价排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁公会战力</b></div><div class="d">各公会战力总和排行</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁更新公告</b></div><div class="d">官方最新更新公告(中文)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁肝帝榜</b></div><div class="d">本周在线时长排行</div></div>
+    <div class="cmd"><div class="c"><b>/帕鲁肝帝榜</b> <span style="opacity:.7">[今日/总榜]</span></div><div class="d">在线时长排行(默认本周,可加 今日/总榜)</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁图鉴</b> [名/字]</div><div class="d">详情/模糊列表/翻页</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁编号</b> 13B</div><div class="d">按编号查(支持变种)</div></div>
     <div class="cmd"><div class="c"><b>/帕鲁配种</b> 亲A 亲B</div><div class="d">查后代+子代继续配</div></div>
@@ -4065,9 +4074,11 @@ MAP_TMPL = _HEAD + """</style></head><body><div class="page">
     <div class="title">🗺️ 在线玩家分布</div>
     <div class="subtitle">{{ subtitle }}</div>
   </div></div>
+  {% for m in maps %}
+  {% if maps|length > 1 %}<div style="margin:{% if not loop.first %}16px{% else %}2px{% endif %} 0 8px;font-size:15px;font-weight:800;color:#f3d98a">◈ {{ m.label }} <span style="font-size:12.5px;color:#9a93b8;font-weight:600">· {{ m.players|length }} 人</span></div>{% endif %}
   <div style="position:relative;width:100%;border-radius:16px;overflow:hidden;border:1px solid rgba(232,198,106,.3);box-shadow:0 4px 16px rgba(0,0,0,.45)">
-    <img src="{{ mapimg }}" style="display:block;width:100%">
-    {% for p in players %}
+    <img src="{{ m.mapimg }}" style="display:block;width:100%">
+    {% for p in m.players %}
     <div style="position:absolute;left:{{ p.left }}%;top:{{ p.top }}%;transform:translate(-50%,-100%);width:16px;height:21px;z-index:5">
       <div style="position:absolute;top:0;left:0;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 55% 40%,#ff9a9a,#d12f2f);border:1.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.65)"></div>
       <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:3.5px solid transparent;border-right:3.5px solid transparent;border-top:6px solid #d12f2f"></div>
@@ -4076,7 +4087,7 @@ MAP_TMPL = _HEAD + """</style></head><body><div class="page">
     {% endfor %}
   </div>
   <div class="glass" style="margin-top:12px">""" + _GEMS + """
-    {% for p in players %}
+    {% for p in m.players %}
     <div style="display:flex;align-items:center;gap:9px;padding:7px 2px;{% if not loop.last %}border-bottom:1px solid rgba(232,198,106,.12){% endif %}">
       <span style="flex:none;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#f3d98a,#e8c66a);color:#0d0820;font-size:13px;font-weight:800;text-align:center;line-height:24px">{{ p.no }}</span>
       <span style="font-size:15px;font-weight:700;color:#f3ecd2">{{ p.name }}</span>
@@ -4088,6 +4099,20 @@ MAP_TMPL = _HEAD + """</style></head><body><div class="page">
     </div>
     {% endfor %}
   </div>
+  {% endfor %}
+  {% if offmap %}
+  <div class="glass" style="margin-top:12px">
+    <div style="font-size:13.5px;font-weight:800;color:#f3d98a;margin-bottom:4px">◈ 位置待确认 <span style="font-size:11.5px;color:#9a93b8;font-weight:600">· 不在已知地图范围</span></div>
+    {% for p in offmap %}
+    <div style="display:flex;align-items:center;gap:9px;padding:7px 2px;{% if not loop.last %}border-bottom:1px solid rgba(232,198,106,.12){% endif %}">
+      <span style="flex:none;width:24px;height:24px;border-radius:50%;background:#3a3350;color:#c9bfe6;font-size:13px;font-weight:800;text-align:center;line-height:24px">{{ p.no }}</span>
+      <span style="font-size:15px;font-weight:700;color:#f3ecd2">{{ p.name }}</span>
+      <span class="pill soft">Lv.{{ p.level }}</span>
+      <span style="margin-left:auto;font-size:11.5px;color:#9a93b8">坐标 {{ p.coord }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
   """ + _FOOT + """
 </div></body></html>"""
 
@@ -4097,9 +4122,11 @@ MAP_PIX = _PH + """</style></head><body><div class="page">
     <div class="title">▦ 在线玩家分布</div>
     <div class="subtitle">{{ subtitle }}</div>
   </div></div>
+  {% for m in maps %}
+  {% if maps|length > 1 %}<div style="margin:{% if not loop.first %}16px{% else %}2px{% endif %} 0 8px;font-size:15px;font-weight:700;color:#46200a">■ {{ m.label }} <span style="font-size:12.5px;color:#7a6a4a">· {{ m.players|length }} 人</span></div>{% endif %}
   <div style="position:relative;width:100%;border:3px solid #6b4a24;box-shadow:inset 0 0 0 2px rgba(255,247,224,.4)">
-    <img src="{{ mapimg }}" style="display:block;width:100%;image-rendering:auto">
-    {% for p in players %}
+    <img src="{{ m.mapimg }}" style="display:block;width:100%;image-rendering:auto">
+    {% for p in m.players %}
     <div style="position:absolute;left:{{ p.left }}%;top:{{ p.top }}%;transform:translate(-50%,-100%);width:24px;height:29px;z-index:5">
       <div style="position:absolute;top:0;left:0;width:24px;height:21px;background:#d12f2f;border:2px solid #fff7e0"></div>
       <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:8px solid #d12f2f"></div>
@@ -4108,7 +4135,7 @@ MAP_PIX = _PH + """</style></head><body><div class="page">
     {% endfor %}
   </div>
   <div class="frame" style="margin-top:12px">
-    {% for p in players %}
+    {% for p in m.players %}
     <div style="display:flex;align-items:center;gap:9px;padding:6px 2px;{% if not loop.last %}border-bottom:2px solid rgba(107,74,36,.3){% endif %}">
       <span style="flex:none;width:24px;height:24px;background:#6b4a24;color:#fff7e0;font-size:13px;font-weight:700;text-align:center;line-height:24px">{{ p.no }}</span>
       <span style="font-size:15px;font-weight:700;color:#2c1a0a">{{ p.name }}</span>
@@ -4120,6 +4147,20 @@ MAP_PIX = _PH + """</style></head><body><div class="page">
     </div>
     {% endfor %}
   </div>
+  {% endfor %}
+  {% if offmap %}
+  <div class="frame" style="margin-top:12px">
+    <div style="font-size:13.5px;font-weight:700;color:#46200a;margin-bottom:4px">■ 位置待确认 <span style="font-size:11.5px;color:#7a6a4a">· 不在已知地图范围</span></div>
+    {% for p in offmap %}
+    <div style="display:flex;align-items:center;gap:9px;padding:6px 2px;{% if not loop.last %}border-bottom:2px solid rgba(107,74,36,.3){% endif %}">
+      <span style="flex:none;width:24px;height:24px;background:#8a7a5a;color:#fff7e0;font-size:13px;font-weight:700;text-align:center;line-height:24px">{{ p.no }}</span>
+      <span style="font-size:15px;font-weight:700;color:#2c1a0a">{{ p.name }}</span>
+      <span class="pill">Lv.{{ p.level }}</span>
+      <span style="margin-left:auto;font-size:11.5px;color:#7a6a4a">坐标 {{ p.coord }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
   """ + _PF + """
 </div></body></html>"""
 
@@ -4678,7 +4719,7 @@ INHERIT_TMPL = _HEAD + _PCHIP + """
     {% endfor %}
     {% if shared %}<div style="margin-top:12px;font-size:12px;color:#ffd34d">⭐ 双亲都带「{{ shared|join('、') }}」，词条池中只算一份。</div>{% endif %}
     {% if unknown %}<div style="margin-top:6px;font-size:12px;color:#ff9a9a">⚠ 没认出：{{ unknown|join('、') }}（已忽略，请用游戏内全名）</div>{% endif %}
-    <div style="margin-top:12px;font-size:11.5px;color:#9c8fc0;line-height:1.65">📌 模型：孩子从父母「去重词条池」里继承 1/2/3/4 个的概率为 40%/30%/20%/10%；空余格子还可能随机刷出新词条。实际为概率，单次孵化结果随机，多孵几窝更稳。</div>
+    <div style="margin-top:12px;font-size:11.5px;color:#9c8fc0;line-height:1.65">📌 模型：孩子从父母「去重词条池」里继承 1/2/3/4 个的概率为 40%/30%/20%/10%；空余格子还可能随机刷出新词条。实际为概率，单次孵化结果随机，多孵几窝更稳。<br>此 40/30/20/10 为<b style="color:#e8c466">社区实测模型</b>，游戏未公开官方数值，仅供参考。</div>
   </div>
   """ + _FOOT + """
 </div></body></html>"""
@@ -4726,7 +4767,7 @@ INHERIT_PIX = _PH + _PCHIP_PIX + """
     {% endfor %}
     {% if shared %}<div style="margin-top:11px;font-size:12px;color:#8f6a12">★ 双亲都带「{{ shared|join('、') }}」，词条池中只算一份。</div>{% endif %}
     {% if unknown %}<div style="margin-top:6px;font-size:12px;color:#a02b1f">⚠ 没认出：{{ unknown|join('、') }}（已忽略，请用游戏内全名）</div>{% endif %}
-    <div style="margin-top:11px;font-size:11.5px;color:#7a5a2a;line-height:1.65">模型：孩子从父母「去重词条池」继承 1/2/3/4 个的概率为 40%/30%/20%/10%；空格还可能随机刷新词条。结果随机，多孵几窝更稳。</div>
+    <div style="margin-top:11px;font-size:11.5px;color:#7a5a2a;line-height:1.65">模型：孩子从父母「去重词条池」继承 1/2/3/4 个的概率为 40%/30%/20%/10%；空格还可能随机刷新词条。结果随机，多孵几窝更稳。<br>此 40/30/20/10 为<b>社区实测模型</b>，游戏未公开官方数值，仅供参考。</div>
   </div>
   """ + _PF + """
 </div></body></html>"""
