@@ -1856,20 +1856,20 @@ IMPLANT_ING = _IH + """</style></head><body><div class="page">
 
 # ---- ingame 版世界树守护者。变量契约与 WORLDTREE_TMPL 一致 ----
 WORLDTREE_ING = _IH + """</style></head><body><div class="page">
-  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">世界树守护者</div><div class="ig-sub"><span class="ig-pill gold">1.0 最终 Boss</span><span class="ig-pill">世界树·封印之室</span></div></div></div>
-  <div class="ig-panel"><div style="font-size:13.5px;color:var(--pal-sub);line-height:1.75">自古伫立于「世界树」旁的两位守护者,镇守着最深处封印之室。击败它们方能解除屏障、抵达世界树的真相。</div></div>
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">世界树 Boss</div><div class="ig-sub"><span class="ig-pill gold">1.0 世界树</span><span class="ig-pill">守护者 + 最终 Boss</span></div></div></div>
+  <div class="ig-panel"><div style="font-size:13.5px;color:var(--pal-sub);line-height:1.75">世界树深处的守护者(暮尘蛾 / 夜蔓爵,可捕获)镇守通往深渊之路;击败后在最深处迎战最终剧情 Boss「枯星龙」(苏醒,不可捕获)。对应主线「通往深渊之路 → 苏醒」。</div></div>
   {% for b in bosses %}
   <div class="ig-panel hi"><div class="ig-teamcard">
     {% if b.icon %}<div class="tpic"><img src="{{ b.icon }}"></div>{% endif %}
-    <div style="flex:1;min-width:0"><div style="font-size:18px;font-weight:800;color:var(--pal-text)">{{ b.name }} <span style="font-size:12px;color:var(--pal-sub);font-weight:400">#{{ b.index }}</span></div>
-      <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}<span class="ig-pill">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="ig-pill">HP {{ b.hp }}</span>{% endif %}</div>
+    <div style="flex:1;min-width:0"><div style="font-size:18px;font-weight:800;color:var(--pal-text)">{{ b.name }} <span style="font-size:12px;color:var(--pal-sub);font-weight:400">#{{ b.index }}</span> <span class="ig-pill{% if not b.is_final %} gold{% endif %}"{% if b.is_final %} style="color:var(--pal-danger)"{% endif %}>{{ b.role }}</span></div>
+      <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}<span class="ig-pill">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="ig-pill">HP {{ b.hp }}</span>{% endif %}{% if b.story_only %}<span class="ig-pill" style="color:var(--pal-danger)">剧情战·不可捕获</span>{% endif %}</div>
       {% if b.partner %}<div style="font-size:12.5px;color:var(--pal-good);margin-top:2px">伙伴技能：{{ b.partner }}</div>{% endif %}
-      <div style="font-size:12px;color:var(--pal-text-2);margin-top:4px;line-height:1.6"><b style="color:var(--pal-sub)">技能</b> {{ b.skills|join('、') }}</div>
-      <div style="font-size:12px;color:var(--pal-gold);margin-top:3px"><b style="color:var(--pal-sub)">掉落</b> {{ b.drops|join('、') }}</div>
+      {% if b.skills %}<div style="font-size:12px;color:var(--pal-text-2);margin-top:4px;line-height:1.6"><b style="color:var(--pal-sub)">技能</b> {{ b.skills|join('、') }}</div>{% endif %}
+      {% if b.drops %}<div style="font-size:12px;color:var(--pal-gold);margin-top:3px"><b style="color:var(--pal-sub)">掉落</b> {{ b.drops|join('、') }}</div>{% endif %}
     </div>
   </div></div>
   {% endfor %}
-  <div class="ig-panel"><div style="font-size:12.5px;color:var(--pal-sub)">发 /帕鲁图鉴 {{ bosses[0].name }} 看完整属性/工作适性/伙伴技能详情。</div></div>
+  <div class="ig-panel"><div style="font-size:12.5px;color:var(--pal-sub)">发 /帕鲁图鉴 {{ bosses[0].name }} 看完整属性/工作适性/伙伴技能详情;发 /帕鲁栖息地 红菇娘（或 燎火舞伶 / 磐甲龙）可查看世界树独立地图。</div></div>
   """ + _IF + """
 </div></body></html>"""
 
@@ -1926,7 +1926,7 @@ LAB_OVERVIEW_ING = _IH + """</style></head><body><div class="page">
   <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁研究所</div><div class="ig-sub"><span class="ig-pill">共 {{ total }} 项研究</span><span class="ig-pill">9 大工作适性</span></div></div></div>
   <div class="ig-panel"><div style="font-size:13.5px;color:var(--pal-sub);line-height:1.75;margin-bottom:13px">在据点建造「研究所」后,投入材料与帕鲁工时研究各类工作适性的<b style="color:var(--pal-gold)">全局增益</b>(工作速度/据点战力/孵化/远征等),效果对全服帕鲁生效。</div>
     <div class="ig-stiles">
-    {% for c in cats %}<div class="ig-stile"><div style="height:36px;display:flex;align-items:center;justify-content:center">{% if icons.work[c.name] %}<img src="{{ icons.work[c.name] }}" style="width:30px;height:30px;object-fit:contain">{% endif %}</div><div style="font-size:14px;font-weight:800;color:var(--pal-text)">{{ c.name }}</div><div style="font-size:11px;color:var(--pal-sub);margin-top:3px">{{ c.count }} 项 · <span style="color:var(--pal-good)">{{ c.essential }} 必需</span></div></div>{% endfor %}
+    {% for c in cats %}<div class="ig-stile"><div style="height:36px;display:flex;align-items:center;justify-content:center">{% if c.icon %}<img src="{{ c.icon }}" style="width:30px;height:30px;object-fit:contain">{% elif c.emoji %}<span style="font-size:28px">{{ c.emoji }}</span>{% endif %}</div><div style="font-size:14px;font-weight:800;color:var(--pal-text)">{{ c.name }}</div><div style="font-size:11px;color:var(--pal-sub);margin-top:3px">{{ c.count }} 项 · <span style="color:var(--pal-good)">{{ c.essential }} 必需</span></div></div>{% endfor %}
     </div>
     <div style="margin-top:13px;font-size:12.5px;color:var(--pal-dim);line-height:1.7">发 /帕鲁研究所 手工 看某类全部研究;发 /帕鲁研究所 &lt;研究名&gt; 看单项材料/前置。</div>
   </div>
@@ -1936,7 +1936,7 @@ LAB_OVERVIEW_ING = _IH + """</style></head><body><div class="page">
 
 # ---- ingame 版研究所分类列表(单列)。变量契约与 LAB_LIST_TMPL 一致 ----
 LAB_LIST_ING = _IH + """</style></head><body><div class="page">
-  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ category }}</div><div class="ig-sub"><span class="ig-pill">{{ items|length }} 项研究</span></div></div></div>
+  <div class="ig-head">{% if icon %}<div class="ig-node" style="width:44px;height:44px"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ category }}</div><div class="ig-sub"><span class="ig-pill">{{ items|length }} 项研究</span></div></div></div>
   <div class="ig-panel">
     {% for it in items %}<div class="ig-prow"><span class="ig-pill gold" style="min-width:24px;justify-content:center">{{ loop.index }}</span>{% if it.essential %}<span class="ig-pill" style="background:#5cc97a;color:#0e1015">必需</span>{% endif %}<div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:700;color:var(--pal-text)">{{ it.name }}</div>{% if it.effect %}<div style="font-size:12px;color:var(--pal-good);margin-top:2px">{{ it.effect }}</div>{% endif %}</div></div>{% endfor %}
     <div style="margin-top:10px;font-size:12.5px;color:var(--pal-dim)">按编号查:发 /帕鲁研究所 {{ cat_short }}1;或 /帕鲁研究所 &lt;研究名&gt; 查详情。</div>
@@ -1947,7 +1947,7 @@ LAB_LIST_ING = _IH + """</style></head><body><div class="page">
 
 # ---- ingame 版研究所详情。变量契约与 LAB_DETAIL_TMPL 一致 ----
 LAB_DETAIL_ING = _IH + """</style></head><body><div class="page">
-  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ name }}</div><div class="ig-sub"><span class="ig-pill">{{ category }}</span>{% if essential %}<span class="ig-pill" style="background:#5cc97a;color:#0e1015">必需研究</span>{% endif %}{% if work %}<span class="ig-pill">{{ work }} 工时</span>{% endif %}</div></div></div>
+  <div class="ig-head">{% if icon %}<div class="ig-node" style="width:52px;height:52px"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ name }}</div><div class="ig-sub"><span class="ig-pill">{{ category }}</span>{% if essential %}<span class="ig-pill" style="background:#5cc97a;color:#0e1015">必需研究</span>{% endif %}{% if work %}<span class="ig-pill">{{ work }} 工时</span>{% endif %}</div></div></div>
   {% if effect %}<div class="ig-panel"><div class="ig-sec">研究效果</div><div style="font-size:15px;color:var(--pal-good);font-weight:700;background:rgba(139,208,106,.1);border:1px solid rgba(139,208,106,.3);border-radius:3px;padding:11px 14px">{{ effect }}</div></div>{% endif %}
   {% if materials %}<div class="ig-panel hi"><div class="ig-sec">所需材料</div><div style="display:flex;flex-wrap:wrap;gap:7px">{% for m in materials %}<span class="ig-pill">{{ m.name }} <b style="color:var(--pal-gold);margin-left:3px">×{{ m.count }}</b></span>{% endfor %}</div></div>{% endif %}
   {% if prereq %}<div class="ig-panel"><div class="ig-sec">前置研究</div><div style="font-size:14px;color:var(--pal-sub)">需先完成「{{ prereq }}」</div></div>{% endif %}
@@ -3862,7 +3862,7 @@ LAB_OVERVIEW_TMPL = _HEAD + """</style></head><body><div class="page">
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:11px">
       {% for c in cats %}
       <div style="display:flex;flex-direction:column;align-items:center;padding:14px 6px 11px;border-radius:14px;background:rgba(12,8,38,.42);border:1px solid rgba(232,198,106,.2)">
-        <div style="font-size:38px;line-height:1">{{ c.emoji }}</div>
+        {% if c.icon %}<img src="{{ c.icon }}" style="width:40px;height:40px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))">{% else %}<div style="font-size:38px;line-height:1">{{ c.emoji }}</div>{% endif %}
         <div style="margin-top:7px;font-size:15px;font-weight:800;color:#ece3f7">{{ c.name }}</div>
         <div style="margin-top:4px;font-size:12px;color:#b9a9d6">{{ c.count }} 项 · <span style="color:#7cfc9a">{{ c.essential }} 必需</span></div>
       </div>{% endfor %}
@@ -3874,7 +3874,7 @@ LAB_OVERVIEW_TMPL = _HEAD + """</style></head><body><div class="page">
 
 LAB_LIST_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div>
-    <div class="title">{{ emoji }} {{ category }}</div>
+    <div class="title">{% if icon %}<img src="{{ icon }}" style="width:24px;height:24px;object-fit:contain;vertical-align:-4px;margin-right:4px">{% else %}{{ emoji }} {% endif %}{{ category }}</div>
     <div class="subtitle"><span class="pill soft">{{ items|length }} 项研究</span></div>
   </div></div>
   <div class="glass">""" + _GEMS + """
@@ -3896,11 +3896,11 @@ LAB_LIST_TMPL = _HEAD + """</style></head><body><div class="page">
 
 LAB_DETAIL_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div style="display:flex;align-items:center;gap:15px;width:100%">
-    <div style="flex:none;font-size:72px">{{ emoji }}</div>
+    {% if icon %}<img src="{{ icon }}" style="flex:none;width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))">{% else %}<div style="flex:none;font-size:72px">{{ emoji }}</div>{% endif %}
     <div style="flex:1;min-width:0">
       <div class="title">{{ name }}</div>
       <div class="subtitle">
-        <span class="pill soft">{{ emoji }} {{ category }}</span>
+        <span class="pill soft">{% if icon %}<img src="{{ icon }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% else %}{{ emoji }} {% endif %}{{ category }}</span>
         {% if essential %}<span class="pill" style="background:rgba(124,252,154,.22);border-color:rgba(124,252,154,.5)">✔ 必需研究</span>{% endif %}
         {% if work %}<span class="pill soft">⏳ {{ work }} 工时</span>{% endif %}
       </div>
@@ -3927,7 +3927,7 @@ SKILLFRUIT_TMPL = _HEAD + """</style></head><body><div class="page">
     <div style="flex:1;min-width:0">
       <div class="title">{{ fruit_name }}</div>
       <div class="subtitle">
-        <span class="pill" style="background:{{ color }}33;border-color:{{ color }}88">{{ emoji }} {{ element }}属性</span>
+        <span class="pill" style="background:{{ color }}33;border-color:{{ color }}88">{% if icons.element[element] %}<img src="{{ icons.element[element] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% else %}{{ emoji }} {% endif %}{{ element }}属性</span>
         {% if power and power != "0" %}<span class="pill soft">⚔ 威力 {{ power }}</span>{% endif %}
         {% if cooldown %}<span class="pill soft">⏱ 冷却 {{ cooldown }}s</span>{% endif %}
       </div>
@@ -3971,23 +3971,23 @@ IMPLANT_TMPL = _HEAD + """</style></head><body><div class="page">
 # ---------------- 世界树最终boss专题(1.0) ----------------
 WORLDTREE_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div>
-    <div class="title">🌳 世界树守护者</div>
-    <div class="subtitle"><span class="pill" style="background:rgba(124,252,154,.2);border-color:rgba(124,252,154,.45)">1.0 最终 Boss</span><span class="pill soft">世界树·封印之室</span></div>
+    <div class="title">🌳 世界树 Boss</div>
+    <div class="subtitle"><span class="pill" style="background:rgba(124,252,154,.2);border-color:rgba(124,252,154,.45)">1.0 世界树</span><span class="pill soft">守护者 + 最终 Boss</span></div>
   </div></div>
   <div class="glass">""" + _GEMS + """
-    <div style="font-size:13.5px;color:#cfc1ea;line-height:1.75;margin-bottom:6px">自古伫立于「世界树」旁的两位守护者，镇守着最深处封印之室。击败它们方能解除屏障、抵达世界树的真相。</div>
+    <div style="font-size:13.5px;color:#cfc1ea;line-height:1.75;margin-bottom:6px">世界树深处的守护者(暮尘蛾 / 夜蔓爵，可捕获)镇守通往深渊之路；击败它们后，在最深处迎战最终剧情 Boss「枯星龙」(苏醒，剧情战不可捕获)。对应主线「通往深渊之路 → 苏醒」。</div>
     {% for b in bosses %}
-    <div style="display:flex;gap:14px;padding:13px;margin-top:11px;border-radius:15px;background:rgba(12,8,38,.5);border:1px solid rgba(200,140,255,.28)">
+    <div style="display:flex;gap:14px;padding:13px;margin-top:11px;border-radius:15px;background:rgba(12,8,38,.5);border:1px solid {% if b.is_final %}rgba(255,120,120,.4){% else %}rgba(200,140,255,.28){% endif %}">
       {% if b.icon %}<img src="{{ b.icon }}" style="width:88px;height:88px;flex:none;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))">{% else %}<div style="flex:none;font-size:60px">🌳</div>{% endif %}
       <div style="flex:1;min-width:0">
-        <div style="font-size:19px;font-weight:800;color:#e8c466">{{ b.name }} <span style="font-size:13px;color:#9c8fc0;font-weight:400">#{{ b.index }}</span></div>
-        <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="pill soft" style="font-size:12px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}<span class="pill soft" style="font-size:12px">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="pill soft" style="font-size:12px">HP种族值 {{ b.hp }}</span>{% endif %}</div>
+        <div style="font-size:19px;font-weight:800;color:#e8c466">{{ b.name }} <span style="font-size:13px;color:#9c8fc0;font-weight:400">#{{ b.index }}</span> <span class="pill" style="font-size:11px;{% if b.is_final %}background:rgba(255,120,120,.22);border-color:rgba(255,120,120,.5);color:#ffb0b0{% else %}background:rgba(124,252,154,.16);border-color:rgba(124,252,154,.4);color:#9effb6{% endif %}">{{ b.role }}</span></div>
+        <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="pill soft" style="font-size:12px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}<span class="pill soft" style="font-size:12px">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="pill soft" style="font-size:12px">HP种族值 {{ b.hp }}</span>{% endif %}{% if b.story_only %}<span class="pill soft" style="font-size:12px;color:#ffb0b0">剧情战·不可捕获</span>{% endif %}</div>
         {% if b.partner %}<div style="font-size:12.5px;color:#bff7cc;margin-top:2px">🛡 伙伴技能：{{ b.partner }}</div>{% endif %}
-        <div style="font-size:12px;color:#cfc1ea;margin-top:4px;line-height:1.6"><b style="color:#9c8fc0">技能</b> {{ b.skills|join('、') }}</div>
-        <div style="font-size:12px;color:#e8c466;margin-top:3px"><b style="color:#9c8fc0">掉落</b> {{ b.drops|join('、') }}</div>
+        {% if b.skills %}<div style="font-size:12px;color:#cfc1ea;margin-top:4px;line-height:1.6"><b style="color:#9c8fc0">技能</b> {{ b.skills|join('、') }}</div>{% endif %}
+        {% if b.drops %}<div style="font-size:12px;color:#e8c466;margin-top:3px"><b style="color:#9c8fc0">掉落</b> {{ b.drops|join('、') }}</div>{% endif %}
       </div>
     </div>{% endfor %}
-    <div style="margin-top:13px;font-size:13px;color:#9c8fc0">发 <b style="color:#e8c466">/帕鲁图鉴 {{ bosses[0].name }}</b> 看完整属性/工作适性/伙伴技能详情。</div>
+    <div style="margin-top:13px;font-size:13px;color:#9c8fc0">发 <b style="color:#e8c466">/帕鲁图鉴 {{ bosses[0].name }}</b> 看完整属性/工作适性/伙伴技能详情;发 /帕鲁栖息地 红菇娘（或 燎火舞伶 / 磐甲龙）可查看世界树独立地图。</div>
   </div>
   """ + _FOOT + """
 </div></body></html>"""
@@ -5090,7 +5090,7 @@ LAB_OVERVIEW_PIX = _PH + """</style></head><body><div class="page">
     <div class="m3">
       {% for c in cats %}
       <div class="tile" style="display:flex;flex-direction:column;align-items:center;padding:13px 6px 10px">
-        <div style="font-size:34px;line-height:1">{{ c.emoji }}</div>
+        {% if c.icon %}<img src="{{ c.icon }}" style="width:36px;height:36px;object-fit:contain;image-rendering:pixelated">{% else %}<div style="font-size:34px;line-height:1">{{ c.emoji }}</div>{% endif %}
         <div style="margin-top:7px;font-size:15px;color:#46200a">{{ c.name }}</div>
         <div style="margin-top:4px;font-size:12px;color:#7a5a1a">{{ c.count }} 项 · <span class="ink">{{ c.essential }} 必需</span></div>
       </div>{% endfor %}
@@ -5102,7 +5102,7 @@ LAB_OVERVIEW_PIX = _PH + """</style></head><body><div class="page">
 
 LAB_LIST_PIX = _PH + """</style></head><body><div class="page">
   <div class="head"><div>
-    <div class="title">{{ emoji }} {{ category }}</div>
+    <div class="title">{% if icon %}<img src="{{ icon }}" style="width:24px;height:24px;object-fit:contain;vertical-align:-4px;margin-right:4px">{% else %}{{ emoji }} {% endif %}{{ category }}</div>
     <div class="subtitle"><span class="pill">{{ items|length }} 项研究</span></div>
   </div></div>
   <div class="frame">
@@ -5122,11 +5122,11 @@ LAB_LIST_PIX = _PH + """</style></head><body><div class="page">
 
 LAB_DETAIL_PIX = _PH + """</style></head><body><div class="page">
   <div class="head"><div style="display:flex;align-items:center;gap:14px;width:100%">
-    <div style="flex:none;font-size:60px">{{ emoji }}</div>
+    {% if icon %}<img src="{{ icon }}" style="flex:none;width:60px;height:60px;object-fit:contain;image-rendering:pixelated">{% else %}<div style="flex:none;font-size:60px">{{ emoji }}</div>{% endif %}
     <div style="flex:1;min-width:0">
       <div class="title">{{ name }}</div>
       <div class="subtitle">
-        <span class="pill">{{ emoji }} {{ category }}</span>
+        <span class="pill">{% if icon %}<img src="{{ icon }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px;image-rendering:pixelated">{% else %}{{ emoji }} {% endif %}{{ category }}</span>
         {% if essential %}<span class="pill" style="background:#7c8a46;color:#fff3d0">✔ 必需研究</span>{% endif %}
         {% if work %}<span class="pill">⏳ {{ work }} 工时</span>{% endif %}
       </div>
@@ -5151,7 +5151,7 @@ SKILLFRUIT_PIX = _PH + """</style></head><body><div class="page">
     <div style="flex:1;min-width:0">
       <div class="title">{{ fruit_name }}</div>
       <div class="subtitle">
-        <span class="pill">{{ emoji }} {{ element }}属性</span>
+        <span class="pill">{% if icons.element[element] %}<img src="{{ icons.element[element] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px;image-rendering:pixelated">{% else %}{{ emoji }} {% endif %}{{ element }}属性</span>
         {% if power and power != "0" %}<span class="pill">⚔ 威力 {{ power }}</span>{% endif %}
         {% if cooldown %}<span class="pill">⏱ 冷却 {{ cooldown }}s</span>{% endif %}
       </div>
@@ -5191,23 +5191,23 @@ IMPLANT_PIX = _PH + """</style></head><body><div class="page">
 
 WORLDTREE_PIX = _PH + """</style></head><body><div class="page">
   <div class="head"><div>
-    <div class="title">🌳 世界树守护者</div>
-    <div class="subtitle"><span class="pill" style="background:#7c8a46;color:#fff3d0">1.0 最终 Boss</span><span class="pill">世界树·封印之室</span></div>
+    <div class="title">🌳 世界树 Boss</div>
+    <div class="subtitle"><span class="pill" style="background:#7c8a46;color:#fff3d0">1.0 世界树</span><span class="pill">守护者 + 最终 Boss</span></div>
   </div></div>
   <div class="frame">
-    <div style="font-size:13.5px;color:#523f10;line-height:1.75;margin-bottom:6px">自古伫立于「世界树」旁的两位守护者，镇守着最深处封印之室。击败它们方能解除屏障、抵达世界树的真相。</div>
+    <div style="font-size:13.5px;color:#523f10;line-height:1.75;margin-bottom:6px">世界树深处的守护者(暮尘蛾 / 夜蔓爵，可捕获)镇守通往深渊之路;击败后在最深处迎战最终剧情 Boss「枯星龙」(苏醒，不可捕获)。对应主线「通往深渊之路 → 苏醒」。</div>
     {% for b in bosses %}
     <div class="row" style="align-items:flex-start;gap:12px;padding:12px">
       {% if b.icon %}<img src="{{ b.icon }}" style="width:78px;height:78px;flex:none;object-fit:contain;image-rendering:pixelated">{% else %}<div style="flex:none;font-size:52px">🌳</div>{% endif %}
       <div style="flex:1;min-width:0">
-        <div style="font-size:18px;color:#7a3604">{{ b.name }} <span style="font-size:12px;color:#7a5a1a">#{{ b.index }}</span></div>
-        <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="pill" style="font-size:12px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}<span class="pill" style="font-size:12px">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="pill" style="font-size:12px">HP种族值 {{ b.hp }}</span>{% endif %}</div>
+        <div style="font-size:18px;color:#7a3604">{{ b.name }} <span style="font-size:12px;color:#7a5a1a">#{{ b.index }}</span> <span class="pill" style="font-size:11px;{% if b.is_final %}background:#c0392b;color:#fff{% else %}background:#5a7a30;color:#fff3d0{% endif %}">{{ b.role }}</span></div>
+        <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="pill" style="font-size:12px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}<span class="pill" style="font-size:12px">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="pill" style="font-size:12px">HP种族值 {{ b.hp }}</span>{% endif %}{% if b.story_only %}<span class="pill" style="font-size:12px;background:#c0392b;color:#fff">剧情战·不可捕获</span>{% endif %}</div>
         {% if b.partner %}<div style="font-size:12.5px;color:#5a6a26;margin-top:2px">🛡 伙伴技能：{{ b.partner }}</div>{% endif %}
-        <div style="font-size:12px;color:#382207;margin-top:4px;line-height:1.6"><b style="color:#7a5a1a">技能</b> {{ b.skills|join('、') }}</div>
-        <div style="font-size:12px;color:#7a3604;margin-top:3px"><b style="color:#7a5a1a">掉落</b> {{ b.drops|join('、') }}</div>
+        {% if b.skills %}<div style="font-size:12px;color:#382207;margin-top:4px;line-height:1.6"><b style="color:#7a5a1a">技能</b> {{ b.skills|join('、') }}</div>{% endif %}
+        {% if b.drops %}<div style="font-size:12px;color:#7a3604;margin-top:3px"><b style="color:#7a5a1a">掉落</b> {{ b.drops|join('、') }}</div>{% endif %}
       </div>
     </div>{% endfor %}
-    <div style="margin-top:13px;font-size:13px;color:#7a5a1a">发 <b class="gold">/帕鲁图鉴 {{ bosses[0].name }}</b> 看完整属性/工作适性/伙伴技能详情。</div>
+    <div style="margin-top:13px;font-size:13px;color:#7a5a1a">发 <b class="gold">/帕鲁图鉴 {{ bosses[0].name }}</b> 看完整属性/工作适性/伙伴技能详情;发 /帕鲁栖息地 红菇娘（或 燎火舞伶 / 磐甲龙）可查看世界树独立地图。</div>
   </div>
   """ + _PF + """
 </div></body></html>"""

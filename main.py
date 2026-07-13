@@ -1032,11 +1032,21 @@ class PalworldPlugin(Star):
 
     _LAB_CAT_EMOJI = {"手工": "🔨", "点火": "🔥", "浇水": "💧", "播种": "🌱", "发电": "⚡",
                       "砍伐": "🪓", "采矿": "⛏️", "冷却": "❄️", "制药": "💊", "通用": "🔬"}
+    # 研究所分类=工作适性 → 游戏工作图标 snake 键(三主题共享,经 game_icon 解析)
+    _LAB_CAT_WORK = {"手工": "handcraft", "点火": "emit_flame", "浇水": "watering", "播种": "seeding",
+                     "发电": "generate_electricity", "砍伐": "deforest", "采矿": "mining",
+                     "冷却": "cool", "制药": "product_medicine"}
+
+    def _lab_cat_icon(self, cat: str) -> str:
+        """研究所分类的真实游戏工作图标 data URI(三主题共享);无对应/缺失返回空(模板回退 Emoji)。"""
+        snake = self._LAB_CAT_WORK.get(cat)
+        return self._assets.game_icon(f"work.{snake}") if snake else ""
 
     def _lab_detail(self, event, it: dict):
         cat = it.get("category", "通用")
         return self._img(event, self._t("lab_detail"), {
             "name": it["name"], "category": cat, "emoji": self._LAB_CAT_EMOJI.get(cat, "🔬"),
+            "icon": self._lab_cat_icon(cat),
             "effect": it.get("effect", ""), "materials": it.get("materials", []),
             "prereq": it.get("prereq", ""), "work": it.get("work", 0),
             "essential": bool(it.get("essential"))})
@@ -1047,13 +1057,14 @@ class PalworldPlugin(Star):
                                         desc="data/lab_research.json 缺失或损坏。", color="#E5484D")
         query, _page = self._parse_page_args(args)
         if not query:
-            cats = [{"name": c, "emoji": self._LAB_CAT_EMOJI.get(c, "🔬"),
+            cats = [{"name": c, "emoji": self._LAB_CAT_EMOJI.get(c, "🔬"), "icon": self._lab_cat_icon(c),
                      "count": len(v), "essential": sum(1 for x in v if x.get("essential"))}
                     for c, v in self._lab_by_cat.items()]
             return await self._img(event, self._t("lab_overview"), {"cats": cats, "total": len(self._lab)})
         if query in self._lab_by_cat:
             return await self._img(event, self._t("lab_list"),
                                    {"category": query + "研究", "emoji": self._LAB_CAT_EMOJI.get(query, "🔬"),
+                                    "icon": self._lab_cat_icon(query),
                                     "items": self._lab_by_cat[query], "cat_short": query})
         mnum = re.match(r"^(.+?)(\d+)$", query)     # 分类+编号，如「手工1」=手工类第1项
         if mnum and mnum.group(1) in self._lab_by_cat:
@@ -1073,7 +1084,7 @@ class PalworldPlugin(Star):
                                         desc=f"没有名字含「{query}」的研究，也不是分类名"
                                              "(手工/点火/浇水/播种/发电/砍伐/采矿/冷却/制药)。", color="#F5A623")
         return await self._img(event, self._t("lab_list"),
-                               {"category": f"含「{query}」的研究", "emoji": "🔬", "items": matches,
+                               {"category": f"含「{query}」的研究", "emoji": "🔬", "icon": "", "items": matches,
                                 "cat_short": matches[0]["category"] if matches else "手工"})
 
     def _breed_result(self, pa: dict, pb: dict):
@@ -2727,16 +2738,24 @@ class PalworldPlugin(Star):
         return await self._implant_detail(event, self._implants[idx - 1])
 
     async def _cmd_worldtree(self, event: AstrMessageEvent, args: list):
-        """/帕鲁世界树：1.0 世界树最终 boss 专题(暮尘蛾 & 夜蔓爵)。"""
+        """/帕鲁世界树：1.0 世界树 boss 专题。守护者(暮尘蛾/夜蔓爵,可捕获)+ 最终剧情 boss 枯星龙(不可捕获)。
+        对应主线 Main_DefeatWorldTreeMiddleBoss / Main_DefeatWorldTreeDragon(苏醒)。"""
+        # (dev, 角色标签, 是否剧情最终boss)——按遭遇顺序:先守护者,后最终龙
+        plan = [("mothman", "世界树守护者", False),
+                ("flowerprince", "世界树守护者", False),
+                ("worldtreedragon", "最终 Boss · 剧情", True)]
         bosses = []
-        for d in ("mothman", "flowerprince"):     # 按遭遇顺序
+        for d, role, final in plan:
             p = self._pal_by_dev.get(d)
             if not p:
                 continue
+            partner = (p.get("partner_skill_title") or "").strip()
             bosses.append({
                 "name": p["pal_name"], "index": p.get("pal_index", ""),
+                "role": role, "is_final": final,
+                "story_only": bool(p.get("is_story_only")),
                 "elements": p.get("elements", []), "rarity": p.get("rarity", 0),
-                "partner": p.get("partner_skill_title", ""),
+                "partner": partner if partner not in ("", "-") else "",
                 "skills": [s["name"] for s in p.get("active_skills", [])],
                 "drops": [dd["item_name"] for dd in p.get("item_drops", [])],
                 "hp": (p.get("stats", {}) or {}).get("hp", ""),
