@@ -5541,7 +5541,7 @@ GROWTH_TMPL = _HEAD + """</style></head><body><div class="page">
     {% if icon %}<img src="{{ icon }}" style="flex:none;width:76px;height:76px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))">{% endif %}
     <div style="flex:1;min-width:0">
       <div class="title" style="font-size:24px">{{ name }}{% if nickname %} <span style="font-size:14px;color:#9c8fc0">「{{ nickname }}」</span>{% endif %}</div>
-      <div class="subtitle"><span class="pill soft">Lv.{{ level }}</span>{% for e in elements %}<span class="pill soft">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:13px;height:13px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}{% if count > 1 %}<span class="pill soft">你有 {{ count }} 只(取最高养成)</span>{% endif %}</div>
+      <div class="subtitle"><span class="pill soft">Lv.{{ level }}</span>{% for e in elements %}<span class="pill soft">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:13px;height:13px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}{% if count > 1 %}<span class="pill soft">你有 {{ count }} 只 · 看第 {{ pick|default(1) }} 只</span>{% endif %}</div>
     </div>
   </div></div>
   <div class="glass">""" + _GEMS + """
@@ -5569,7 +5569,7 @@ GROWTH_PIX = _PH + """</style></head><body><div class="page">
     {% if icon %}<img src="{{ icon }}" style="flex:none;width:70px;height:70px;object-fit:contain;image-rendering:pixelated">{% endif %}
     <div style="flex:1;min-width:0">
       <div class="title" style="font-size:22px">{{ name }}{% if nickname %} <span style="font-size:13px;color:#7a5a1a">「{{ nickname }}」</span>{% endif %}</div>
-      <div class="subtitle"><span class="pill">Lv.{{ level }}</span>{% for e in elements %}<span class="pill">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:13px;height:13px;object-fit:contain;vertical-align:-2px;margin-right:2px;image-rendering:pixelated">{% endif %}{{ e }}</span>{% endfor %}{% if count > 1 %}<span class="pill">你有 {{ count }} 只</span>{% endif %}</div>
+      <div class="subtitle"><span class="pill">Lv.{{ level }}</span>{% for e in elements %}<span class="pill">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:13px;height:13px;object-fit:contain;vertical-align:-2px;margin-right:2px;image-rendering:pixelated">{% endif %}{{ e }}</span>{% endfor %}{% if count > 1 %}<span class="pill">你有 {{ count }} 只 · 看第 {{ pick|default(1) }} 只</span>{% endif %}</div>
     </div>
   </div></div>
   <div class="frame">
@@ -5593,7 +5593,7 @@ GROWTH_PIX = _PH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 GROWTH_ING = _IH + """</style></head><body><div class="page">
-  <div class="ig-head">{% if icon %}<div class="ig-portrait" style="width:70px;height:70px;border-width:10px"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ name }}{% if nickname %} 「{{ nickname }}」{% endif %}</div><div class="ig-sub"><span class="ig-pill">Lv.{{ level }}</span>{% for e in elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}{% if count > 1 %}<span class="ig-pill">你有 {{ count }} 只</span>{% endif %}</div></div></div>
+  <div class="ig-head">{% if icon %}<div class="ig-portrait" style="width:70px;height:70px;border-width:10px"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ name }}{% if nickname %} 「{{ nickname }}」{% endif %}</div><div class="ig-sub"><span class="ig-pill">Lv.{{ level }}</span>{% for e in elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}{% if count > 1 %}<span class="ig-pill">你有 {{ count }} 只 · 看第 {{ pick|default(1) }} 只</span>{% endif %}</div></div></div>
   <div class="ig-panel"><div class="ig-sec">浓缩</div>
     <div style="font-size:20px;letter-spacing:2px;color:var(--pal-gold)">{% for i in range(condense_max) %}{% if i < condense %}★{% else %}☆{% endif %}{% endfor %} <span style="font-size:13px;color:var(--pal-sub)">{{ condense }}/{{ condense_max }}★</span></div></div>
   {% if souls %}<div class="ig-panel hi"><div class="ig-sec">帕鲁之魂强化</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for s in souls %}<span class="ig-pill">{{ s.k }} +{{ s.lv }}</span>{% endfor %}</div></div>{% endif %}

@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.17.0",
+    "1.17.1",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -3335,10 +3335,14 @@ class PalworldPlugin(Star):
     async def _cmd_growth(self, event: AstrMessageEvent, args: list[str]):
         if not self._pals:
             return await self._msg_card(event, "🧬", "图鉴数据未加载", desc="data/paldex.json 缺失。", color="#E5484D")
-        q = " ".join(args).strip()
+        a = list(args)
+        idx = 0
+        if len(a) > 1 and a[-1].isdigit():   # 名字后带序号:选具体某只(同种多只时)
+            idx = int(a[-1]); a = a[:-1]
+        q = " ".join(a).strip()
         if not q:
             return await self._msg_card(event, "✏️", "查你某只帕鲁的养成",
-                                        desc="用法：/帕鲁养成 <帕鲁名>\n会读你存档里这只帕鲁的浓缩/帕鲁之魂/觉醒/个体值/词条/技能现状。",
+                                        desc="用法：/帕鲁养成 <帕鲁名> [序号]\n会读你存档里这只帕鲁的浓缩/帕鲁之魂/觉醒/个体值/词条/技能现状；同种有多只时会列出让你选序号。",
                                         head="🧬 养成", color="#7ab8ff")
         p = self._find_pal(q)
         if not p:
@@ -3354,8 +3358,26 @@ class PalworldPlugin(Star):
         if not mine:
             return await self._msg_card(event, "📦", f"你还没有「{_esc(p['pal_name'])}」",
                                         desc="养成卡只统计你自己捕捉的这只帕鲁。先去抓一只,再来看养成进度~", color="#9a8a91")
-        best = max(mine, key=lambda x: (int(x.get("rank", 1) or 1), int(x.get("level", 1) or 1)))
-        return await self._img(event, self._t("growth"), self._growth_data(best, p, len(mine)))
+        # 稳定排序(浓缩>等级>iid)——保证序号跨查询一致,best 在前
+        mine.sort(key=lambda x: (-int(x.get("rank", 1) or 1), -int(x.get("level", 1) or 1), str(x.get("iid", ""))))
+        # 只有一只 或 指定了有效序号 -> 直接出养成卡
+        if len(mine) == 1 or 1 <= idx <= len(mine):
+            chosen = mine[idx - 1] if idx else mine[0]
+            d = self._growth_data(chosen, p, len(mine))
+            d["pick"] = idx or 1
+            return await self._img(event, self._t("growth"), d)
+        # 同种多只、未指定序号 -> 列出让用户选(每只带昵称/等级/浓缩/个体值区分)
+        lines = []
+        for i, pal in enumerate(mine, 1):
+            stars = "★" * max(0, int(pal.get("rank", 1) or 1) - 1) or "0★"
+            nick = pal.get("nickname") or "(无昵称)"
+            badge = ("✨" if pal.get("lucky") else "") + ("👑" if pal.get("is_alpha") else "")
+            lines.append(f"{i}. {badge}「{_esc(nick)}」Lv{pal.get('level', 1)} · 浓缩{stars} · "
+                         f"个体{pal.get('iv_hp', 0)}/{pal.get('iv_atk', 0)}/{pal.get('iv_def', 0)}")
+        return await self._msg_card(
+            event, "🧬", f"你有 {len(mine)} 只「{_esc(p['pal_name'])}」",
+            desc="\n".join(lines) + f"\n\n发「/帕鲁养成 {_esc(p['pal_name'])} <序号>」看具体某只的养成。",
+            head="🧬 选一只看养成", color="#7ab8ff")
 
     # ------------------------------------------------------------------
     # 帕鲁战力等级排行（/帕鲁战力榜）：基于图鉴种族值的战力，全帕鲁排名，翻页+详细

@@ -49,3 +49,48 @@ def test_growth_awakened_no_gem_prompt():
     d = o._growth_data(pal, p, 1)
     assert d["condense"] == 4 and d["awakened"] is True
     assert any("已觉醒" in n for n in d["notes"])
+
+
+def test_growth_multi_same_species_select():
+    """同种多只:不带序号列出候选(msg);带有效序号出养成卡(img)。序号稳定(浓缩>等级>iid)。"""
+    import asyncio
+    o = _plugin()
+    p = list(o._pal_by_name.values())[0]
+    dev = p["pal_dev_name"]
+    prof = {"nickname": "阿狸", "party": [], "basecamp": [],
+            "palbox": [{"char_id": dev, "level": 20, "rank": 1, "iid": "b", "iv_hp": 5, "iv_atk": 5, "iv_def": 5,
+                        "souls": {}, "passives": [], "equip_waza": []},
+                       {"char_id": dev, "level": 40, "rank": 3, "iid": "a", "iv_hp": 9, "iv_atk": 9, "iv_def": 9,
+                        "souls": {}, "passives": [], "equip_waza": []}]}
+
+    async def _rt(event, a):
+        return prof, "阿狸", None
+
+    o._resolve_target_sp = _rt
+    cap = {}
+
+    async def _img(event, tmpl, data, **kw):
+        cap["kind"] = ("img", data)
+        return "I"
+
+    async def _msg(event, icon, title, **k):
+        cap["kind"] = ("msg", title, k.get("desc", ""))
+        return "M"
+
+    o._img, o._t, o._msg_card = _img, (lambda k: k), _msg
+
+    class E:
+        def get_sender_id(self):
+            return "q0"
+
+        def get_group_id(self):
+            return "g1"
+
+    def run(a):
+        asyncio.new_event_loop().run_until_complete(o._cmd_growth(E(), a))
+        return cap["kind"]
+
+    k = run([p["pal_name"]])                       # 无序号 -> 列表
+    assert k[0] == "msg" and "2 只" in k[1] and "1." in k[2] and "2." in k[2]
+    k = run([p["pal_name"], "1"])                  # 序号1 -> 养成卡,取排序后第1(rank3那只)
+    assert k[0] == "img" and k[1]["pick"] == 1 and k[1]["condense"] == 2   # rank3 -> 2★
