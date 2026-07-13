@@ -11,6 +11,7 @@
 | 2 | Palworld 1.0 数据适配 | ✅ 已完成(阶段3,v1.8.6–1.8.10) |
 | 3 | 独立 ingame 游戏原生主题 | 🟢 主体完成(56/56 卡已转,待截图做视觉精校) |
 | 4 | 全页面游戏图标替换 | 🟢 主体完成(真实游戏图标全覆盖 + 插件扩展 SVG;剩动态标题/message icon 去 Emoji) |
+| 4b | **真实游戏图标改为三主题共享**(v1.11.0) | 🟢 架构完成(`game_icon`/`game_icon_map` 三主题共享,renderer 三主题注入 icons;fantasy/pixel 属性/工作适性/货币/元素徽章已接真图)。剩余模板接线见 `docs/THEME_ICON_COVERAGE.md` |
 | 5 | 游戏数据与素材自动生成工具 | 🟡 部分(提取脚本在仓库外 `/opt/palworld-khd/work`,未收进 `tools/game_data/`) |
 
 ---

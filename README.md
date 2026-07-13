@@ -10,7 +10,7 @@
 图鉴配种攻略随手查；管理员可公告 / 踢封 / 存档 / 关服。<br>
 **所有回复一律输出精美卡片图片**，附一键部署脚本。
 
-![version](https://img.shields.io/badge/version-1.10.0-6366F1?style=flat-square)
+![version](https://img.shields.io/badge/version-1.11.0-6366F1?style=flat-square)
 ![AstrBot](https://img.shields.io/badge/AstrBot-4.25%2B-8B5CF6?style=flat-square)
 ![OneBot](https://img.shields.io/badge/OneBot-v11-4ade80?style=flat-square)
 ![NapCat](https://img.shields.io/badge/adapter-NapCat-22c55e?style=flat-square)
@@ -208,7 +208,7 @@
 | `enable_host_stats` | `true` | 状态卡显示容器 CPU/内存 |
 | `docker_container` | `palworld-server` | 要监控/拉存档的帕鲁容器名；**找不到会自动探测**跑 palworld 的游戏服容器 |
 | `docker_sock` | `/var/run/docker.sock` | docker socket 路径 |
-| `card_style` | `fantasy` | 卡片风格：`fantasy`(奇幻玻璃) / `pixel`(像素羊皮纸) |
+| `card_style` | `fantasy` | 卡片风格：`fantasy`(奇幻玻璃) / `pixel`(像素羊皮纸) / `ingame`(游戏原生)。三套主题**共享真实游戏语义图标**(属性/工作适性/货币等),仅背景/面板/边框/排版各自不同 |
 | `save_dir_in_container` | （空） | 帕鲁容器内的世界存档目录；**留空自动探测** `SaveGames/0/` 下的世界 GUID（换世界也免改，仅多世界/特殊布局才需手填）|
 | `save_cache_ttl` | `120` | 存档解析缓存秒数（每次拉档先强制存盘，建议 ≥60）|
 | `local_render` | `false` | **默认关**：出图走 **AstrBot 内置 t2i 渲染服务**（开箱即用、自带中文字体、稳定,推荐）。仅当容器确实装了 Playwright+Chromium+中文字体、想更快出图时才开 `true`（会自动回退 t2i）|

@@ -93,12 +93,30 @@ def _resolver():
     return AssetResolver(_ROOT)
 
 
-def test_resolver_fantasy_returns_fallback_emoji():
+def test_resolver_fantasy_keeps_fallback_text():
     r = _resolver()
+    # fallback 文字(Emoji)仍保留,供无游戏图标时回退
     assert r.text("element.fire", "fantasy") == "🔥"
     assert r.text("work.mining", "pixel") == "⛏️"
-    # fantasy/pixel 不取 ingame 图
-    assert r.img("element.fire", "fantasy") == ""
+
+
+def test_game_icon_shared_across_all_themes():
+    """新规则:游戏有原图的语义键,fantasy/pixel/ingame 三主题都返回同一张真实游戏图标(共享素材层)。"""
+    r = _resolver()
+    for key in ("element.fire", "work.mining", "work.emit_flame", "currency.gold", "pal.alpha", "pal.mutation"):
+        for style in ("fantasy", "pixel", "ingame"):
+            uri = r.img(key, style)
+            assert uri.startswith("data:image/png;base64,"), f"{key}@{style} 应返回真实游戏图标,实为 {uri[:30]!r}"
+        # game_icon() 是主题无关的共享入口
+        assert r.game_icon(key).startswith("data:image/png;base64,")
+
+
+def test_plugin_ext_still_per_theme():
+    """插件扩展概念(游戏无图):ingame 用中性 SVG,fantasy/pixel 返回空串(模板回退 Emoji)。"""
+    r = _resolver()
+    assert r.img("server.cpu", "ingame").startswith("data:image/svg+xml")
+    assert r.img("server.cpu", "fantasy") == "" and r.img("server.cpu", "pixel") == ""
+    assert r.game_icon("server.cpu") == ""   # 非游戏图标
 
 
 def test_resolver_ingame_returns_real_icon_data_uri():
@@ -180,10 +198,11 @@ def test_component_textures_exist_and_resolve():
 
 def test_resolver_resolve_shape():
     r = _resolver()
+    # 游戏语义键:三主题 resolve 的 img 都是真实游戏图标;text(Emoji 回退)仍在
     a = r.resolve("element.water", "ingame")
     assert a["img"].startswith("data:image/png;base64,")
     b = r.resolve("element.water", "fantasy")
-    assert b["img"] == "" and b["text"] == "💧"
+    assert b["img"].startswith("data:image/png;base64,") and b["text"] == "💧"
 
 
 # ------------------------------------------------- ingame 静态模板无未白名单 Emoji

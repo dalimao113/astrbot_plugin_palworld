@@ -1,10 +1,16 @@
-"""ingame 主题图标解析器(Asset Manifest 解析)。
+"""游戏图标解析器(Asset Manifest 解析)——**真实游戏语义图标为三主题共享素材层**。
 
-业务层传**语义键**(如 `element.fire` / `work.mining` / `server.online`),按当前皮肤解析:
-- `ingame`  → 真实游戏图标 base64 data URI;缺失(pending/plugin-ext)时回退**统一缺失占位**,绝不抛异常。
-- `fantasy` / `pixel` → 原 Emoji/文字(manifest 的 `fallback`),视觉与现状完全一致。
+业务层传**语义键**(如 `element.fire` / `work.mining` / `currency.gold` / `server.online`):
+- **游戏有原图**(属性/工作/货币/状态/稀有度/头目闪光突变浓缩等):`game_icon()` / `img()` 对
+  **fantasy / pixel / ingame 三套主题都返回同一张真实游戏图标**(共享,图标文件只一份)。
+- **游戏无原图**(server/plugin/docker/cpu 等插件扩展概念):ingame 用中性线性 SVG;
+  fantasy/pixel 返回空串,由模板回退到各自 Emoji/像素图标。
+- 键未知 / 素材文件缺失:ingame 回退统一缺失占位;fantasy/pixel 返回空串(模板回退 Emoji)。**绝不抛异常**。
 
-数据来源:`data/ingame/manifest.json` + `data/ingame/icons/*.png`(见该目录 README / tools/game_data)。
+主题只决定**展示方式**(奇幻光晕 / 像素边框 / 游戏槽位),不决定图标**来源**。
+UI 组件纹理(游戏窗口/切角面板/物品槽边框,`component_uris()`)仍只供 ingame,与语义图标区分。
+
+数据来源:`data/ingame/manifest.json` + `data/ingame/icons/*.png`。manifest 资产字段兼容 `game`(新)/`ingame`(旧)。
 
 设计约束:
 - **本模块不依赖 astrbot**,可独立单测(stub 无关)。
@@ -112,21 +118,35 @@ class AssetResolver:
         self._uri_cache[cache_key] = uri
         return uri
 
-    def img(self, key: str, style: str = "ingame") -> str:
-        """ingame 皮肤:图标 data URI(游戏图标优先,其次插件扩展 SVG,再缺失→统一占位)。
-        fantasy/pixel:返回空串(用 text)。"""
-        if style != "ingame":
-            return ""
+    @staticmethod
+    def _asset_rel(entry: dict) -> str:
+        """entry 里的真实游戏图标相对路径。兼容新字段 `game` 与旧字段 `ingame`。"""
+        return entry.get("game") or entry.get("ingame") or ""
+
+    def game_icon(self, key: str) -> str:
+        """**真实游戏图标 data URI,三主题共享**。无游戏原图 / 素材文件缺失 → 空串。
+        plugin_svg(游戏无此概念)不算游戏图标,这里不返回。"""
         e = self.entry(key)
         if not e:
-            return _MISSING_SVG
-        rel = e.get("ingame")
-        if rel:
-            return self._uri(rel)
-        svg = e.get("plugin_svg")
-        if svg:
-            return self._svg_uri(svg)
-        return _MISSING_SVG
+            return ""
+        rel = self._asset_rel(e)
+        if not rel:
+            return ""
+        uri = self._uri(rel)
+        return "" if uri == _MISSING_SVG else uri   # 文件缺失 → 空,交主题回退 Emoji
+
+    def img(self, key: str, style: str = "ingame") -> str:
+        """语义键 → 展示图标 data URI。
+        - 游戏有原图:**三主题都返回真实游戏图标**(共享素材层)。
+        - 游戏无原图:ingame 用插件扩展 SVG,再缺失→统一占位;fantasy/pixel 返回空串(模板回退 Emoji)。"""
+        g = self.game_icon(key)
+        if g:
+            return g                             # 三主题共享
+        if style == "ingame":
+            e = self.entry(key)
+            svg = e.get("plugin_svg") if e else None
+            return self._svg_uri(svg) if svg else _MISSING_SVG
+        return ""                                # fantasy/pixel:无游戏原图 → 空,模板用 text(Emoji)
 
     def text(self, key: str, style: str = "fantasy") -> str:
         """fantasy/pixel 皮肤用:返回 manifest 的 fallback(原 Emoji/文字)。未知键→空串。"""
@@ -170,37 +190,48 @@ class AssetResolver:
         for name, v in comp.items():
             if name.startswith("_") or not isinstance(v, dict):
                 continue
-            rel = v.get("ingame")
+            rel = self._asset_rel(v)
             out[name] = self._uri(rel) if rel else _MISSING_SVG
         self._uri_cache["__components__"] = out  # type: ignore[assignment]
         return out
 
-    def ingame_icon_map(self) -> dict:
-        """给 ingame 模板用的中文键图标映射:{element:{中文:uri}, work:{中文标签:uri}, stat:{键:uri}}。
-        业务数据里属性/工种是中文,这里按 manifest(元素别名)+ constants(工种中文)解析成图标。缓存。"""
-        cached = self._uri_cache.get("__iconmap__")
+    def game_icon_map(self, style: str = "ingame") -> dict:
+        """**三主题共享**的语义图标映射(中文键 → data uri):{element, work, stat, passive_rank, pal, currency}
+        + server(plugin-ext)。业务数据里属性/工种是中文,按 manifest(元素别名)+ constants(工种中文)解析。
+        - 游戏有原图的语义(属性/工作/货币/状态/稀有度/头目闪光突变浓缩):三主题都取到真实游戏图标。
+        - server/plugin 概念(游戏无):仅 ingame 取到中性 SVG,fantasy/pixel 为空串(模板回退 Emoji)。
+        按 style 缓存。"""
+        ck = f"__iconmap__::{style}"
+        cached = self._uri_cache.get(ck)
         if cached is not None:
             return cached  # type: ignore[return-value]
         self._ensure_loaded()
         m = self._manifest or {}
         el_keys = (m.get("element", {}).get("_plugin_key_map") or {}).keys()  # 中文属性名
-        el = {cn: self.img(f"element.{cn}", "ingame") for cn in el_keys}
+        el = {cn: self.img(f"element.{cn}", style) for cn in el_keys}
         try:
             from ..constants import WORK_LABELS  # snake -> 中文工种
-            wk = {cn: self.img(f"work.{snake}", "ingame") for snake, cn in WORK_LABELS.items()}
+            wk = {cn: self.img(f"work.{snake}", style) for snake, cn in WORK_LABELS.items()}
         except Exception:  # noqa: BLE001  constants 不可用(独立单测)时降级空表
             wk = {}
-        stat = {k: self.img(f"stat.{k}", "ingame") for k in ("hp", "defense", "weight", "hunger")}
-        rank = {k: self.img(f"passive_rank.{k}", "ingame")
+        stat = {k: self.img(f"stat.{k}", style) for k in ("hp", "attack", "defense", "weight", "hunger",
+                                                          "san", "work_speed", "stamina", "speed")}
+        rank = {k: self.img(f"passive_rank.{k}", style)
                 for k in ("rank_down", "rank_up1", "rank_up2", "rank_up3", "rank_up3_plus")}
-        # server/plugin 概念(游戏无)→ 插件扩展 SVG
-        server = {k: self.img(f"server.{k}", "ingame")
+        # server/plugin 概念(游戏无)→ ingame 用插件扩展 SVG;fantasy/pixel 空串
+        server = {k: self.img(f"server.{k}", style)
                   for k in ("online", "offline", "player_count", "fps", "uptime",
                             "world_day", "load", "cpu", "memory")}
-        pal = {k: self.img(f"pal.{k}", "ingame") for k in ("lucky", "alpha", "mutation", "condensation")}
-        cur = {k: self.img(f"currency.{k}", "ingame")
+        pal = {k: self.img(f"pal.{k}", style)
+               for k in ("lucky", "alpha", "mutation", "condensation", "awakening",
+                         "gender_male", "gender_female", "rarity")}
+        cur = {k: self.img(f"currency.{k}", style)
                for k in ("gold", "tech_point", "ancient_tech_point", "dog_coin", "bounty")}
         out = {"element": el, "work": wk, "stat": stat, "passive_rank": rank,
                "server": server, "pal": pal, "currency": cur}
-        self._uri_cache["__iconmap__"] = out  # type: ignore[assignment]
+        self._uri_cache[ck] = out  # type: ignore[assignment]
         return out
+
+    def ingame_icon_map(self) -> dict:
+        """向后兼容别名 → game_icon_map('ingame')。新代码用 game_icon_map(style)。"""
+        return self.game_icon_map("ingame")
