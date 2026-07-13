@@ -218,7 +218,9 @@ def _pal_brief(sp, iid='', shared=False):
         'nickname': _vv(sp.get('NickName', {})) or '',
         'equip_waza': [str(w).split('::')[-1] for w in _arr(sp.get('EquipWaza', {}))],
         'passives': [str(p) for p in _arr(sp.get('PassiveSkillList', {}))],
-        'souls': _status_points(sp, 'GotStatusPointList'),   # 灵魄强化加点
+        'souls': _status_points(sp, 'GotStatusPointList'),   # 帕鲁之魂强化加点(最大HP/攻击/防御/工作速度)
+        'awakened': bool(_vv(sp.get('bIsAwakening', {})) or False),   # 是否已觉醒(1.0 存档 bIsAwakening,实测可读)
+        'mastered_waza': [str(w).split('::')[-1] for w in _arr(sp.get('MasteredWaza', {}))],  # 已学会的主动技能
     }
 def extract_profiles(save_dir):
     """解析存档目录 -> {player_uid: {...档案...}}。save_dir 含 Level.sav 和 Players/*.sav。"""

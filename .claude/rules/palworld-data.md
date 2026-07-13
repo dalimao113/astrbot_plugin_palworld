@@ -28,7 +28,8 @@ paths:
 - 遇 `Unknown type: XxxProperty` 一律同法:按 `size` 跳过、对齐到下一属性;**不得为避免报错而静默吞掉关键数据**,对不支持的新结构输出明确日志。
 - **修改存档解析必须用真实或脱敏样本验证**;无真实 1.0 存档验证时,不得声称"已兼容"。
 - 调试存档:拉只读副本 → 容器内 `palsave.extract_profiles` → **用完 rm -rf,绝不提交**(玩家隐私)。
-- 觉醒状态:存档帕鲁 SaveParameter **无觉醒字段**(`Rank_HP/Attack/Defence` 是浓缩非觉醒),当前**不支持读取觉醒状态**,只做百科查询。
+- 帕鲁养成字段(1.0 真实存档实测可读,`_pal_brief` 已解析):`Rank`(浓缩星级 1~5→0~4★)、`GotStatusPointList`(帕鲁之魂强化:最大HP/攻击/防御/工作速度)、`bIsAwakening`(**觉醒状态,可读** —— 旧注"无觉醒字段"已作废)、`Talent_HP/Shot/Defense`(个体值)、`PassiveSkillList`(词条)、`EquipWaza/MasteredWaza`(技能)。
+- **浓缩/帕鲁之魂的精确材料需求数**(每星需几只同种、每级魂需几个道具)**未在已导出 DataTable/Blueprint 中找到**:`/帕鲁养成` 不虚报,明确标注"游戏未从 DataTable 提取精确数量";觉醒材料按主属性引用 `/帕鲁觉醒` 的 9 系晶石(真实数据)。
 
 ## 工具化
 - 数据/素材提取工具逐步收进 `tools/game_data/`,不长期依赖仓库外隐藏目录(如 `/opt/palworld-khd/work`)。

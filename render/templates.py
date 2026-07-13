@@ -5535,6 +5535,77 @@ BASEHEALTH_ING = _IH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+# ---------------- 养成(首选3)。变量:name,icon,elements,level,nickname,count,condense,condense_max,souls[{k,lv}],awakened,gem,element_cn,iv_*,passives[],wazas[],notes[],source ----------------
+GROWTH_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:13px;width:100%">
+    {% if icon %}<img src="{{ icon }}" style="flex:none;width:76px;height:76px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))">{% endif %}
+    <div style="flex:1;min-width:0">
+      <div class="title" style="font-size:24px">{{ name }}{% if nickname %} <span style="font-size:14px;color:#9c8fc0">「{{ nickname }}」</span>{% endif %}</div>
+      <div class="subtitle"><span class="pill soft">Lv.{{ level }}</span>{% for e in elements %}<span class="pill soft">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:13px;height:13px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}{% if count > 1 %}<span class="pill soft">你有 {{ count }} 只(取最高养成)</span>{% endif %}</div>
+    </div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    <div class="sec-t">浓缩</div>
+    <div style="font-size:22px;letter-spacing:2px;color:#e8c466">{% for i in range(condense_max) %}{% if i < condense %}★{% else %}<span style="color:#4a3f6a">☆</span>{% endif %}{% endfor %} <span style="font-size:14px;color:#cfc1ea">{{ condense }}/{{ condense_max }}★</span></div>
+    {% if souls %}<div class="sec-t" style="margin-top:14px">帕鲁之魂强化</div>
+    <div style="display:flex;flex-wrap:wrap;gap:7px">{% for s in souls %}<span class="pill soft">{{ s.k }} +{{ s.lv }}</span>{% endfor %}</div>{% endif %}
+    <div class="sec-t" style="margin-top:14px">觉醒</div>
+    <div style="font-size:14px;color:{% if awakened %}#7fe0a0{% else %}#ffce6b{% endif %}">{% if awakened %}✔ 已觉醒{% else %}○ 未觉醒{% if gem %} · 需「{{ gem }}」{% endif %}{% endif %}</div>
+    <div class="sec-t" style="margin-top:14px">个体值(天赋 · 捕捉固定)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:7px"><span class="pill soft">HP {{ iv_hp }}/100</span><span class="pill soft">攻击 {{ iv_atk }}/100</span><span class="pill soft">防御 {{ iv_def }}/100</span></div>
+    {% if passives %}<div class="sec-t" style="margin-top:14px">词条 <span style="font-size:11px;color:#9c8fc0">{{ passives|length }}/4</span></div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for x in passives %}<span class="pill soft">{{ x }}</span>{% endfor %}</div>{% endif %}
+    {% if wazas %}<div class="sec-t" style="margin-top:14px">已装备技能</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for x in wazas %}<span class="pill soft">{{ x }}</span>{% endfor %}</div>{% endif %}
+    <div class="sec-t" style="margin-top:15px">养成建议</div>
+    {% for n in notes %}<div style="font-size:12.5px;color:#cfc1ea;line-height:1.7;margin-top:2px">• {{ n }}</div>{% endfor %}
+    <div style="margin-top:11px;font-size:11px;color:#8a82a8;line-height:1.6">{{ source }}</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+GROWTH_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:12px;width:100%">
+    {% if icon %}<img src="{{ icon }}" style="flex:none;width:70px;height:70px;object-fit:contain;image-rendering:pixelated">{% endif %}
+    <div style="flex:1;min-width:0">
+      <div class="title" style="font-size:22px">{{ name }}{% if nickname %} <span style="font-size:13px;color:#7a5a1a">「{{ nickname }}」</span>{% endif %}</div>
+      <div class="subtitle"><span class="pill">Lv.{{ level }}</span>{% for e in elements %}<span class="pill">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:13px;height:13px;object-fit:contain;vertical-align:-2px;margin-right:2px;image-rendering:pixelated">{% endif %}{{ e }}</span>{% endfor %}{% if count > 1 %}<span class="pill">你有 {{ count }} 只</span>{% endif %}</div>
+    </div>
+  </div></div>
+  <div class="frame">
+    <div class="sec-t">浓缩</div>
+    <div style="font-size:20px;letter-spacing:2px;color:#7a3604">{% for i in range(condense_max) %}{% if i < condense %}★{% else %}☆{% endif %}{% endfor %} <span style="font-size:13px;color:#523f10">{{ condense }}/{{ condense_max }}★</span></div>
+    {% if souls %}<div class="sec-t" style="margin-top:12px">帕鲁之魂强化</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for s in souls %}<span class="pill">{{ s.k }} +{{ s.lv }}</span>{% endfor %}</div>{% endif %}
+    <div class="sec-t" style="margin-top:12px">觉醒</div>
+    <div style="font-size:14px;color:{% if awakened %}#1d7a36{% else %}#8f5a12{% endif %}">{% if awakened %}✔ 已觉醒{% else %}○ 未觉醒{% if gem %} · 需「{{ gem }}」{% endif %}{% endif %}</div>
+    <div class="sec-t" style="margin-top:12px">个体值(天赋 · 捕捉固定)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px"><span class="pill">HP {{ iv_hp }}/100</span><span class="pill">攻击 {{ iv_atk }}/100</span><span class="pill">防御 {{ iv_def }}/100</span></div>
+    {% if passives %}<div class="sec-t" style="margin-top:12px">词条 {{ passives|length }}/4</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for x in passives %}<span class="pill">{{ x }}</span>{% endfor %}</div>{% endif %}
+    {% if wazas %}<div class="sec-t" style="margin-top:12px">已装备技能</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for x in wazas %}<span class="pill">{{ x }}</span>{% endfor %}</div>{% endif %}
+    <div class="sec-t" style="margin-top:13px">养成建议</div>
+    {% for n in notes %}<div style="font-size:12.5px;color:#382207;line-height:1.7;margin-top:2px">• {{ n }}</div>{% endfor %}
+    <div style="margin-top:10px;font-size:11px;color:#7a6a4a;line-height:1.6">{{ source }}</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+GROWTH_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">{% if icon %}<div class="ig-portrait" style="width:70px;height:70px;border-width:10px"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ name }}{% if nickname %} 「{{ nickname }}」{% endif %}</div><div class="ig-sub"><span class="ig-pill">Lv.{{ level }}</span>{% for e in elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}{% if count > 1 %}<span class="ig-pill">你有 {{ count }} 只</span>{% endif %}</div></div></div>
+  <div class="ig-panel"><div class="ig-sec">浓缩</div>
+    <div style="font-size:20px;letter-spacing:2px;color:var(--pal-gold)">{% for i in range(condense_max) %}{% if i < condense %}★{% else %}☆{% endif %}{% endfor %} <span style="font-size:13px;color:var(--pal-sub)">{{ condense }}/{{ condense_max }}★</span></div></div>
+  {% if souls %}<div class="ig-panel hi"><div class="ig-sec">帕鲁之魂强化</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for s in souls %}<span class="ig-pill">{{ s.k }} +{{ s.lv }}</span>{% endfor %}</div></div>{% endif %}
+  <div class="ig-panel"><div class="ig-sec">觉醒</div><div style="font-size:14px;color:{% if awakened %}var(--pal-good){% else %}var(--pal-gold){% endif %}">{% if awakened %}✔ 已觉醒{% else %}○ 未觉醒{% if gem %} · 需「{{ gem }}」{% endif %}{% endif %}</div></div>
+  <div class="ig-panel"><div class="ig-sec">个体值(天赋 · 捕捉固定)</div><div style="display:flex;flex-wrap:wrap;gap:6px"><span class="ig-pill">HP {{ iv_hp }}/100</span><span class="ig-pill">攻击 {{ iv_atk }}/100</span><span class="ig-pill">防御 {{ iv_def }}/100</span></div></div>
+  {% if passives %}<div class="ig-panel"><div class="ig-sec">词条 {{ passives|length }}/4</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for x in passives %}<span class="ig-pill">{{ x }}</span>{% endfor %}</div></div>{% endif %}
+  {% if wazas %}<div class="ig-panel"><div class="ig-sec">已装备技能</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for x in wazas %}<span class="ig-pill">{{ x }}</span>{% endfor %}</div></div>{% endif %}
+  <div class="ig-panel"><div class="ig-sec">养成建议</div>{% for n in notes %}<div style="font-size:12.5px;color:var(--pal-text-2);line-height:1.7;margin-top:2px">• {{ n }}</div>{% endfor %}<div style="margin-top:9px;font-size:11px;color:var(--pal-dim)">{{ source }}</div></div>
+  """ + _IF + """
+</div></body></html>"""
+
+
 STYLES = {
     "fantasy": {"status": STATUS_TMPL, "players": PLAYERS_TMPL, "settings": SETTINGS_TMPL,
                 "help": HELP_TMPL, "message": MSG_TMPL, "stats": STATS_TMPL, "rank": RANK_TMPL,
@@ -5547,7 +5618,7 @@ STYLES = {
                 "facility": FACILITY_TMPL, "tech": TECH_TMPL, "grid": GRID_TMPL, "map": MAP_TMPL,
                 "lab_overview": LAB_OVERVIEW_TMPL, "lab_list": LAB_LIST_TMPL, "lab_detail": LAB_DETAIL_TMPL,
                 "bag": BAG_TMPL, "team": TEAM_TMPL, "palbox": PALBOX_TMPL, "guild": GUILD_TMPL,
-                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL,
+                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "passdex": PASSDEX_TMPL, "passlist": PASSLIST_TMPL,
                 "awakening": AWAKENING_TMPL, "mutation": MUTATION_TMPL,
@@ -5566,7 +5637,7 @@ STYLES = {
               "facility": FACILITY_PIX, "tech": TECH_PIX, "grid": GRID_PIX, "map": MAP_PIX,
               "lab_overview": LAB_OVERVIEW_PIX, "lab_list": LAB_LIST_PIX, "lab_detail": LAB_DETAIL_PIX,
               "bag": BAG_PIX, "team": TEAM_PIX, "palbox": PALBOX_PIX, "guild": GUILD_PIX,
-              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX,
+              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX,
               "element": ELEMENT_PIX, "habitat": HABITAT_PIX, "passrec": PASSREC_PIX,
               "passdex": PASSDEX_PIX, "passlist": PASSLIST_PIX,
               "awakening": AWAKENING_PIX, "mutation": MUTATION_PIX,
@@ -5583,6 +5654,7 @@ STYLES = {
 STYLES["ingame"] = dict(STYLES["fantasy"])
 STYLES["ingame"]["squad"] = SQUAD_ING
 STYLES["ingame"]["basehealth"] = BASEHEALTH_ING
+STYLES["ingame"]["growth"] = GROWTH_ING
 # 阶段D:已改造为 ingame 专属布局的卡(其余仍临时回退 fantasy,见 INGAME_ICON_COVERAGE.md)
 STYLES["ingame"]["paldex"] = PALDEX_ING
 STYLES["ingame"]["passlist"] = PASSLIST_ING

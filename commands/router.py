@@ -99,6 +99,7 @@ COMMANDS: list[CommandSpec] = [
     # ---------------- 玩家自助 ----------------
     CommandSpec("绑定", "_cmd_bind", ("bind",), pass_args=True, description="绑定游戏角色", category="player"),
     CommandSpec("我的战力", "_cmd_my_power", ("个人战力", "我的最强帕鲁", "我的帕鲁战力", "mypower"), cooldown=True, pass_args=True, description="自己所有捕捉帕鲁的战力排行", category="player"),
+    CommandSpec("养成", "_cmd_growth", ("培养", "养成进度", "养成路线", "growth"), cooldown=True, pass_args=True, description="某只自己帕鲁的浓缩/魂/觉醒/词条现状与差距", category="player"),
     CommandSpec("小队进度", "_cmd_squad", ("小队", "squad", "team_progress"), cooldown=True, description="小队探索/收集/塔主进度聚合", category="player"),
     CommandSpec("据点体检", "_cmd_basecamp_health", ("基地体检", "据点健康", "基地健康", "basehealth"), cooldown=True, pass_args=True, description="据点工人/适性缺口/伤病摘要(可选据点号)", category="player"),
     CommandSpec("小队勾选", "_cmd_squad_check", ("勾选", "squadcheck"), pass_args=True, description="手动勾选小队探索目标", category="player"),

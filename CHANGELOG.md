@@ -2,6 +2,16 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.17.0] - 2026-07-13
+
+### 新增(首选3:养成)
+- **`/帕鲁养成 <帕鲁名>`**:读玩家存档里这只帕鲁的养成现状与差距,**全部只读**:
+  - 浓缩星级(存档 `Rank`,0~4★)、帕鲁之魂强化(`GotStatusPointList`)、**觉醒**(`bIsAwakening`,实测可读)、个体值(`Talent_*`)、词条(`PassiveSkillList`→中文)、已装备技能(`EquipWaza`→中文)。取你拥有的该species最高养成那只;多只会提示数量。
+  - **不虚报**:浓缩/帕鲁之魂的精确材料需求数未在已导出 DataTable/Blueprint 中找到,建议里明确标注"游戏未从 DataTable 提取",不编数字;觉醒材料按主属性引用 `/帕鲁觉醒` 的真实 9 系晶石。
+  - 真实存档验证:青天如墨的鬼刃武士 浓缩 3/4★、个体值 76/99/73、词条 稀有·灵活、技能 真空刃/启示录/爆烈火墙。
+- `palsave._pal_brief` 补 `awakened`(bIsAwakening)、`mastered_waza`。
+- 修正 `.claude/rules`:旧注"觉醒无存档字段/不可读"作废(bIsAwakening 实测可读)。
+
 ## [1.16.0] - 2026-07-13
 
 ### 新增(个人帕鲁战力排行)
