@@ -135,7 +135,32 @@ def build():
         r["next"] = nm            # 存"目标任务中文名"(消费端直接展示,不再解析 id)
         r["next_id"] = nid if nm else ""   # 有效才保留内部 id,便于追链
         out.append(r)
-    out.sort(key=lambda m: (m["type"] != "主线", str(m.get("order") or 9999), m["id"]))
+    # 主线顺序:按 next_id 链拓扑重排(1.0 主线有分支,多条链;链内顺序=游戏推进序)。
+    # 旧数据 order 是 155-only EA 残留/字符串,不可靠 → 用链派生干净整数序覆盖。支线不排序(按 NPC 分组)。
+    mains = {m["id"]: m for m in out if m["type"] == "主线"}
+    nexts = {i: m.get("next_id", "") for i, m in mains.items()}
+    pointed = {v for v in nexts.values() if v in mains}
+    # 链头按旧 order(能转 int 的)再按 id 稳定排,尽量把"冒险的开始"类靠前
+    def _old_ord(i):
+        try:
+            return int(mains[i].get("order") or 9999)
+        except (TypeError, ValueError):
+            return 9999
+    heads = sorted((i for i in mains if i not in pointed), key=lambda i: (_old_ord(i), i))
+    seen, seq = set(), []
+    for h in heads:
+        c = h
+        while c in mains and c not in seen:
+            seen.add(c); seq.append(c); c = nexts.get(c, "")
+    for i in mains:                      # 环内/未覆盖的补末尾
+        if i not in seen:
+            seq.append(i)
+    for idx, i in enumerate(seq, 1):
+        mains[i]["order"] = idx          # 干净整数序
+    for m in out:
+        if m["type"] == "支线":
+            m["order"] = ""              # 支线按 NPC 分组展示,无线性顺序
+    out.sort(key=lambda m: (m["type"] != "主线", m["order"] if isinstance(m["order"], int) else 9999, m["id"]))
     print(f"[build] active 任务 {len(out)}(跳过 _Old);悬挂 next 已丢弃 {dangling} 条;"
           f"主线 {sum(1 for m in out if m['type'] == '主线')}/支线 {sum(1 for m in out if m['type'] == '支线')}")
     return out

@@ -6,6 +6,8 @@
 - `next_id` 若有必指向存在的任务 id。
 - 中文名重名不静默覆盖:主键取确定性主体,候选全保留,可按 id 直查;精确重名查交候选列表。
 """
+import asyncio
+
 import astrbot_plugin_palworld.main as main
 
 
@@ -13,6 +15,60 @@ def _loaded():
     o = main.PalworldPlugin.__new__(main.PalworldPlugin)
     o._load_paldex()
     return o
+
+
+class _Ev:
+    def get_sender_id(self):
+        return "u1"
+
+    def get_group_id(self):
+        return "g"
+
+
+def _run_handler(o, name, args):
+    """跑一个查询 handler(stub 掉 _img/_msg_card),返回渲染 data 或 'msg'。不抛异常=通过。"""
+    cap = {}
+
+    async def _img(event, tmpl, data, **kw):
+        cap["data"] = data
+        return "IMG"
+
+    async def _msg(event, *a, **k):
+        cap["msg"] = a
+        return "MSG"
+
+    o._img = _img
+    o._t = lambda k: k
+    o._msg_card = _msg
+    asyncio.new_event_loop().run_until_complete(getattr(o, name)(_Ev(), args))
+    return cap
+
+
+def test_mainquest_order_all_int_and_sorted():
+    o = _loaded()
+    mains = [m for m in o._missions if m["type"] == "主线"]
+    assert all(isinstance(m["order"], int) for m in mains), "主线 order 必须全为 int(否则排序崩)"
+    assert {m["order"] for m in mains} == set(range(1, len(mains) + 1)), "主线 order 应为连续 1..N"
+
+
+def test_mainquest_subquest_merchant_handlers_no_crash():
+    """回归:/帕鲁主线(order 混类型 TypeError)、/帕鲁支线(MISSION_GROUP_CN NameError)、/帕鲁商人。"""
+    o = _loaded()
+    assert "rows" in _run_handler(o, "_cmd_mainquest", [])["data"]
+    assert "rows" in _run_handler(o, "_cmd_subquest", [])["data"]
+    assert "rows" in _run_handler(o, "_cmd_subquest", ["农民"])["data"]
+
+
+def test_cooldown_per_command_not_global():
+    """并发不同指令互不冷却:同一用户发不同指令都放行;重复同一指令才拦。"""
+    o = main.PalworldPlugin.__new__(main.PalworldPlugin)
+    o.config = {"query_cooldown": 10}
+    o._cooldown_map = {}
+    ev = _Ev()
+    assert o._pass_cooldown(ev, "主线") is True
+    assert o._pass_cooldown(ev, "商人") is True          # 不同指令 -> 放行(并发)
+    assert o._pass_cooldown(ev, "支线") is True
+    assert o._pass_cooldown(ev, "主线") is False          # 重复同一指令 -> 拦
 
 
 def test_no_old_in_active():

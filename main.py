@@ -42,6 +42,7 @@ from .render.templates import (  # noqa: F401
     TEMPLATE_KEYS,
     STYLE_NAMES,
     STYLE_ALIAS,
+    MISSION_GROUP_CN,   # 支线委托 NPC 分组中文名(此前漏导致 /帕鲁支线 NameError)
 )
 # 命令注册表：子命令→处理器 的单一事实来源，驱动 _dispatch 与 _SUB_ALIASES。
 from .commands.router import ALIAS_MAP as COMMAND_ALIAS_MAP, COMMAND_TOKENS
@@ -2183,7 +2184,8 @@ class PalworldPlugin(Star):
             "name": m["name"], "emoji": "📜" if is_main else "📋",
             "tlabel": "主线任务" if is_main else "支线任务",
             "tcolor": "#e8c466" if is_main else "#7ab8ff",
-            "order": m.get("order") if is_main else 0,
+            "order": (m.get("order") if isinstance(m.get("order"), int) else 0) if is_main else 0,
+            "order_total": sum(1 for x in self._missions if x.get("type") == "主线"),
             "group": grp, "desc": m.get("desc", ""),
             "objective": m.get("objective", ""), "coords": m.get("coords", ""),
             "exp": m.get("exp", ""), "rewards": m.get("rewards", []),
@@ -2216,10 +2218,20 @@ class PalworldPlugin(Star):
                                {"title": f"📜 含「{q}」的任务", "subtitle": f"{len(hits)} 个",
                                 "rows": rows, "detailhint": hint, "pagehint": ""})
 
+    @staticmethod
+    def _order_int(m: dict) -> int:
+        """任务 order 归一成 int(用于排序,兼容 str/空/缺失,不再混类型崩溃)。无有效 order 排最后。"""
+        o = m.get("order")
+        try:
+            return int(o)
+        except (TypeError, ValueError):
+            return 9999
+
     async def _cmd_mainquest(self, event: AstrMessageEvent, args: list):
         if not self._missions:
             return await self._msg_card(event, "📜", "任务数据未加载", desc="data/missions.json 缺失。", color="#E5484D")
-        mains = sorted([m for m in self._missions if m["type"] == "主线"], key=lambda x: x.get("order", 999))
+        mains = sorted([m for m in self._missions if m["type"] == "主线"],
+                       key=lambda x: (self._order_int(x), x.get("id", "")))
         page = 1
         if args and args[-1].isdigit():
             page = max(1, int(args[-1]))
@@ -2227,7 +2239,8 @@ class PalworldPlugin(Star):
         total_pages = max(1, (len(mains) + size - 1) // size)
         page = min(page, total_pages)
         chunk = mains[(page - 1) * size: page * size]
-        rows = [{"tag": str(m.get("order", "")), "name": m["name"],
+        rows = [{"tag": (str(m["order"]) if str(m.get("order", "")).strip() not in ("", "9999") else "主"),
+                 "name": m["name"],
                  "brief": (m.get("desc", "")[:22] or m.get("objective", ""))} for m in chunk]
         pagehint = f"发「/帕鲁主线 {page + 1}」看下一页" if page < total_pages else ""
         return await self._img(event, self._t("missionlist"),
@@ -3002,7 +3015,7 @@ class PalworldPlugin(Star):
                 logger.warning(f"{LOG_PREFIX} 非白名单用户 {sender} 尝试执行「{spec.canonical}」")
             yield await self._no_perm_card(event)
             return
-        if spec.cooldown and not self._pass_cooldown(event):
+        if spec.cooldown and not self._pass_cooldown(event, spec.canonical):
             return
         handler = getattr(self, spec.handler)
         if spec.pass_args:
@@ -3013,19 +3026,20 @@ class PalworldPlugin(Star):
     # ------------------------------------------------------------------
     # 冷却
     # ------------------------------------------------------------------
-    def _pass_cooldown(self, event: AstrMessageEvent) -> bool:
-        """用户级查询冷却：同一用户两次受冷却的查询指令间隔 < query_cooldown 秒则拦截(返回 False)。
-        query_cooldown<=0 关闭(私人小群可关)；管理/绑定等 cooldown=False 的指令不经过这里。
-        目的：避免一个人连续刷图拖慢 t2i 渲染，服务器压力另由 SaveService 拉取锁+缓存兜底。"""
+    def _pass_cooldown(self, event: AstrMessageEvent, sub: str = "") -> bool:
+        """查询冷却:**按(用户, 指令)分别计时**——同一用户重复发**同一条**指令 < query_cooldown 秒才拦截;
+        **不同指令互不冷却**,可同时发多条并各自出图(如 /帕鲁主线 + /帕鲁商人 一起发都会处理)。
+        query_cooldown<=0 关闭(私人小群可关);管理/绑定等 cooldown=False 的指令不经过这里。
+        目的:只挡"同一个人狂刷同一张图",不挡正常并发不同查询。"""
         cd = self._effective_cooldown()
         if cd <= 0:
             return True
-        uid = str(event.get_sender_id() or "")
+        key = f"{event.get_sender_id() or ''}:{sub}"
         now = time.time()
-        if now - self._cooldown_map.get(uid, 0.0) < cd:
+        if now - self._cooldown_map.get(key, 0.0) < cd:
             return False
-        self._cooldown_map[uid] = now
-        if len(self._cooldown_map) > 300:   # 防内存无界增长，清理过期项
+        self._cooldown_map[key] = now
+        if len(self._cooldown_map) > 500:   # 防内存无界增长,清理过期项
             self._cooldown_map = {k: v for k, v in self._cooldown_map.items() if now - v < cd}
         return True
 

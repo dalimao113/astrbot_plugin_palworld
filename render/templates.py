@@ -1788,7 +1788,7 @@ MAP_ING = _IH + """</style></head><body><div class="page">
 
 # ---- ingame 版任务详情。变量契约与 MISSION_TMPL 一致 ----
 MISSION_ING = _IH + """</style></head><body><div class="page">
-  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ name }}</div><div class="ig-sub"><span class="ig-pill" style="color:{{tcolor}}">{{ tlabel }}</span>{% if order %}<span class="ig-pill">主线 第 {{ order }}/32</span>{% endif %}{% if group %}<span class="ig-pill">{{ group }}</span>{% endif %}</div></div></div>
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ name }}</div><div class="ig-sub"><span class="ig-pill" style="color:{{tcolor}}">{{ tlabel }}</span>{% if order %}<span class="ig-pill">主线 第 {{ order }}/{{ order_total or 55 }}</span>{% endif %}{% if group %}<span class="ig-pill">{{ group }}</span>{% endif %}</div></div></div>
   <div class="ig-panel">{% if desc %}<div style="font-size:14.5px;color:var(--pal-text-2);line-height:1.85;white-space:pre-line">{{ desc }}</div>{% endif %}
     <div class="ig-sec" style="margin-top:14px">目标</div><div style="font-size:14px;color:var(--pal-text-2);line-height:1.7">{{ objective or "按上方任务说明完成即可" }}{% if coords %}<br><span class="ig-pill" style="margin-top:6px;display:inline-block">地图坐标 <b style="color:var(--pal-gold);margin-left:3px">{{ coords }}</b></span>{% endif %}</div>
     {% if exp or rewards %}<div class="ig-sec" style="margin-top:14px">任务奖励</div><div style="display:flex;flex-wrap:wrap;gap:7px">{% if exp %}<span class="ig-pill gold">经验 +{{ exp }}</span>{% endif %}{% for r in rewards %}<span class="ig-pill">{{ r.name }} ×{{ r.qty }}</span>{% endfor %}</div>{% endif %}
@@ -4430,7 +4430,7 @@ MISSION_TMPL = _HEAD + """</style></head><body><div class="page">
     <div style="flex:none;width:74px;height:74px;border-radius:18px;background:radial-gradient(circle at 50% 38%,{{tcolor}}44,rgba(18,12,48,.5) 72%);border:2px solid {{tcolor}}aa;display:flex;align-items:center;justify-content:center;font-size:38px">{{ emoji }}</div>
     <div style="flex:1;min-width:0">
       <div class="title">{{ name }}</div>
-      <div class="subtitle"><span class="pill soft" style="color:{{tcolor}}">{{ tlabel }}</span>{% if order %}<span class="pill soft">主线 第 {{ order }}/32</span>{% endif %}{% if group %}<span class="pill soft">{{ group }}</span>{% endif %}</div>
+      <div class="subtitle"><span class="pill soft" style="color:{{tcolor}}">{{ tlabel }}</span>{% if order %}<span class="pill soft">主线 第 {{ order }}/{{ order_total or 55 }}</span>{% endif %}{% if group %}<span class="pill soft">{{ group }}</span>{% endif %}</div>
     </div>
   </div></div>
   <div class="glass">""" + _GEMS + """
@@ -4453,7 +4453,7 @@ MISSION_PIX = _PH + """</style></head><body><div class="page">
     <div style="flex:none;width:70px;height:70px;background:{{tcolor}}33;border:3px solid #6b4a24;box-shadow:inset 0 0 0 2px rgba(255,247,224,.5);display:flex;align-items:center;justify-content:center;font-size:34px">{{ emoji }}</div>
     <div style="flex:1;min-width:0">
       <div class="title">{{ name }}</div>
-      <div class="subtitle"><span class="pill">{{ tlabel }}</span>{% if order %}<span class="pill">主线 {{ order }}/32</span>{% endif %}{% if group %}<span class="pill">{{ group }}</span>{% endif %}</div>
+      <div class="subtitle"><span class="pill">{{ tlabel }}</span>{% if order %}<span class="pill">主线 {{ order }}/{{ order_total or 55 }}</span>{% endif %}{% if group %}<span class="pill">{{ group }}</span>{% endif %}</div>
     </div>
   </div></div>
   <div class="frame">

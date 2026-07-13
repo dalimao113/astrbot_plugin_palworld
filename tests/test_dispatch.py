@@ -21,7 +21,7 @@ def _mk(admin=False):
             return _n
         object.__setattr__(o, name, f)
     object.__setattr__(o, "_is_admin", lambda q: admin)
-    object.__setattr__(o, "_pass_cooldown", lambda e: True)
+    object.__setattr__(o, "_pass_cooldown", lambda e, sub="": True)
     return o, log
 
 
