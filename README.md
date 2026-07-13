@@ -10,7 +10,7 @@
 图鉴配种攻略随手查；管理员可公告 / 踢封 / 存档 / 关服。<br>
 **所有回复一律输出精美卡片图片**，附一键部署脚本。
 
-![version](https://img.shields.io/badge/version-1.13.0-6366F1?style=flat-square)
+![version](https://img.shields.io/badge/version-1.14.0-6366F1?style=flat-square)
 ![AstrBot](https://img.shields.io/badge/AstrBot-4.25%2B-8B5CF6?style=flat-square)
 ![OneBot](https://img.shields.io/badge/OneBot-v11-4ade80?style=flat-square)
 ![NapCat](https://img.shields.io/badge/adapter-NapCat-22c55e?style=flat-square)
@@ -149,6 +149,7 @@
 | `/帕鲁我` | 查看个人在线档案（在线状态/本周时长/累计/排名）|
 | `/帕鲁小队进度` | 按群聚合已绑定队员的**图鉴/传送点/塔主/野外Boss/地牢/遗物/区域**进度 + 各自**下一步任务**（存档只读自动同步，读不到的用手动勾选）|
 | `/帕鲁小队勾选 <目标>` | 手动勾选/取消一个探索目标（按群记录是谁完成，如 `/帕鲁小队勾选 世界树探索`）|
+| `/帕鲁据点体检` | 小队据点摘要：工人数/工作中、**工作适性覆盖与关键缺口**、伤病/饥饿/理智低/工作病计数 + 处理建议（存档只读，规则见 `data/basecamp_rules.json`）|
 | `/帕鲁订阅 <游戏名>` | 该玩家上线时在群里 @ 你 |
 | `/帕鲁退订 <游戏名>` | 取消上线提醒 |
 | `/帕鲁找人 <游戏名>` | 查某玩家是否在线 |

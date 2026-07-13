@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "game_version": "1.0",
+    "steam_build_id": "24088465",
+    "generated_at": "2026-07-13",
+    "source": "工作适性(work_types)来自客户端 DataTable DT_PalMonsterParameter.WorkSuitability,经 constants.WORK_LABELS 映射中文;健康阈值为通用运营参考(非游戏内部数值),仅用于据点体检提示,不代表官方数据。",
+    "note": "据点体检为只读分析,不改存档。缺口=该工作适性据点内 0 只帕鲁能做。"
+  },
+  "work_types": [
+    {"key": "handcraft", "cn": "手工", "essential": true, "why": "制作/建造/组装,几乎所有生产线前置"},
+    {"key": "mining", "cn": "采矿", "essential": true, "why": "石头/矿石/煤,建造与冶炼原料"},
+    {"key": "deforest", "cn": "砍伐", "essential": true, "why": "木材,建造与燃料"},
+    {"key": "collection", "cn": "采集", "essential": true, "why": "果实/纤维/掉落物搬运回收"},
+    {"key": "transport", "cn": "搬运", "essential": true, "why": "把产出送进仓库,缺则物料堆积拥堵"},
+    {"key": "watering", "cn": "浇水", "essential": false, "why": "农场浇水,种植线需要"},
+    {"key": "seeding", "cn": "播种", "essential": false, "why": "农场播种,种植线需要"},
+    {"key": "generate_electricity", "cn": "发电", "essential": false, "why": "电力设施(电熔炉/生产台)供能"},
+    {"key": "emit_flame", "cn": "点火", "essential": false, "why": "熔炉/篝火/料理加热"},
+    {"key": "cool", "cn": "制冷", "essential": false, "why": "冰箱/保鲜/孵化温控"},
+    {"key": "product_medicine", "cn": "制药", "essential": false, "why": "药品生产,治疗伤病"},
+    {"key": "monster_farm", "cn": "牧场", "essential": false, "why": "牧场产出(蛋/奶/羊毛等)"}
+  ],
+  "health_thresholds": {
+    "hp_low_pct": 50,
+    "sanity_low": 40,
+    "stomach_low_pct": 30
+  }
+}

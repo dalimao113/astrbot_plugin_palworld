@@ -5431,6 +5431,81 @@ SQUAD_ING = _IH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+# ---------------- 据点体检(首选2)。变量:workers,working,coverage[{cn,count,maxlv,essential,gap}],hurt,hungry,low_san,sick,advices[],source ----------------
+BASEHEALTH_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">🏰 据点体检</div>
+    <div class="subtitle"><span class="pill soft">工人 {{ workers }}</span><span class="pill soft">工作中 {{ working }}</span></div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+      <span class="pill" style="background:{% if hurt %}rgba(255,120,120,.2){% else %}rgba(124,252,154,.14){% endif %}">残血 {{ hurt }}</span>
+      <span class="pill" style="background:{% if hungry %}rgba(255,180,80,.2){% else %}rgba(124,252,154,.14){% endif %}">饥饿 {{ hungry }}</span>
+      <span class="pill" style="background:{% if low_san %}rgba(200,140,255,.2){% else %}rgba(124,252,154,.14){% endif %}">理智低 {{ low_san }}</span>
+      <span class="pill" style="background:{% if sick %}rgba(255,120,120,.2){% else %}rgba(124,252,154,.14){% endif %}">工作病 {{ sick }}</span>
+    </div>
+    <div class="sec-t">工作适性覆盖</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px">
+    {% for c in coverage %}
+      <div style="display:flex;align-items:center;gap:7px;padding:6px 10px;border-radius:10px;background:{% if c.gap and c.essential %}rgba(255,90,90,.14){% else %}rgba(12,8,38,.4){% endif %};border:1px solid {% if c.gap and c.essential %}rgba(255,90,90,.4){% else %}rgba(232,198,106,.16){% endif %}">
+        <span style="font-size:13px;color:#f3ecd2;{% if c.essential %}font-weight:800{% endif %}">{{ c.cn }}</span>
+        <span style="margin-left:auto;font-size:12.5px;color:{% if c.gap %}#ff9a9a{% else %}#9effb6{% endif %}">{% if c.gap %}缺{% else %}{{ c.count }} 只 · Lv{{ c.maxlv }}{% endif %}</span>
+      </div>
+    {% endfor %}
+    </div>
+    <div class="sec-t" style="margin-top:15px">📋 体检建议</div>
+    {% for a in advices %}<div style="font-size:13px;color:#cfc1ea;line-height:1.7;margin-top:3px">• {{ a }}</div>{% endfor %}
+    <div style="margin-top:12px;font-size:11px;color:#8a82a8;line-height:1.6">{{ source }}</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+BASEHEALTH_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">■ 据点体检</div>
+    <div class="subtitle"><span class="pill">工人 {{ workers }}</span><span class="pill">工作中 {{ working }}</span></div>
+  </div></div>
+  <div class="frame">
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:11px">
+      <span class="pill">残血 {{ hurt }}</span><span class="pill">饥饿 {{ hungry }}</span><span class="pill">理智低 {{ low_san }}</span><span class="pill">工作病 {{ sick }}</span>
+    </div>
+    <div class="sec-t">工作适性覆盖</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px">
+    {% for c in coverage %}
+      <div style="display:flex;gap:6px;padding:5px 9px;border:2px solid {% if c.gap and c.essential %}#c0392b{% else %}#6b4a24{% endif %};background:{% if c.gap and c.essential %}rgba(192,57,43,.14){% else %}rgba(221,198,149,.35){% endif %}">
+        <span style="font-size:12.5px;color:#2c1a0a;{% if c.essential %}font-weight:700{% endif %}">{{ c.cn }}</span>
+        <span style="margin-left:auto;font-size:12px;color:{% if c.gap %}#8f1212{% else %}#1d7a36{% endif %}">{% if c.gap %}缺{% else %}{{ c.count }}·Lv{{ c.maxlv }}{% endif %}</span>
+      </div>
+    {% endfor %}
+    </div>
+    <div class="sec-t" style="margin-top:14px">体检建议</div>
+    {% for a in advices %}<div style="font-size:13px;color:#382207;line-height:1.7;margin-top:3px">• {{ a }}</div>{% endfor %}
+    <div style="margin-top:11px;font-size:11px;color:#7a6a4a;line-height:1.6">{{ source }}</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+BASEHEALTH_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">据点体检</div><div class="ig-sub"><span class="ig-pill">工人 {{ workers }}</span><span class="ig-pill">工作中 {{ working }}</span></div></div></div>
+  <div class="ig-panel">
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <span class="ig-pill"{% if hurt %} style="color:var(--pal-danger)"{% endif %}>残血 {{ hurt }}</span><span class="ig-pill"{% if hungry %} style="color:var(--pal-gold)"{% endif %}>饥饿 {{ hungry }}</span>
+      <span class="ig-pill">理智低 {{ low_san }}</span><span class="ig-pill"{% if sick %} style="color:var(--pal-danger)"{% endif %}>工作病 {{ sick }}</span>
+    </div>
+  </div>
+  <div class="ig-panel hi"><div class="ig-sec">工作适性覆盖</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px">
+    {% for c in coverage %}<div class="ig-prow" style="justify-content:space-between"><span{% if c.essential %} style="font-weight:800"{% endif %}>{{ c.cn }}</span><span style="font-size:12px;color:{% if c.gap %}var(--pal-danger){% else %}var(--pal-good){% endif %}">{% if c.gap %}缺{% else %}{{ c.count }} · Lv{{ c.maxlv }}{% endif %}</span></div>{% endfor %}
+    </div>
+  </div>
+  <div class="ig-panel"><div class="ig-sec">体检建议</div>
+    {% for a in advices %}<div style="font-size:13px;color:var(--pal-text-2);line-height:1.7;margin-top:3px">• {{ a }}</div>{% endfor %}
+    <div style="margin-top:10px;font-size:11px;color:var(--pal-dim)">{{ source }}</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
 STYLES = {
     "fantasy": {"status": STATUS_TMPL, "players": PLAYERS_TMPL, "settings": SETTINGS_TMPL,
                 "help": HELP_TMPL, "message": MSG_TMPL, "stats": STATS_TMPL, "rank": RANK_TMPL,
@@ -5443,7 +5518,7 @@ STYLES = {
                 "facility": FACILITY_TMPL, "tech": TECH_TMPL, "grid": GRID_TMPL, "map": MAP_TMPL,
                 "lab_overview": LAB_OVERVIEW_TMPL, "lab_list": LAB_LIST_TMPL, "lab_detail": LAB_DETAIL_TMPL,
                 "bag": BAG_TMPL, "team": TEAM_TMPL, "palbox": PALBOX_TMPL, "guild": GUILD_TMPL,
-                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL,
+                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "passdex": PASSDEX_TMPL, "passlist": PASSLIST_TMPL,
                 "awakening": AWAKENING_TMPL, "mutation": MUTATION_TMPL,
@@ -5462,7 +5537,7 @@ STYLES = {
               "facility": FACILITY_PIX, "tech": TECH_PIX, "grid": GRID_PIX, "map": MAP_PIX,
               "lab_overview": LAB_OVERVIEW_PIX, "lab_list": LAB_LIST_PIX, "lab_detail": LAB_DETAIL_PIX,
               "bag": BAG_PIX, "team": TEAM_PIX, "palbox": PALBOX_PIX, "guild": GUILD_PIX,
-              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX,
+              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX,
               "element": ELEMENT_PIX, "habitat": HABITAT_PIX, "passrec": PASSREC_PIX,
               "passdex": PASSDEX_PIX, "passlist": PASSLIST_PIX,
               "awakening": AWAKENING_PIX, "mutation": MUTATION_PIX,
@@ -5478,6 +5553,7 @@ STYLES = {
 # 该临时回退是**显式记录**的(见 docs/INGAME_ICON_COVERAGE.md),非「悄悄用别的主题」。
 STYLES["ingame"] = dict(STYLES["fantasy"])
 STYLES["ingame"]["squad"] = SQUAD_ING
+STYLES["ingame"]["basehealth"] = BASEHEALTH_ING
 # 阶段D:已改造为 ingame 专属布局的卡(其余仍临时回退 fantasy,见 INGAME_ICON_COVERAGE.md)
 STYLES["ingame"]["paldex"] = PALDEX_ING
 STYLES["ingame"]["passlist"] = PASSLIST_ING

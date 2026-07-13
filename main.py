@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.13.0",
+    "1.14.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2968,7 +2968,7 @@ class PalworldPlugin(Star):
                 return alias, (([rest] + list(args)) if rest else list(args))
         return sub, args
 
-    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
+    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点体检|基地体检|据点健康|基地健康|basehealth|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
     async def palworld(self, event: AstrMessageEvent):
         raw = (event.message_str or "").strip()
         # 去掉可选的「/」前缀和指令词「帕鲁」，剩余既可能是「在线」也可能是「在线 参数」
@@ -3670,6 +3670,83 @@ class PalworldPlugin(Star):
             self.state["squad"].pop(gid, None)
             self._save_state()
         return await self._msg_card(event, "🧹", "已重置本群小队清单", desc="本群的手动勾选目标已清空(存档自动同步部分不受影响)。", color="#30A46C")
+
+    # ------------------------------------------------------------------
+    # 首选2：据点体检(/帕鲁据点体检)——聚合小队(公会共享)据点工作帕鲁,给工人/适性缺口/伤病摘要。只读,不改存档。
+    # ------------------------------------------------------------------
+    def _load_basecamp_rules(self) -> dict:
+        if getattr(self, "_bc_rules", None) is None:
+            try:
+                base = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "basecamp_rules.json")
+                with open(base, encoding="utf-8") as f:
+                    self._bc_rules = json.load(f)
+            except Exception:  # noqa: BLE001
+                self._bc_rules = {"work_types": [], "health_thresholds": {}}
+        return self._bc_rules
+
+    async def _basecamp_health_data(self, gid: str) -> Optional[dict]:
+        """聚合本群小队据点工作帕鲁的体检数据(公会共享,按 iid 去重)。存档只读。读不到→None。"""
+        self._last_save_use = time.time()
+        data = await self._fetch_save_data(force_save=False)
+        if not data:
+            return None
+        profiles = data.get("profiles") or {}
+        bindings = self.state.get("bindings", {}) or {}
+        workers = {}   # iid -> pal(据点共享帕鲁在每个成员档案里各有一份,去重)
+        for qq in self._squad_roster_qq(gid):
+            uid = self._norm_uid((bindings.get(qq) or {}).get("userId"))
+            for pal in (profiles.get(uid) or {}).get("basecamp", []):
+                workers.setdefault(pal.get("iid") or id(pal), pal)
+        views = self._safe_views(self._basecamp_view, list(workers.values()), "据点体检")
+        rules = self._load_basecamp_rules()
+        th = rules.get("health_thresholds", {})
+        hp_low, san_low, stom_low = th.get("hp_low_pct", 50), th.get("sanity_low", 40), th.get("stomach_low_pct", 30)
+        coverage = []
+        for wt in rules.get("work_types", []):
+            cn = wt["cn"]
+            cnt = sum(1 for v in views if any(w["k"] == cn for w in v.get("works", [])))
+            maxlv = max([w["lv"] for v in views for w in v.get("works", []) if w["k"] == cn] or [0])
+            coverage.append({"cn": cn, "count": cnt, "maxlv": maxlv,
+                             "essential": bool(wt.get("essential")), "gap": cnt == 0})
+        gaps = [c["cn"] for c in coverage if c["gap"] and c["essential"]]
+        hurt = sum(1 for v in views if v.get("hp_pct") and v["hp_pct"] < hp_low)
+        hungry = sum(1 for v in views if v.get("hungry"))
+        low_san = sum(1 for v in views if v.get("low_san"))
+        sick = sum(1 for v in views if v.get("sick"))
+        low_stom = sum(1 for v in views if v.get("stomach") and v["stomach"] < stom_low)
+        advices = []
+        if gaps:
+            advices.append(f"缺关键工作适性：{('、').join(gaps)} —— 抓/放对应适性帕鲁进据点补齐。")
+        if hungry or low_stom:
+            advices.append(f"有 {max(hungry, low_stom)} 只饥饿/低饱食 —— 检查喂食箱食物是否断供、补种农场。")
+        if sick:
+            advices.append(f"有 {sick} 只工作病(扭伤/虚弱/消沉) —— 放进帕鲁床/温泉/药品设施休养。")
+        if low_san:
+            advices.append(f"有 {low_san} 只理智低 —— 减负、加温泉/娱乐设施,避免暴走。")
+        if hurt:
+            advices.append(f"有 {hurt} 只残血(<{hp_low}%) —— 撤下休养或喂治疗药。")
+        if not advices and views:
+            advices.append("据点状态良好：关键适性齐全,无明显伤病/饥饿。")
+        return {
+            "workers": len(views), "working": sum(1 for v in views if v.get("working")),
+            "coverage": coverage, "gaps": gaps,
+            "hurt": hurt, "hungry": hungry, "low_san": low_san, "sick": sick, "low_stom": low_stom,
+            "advices": advices,
+            "source": "工作适性来自客户端 DataTable;体检只读,不改存档",
+        }
+
+    async def _cmd_basecamp_health(self, event: AstrMessageEvent, args: list[str]):
+        gid = str(event.get_group_id() or "")
+        if not gid:
+            return await self._msg_card(event, "🏰", "请在群里用", desc="据点体检按群小队聚合，请在群聊里发 /帕鲁据点体检。", color="#F5A623")
+        d = await self._basecamp_health_data(gid)
+        if d is None:
+            return await self._msg_card(event, "🛰️", "暂时读不到存档",
+                                        desc="未挂载 docker.sock 或存档读取失败，稍后再试。", color="#F5A623")
+        if not d["workers"]:
+            return await self._msg_card(event, "🏰", "据点里还没有工作帕鲁",
+                                        desc="让群友先 /帕鲁绑定 并上线一次；或把帕鲁从帕鲁箱放到据点工作后再体检。", color="#9a8a91")
+        return await self._img(event, self._t("basehealth"), d)
 
     # ------------------------------------------------------------------
     # Phase 3：玩家绑定 / 个人卡 / 订阅
