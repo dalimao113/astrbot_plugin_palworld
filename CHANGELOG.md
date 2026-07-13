@@ -2,6 +2,11 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.14.2] - 2026-07-13
+
+### 修正
+- **`/帕鲁小队进度`、`/帕鲁据点体检` 已绑定却显示"没有进度/工人"**:聚合时错用 `绑定userId` 去查进度/档案,但存档进度与档案是以 **存档 playerId(hex)** 为键;绑定 userId(REST,如 `steam_…`)≠ playerId。改为复用 `_match_save_profile`(userId→playerId via `uid2pid`,或昵称兜底)——与 `/帕鲁我`、`/帕鲁背包` 同一套匹配。真实存档验证:12/12 档案↔进度键对齐、按昵称可匹配到进度。
+
 ## [1.14.1] - 2026-07-13
 
 ### 修正

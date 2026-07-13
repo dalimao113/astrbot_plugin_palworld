@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.14.1",
+    "1.14.2",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -3587,13 +3587,16 @@ class PalworldPlugin(Star):
         data = await self._fetch_save_data(force_save=False)
         if not data:
             return None
+        profiles = data.get("profiles") or {}
         progress = data.get("progress") or {}
         bindings = self.state.get("bindings", {}) or {}
         members = []
         for qq in self._squad_roster_qq(gid):
             b = bindings.get(qq) or {}
-            uid = self._norm_uid(b.get("userId"))
-            pr = progress.get(uid)
+            prof = self._match_save_profile(b, profiles)   # 绑定 userId→playerId(uid2pid)或昵称兜底
+            if not prof:
+                continue
+            pr = progress.get(prof.get("player_id"))       # 进度按存档 playerId 键
             if not pr:
                 continue
             # 当前进行中的任务 -> 中文名(下一步建议);去掉隐藏/展示台内部任务
@@ -3694,8 +3697,8 @@ class PalworldPlugin(Star):
         bindings = self.state.get("bindings", {}) or {}
         workers = {}   # iid -> pal(据点共享帕鲁在每个成员档案里各有一份,去重)
         for qq in self._squad_roster_qq(gid):
-            uid = self._norm_uid((bindings.get(qq) or {}).get("userId"))
-            for pal in (profiles.get(uid) or {}).get("basecamp", []):
+            prof = self._match_save_profile(bindings.get(qq), profiles)   # 绑定→存档档案(uid2pid/昵称)
+            for pal in (prof or {}).get("basecamp", []):
                 workers.setdefault(pal.get("iid") or id(pal), pal)
         views = self._safe_views(self._basecamp_view, list(workers.values()), "据点体检")
         rules = self._load_basecamp_rules()

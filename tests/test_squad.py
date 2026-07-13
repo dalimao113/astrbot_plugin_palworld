@@ -28,18 +28,21 @@ def _run(coro):
 def _plugin():
     o = main.PalworldPlugin.__new__(main.PalworldPlugin)
     o._load_paldex()
-    o.state = {"bindings": {"q0": {"userId": "AAAA0000", "name": "阿狸"},
-                            "q1": {"userId": "BBBB0000", "name": "小明"}},
+    # 绑定 userId(REST) → 存档 playerId(uid2pid);profiles/progress 以 playerId 为键(与生产一致)
+    o.state = {"bindings": {"q0": {"userId": "UID_A", "name": "阿狸"},
+                            "q1": {"userId": "UID_B", "name": "小明"}},
+               "uid2pid": {"UID_A": "PID_A", "UID_B": "PID_B"},
                "group_members": {}, "squad": {}}
     o._save_state = lambda: None
     o._last_save_use = 0
-    # 模拟存档进度(真实结构由 extract_player_progress 提供;这里给聚合喂已解析结果)
-    prog = {"AAAA0000": {"paldeck": 91, "fasttravel": 55, "tower_bosses": ["GrassBoss", "ForestBoss"],
-                         "field_bosses": 22, "dungeon_normal": 1, "dungeon_fixed": 8, "relics": 2,
-                         "areas_found": 47, "active_quests": ["Main_CollectKeySpheres", "Hidden_X"]}}
+    profiles = {"PID_A": {"player_id": "PID_A", "nickname": "阿狸"},
+                "PID_B": {"player_id": "PID_B", "nickname": "小明"}}   # PID_B 无进度 -> 应被跳过,不伪造
+    prog = {"PID_A": {"paldeck": 91, "fasttravel": 55, "tower_bosses": ["GrassBoss", "ForestBoss"],
+                      "field_bosses": 22, "dungeon_normal": 1, "dungeon_fixed": 8, "relics": 2,
+                      "areas_found": 47, "active_quests": ["Main_CollectKeySpheres", "Hidden_X"]}}
 
     async def _fetch(**k):
-        return {"profiles": {}, "guilds": [], "progress": prog}
+        return {"profiles": profiles, "guilds": [], "progress": prog}
 
     o._fetch_save_data = _fetch
     cap = {}

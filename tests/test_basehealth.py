@@ -23,12 +23,14 @@ def test_rules_file_traceable():
 
 def _plugin_with_views(views):
     o = main.PalworldPlugin.__new__(main.PalworldPlugin)
-    o.state = {"bindings": {"q0": {"userId": "AAAA0000", "name": "阿狸"}}, "group_members": {}}
+    o.state = {"bindings": {"q0": {"userId": "UID_A", "name": "阿狸"}},
+               "uid2pid": {"UID_A": "PID_A"}, "group_members": {}}
     o._last_save_use = 0
     o._bc_rules = None
 
     async def _fetch(**k):
-        return {"profiles": {"AAAA0000": {"basecamp": [{"iid": f"i{i}"} for i in range(len(views))]}}}
+        return {"profiles": {"PID_A": {"player_id": "PID_A",
+                                       "basecamp": [{"iid": f"i{i}"} for i in range(len(views))]}}}
 
     o._fetch_save_data = _fetch
     o._safe_views = lambda fn, pals, tag: views            # 直接喂受控 view,绕过复杂 _basecamp_view
