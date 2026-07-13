@@ -474,7 +474,7 @@ PALDEX_TMPL = _HEAD + """
   <div class="head"><div style="display:flex;align-items:center;gap:15px;width:100%">
     {% if icon %}<div style="flex:none;width:108px;height:108px;border-radius:20px;background:radial-gradient(circle at 50% 38%,rgba(232,198,106,.30),rgba(18,12,48,.55) 72%);border:2px solid rgba(232,198,106,.62);box-shadow:0 3px 15px rgba(0,0,0,.5),inset 0 0 18px rgba(232,198,106,.18);display:flex;align-items:center;justify-content:center"><img src="{{ icon }}" style="width:92px;height:92px;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(0,0,0,.6))"></div>{% else %}<div style="flex:none;font-size:72px">📕</div>{% endif %}
     <div style="flex:1;min-width:0">
-      <div class="title">{{ name }}{% if is_tower_boss %} <span style="font-size:15px;vertical-align:middle;background:linear-gradient(135deg,#c0392b,#8e2318);color:#fff;padding:3px 11px;border-radius:9px;font-weight:800;box-shadow:0 2px 7px rgba(192,57,43,.55)">🗼 塔主</span>{% elif is_boss %} <span style="font-size:15px;vertical-align:middle;background:linear-gradient(135deg,#d68910,#a86008);color:#fff;padding:3px 11px;border-radius:9px;font-weight:800;box-shadow:0 2px 7px rgba(214,137,16,.5)">👑 头目</span>{% endif %}</div>
+      <div class="title">{{ name }}{% if is_tower_boss %} <span style="font-size:15px;vertical-align:middle;background:linear-gradient(135deg,#c0392b,#8e2318);color:#fff;padding:3px 11px;border-radius:9px;font-weight:800;box-shadow:0 2px 7px rgba(192,57,43,.55)">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:15px;height:15px;object-fit:contain;vertical-align:-2px;margin-right:3px">{% else %}🗼 {% endif %}塔主</span>{% elif is_boss %} <span style="font-size:15px;vertical-align:middle;background:linear-gradient(135deg,#d68910,#a86008);color:#fff;padding:3px 11px;border-radius:9px;font-weight:800;box-shadow:0 2px 7px rgba(214,137,16,.5)">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:15px;height:15px;object-fit:contain;vertical-align:-2px;margin-right:3px">{% else %}👑 {% endif %}头目</span>{% endif %}</div>
       <div class="subtitle">
         <span class="pill soft">图鉴 #{{ index }}</span>
         {% for e in elements %}<span class="pill soft">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ e }}</span>{% endfor %}
@@ -540,14 +540,14 @@ BREED_TMPL = _HEAD + """</style></head><body><div class="page">
         {% if a.icon %}<img src="{{ a.icon }}" style="width:52px;height:52px;object-fit:contain;display:block;margin:0 auto 6px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))">{% endif %}
         <div style="font-size:18px;font-weight:800;color:#f3ecd2;word-break:break-word">{{ a.name }}</div>
         <div style="font-size:12px;color:#9c8fc0;margin-top:3px">#{{ a.index }}</div>
-        <div style="margin-top:8px;display:flex;gap:5px;justify-content:center;flex-wrap:wrap">{% for e in a.elements %}<span class="pill soft" style="font-size:11px;padding:2px 9px">{{ e }}</span>{% endfor %}</div>
+        <div style="margin-top:8px;display:flex;gap:5px;justify-content:center;flex-wrap:wrap">{% for e in a.elements %}<span class="pill soft" style="font-size:11px;padding:2px 9px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
       </div>
       <div style="font-size:30px;font-weight:900;color:#e8c466;flex-shrink:0">＋</div>
       <div class="tile" style="flex:1;max-width:150px;text-align:center;padding:15px 8px">
         {% if b.icon %}<img src="{{ b.icon }}" style="width:52px;height:52px;object-fit:contain;display:block;margin:0 auto 6px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))">{% endif %}
         <div style="font-size:18px;font-weight:800;color:#f3ecd2;word-break:break-word">{{ b.name }}</div>
         <div style="font-size:12px;color:#9c8fc0;margin-top:3px">#{{ b.index }}</div>
-        <div style="margin-top:8px;display:flex;gap:5px;justify-content:center;flex-wrap:wrap">{% for e in b.elements %}<span class="pill soft" style="font-size:11px;padding:2px 9px">{{ e }}</span>{% endfor %}</div>
+        <div style="margin-top:8px;display:flex;gap:5px;justify-content:center;flex-wrap:wrap">{% for e in b.elements %}<span class="pill soft" style="font-size:11px;padding:2px 9px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
       </div>
     </div>
     <div style="text-align:center;font-size:14px;color:#e8c466;font-weight:800;margin:4px 0 2px">═══ 后代 ═══</div>
@@ -555,7 +555,7 @@ BREED_TMPL = _HEAD + """</style></head><body><div class="page">
       {% if c.icon %}<img src="{{ c.icon }}" style="width:72px;height:72px;object-fit:contain;display:block;margin:0 auto 4px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.55))">{% endif %}
       <div class="num-gold" style="font-size:30px">{{ c.name }}</div>
       <div style="font-size:13px;color:#9c8fc0;margin-top:4px">图鉴 #{{ c.index }} · {{ "★" * (c.rarity if c.rarity <= 5 else 5) if c.rarity else "★" }}</div>
-      <div style="display:flex;gap:6px;justify-content:center;margin-top:10px">{% for e in c.elements %}<span class="pill gold" style="font-size:13px;padding:4px 13px">{{ e }}</span>{% endfor %}</div>
+      <div style="display:flex;gap:6px;justify-content:center;margin-top:10px">{% for e in c.elements %}<span class="pill gold" style="font-size:13px;padding:4px 13px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ e }}</span>{% endfor %}</div>
     </div>
     {% if child_breeds %}
     <div style="margin-top:12px;border-top:1px solid rgba(232,198,106,0.25);padding-top:12px">
@@ -2682,7 +2682,7 @@ BASECAMP_TMPL = _HEAD + """
         <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
           <span style="font-size:15px;font-weight:800;color:#f3ecd2">{{ c.name }}</span>
           <span style="font-size:12px;color:#e8c466;font-weight:700">Lv.{{ c.level }}</span>
-          {% for e in c.elements %}<span style="font-size:10.5px;color:#cfc1ea;background:rgba(99,102,241,.18);border-radius:5px;padding:0 6px">{{ e }}</span>{% endfor %}
+          {% for e in c.elements %}<span style="font-size:10.5px;color:#cfc1ea;background:rgba(99,102,241,.18);border-radius:5px;padding:0 6px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-1px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}
           {% if c.health.hurt %}<span class="hpill" style="background:{% if c.health.tone=='bad' %}#d42c2c{% else %}#e07a1a{% endif %};color:#fff">⚠{{ c.health.label }}</span>{% endif %}
           {% if c.starving %}<span class="hpill" style="background:#e0a01a;color:#3a1d00">🍖饥饿</span>{% endif %}
           {% if c.low_san %}<span class="hpill" style="background:#c05bd0;color:#fff">🧠理智低</span>{% endif %}
@@ -2758,7 +2758,7 @@ BASECAMP_PIX = _PH + """
         <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
           <span style="font-size:15px;color:#46200a">{{ c.name }}</span>
           <span style="font-size:12px;color:#8f1212">Lv.{{ c.level }}</span>
-          {% for e in c.elements %}<span style="font-size:10.5px;color:#574012;background:rgba(156,107,26,.18);padding:0 5px">{{ e }}</span>{% endfor %}
+          {% for e in c.elements %}<span style="font-size:10.5px;color:#574012;background:rgba(156,107,26,.18);padding:0 5px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-1px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}
           {% if c.health.hurt %}<span class="hpill" style="background:{% if c.health.tone=='bad' %}#d42c2c{% else %}#e07a1a{% endif %}">⚠{{ c.health.label }}</span>{% endif %}
           {% if c.starving %}<span class="hpill" style="background:#c98a10">🍖饥饿</span>{% endif %}
           {% if c.low_san %}<span class="hpill" style="background:#9c4baa">🧠理智低</span>{% endif %}
@@ -2913,7 +2913,7 @@ TEAM_TMPL = _HEAD + _PCHIP + _TEAM_STAT_F + """
         <span class="pill soft">Lv.{{ p.level }}</span>
         {% if p.gender %}<span class="pill soft">{{ p.gender }}</span>{% endif %}
         {% for e in p.elements %}<span class="pill soft">{{ e }}</span>{% endfor %}
-        {% if p.lucky %}<span class="pill soft">✨ 闪光</span>{% elif p.alpha %}<span class="pill soft">👑 头目</span>{% endif %}
+        {% if p.lucky %}<span class="pill soft">{% if icons.pal.lucky %}<img src="{{ icons.pal.lucky }}" style="width:13px;height:13px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}✨ {% endif %}闪光</span>{% elif p.alpha %}<span class="pill soft">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:13px;height:13px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}👑 {% endif %}头目</span>{% endif %}
         {% if p.health.hurt %}<span class="pill" style="background:linear-gradient(135deg,{% if p.health.tone=='bad' %}#ff6a6a,#d42c2c{% else %}#ffb24a,#e07a1a{% endif %});color:#fff;font-weight:800">⚠ {{ p.health.label }}{% if p.health.tone=='bad' %}·放终端可恢复{% endif %}</span>{% endif %}
       </div>
       <div class="ivr">
@@ -2974,7 +2974,7 @@ TEAM_PIX = _PH + _PCHIP_PIX + _TEAM_STAT_P + """
         <span class="pill">Lv.{{ p.level }}</span>
         {% if p.gender %}<span class="pill">{{ p.gender }}</span>{% endif %}
         {% for e in p.elements %}<span class="pill">{{ e }}</span>{% endfor %}
-        {% if p.lucky %}<span class="pill">✨闪光</span>{% elif p.alpha %}<span class="pill">♛头目</span>{% endif %}
+        {% if p.lucky %}<span class="pill">{% if icons.pal.lucky %}<img src="{{ icons.pal.lucky }}" style="width:13px;height:13px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}✨{% endif %}闪光</span>{% elif p.alpha %}<span class="pill">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:13px;height:13px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}♛{% endif %}头目</span>{% endif %}
         {% if p.health.hurt %}<span class="pill" style="background:{% if p.health.tone=='bad' %}#d42c2c{% else %}#e07a1a{% endif %};color:#fff">⚠{{ p.health.label }}{% if p.health.tone=='bad' %}·放终端可恢复{% endif %}</span>{% endif %}
       </div>
       <div class="ivr">
@@ -3046,7 +3046,7 @@ PALDEX_PIX = _PH + """
     {% if icon %}<div style="flex:none;width:104px;height:104px;background:rgba(214,184,124,.3);border:3px solid #6b4a24;box-shadow:inset 0 0 0 2px rgba(255,247,224,.5);display:flex;align-items:center;justify-content:center"><img src="{{ icon }}" style="width:86px;height:86px;object-fit:contain;image-rendering:pixelated"></div>{% else %}<div style="flex:none;font-size:64px">▥</div>{% endif %}
     <div style="flex:1;min-width:0">
       <div class="title">{{ name }}</div>
-      <div class="subtitle">{% if is_tower_boss %}<span class="pill" style="background:#c0392b;color:#fff">🗼塔主</span>{% elif is_boss %}<span class="pill" style="background:#d68910;color:#fff">👑头目</span>{% endif %}<span class="pill">#{{ index }}</span>{% for e in elements %}<span class="pill">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ e }}</span>{% endfor %}<span class="pill">{{ "★"*(rarity if rarity <= 5 else 5) if rarity else "★" }}</span>{% if nocturnal %}<span class="pill">夜行</span>{% endif %}</div>
+      <div class="subtitle">{% if is_tower_boss %}<span class="pill" style="background:#c0392b;color:#fff">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}🗼{% endif %}塔主</span>{% elif is_boss %}<span class="pill" style="background:#d68910;color:#fff">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}👑{% endif %}头目</span>{% endif %}<span class="pill">#{{ index }}</span>{% for e in elements %}<span class="pill">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ e }}</span>{% endfor %}<span class="pill">{{ "★"*(rarity if rarity <= 5 else 5) if rarity else "★" }}</span>{% if nocturnal %}<span class="pill">夜行</span>{% endif %}</div>
     </div>
   </div></div>
   <div class="frame">
@@ -3102,14 +3102,14 @@ BREED_PIX = _PH + """</style></head><body><div class="page">
         {% if a.icon %}<img src="{{ a.icon }}" style="width:48px;height:48px;object-fit:contain;display:block;margin:0 auto 5px;image-rendering:pixelated">{% endif %}
         <div style="font-size:17px;color:#46200a;word-break:break-word">{{ a.name }}</div>
         <div style="font-size:11px;color:#523f10;margin-top:3px">#{{ a.index }}</div>
-        <div style="margin-top:7px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for e in a.elements %}<span class="pill" style="font-size:10px">{{ e }}</span>{% endfor %}</div>
+        <div style="margin-top:7px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for e in a.elements %}<span class="pill" style="font-size:10px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
       </div>
       <div style="font-size:26px;color:#8f1212;flex-shrink:0">+</div>
       <div class="tile" style="flex:1;max-width:150px;text-align:center;padding:13px 8px">
         {% if b.icon %}<img src="{{ b.icon }}" style="width:48px;height:48px;object-fit:contain;display:block;margin:0 auto 5px;image-rendering:pixelated">{% endif %}
         <div style="font-size:17px;color:#46200a;word-break:break-word">{{ b.name }}</div>
         <div style="font-size:11px;color:#523f10;margin-top:3px">#{{ b.index }}</div>
-        <div style="margin-top:7px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for e in b.elements %}<span class="pill" style="font-size:10px">{{ e }}</span>{% endfor %}</div>
+        <div style="margin-top:7px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for e in b.elements %}<span class="pill" style="font-size:10px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
       </div>
     </div>
     <div style="text-align:center;font-size:14px;color:#7a3604;margin:2px 0">==== 后代 ====</div>
@@ -3117,7 +3117,7 @@ BREED_PIX = _PH + """</style></head><body><div class="page">
       {% if c.icon %}<img src="{{ c.icon }}" style="width:64px;height:64px;object-fit:contain;display:block;margin:0 auto 4px;image-rendering:pixelated">{% endif %}
       <div class="num-big" style="font-size:28px">{{ c.name }}</div>
       <div style="font-size:12px;color:#523f10;margin-top:4px">图鉴 #{{ c.index }} · {{ "★"*(c.rarity if c.rarity <= 5 else 5) if c.rarity else "★" }}</div>
-      <div style="display:flex;gap:5px;justify-content:center;margin-top:9px">{% for e in c.elements %}<span class="pill red" style="font-size:13px;padding:3px 12px">{{ e }}</span>{% endfor %}</div>
+      <div style="display:flex;gap:5px;justify-content:center;margin-top:9px">{% for e in c.elements %}<span class="pill red" style="font-size:13px;padding:3px 12px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ e }}</span>{% endfor %}</div>
     </div>
     {% if child_breeds %}
     <div style="margin-top:10px;border-top:2px dotted rgba(90,58,30,0.35);padding-top:10px">
@@ -3196,7 +3196,7 @@ SHINY_TMPL = _HEAD + """</style></head><body><div class="page">
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
     {% for r in rows %}
       <div style="display:flex;flex-direction:column;align-items:center;background:linear-gradient(160deg,rgba(232,198,106,.16),rgba(18,12,48,.5));border:1px solid rgba(232,198,106,.35);border-radius:13px;padding:10px 6px;position:relative">
-        <span style="position:absolute;top:4px;right:6px;font-size:13px">{{ badge }}</span>
+        <span style="position:absolute;top:4px;right:6px;font-size:13px">{% if icons.pal[badge_kind] %}<img src="{{ icons.pal[badge_kind] }}" style="width:16px;height:16px;object-fit:contain">{% else %}{{ badge }}{% endif %}</span>
         {% if r.icon %}<img src="{{ r.icon }}" style="width:52px;height:52px;object-fit:contain">{% else %}<span style="font-size:32px">🐾</span>{% endif %}
         <div style="font-size:13px;font-weight:700;color:#f3ecd2;margin-top:5px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%">{{ r.name }}</div>
         <div style="font-size:11px;color:#9c8fc0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%">🧑{{ r.owner }}</div>
@@ -3218,7 +3218,7 @@ SHINY_PIX = _PH + """</style></head><body><div class="page">
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
     {% for r in rows %}
       <div style="display:flex;flex-direction:column;align-items:center;background:rgba(221,198,149,.5);border:2px solid #9c6b1a;padding:9px 5px;position:relative">
-        <span style="position:absolute;top:3px;right:5px;font-size:12px">{{ badge }}</span>
+        <span style="position:absolute;top:3px;right:5px;font-size:12px">{% if icons.pal[badge_kind] %}<img src="{{ icons.pal[badge_kind] }}" style="width:15px;height:15px;object-fit:contain;image-rendering:pixelated">{% else %}{{ badge }}{% endif %}</span>
         {% if r.icon %}<img src="{{ r.icon }}" style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated">{% else %}<span style="font-size:30px">🐾</span>{% endif %}
         <div style="font-size:13px;color:#382207;margin-top:5px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%">{{ r.name }}</div>
         <div style="font-size:11px;color:#7a5a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%">{{ r.owner }}</div>
@@ -3429,7 +3429,7 @@ PALPOWER_TMPL = _HEAD + """</style></head><body><div class="page">
       <div style="width:30px;flex-shrink:0;text-align:center;font-size:17px;font-weight:900;color:#e8c466">{{ r.medal }}</div>
       {% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;flex-shrink:0">{% else %}<span style="font-size:24px">🐾</span>{% endif %}
       <div style="flex:1;min-width:0">
-        <div style="font-size:15px;font-weight:700;color:#f3ecd2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.boss=='tower' %} <span style="font-size:10.5px;background:#c0392b;color:#fff;padding:1px 6px;border-radius:5px;font-weight:800">🗼塔主</span>{% elif r.boss=='boss' %} <span style="font-size:10.5px;background:#d68910;color:#fff;padding:1px 6px;border-radius:5px;font-weight:800">👑头目</span>{% endif %}</div>
+        <div style="font-size:15px;font-weight:700;color:#f3ecd2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.boss=='tower' %} <span style="font-size:10.5px;background:#c0392b;color:#fff;padding:1px 6px;border-radius:5px;font-weight:800">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}🗼{% endif %}塔主</span>{% elif r.boss=='boss' %} <span style="font-size:10.5px;background:#d68910;color:#fff;padding:1px 6px;border-radius:5px;font-weight:800">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}👑{% endif %}头目</span>{% endif %}</div>
         <div style="font-size:12px;color:#9c8fc0">{{ r.element }} · 稀有度 {{ r.rarity }}</div>
       </div>
       <div style="flex-shrink:0;text-align:right;min-width:62px">
@@ -3981,7 +3981,7 @@ WORLDTREE_TMPL = _HEAD + """</style></head><body><div class="page">
       {% if b.icon %}<img src="{{ b.icon }}" style="width:88px;height:88px;flex:none;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))">{% else %}<div style="flex:none;font-size:60px">🌳</div>{% endif %}
       <div style="flex:1;min-width:0">
         <div style="font-size:19px;font-weight:800;color:#e8c466">{{ b.name }} <span style="font-size:13px;color:#9c8fc0;font-weight:400">#{{ b.index }}</span></div>
-        <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="pill soft" style="font-size:12px">{{ e }}</span>{% endfor %}<span class="pill soft" style="font-size:12px">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="pill soft" style="font-size:12px">HP种族值 {{ b.hp }}</span>{% endif %}</div>
+        <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="pill soft" style="font-size:12px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}<span class="pill soft" style="font-size:12px">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="pill soft" style="font-size:12px">HP种族值 {{ b.hp }}</span>{% endif %}</div>
         {% if b.partner %}<div style="font-size:12.5px;color:#bff7cc;margin-top:2px">🛡 伙伴技能：{{ b.partner }}</div>{% endif %}
         <div style="font-size:12px;color:#cfc1ea;margin-top:4px;line-height:1.6"><b style="color:#9c8fc0">技能</b> {{ b.skills|join('、') }}</div>
         <div style="font-size:12px;color:#e8c466;margin-top:3px"><b style="color:#9c8fc0">掉落</b> {{ b.drops|join('、') }}</div>
@@ -5037,7 +5037,7 @@ PALPOWER_PIX = _PH + """</style></head><body><div class="page">
       <div style="width:28px;flex-shrink:0;text-align:center;font-size:16px;color:#7a1f1f">{{ r.medal }}</div>
       {% if r.icon %}<img src="{{ r.icon }}" style="width:38px;height:38px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% else %}<span style="font-size:22px">🐾</span>{% endif %}
       <div style="flex:1;min-width:0">
-        <div style="font-size:15px;color:#382207;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.boss=='tower' %} <span class="pill red" style="font-size:10.5px">🗼塔主</span>{% elif r.boss=='boss' %} <span class="pill" style="font-size:10.5px">👑头目</span>{% endif %}</div>
+        <div style="font-size:15px;color:#382207;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.boss=='tower' %} <span class="pill red" style="font-size:10.5px">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}🗼{% endif %}塔主</span>{% elif r.boss=='boss' %} <span class="pill" style="font-size:10.5px">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}👑{% endif %}头目</span>{% endif %}</div>
         <div style="font-size:12px;color:#7a5a1a">{{ r.element }} · 稀有度 {{ r.rarity }}</div>
       </div>
       <div style="flex-shrink:0;text-align:right;min-width:58px">
@@ -5201,7 +5201,7 @@ WORLDTREE_PIX = _PH + """</style></head><body><div class="page">
       {% if b.icon %}<img src="{{ b.icon }}" style="width:78px;height:78px;flex:none;object-fit:contain;image-rendering:pixelated">{% else %}<div style="flex:none;font-size:52px">🌳</div>{% endif %}
       <div style="flex:1;min-width:0">
         <div style="font-size:18px;color:#7a3604">{{ b.name }} <span style="font-size:12px;color:#7a5a1a">#{{ b.index }}</span></div>
-        <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="pill" style="font-size:12px">{{ e }}</span>{% endfor %}<span class="pill" style="font-size:12px">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="pill" style="font-size:12px">HP种族值 {{ b.hp }}</span>{% endif %}</div>
+        <div style="margin:5px 0;display:flex;flex-wrap:wrap;gap:5px">{% for e in b.elements %}<span class="pill" style="font-size:12px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}<span class="pill" style="font-size:12px">稀有度 {{ b.rarity }}</span>{% if b.hp %}<span class="pill" style="font-size:12px">HP种族值 {{ b.hp }}</span>{% endif %}</div>
         {% if b.partner %}<div style="font-size:12.5px;color:#5a6a26;margin-top:2px">🛡 伙伴技能：{{ b.partner }}</div>{% endif %}
         <div style="font-size:12px;color:#382207;margin-top:4px;line-height:1.6"><b style="color:#7a5a1a">技能</b> {{ b.skills|join('、') }}</div>
         <div style="font-size:12px;color:#7a3604;margin-top:3px"><b style="color:#7a5a1a">掉落</b> {{ b.drops|join('、') }}</div>

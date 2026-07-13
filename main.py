@@ -3273,8 +3273,9 @@ class PalworldPlugin(Star):
         return await self._img(event, self._t("palpower"),
                                {"rows": rows, "sub": sub, "page": page, "total_pages": total_pages})
 
-    async def _collection_wall(self, event, field, title, badge, label, empty):
-        """收藏墙通用：遍历全服帕鲁筛 field(lucky/is_alpha) 为真的，网格展示。"""
+    async def _collection_wall(self, event, field, title, badge, label, empty, badge_kind=""):
+        """收藏墙通用：遍历全服帕鲁筛 field(lucky/is_alpha) 为真的，网格展示。
+        badge_kind: 语义键(lucky/alpha),模板据此取三主题共享的游戏图标,缺失回退 badge Emoji。"""
         self._last_save_use = time.time()
         profiles = await self._fetch_save_profiles()
         if not profiles:
@@ -3298,18 +3299,18 @@ class PalworldPlugin(Star):
         owners = sorted(owner_cnt.items(), key=lambda x: -x[1])
         top = " ".join(f"{_esc(o)}×{c}" for o, c in owners[:3])
         return await self._img(event, self._t("shiny"), {
-            "title": title, "badge": badge, "rows": items[:30],
+            "title": title, "badge": badge, "badge_kind": badge_kind, "rows": items[:30],
             "sub": f"共 {len(items)} 只{label} · {len(owner_cnt)} 位训练师", "top_owners": top})
 
     async def _cmd_shiny(self, event: AstrMessageEvent):
         return await self._collection_wall(
             event, "lucky", "✨ 全服闪光墙", "✨", "闪光",
-            "闪光(幸运)帕鲁非常稀有～多抓多孵，第一只闪光说不定就是你的！")
+            "闪光(幸运)帕鲁非常稀有～多抓多孵，第一只闪光说不定就是你的！", badge_kind="lucky")
 
     async def _cmd_alpha(self, event: AstrMessageEvent):
         return await self._collection_wall(
             event, "is_alpha", "👑 全服头目墙", "👑", "头目",
-            "头目(Alpha)是地图上的强力 BOSS 帕鲁，捕获它们填满这面墙吧！")
+            "头目(Alpha)是地图上的强力 BOSS 帕鲁，捕获它们填满这面墙吧！", badge_kind="alpha")
 
     _WEEK_CN = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
 

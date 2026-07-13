@@ -7,7 +7,7 @@
 ### 变更(真实游戏图标改为三主题共享)
 - **根因修复**:`render/assets.py` 旧逻辑 `if style != "ingame": return ""` 导致真实游戏图标只在 ingame 生效,fantasy/pixel 仍用 🔥💧⚡⛏️🔨 等 Emoji。
 - 重构为**共享游戏素材层**:新增 `game_icon(key)`(主题无关)+ `game_icon_map(style)`(`ingame_icon_map` 保留别名);`img(key, style)` 对游戏有原图的语义键三主题都返回真图,插件扩展概念仍各主题自有;renderer 对三主题都注入 `{{ icons.* }}`。manifest 资产字段兼容 `game`/`ingame`,图标文件只一份。
-- **fantasy/pixel 用上真实游戏图标**:属性克制图、帕鲁详情(属性/工作适性/贩卖价)、栖息区域/BOSS/竞技场元素徽章、据点帕鲁工作适性、物品/词条货币价——不再回退 Emoji。各主题保留自己的背景/面板/边框/字体/配色/排版。
+- **fantasy/pixel 用上真实游戏图标**:属性克制图、帕鲁详情(属性/工作适性/贩卖价/头目·塔主徽章)、栖息区域/BOSS/竞技场/对比页/战力榜元素徽章、据点帕鲁工作适性+元素、队伍闪光/头目、闪光墙·头目墙角标(`badge_kind`)、物品/词条货币价——不再回退 Emoji。各主题保留自己的背景/面板/边框/字体/配色/排版。
 - UI 组件纹理(游戏窗口/切角面板/物品槽)仍仅 ingame,与语义图标区分。
 - 覆盖表 `docs/INGAME_ICON_COVERAGE.md` → 重命名 `docs/THEME_ICON_COVERAGE.md`,记录三主题使用状态与待办。
 
