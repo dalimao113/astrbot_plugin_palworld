@@ -22,5 +22,5 @@ def test_handlers_and_tokens_wellformed():
 
 
 def test_expected_token_count():
-    # 回归护栏：改动别名时提醒同步（当前 338）
-    assert len(router.COMMAND_TOKENS) == 338
+    # 回归护栏：改动别名时提醒同步（当前 344，含批准绑定/拒绝绑定 6 个新 token）
+    assert len(router.COMMAND_TOKENS) == 344

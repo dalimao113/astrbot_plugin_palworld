@@ -132,6 +132,8 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("备份列表", "_cmd_backups", ("备份", "备份管理", "backups", "backup"), admin=True, pass_args=True, log_denied=True, description="备份列表", category="admin"),
     CommandSpec("回档", "_cmd_rollback", ("回滚", "rollback"), admin=True, pass_args=True, confirm=True, log_denied=True, description="回档到备份", category="admin"),
     CommandSpec("解绑", "_cmd_unbind", ("unbind",), admin=True, pass_args=True, log_denied=True, description="解绑角色", category="admin"),
+    CommandSpec("批准绑定", "_cmd_bind_approve", ("批准", "approvebind"), admin=True, pass_args=True, log_denied=True, description="批准挂起的绑定申请", category="admin"),
+    CommandSpec("拒绝绑定", "_cmd_bind_reject", ("拒绝", "rejectbind"), admin=True, pass_args=True, log_denied=True, description="拒绝挂起的绑定申请", category="admin"),
     CommandSpec("公告", "_cmd_announce", admin=True, pass_args=True, log_denied=True, description="发服务器公告", category="admin"),
     CommandSpec("踢", "_cmd_kick", admin=True, pass_args=True, log_denied=True, description="踢出玩家", category="admin"),
     CommandSpec("封", "_cmd_ban", admin=True, pass_args=True, log_denied=True, description="封禁玩家", category="admin"),

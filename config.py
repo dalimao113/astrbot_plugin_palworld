@@ -19,6 +19,11 @@ DEFAULTS: dict = {
     "admin_password": "",
     "admin_qq": [],
     "request_timeout": 5,
+    # --- 绑定 / 隐私安全 ---
+    "bind_mode": "open",            # open=先到先绑(默认,兼容现有小队) / admin_confirm=需管理员批准
+    "trusted_qq": [],               # 受信任 QQ:admin_confirm 模式下仍可直接自绑(免批准);管理员默认受信
+    # --- 广播安全 ---
+    "broadcast_whitelist_only": False,   # True=只向 broadcast_groups 白名单播报,禁用"用过指令的群自动登记"(防误发到误邀群)
     # --- 交互 / 冷却 / 外观 ---
     "query_cooldown": 10,
     "confirm_timeout": 60,

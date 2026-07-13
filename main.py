@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.11.0",
+    "1.12.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -153,7 +153,9 @@ class PalworldPlugin(Star):
                     pass
 
     def _register_group(self, gid: str):
-        """自动登记用过指令的群为广播目标。"""
+        """自动登记用过指令的群为广播目标。broadcast_whitelist_only 开启时不自动登记(仅显式白名单)。"""
+        if self.config.get("broadcast_whitelist_only", False):
+            return
         if gid and gid not in self.state.get("groups", []):
             self.state.setdefault("groups", []).append(gid)
             self._save_state()
@@ -1542,6 +1544,12 @@ class PalworldPlugin(Star):
     def _is_admin(self, qq: str) -> bool:
         return str(qq) in self._admins()
 
+    def _is_trusted(self, qq: str) -> bool:
+        """受信任用户(管理员 或 trusted_qq 白名单):admin_confirm 绑定模式下仍可直接自绑。"""
+        if self._is_admin(qq):
+            return True
+        return str(qq) in {str(q).strip() for q in (self.config.get("trusted_qq") or []) if str(q).strip()}
+
     # --- 后台广播相关配置 ---
     def _enable_broadcast(self) -> bool:
         return bool(self.config.get("enable_broadcast", True))
@@ -1559,8 +1567,12 @@ class PalworldPlugin(Star):
         return max(int(self.config.get("offline_alert_threshold", 2)), 1)
 
     def _broadcast_targets(self) -> list[str]:
-        """配置了 broadcast_groups 就用它，否则用自动登记的群。"""
+        """播报目标群。配了 broadcast_groups 白名单就只用它;
+        broadcast_whitelist_only=True 时**只**认白名单(白名单空则不播报,绝不回退自动登记群,防误发误邀群);
+        否则(默认)回退到用过指令自动登记的群。"""
         cfg = [str(g).strip() for g in (self.config.get("broadcast_groups") or []) if str(g).strip()]
+        if self.config.get("broadcast_whitelist_only", False):
+            return cfg   # 严格白名单:空则不播报
         return cfg if cfg else [str(g) for g in self.state.get("groups", [])]
 
     # ------------------------------------------------------------------
@@ -2951,7 +2963,7 @@ class PalworldPlugin(Star):
                 return alias, (([rest] + list(args)) if rest else list(args))
         return sub, args
 
-    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
+    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
     async def palworld(self, event: AstrMessageEvent):
         raw = (event.message_str or "").strip()
         # 去掉可选的「/」前缀和指令词「帕鲁」，剩余既可能是「在线」也可能是「在线 参数」
@@ -3608,15 +3620,58 @@ class PalworldPlugin(Star):
         return None
 
     async def _do_bind_checked(self, event, qq: str, uid: str, name: str, ok_desc: str):
-        """带归属校验的绑定：该角色已被别的 QQ 绑定则拒绝，否则落库并回成功卡。"""
+        """带归属校验的绑定：该角色已被别的 QQ 绑定则拒绝；admin_confirm 模式下非受信用户挂起待批；否则落库回成功卡。"""
         if self._bind_owner(uid, qq):
             return await self._msg_card(
                 event, "🔒", "该角色已被绑定",
                 desc="这个游戏角色已被其他 QQ 绑定，无法重复绑定。\n"
                      "如需换绑，请联系管理员用 /帕鲁解绑 <QQ或角色名> 先解绑。",
                 color="#E5484D")
+        # admin_confirm 模式:非受信用户(非管理/非 trusted_qq)不直接绑,挂起等管理员批准(防冒绑他人角色偷看隐私)
+        if self.config.get("bind_mode", "open") == "admin_confirm" and not self._is_trusted(qq):
+            pend = self.state.setdefault("bind_pending", {})
+            pend[str(qq)] = {"userId": uid, "name": name, "ts": int(time.time())}
+            self._save_state()
+            return await self._msg_card(
+                event, "⏳", "绑定待管理员批准",
+                desc=f"已提交绑定到角色「{_esc(name)}」的申请。\n"
+                     f"当前为「需管理员批准」模式，请管理员发 /帕鲁批准绑定 {qq} 通过。",
+                color="#F5A623")
         self._do_bind(qq, uid, name)
+        self.state.get("bind_pending", {}).pop(str(qq), None)   # 清掉可能的旧挂起
         return await self._msg_card(event, "🔗", "绑定成功", desc=_esc(ok_desc), color="#30A46C")
+
+    async def _cmd_bind_approve(self, event: AstrMessageEvent, args: list[str]):
+        """管理员批准/查看挂起绑定：/帕鲁批准绑定 [QQ]。无参列出待批。"""
+        pend = self.state.get("bind_pending", {}) or {}
+        if not args:
+            if not pend:
+                return await self._msg_card(event, "✅", "没有待批准的绑定", desc="当前没有挂起的绑定申请。", color="#30A46C")
+            lines = [f"• QQ {q} → 角色「{_esc(r.get('name', '?'))}」" for q, r in pend.items()]
+            return await self._msg_card(event, "⏳", f"待批准绑定 {len(pend)} 条",
+                                        desc="\n".join(lines) + "\n\n批准发：/帕鲁批准绑定 <QQ>；拒绝发：/帕鲁拒绝绑定 <QQ>",
+                                        color="#F5A623")
+        qq = args[0].strip()
+        req = pend.get(qq)
+        if not req:
+            return await self._msg_card(event, "🔍", "没有该 QQ 的待批绑定", desc=f"QQ {qq} 没有挂起的绑定申请。", color="#F5A623")
+        if self._bind_owner(req["userId"], qq):   # 期间可能被别人绑了
+            pend.pop(qq, None); self._save_state()
+            return await self._msg_card(event, "🔒", "申请作废", desc=f"角色「{_esc(req.get('name', '?'))}」已被别的 QQ 绑定，此申请已删除。", color="#E5484D")
+        self._do_bind(qq, req["userId"], req["name"])
+        pend.pop(qq, None); self._save_state()
+        return await self._msg_card(event, "🔗", "已批准绑定", desc=f"QQ {qq} 已绑定到角色「{_esc(req.get('name', '?'))}」。", color="#30A46C")
+
+    async def _cmd_bind_reject(self, event: AstrMessageEvent, args: list[str]):
+        """管理员拒绝挂起绑定：/帕鲁拒绝绑定 <QQ>。"""
+        if not args:
+            return await self._msg_card(event, "✏️", "请提供要拒绝的 QQ", desc="用法：/帕鲁拒绝绑定 <QQ>", color="#E5484D")
+        qq = args[0].strip()
+        pend = self.state.get("bind_pending", {}) or {}
+        if pend.pop(qq, None) is None:
+            return await self._msg_card(event, "🔍", "没有该 QQ 的待批绑定", desc=f"QQ {qq} 没有挂起的绑定申请。", color="#F5A623")
+        self._save_state()
+        return await self._msg_card(event, "🚫", "已拒绝绑定", desc=f"已删除 QQ {qq} 的绑定申请。", color="#9a8a91")
 
     async def _bind_ambiguous_card(self, event, name, cands):
         """同名多人，列候选让用户用 userId 精确绑定。"""

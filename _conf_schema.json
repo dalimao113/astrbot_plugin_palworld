@@ -18,6 +18,24 @@
     "description": "管理员 QQ 号白名单",
     "hint": "只有列表内的 QQ 号能执行 公告/踢/封/解封/存档/关服。例如：['10001', '10002']"
   },
+  "bind_mode": {
+    "type": "string",
+    "default": "open",
+    "description": "绑定模式",
+    "hint": "open=先到先绑(默认,兼容现有私人小队)；admin_confirm=玩家绑定需管理员用 /帕鲁批准绑定 <QQ> 批准(防冒名绑定他人角色偷看隐私)。"
+  },
+  "trusted_qq": {
+    "type": "list",
+    "default": [],
+    "description": "受信任 QQ 号(免绑定批准)",
+    "hint": "admin_confirm 模式下,列表内 QQ(及管理员)仍可直接自绑,无需批准。例如：['10001']"
+  },
+  "broadcast_whitelist_only": {
+    "type": "bool",
+    "default": false,
+    "description": "仅白名单群播报",
+    "hint": "开启后只向 broadcast_groups 白名单群播报上下线/掉线/里程碑,不再自动登记用过指令的群(防把服务器状态发到误邀群)。白名单为空则不播报。"
+  },
   "query_cooldown": {
     "type": "int",
     "default": 10,
