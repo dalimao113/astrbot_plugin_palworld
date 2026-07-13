@@ -2,6 +2,12 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.14.1] - 2026-07-13
+
+### 修正
+- **`/帕鲁小队进度`、`/帕鲁据点体检` 报错**:两个 handler 带 `args` 形参却在 router 未标 `pass_args`,`_dispatch` 以 `handler(event)` 调用 → `TypeError` → 报错卡。去掉未用的 `args` 形参。
+- 新增回归护栏 `test_handler_arity_matches_pass_args`:校验每个 handler 签名与 `pass_args`/`extra` 匹配,杜绝此类"指令一发就报错"的 bug。
+
 ## [1.14.0] - 2026-07-13
 
 ### 新增(首选2:据点体检)

@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.14.0",
+    "1.14.1",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -3626,7 +3626,7 @@ class PalworldPlugin(Star):
                 "dex_total": dex_total, "checklist": checklist,
                 "hint": "存档自动同步:图鉴/传送点/塔主/野外boss/地牢/遗物/区域/当前任务;手动目标用 /帕鲁小队勾选 <目标>"}
 
-    async def _cmd_squad(self, event: AstrMessageEvent, args: list[str]):
+    async def _cmd_squad(self, event: AstrMessageEvent):
         gid = str(event.get_group_id() or "")
         if not gid:
             return await self._msg_card(event, "👥", "请在群里用", desc="小队进度按群聚合，请在群聊里发 /帕鲁小队进度。", color="#F5A623")
@@ -3735,7 +3735,7 @@ class PalworldPlugin(Star):
             "source": "工作适性来自客户端 DataTable;体检只读,不改存档",
         }
 
-    async def _cmd_basecamp_health(self, event: AstrMessageEvent, args: list[str]):
+    async def _cmd_basecamp_health(self, event: AstrMessageEvent):
         gid = str(event.get_group_id() or "")
         if not gid:
             return await self._msg_card(event, "🏰", "请在群里用", desc="据点体检按群小队聚合，请在群聊里发 /帕鲁据点体检。", color="#F5A623")

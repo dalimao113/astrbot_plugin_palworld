@@ -1,5 +1,26 @@
-"""命令注册表：别名不重复、handler 命名、token 一致性。"""
+"""命令注册表：别名不重复、handler 命名、token 一致性、handler 签名与 pass_args 匹配。"""
+import inspect
+
 from astrbot_plugin_palworld.commands import router
+
+
+def test_handler_arity_matches_pass_args():
+    """回归护栏:每个 handler 能被 _dispatch 用 (event[, args], *extra) 正确调用。
+    防"handler 带 args 却没 pass_args"(=> 运行时 TypeError => 指令报错)这类 bug。"""
+    import astrbot_plugin_palworld.main as main
+    bad = []
+    for s in router.COMMANDS:
+        fn = getattr(main.PalworldPlugin, s.handler, None)
+        assert fn is not None, f"{s.canonical}: handler {s.handler} 缺失"
+        params = list(inspect.signature(fn).parameters.values())[1:]   # 去 self
+        pos = [p for p in params if p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD)]
+        has_var = any(p.kind == p.VAR_POSITIONAL for p in params)
+        required = sum(1 for p in pos if p.default is inspect._empty)
+        dispatched = 1 + (1 if s.pass_args else 0) + len(s.extra)       # event + args? + extra
+        upper = 10 ** 9 if has_var else len(pos)
+        if not (required <= dispatched <= upper):
+            bad.append(f"{s.canonical}/{s.handler}: 必填{required} 派发{dispatched} 上限{upper}")
+    assert not bad, "handler 签名与 pass_args/extra 不匹配(会导致指令报错):\n" + "\n".join(bad)
 
 
 def test_no_duplicate_aliases():
