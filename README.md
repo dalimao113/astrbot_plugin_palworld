@@ -10,7 +10,7 @@
 图鉴配种攻略随手查；管理员可公告 / 踢封 / 存档 / 关服。<br>
 **所有回复一律输出精美卡片图片**，附一键部署脚本。
 
-![version](https://img.shields.io/badge/version-1.20.0-6366F1?style=flat-square)
+![version](https://img.shields.io/badge/version-1.20.1-6366F1?style=flat-square)
 ![AstrBot](https://img.shields.io/badge/AstrBot-4.25%2B-8B5CF6?style=flat-square)
 ![OneBot](https://img.shields.io/badge/OneBot-v11-4ade80?style=flat-square)
 ![NapCat](https://img.shields.io/badge/adapter-NapCat-22c55e?style=flat-square)
@@ -184,7 +184,7 @@
 | `/帕鲁可孵化` | 根据你帕鲁箱里**已拥有的帕鲁**，算出两两配种能孵出哪些你还没有的新帕鲁 |
 | `/帕鲁据点 [据点号] [页]` | 据点工作帕鲁状态：每只的属性/等级/**工作适性** + **濒死·重伤·饥饿**标记 + 受伤/饥饿汇总。多据点时顶部可切换、`/帕鲁据点 2` 看第 2 据点 |
 | `/帕鲁箱查询 <编号>` | 帕鲁箱里某只帕鲁的完整面板（编号取自 `/帕鲁箱` 列表）|
-| `/帕鲁公会` | 公会信息卡：成员/会长/规模（也可 `/帕鲁工会`）|
+| `/帕鲁公会` | 公会信息卡：成员/会长/规模 + **每成员等级·帕鲁数 + 公会帕鲁合计**（存档只读，跨角色表按 uid 关联）（也可 `/帕鲁工会`）|
 | `/帕鲁公会榜` | 公会肝帝榜：按公会汇总成员在线时长排名 |
 | `/帕鲁公会帕鲁 [页]` | 公会终端：汇总本公会**所有成员帕鲁箱**里的帕鲁（分页网格）|
 

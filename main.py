@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.20.0",
+    "1.20.1",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -5048,12 +5048,25 @@ class PalworldPlugin(Star):
         leader = _esc(next((m["name"] for m in members if m["uid"] == g.get("admin_uid")), members[0]["name"]))
         total = len(members)
         rank = "个人" if total <= 1 else ("小型" if total <= 5 else ("中型" if total <= 15 else "大型"))
+        # 每成员 等级/帕鲁数：跨 CharacterSaveParameterMap 按 uid 关联(存档只读,真实存档 12/12 验证)
+        profiles = await self._fetch_save_profiles(max_age=self._fresh_ttl()) or {}
+        prof_by_norm = {self._norm_uid(k): v for k, v in profiles.items()}
+
+        def _mstat(m):
+            pf = prof_by_norm.get(self._norm_uid(m["uid"]))
+            if not pf:
+                return None, None
+            return int(pf.get("level") or 0), len(pf.get("party", [])) + len(pf.get("palbox", []))
+        guild_pals = sum((_mstat(m)[1] or 0) for m in members)
         pages = max(1, (total + GUILD_PAGE_SIZE - 1) // GUILD_PAGE_SIZE)
         page = min(page, pages)
         start = (page - 1) * GUILD_PAGE_SIZE
         shown = members[start:start + GUILD_PAGE_SIZE]
-        view = [{"name": _esc(m["name"]), "is_leader": m["uid"] == g.get("admin_uid"), "no": start + i + 1}
-                for i, m in enumerate(shown)]
+        view = []
+        for i, m in enumerate(shown):
+            lvl, pals = _mstat(m)
+            view.append({"name": _esc(m["name"]), "is_leader": m["uid"] == g.get("admin_uid"),
+                         "no": start + i + 1, "level": lvl, "pals": pals})
         tgt_part = (" " + name) if name else ""
         pager = ""
         if pages > 1:
@@ -5061,7 +5074,7 @@ class PalworldPlugin(Star):
             pager = f"发「/帕鲁公会{tgt_part} {nxt}」翻到第 {nxt} 页（共 {pages} 页）"
         return await self._img(event, self._t("guild"),
                                {"gname": _esc(self._guild_display_name(g, leader)), "leader": leader, "total": total,
-                                "rank": rank, "members": view,
+                                "rank": rank, "members": view, "guild_pals": guild_pals,
                                 "page": page, "pages": pages, "pager": pager})
 
     async def _cmd_guild_rank(self, event: AstrMessageEvent):

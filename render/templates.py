@@ -1629,14 +1629,14 @@ PALPOWERDETAIL_ING = _IH + """</style></head><body><div class="page">
 
 # ---- ingame 版公会。变量契约与 GUILD_TMPL 一致 ----
 GUILD_ING = _IH + """</style></head><body><div class="page">
-  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ gname }}</div><div class="ig-sub">公会成员 · 共 {{ total }} 人{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %}</div></div></div>
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ gname }}</div><div class="ig-sub">公会成员 · 共 {{ total }} 人{% if guild_pals %} · 帕鲁合计 {{ guild_pals }}{% endif %}{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %}</div></div></div>
   <div class="ig-panel">
     <div class="ig-stiles" style="margin-bottom:12px">
       <div class="ig-stile"><div class="v">{{ total }}</div><div class="k">成员数</div></div>
       <div class="ig-stile"><div class="v" style="font-size:14px">{{ leader }}</div><div class="k">会长</div></div>
-      <div class="ig-stile"><div class="v">{{ rank }}</div><div class="k">成员规模</div></div>
+      <div class="ig-stile"><div class="v">{% if guild_pals %}{{ guild_pals }}{% else %}{{ rank }}{% endif %}</div><div class="k">{% if guild_pals %}帕鲁合计{% else %}成员规模{% endif %}</div></div>
     </div>
-    {% for m in members %}<div class="ig-prow"><span style="width:26px;height:26px;flex:none;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--pal-line);color:var(--pal-sub);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ m.no }}</span><span class="pnm">{{ m.name }}</span>{% if m.is_leader %}<span class="ig-pill gold">会长</span>{% endif %}</div>{% endfor %}
+    {% for m in members %}<div class="ig-prow"><span style="width:26px;height:26px;flex:none;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--pal-line);color:var(--pal-sub);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ m.no }}</span><span class="pnm">{{ m.name }}</span>{% if m.level %}<span class="ig-pill">Lv.{{ m.level }} · {{ m.pals }}只</span>{% endif %}{% if m.is_leader %}<span class="ig-pill gold">会长</span>{% endif %}</div>{% endfor %}
     {% if pager %}<div style="margin-top:13px;text-align:center;font-size:12.5px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}
   </div>
   """ + _IF + """
@@ -2823,15 +2823,15 @@ GUILD_TMPL = _HEAD + """
   .grow .gn { flex:1; font-size:15px; font-weight:700; color:#f3ecd2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .grow .gt { font-size:12px; color:#ffd34d; font-weight:700; flex:none; }
 </style></head><body><div class="page">
-  <div class="head"><div><div class="title">👥 {{ gname }}</div><div class="subtitle">公会成员 · 共 {{ total }} 人{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %}</div></div></div>
+  <div class="head"><div><div class="title">👥 {{ gname }}</div><div class="subtitle">公会成员 · 共 {{ total }} 人{% if guild_pals %} · 帕鲁合计 {{ guild_pals }}{% endif %}{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %}</div></div></div>
   <div class="glass">""" + _GEMS + """
     <div class="m3" style="margin-bottom:14px">
       <div class="tile tc"><div class="v gold">{{ total }}</div><div class="k">成员数</div></div>
       <div class="tile tc"><div class="v gold" style="font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ leader }}</div><div class="k">会长</div></div>
-      <div class="tile tc"><div class="v gold">{{ rank }}</div><div class="k">成员规模</div></div>
+      <div class="tile tc"><div class="v gold">{% if guild_pals %}{{ guild_pals }}{% else %}{{ rank }}{% endif %}</div><div class="k">{% if guild_pals %}帕鲁合计{% else %}成员规模{% endif %}</div></div>
     </div>
     {% for m in members %}
-    <div class="grow"><div class="gi">{{ m.no }}</div><div class="gn">{{ m.name }}</div>{% if m.is_leader %}<div class="gt">👑 会长</div>{% endif %}</div>
+    <div class="grow"><div class="gi">{{ m.no }}</div><div class="gn">{{ m.name }}</div>{% if m.level %}<div class="gt" style="color:#b9a9d6;font-weight:600">Lv.{{ m.level }} · {{ m.pals }}只</div>{% endif %}{% if m.is_leader %}<div class="gt">👑 会长</div>{% endif %}</div>
     {% endfor %}
     {% if pager %}<div style="margin-top:14px;text-align:center;font-size:13px;color:#d8cdf0;background:rgba(99,102,241,.16);border:1px solid rgba(232,198,106,.2);border-radius:12px;padding:9px 12px">📖 {{ pager }}</div>{% endif %}
   </div>
@@ -2845,15 +2845,15 @@ GUILD_PIX = _PH + """
   .grow .gn { flex:1; font-size:15px; color:#382207; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .grow .gt { font-size:12px; color:#8f1212; flex:none; }
 </style></head><body><div class="page">
-  <div class="head"><div><div class="title">☗ {{ gname }}</div><div class="subtitle">公会成员 · 共 {{ total }} 人{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %}</div></div></div>
+  <div class="head"><div><div class="title">☗ {{ gname }}</div><div class="subtitle">公会成员 · 共 {{ total }} 人{% if guild_pals %} · 帕鲁合计 {{ guild_pals }}{% endif %}{% if pages and pages > 1 %} · 第 {{ page }}/{{ pages }} 页{% endif %}</div></div></div>
   <div class="frame">
     <div class="m3" style="margin-bottom:13px">
       <div class="tile tc"><div class="v">{{ total }}</div><div class="k">成员数</div></div>
       <div class="tile tc"><div class="v" style="font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ leader }}</div><div class="k">会长</div></div>
-      <div class="tile tc"><div class="v">{{ rank }}</div><div class="k">成员规模</div></div>
+      <div class="tile tc"><div class="v">{% if guild_pals %}{{ guild_pals }}{% else %}{{ rank }}{% endif %}</div><div class="k">{% if guild_pals %}帕鲁合计{% else %}成员规模{% endif %}</div></div>
     </div>
     {% for m in members %}
-    <div class="grow"><div class="gi">{{ m.no }}</div><div class="gn">{{ m.name }}</div>{% if m.is_leader %}<div class="gt">♛ 会长</div>{% endif %}</div>
+    <div class="grow"><div class="gi">{{ m.no }}</div><div class="gn">{{ m.name }}</div>{% if m.level %}<div class="gt" style="color:#7a5a2a;font-weight:600">Lv.{{ m.level }} · {{ m.pals }}只</div>{% endif %}{% if m.is_leader %}<div class="gt">♛ 会长</div>{% endif %}</div>
     {% endfor %}
     {% if pager %}<div style="margin-top:13px;text-align:center;font-size:13px;color:#46200a;background:rgba(221,198,149,0.55);border:2px solid #6a4524;padding:8px 11px">▶ {{ pager }}</div>{% endif %}
   </div>
