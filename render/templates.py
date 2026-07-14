@@ -2697,7 +2697,7 @@ TEAM_TMPL = _HEAD + _PCHIP + _TEAM_STAT_F + """
       {% if p.partner.title %}<div class="sec-t" style="margin-top:12px">伙伴技能</div>
       <div class="prow"><span class="pname pl-legend">{{ p.partner.title }}</span>{% if p.partner.desc %}<span class="pdesc">{{ p.partner.desc }}</span>{% endif %}</div>{% endif %}
       {% if p.passives %}<div class="sec-t" style="margin-top:12px">词条</div>
-      {% for s in p.passives %}<div class="prow"><span class="pname pl-{{ s.color }}"><span class="ar">{{ s.arrows }}</span>{{ s.name }}</span>{% if s.effect %}<span class="pdesc">{{ s.effect }}</span>{% endif %}</div>{% endfor %}{% endif %}
+      {% for s in p.passives %}<div class="prow"><span class="pname" style="color:{{ s.hex }};font-weight:800">{% if icons.passive_rank[s.rank_key] %}<span style="display:inline-block;width:15px;height:15px;vertical-align:-2px;margin-right:3px;background:{{ s.hex }};-webkit-mask:url('{{ icons.passive_rank[s.rank_key] }}') center/contain no-repeat;mask:url('{{ icons.passive_rank[s.rank_key] }}') center/contain no-repeat"></span>{% else %}<span class="ar">{{ s.arrows }}</span>{% endif %}{{ s.name }}</span>{% if s.effect %}<span class="pdesc">{{ s.effect }}</span>{% endif %}</div>{% endfor %}{% endif %}
       {% if p.wazas %}<div class="sec-t" style="margin-top:12px">技能</div>
       {% for w in p.wazas %}<div class="srow"><span class="sname">{{ w.name }}</span>{% if w.elem %}<span class="selem">{{ w.elem }}</span>{% endif %}{% if w.power %}<span class="spow">威力 {{ w.power }}</span>{% endif %}{% if w.desc %}<span class="sdesc">{{ w.desc }}</span>{% endif %}</div>{% endfor %}{% endif %}
     </div>
@@ -2758,7 +2758,7 @@ TEAM_PIX = _PH + _PCHIP_PIX + _TEAM_STAT_P + """
       {% if p.partner.title %}<div class="sec-t" style="margin-top:12px">伙伴技能</div>
       <div class="prow"><span class="pname pl-legend">{{ p.partner.title }}</span>{% if p.partner.desc %}<span class="pdesc">{{ p.partner.desc }}</span>{% endif %}</div>{% endif %}
       {% if p.passives %}<div class="sec-t" style="margin-top:12px">词条</div>
-      {% for s in p.passives %}<div class="prow"><span class="pname pl-{{ s.color }}"><span class="ar">{{ s.arrows }}</span>{{ s.name }}</span>{% if s.effect %}<span class="pdesc">{{ s.effect }}</span>{% endif %}</div>{% endfor %}{% endif %}
+      {% for s in p.passives %}<div class="prow"><span class="pname" style="color:{{ s.hex }};font-weight:800">{% if icons.passive_rank[s.rank_key] %}<span style="display:inline-block;width:15px;height:15px;vertical-align:-2px;margin-right:3px;background:{{ s.hex }};-webkit-mask:url('{{ icons.passive_rank[s.rank_key] }}') center/contain no-repeat;mask:url('{{ icons.passive_rank[s.rank_key] }}') center/contain no-repeat"></span>{% else %}<span class="ar">{{ s.arrows }}</span>{% endif %}{{ s.name }}</span>{% if s.effect %}<span class="pdesc">{{ s.effect }}</span>{% endif %}</div>{% endfor %}{% endif %}
       {% if p.wazas %}<div class="sec-t" style="margin-top:12px">技能</div>
       {% for w in p.wazas %}<div class="srow"><span class="sname">{{ w.name }}</span>{% if w.elem %}<span class="selem">{{ w.elem }}</span>{% endif %}{% if w.power %}<span class="spow">威力 {{ w.power }}</span>{% endif %}{% if w.desc %}<span class="sdesc">{{ w.desc }}</span>{% endif %}</div>{% endfor %}{% endif %}
     </div>

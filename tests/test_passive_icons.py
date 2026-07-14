@@ -40,6 +40,28 @@ def test_passlist_shows_game_arrow_all_themes():
         assert "🟢" not in html and "🔴" not in html    # 不再用 emoji
 
 
+def test_passive_view_has_icon_fields():
+    o = main.PalworldPlugin.__new__(main.PalworldPlugin)
+    o._load_paldex()
+    pid = next(iter(o._passives))
+    v = o._passive_view(pid)
+    assert v["rank_key"].startswith("rank_") and v["hex"].startswith("#")
+
+
+def test_team_card_passives_use_game_icon():
+    """队伍/箱查询/据点(共用 team 模板 + _pal_view)的词条改用游戏箭头图标。"""
+    pal = {"name": "火绒狐", "index": "5", "icon": "", "elements": ["火属性"], "level": 30,
+           "gender": "公", "alpha": False, "lucky": False, "nickname": "", "hp": 1500, "health": {},
+           "condense": 0, "rarity": 3, "rtier": "", "iv_hp": 80, "iv_atk": 70, "iv_def": 60,
+           "passives": [{"name": "攻击提升", "effect": "攻击+30%", "rank": 3, "sign": 1,
+                         "color": "epic", "hex": "#ffce4a", "rank_key": "rank_up3", "arrows": "▴▴▴"}],
+           "wazas": [], "base_atk": 100, "base_def": 80, "cur_atk": 100, "cur_def": 80, "craft_speed": 100}
+    for st in ("fantasy", "pixel", "ingame"):
+        icons = _RES.game_icon_map(st)
+        html = _ENV.from_string(STYLES[st]["team"]).render(pals=[pal], name="X", count=1, icons=icons)
+        assert ("webkit-mask" in html or "ig-rank" in html) and "data:image" in html, st
+
+
 def test_passrec_shows_game_arrow():
     sec = {"title": "⚔️ 战斗向", "color": "#e8c466",
            "items": [{"name": "攻击提升", "effect": "攻击+30%", "rank": 3, "stars": "★★★",

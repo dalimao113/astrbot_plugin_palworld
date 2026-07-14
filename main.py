@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.30.0",
+    "1.31.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -4703,8 +4703,10 @@ class PalworldPlugin(Star):
             color = "common"
         else:
             color = "neutral"
+        rkey, rhex = self._passive_rank_meta(rank, sign)   # 游戏箭头图标键 + 品阶金/红色
         return {"name": meta.get("name") or pid, "rank": rank, "sign": sign,
                 "effect": meta.get("effect", ""), "color": color,
+                "rank_key": rkey, "hex": rhex,
                 "arrows": ("▾" if sign < 0 else "▴") * (rank if rank else 1)}
 
     def _waza_name(self, wid: str) -> str:
