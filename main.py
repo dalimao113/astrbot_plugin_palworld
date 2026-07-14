@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.27.0",
+    "1.28.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -678,9 +678,11 @@ class PalworldPlugin(Star):
         if isinstance(_mp, (int, float)) and 0 <= _mp <= 100 and int(_mp) != 50:
             _mp = int(_mp)
             traits.append({"k": "公母比", "v": f"♂{_mp}% ♀{100 - _mp}%"})
+        _pn = p["pal_name"]
         return {
-            "name": p["pal_name"], "index": p["pal_index"], "elements": p.get("elements", []),
+            "name": _pn, "index": p["pal_index"], "elements": p.get("elements", []),
             "traits": traits,
+            "related": [f"/帕鲁栖息区域 {_pn}", f"/帕鲁反配种 {_pn}", f"/帕鲁推荐词条 {_pn}"],
             "icon": self._pal_icon(dev),
             "rarity": min(int(p.get("rarity", 0) or 0), 5), "nocturnal": bool(p.get("nocturnal")),
             "is_boss": bool(p.get("is_boss")), "is_tower_boss": bool(p.get("is_tower_boss")),
@@ -973,6 +975,8 @@ class PalworldPlugin(Star):
             "description": clean_text(it.get("description")),   # 详情:统一清洗,不截断
             "materials": mats, "benches": rec.get("bench", []),
             "price": price, "sphere": sphere, "weight": wt,
+            "related": ([f"/帕鲁材料路线 {it['name']}", f"/帕鲁用途 {it['name']}"]
+                        + ([f"/帕鲁哪里买 {it['name']}"] if price else [])),
             "icon": self._item_icon(it.get("item_id"))})
 
     async def _cmd_item(self, event: AstrMessageEvent, args: list[str]):
@@ -4038,7 +4042,7 @@ class PalworldPlugin(Star):
                 "pct": round(r["sec"] / maxsec * 100) if maxsec else 0,
                 "medal": medals.get(i, str(i)),
             })
-        data = {"rows": rows}
+        data = {"rows": rows, "note": "按玩家本周(周一0点起)累计在线时长排序;时长由机器人定时轮询在线状态累加,离线不计。"}
         if title:   # week 用模板默认标题
             data["rank_title"], data["rank_sub"] = title, sub
         return await self._img(event, self._t("rank"), data)
@@ -4074,7 +4078,8 @@ class PalworldPlugin(Star):
                          "medal": medals.get(i, str(i))})
         return await self._img(event, self._t("rank"), {
             "rows": rows, "rank_title": "📖 图鉴收集榜",
-            "rank_sub": f"全服图鉴收集进度 · 共 {total} 种 · {len(board)} 位训练师"})
+            "rank_sub": f"全服图鉴收集进度 · 共 {total} 种 · {len(board)} 位训练师",
+            "note": f"按玩家拥有的不同帕鲁种类数排序(队伍+帕鲁箱去重,不含公会共享据点);满值={total}(官方可收集数)。"})
 
     async def _cmd_wealth(self, event: AstrMessageEvent):
         """帕鲁资产榜：全服玩家按所有帕鲁的总身价(paldex price)排行(复用 rank 模板)。"""
@@ -4108,7 +4113,8 @@ class PalworldPlugin(Star):
                          "medal": medals.get(i, str(i))})
         return await self._img(event, self._t("rank"), {
             "rows": rows, "rank_title": "💰 帕鲁资产榜",
-            "rank_sub": f"全服帕鲁总身价排行(金币) · {len(board)} 位训练师"})
+            "rank_sub": f"全服帕鲁总身价排行(金币) · {len(board)} 位训练师",
+            "note": "把玩家所有帕鲁的图鉴售价(卖给商人的金币)累加;个体值/浓缩/词条不计入,仅按种族基础售价。"})
 
     async def _cmd_guild_power(self, event: AstrMessageEvent):
         """公会战力榜：各公会成员帕鲁战力总和排行(复用 rank 模板，无公会名用队长代称)。"""
@@ -4153,7 +4159,8 @@ class PalworldPlugin(Star):
                          "medal": medals.get(i, str(i))})
         return await self._img(event, self._t("rank"), {
             "rows": rows, "rank_title": "⚔️ 公会战力榜",
-            "rank_sub": f"各公会成员帕鲁战力总和 · {len(board)} 个公会"})
+            "rank_sub": f"各公会成员帕鲁战力总和 · {len(board)} 个公会",
+            "note": "各公会全体成员帕鲁的综合战力(等级/种族/天赋/浓缩/被动)求和;共享据点帕鲁全局去重,只计一次。"})
 
     async def _cmd_help(self, event: AstrMessageEvent):
         # 一行一条指令，玩家一眼看清；指令清单硬编码在 HELP_TMPL 模板里。

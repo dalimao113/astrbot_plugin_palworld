@@ -352,6 +352,7 @@ RANK_TMPL = _HEAD + """</style></head><body><div class="page">
     {% endfor %}
   </div>
   {% endif %}
+  {% if note %}<div style="margin-top:10px;font-size:11px;color:#8a82a8;line-height:1.6;text-align:center">ℹ️ 口径：{{ note }}</div>{% endif %}
   """ + _FOOT + """
 </div></body></html>"""
 
@@ -526,6 +527,8 @@ PALDEX_TMPL = _HEAD + """
       <div style="font-size:15px;font-weight:800;color:#e8c466">{{ partner_title }}</div>
       <div style="font-size:13.5px;color:#b9a9d6;line-height:1.6;margin-top:5px">{{ partner_desc }}</div>
     </div>{% endif %}
+    {% if related %}<div class="sec-t" style="margin-top:16px">🔗 相关指令</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for c in related %}<span class="pill soft">{{ c }}</span>{% endfor %}</div>{% endif %}
   </div>
   """ + _FOOT + """
 </div></body></html>"""
@@ -1074,6 +1077,7 @@ PALDEX_ING = _IH + """</style></head><body><div class="page">
   {% if partner_title %}<div class="ig-panel hi"><div class="ig-sec">伙伴技能</div>
     <div style="font-size:14.5px;font-weight:800;color:var(--pal-gold)">{{ partner_title }}</div>
     <div style="font-size:13px;color:var(--pal-sub);line-height:1.6;margin-top:5px">{{ partner_desc }}</div></div>{% endif %}
+  {% if related %}<div class="ig-panel"><div class="ig-sec">相关指令</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for c in related %}<span class="ig-pill">{{ c }}</span>{% endfor %}</div></div>{% endif %}
   """ + _IF + """
 </div></body></html>"""
 
@@ -1511,6 +1515,7 @@ ITEM_ING = _IH + """</style></head><body><div class="page">
     {% for m in materials %}<div class="ig-drop"><span class="l">{% if m.icon %}<img src="{{ m.icon }}">{% endif %}{{ m.name }}</span><span class="r" style="color:var(--pal-gold);font-weight:800">×{{ m.count }}</span></div>{% endfor %}
     {% if benches %}<div class="ig-subsec">制作台</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for b in benches %}<span class="ig-pill">{{ b }}</span>{% endfor %}</div>{% endif %}
   </div>{% endif %}
+  {% if related %}<div class="ig-panel"><div class="ig-sec">相关指令</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for c in related %}<span class="ig-pill">{{ c }}</span>{% endfor %}</div></div>{% endif %}
   """ + _IF + """
 </div></body></html>"""
 
@@ -1568,6 +1573,7 @@ RANK_ING = _IH + """</style></head><body><div class="page">
     {% endfor %}
   </div>
   {% endif %}
+  {% if note %}<div style="margin-top:9px;text-align:center;font-size:11px;color:var(--pal-dim);line-height:1.6">ℹ️ 口径：{{ note }}</div>{% endif %}
   """ + _IF + """
 </div></body></html>"""
 
@@ -2475,6 +2481,7 @@ RANK_PIX = _PH + """</style></head><body><div class="page">
     {% endfor %}
   </div>
   {% endif %}
+  {% if note %}<div style="margin-top:9px;text-align:center;font-size:11px;color:#7a6a4a;line-height:1.6">ℹ️ 口径：{{ note }}</div>{% endif %}
   """ + _PF + """
 </div></body></html>"""
 
@@ -3107,6 +3114,8 @@ PALDEX_PIX = _PH + """
       <div style="font-size:14px;color:#7a3604">{{ partner_title }}</div>
       <div style="font-size:13px;color:#574012;line-height:1.6;margin-top:5px">{{ partner_desc }}</div>
     </div>{% endif %}
+    {% if related %}<div class="sec-t" style="margin-top:15px">相关指令</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for c in related %}<span class="pill">{{ c }}</span>{% endfor %}</div>{% endif %}
   </div>
   """ + _PF + """
 </div></body></html>"""
@@ -3696,6 +3705,8 @@ ITEM_TMPL = _HEAD + """</style></head><body><div class="page">
     </div>{% endif %}
     {% if benches %}<div class="sec-t" style="margin-top:14px">🛠️ 制作台</div>
     <div style="display:flex;flex-wrap:wrap;gap:7px">{% for b in benches %}<span class="pill soft">{{ b }}</span>{% endfor %}</div>{% endif %}
+    {% if related %}<div class="sec-t" style="margin-top:14px">🔗 相关指令</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for c in related %}<span class="pill soft">{{ c }}</span>{% endfor %}</div>{% endif %}
   </div>
   """ + _FOOT + """
 </div></body></html>"""
@@ -3729,6 +3740,8 @@ ITEM_PIX = _PH + """</style></head><body><div class="page">
     </div>{% endif %}
     {% if benches %}<div class="sec-t" style="margin-top:13px">制作台</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px">{% for b in benches %}<span class="pill">{{ b }}</span>{% endfor %}</div>{% endif %}
+    {% if related %}<div class="sec-t" style="margin-top:13px">相关指令</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for c in related %}<span class="pill">{{ c }}</span>{% endfor %}</div>{% endif %}
   </div>
   """ + _PF + """
 </div></body></html>"""
