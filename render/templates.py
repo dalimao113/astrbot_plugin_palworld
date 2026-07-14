@@ -5717,6 +5717,44 @@ TECHTREE_ING = _IH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+MATUSE_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:12px;width:100%">
+    {% if icon %}<img src="{{ icon }}" style="flex:none;width:56px;height:56px;object-fit:contain">{% endif %}
+    <div style="flex:1;min-width:0"><div class="title" style="font-size:22px">{{ name }} · 用途</div><div class="subtitle"><span class="pill soft">被 {{ total }} 种配方使用</span>{% if pages > 1 %}<span class="pill soft">第 {{ page }}/{{ pages }} 页</span>{% endif %}</div></div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    <div style="display:flex;flex-direction:column;gap:6px">{% for r in rows %}<div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(232,198,106,0.1)">
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:30px;height:30px;object-fit:contain;flex:none">{% endif %}
+      <span style="flex:1;font-size:14.5px;font-weight:700;color:#f3ecd2">{{ r.name }}</span>
+      <span class="pill soft" style="font-size:11px">{{ r.kind }}</span><span class="pill soft">需 ×{{ r.count }}</span></div>{% endfor %}</div>
+    {% if pager %}<div style="margin-top:12px;text-align:center;font-size:13px;color:#d8cdf0;background:rgba(99,102,241,.16);border:1px solid rgba(232,198,106,.2);border-radius:12px;padding:9px 12px">📖 {{ pager }}</div>{% endif %}
+    <div style="margin-top:9px;font-size:11px;color:#8a82a8">「需×N」为该配方所需数量(同名不同品阶取最小);正查完整配方发「/帕鲁材料路线 <物品>」。</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+MATUSE_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:11px;width:100%">
+    {% if icon %}<img src="{{ icon }}" style="flex:none;width:52px;height:52px;object-fit:contain;image-rendering:pixelated">{% endif %}
+    <div style="flex:1;min-width:0"><div class="title" style="font-size:20px">{{ name }} · 用途</div><div class="subtitle"><span class="pill">被 {{ total }} 种配方使用</span>{% if pages > 1 %}<span class="pill">第 {{ page }}/{{ pages }} 页</span>{% endif %}</div></div>
+  </div></div>
+  <div class="frame">
+    <div style="display:flex;flex-direction:column;gap:5px">{% for r in rows %}<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:2px dotted rgba(90,58,30,.22)">
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:28px;height:28px;object-fit:contain;flex:none;image-rendering:pixelated">{% endif %}
+      <span style="flex:1;font-size:14px;font-weight:700;color:#382207">{{ r.name }}</span>
+      <span class="pill" style="font-size:11px">{{ r.kind }}</span><span class="pill">×{{ r.count }}</span></div>{% endfor %}</div>
+    {% if pager %}<div style="margin-top:11px;text-align:center;font-size:13px;color:#46200a;background:rgba(221,198,149,0.55);border:2px solid #6a4524;padding:8px 11px">▶ {{ pager }}</div>{% endif %}
+    <div style="margin-top:8px;font-size:11px;color:#7a6a4a">「×N」为该配方所需量(同名取最小);正查配方发「/帕鲁材料路线 <物品>」。</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+MATUSE_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">{% if icon %}<div class="ig-portrait" style="width:54px;height:54px;border-width:8px"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ name }} · 用途</div><div class="ig-sub"><span class="ig-pill">被 {{ total }} 种配方使用</span>{% if pages > 1 %}<span class="ig-pill">第 {{ page }}/{{ pages }} 页</span>{% endif %}</div></div></div>
+  <div class="ig-panel"><div style="display:flex;flex-direction:column;gap:5px">{% for r in rows %}<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--pal-line)">{% if r.icon %}<img src="{{ r.icon }}" style="width:28px;height:28px;object-fit:contain;flex:none">{% endif %}<span style="flex:1;font-size:14px;color:var(--pal-text)">{{ r.name }}</span><span class="ig-pill">{{ r.kind }}</span><span class="ig-pill">×{{ r.count }}</span></div>{% endfor %}</div>{% if pager %}<div style="margin-top:11px;text-align:center;font-size:12.5px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}<div style="margin-top:8px;font-size:11px;color:var(--pal-dim)">「×N」为该配方所需量(同名取最小);正查配方发「/帕鲁材料路线 <物品>」。</div></div>
+  """ + _IF + """
+</div></body></html>"""
+
 RANCH_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div><div class="title" style="font-size:23px">🐑 {{ title }}</div><div class="subtitle"><span class="pill soft">{{ sub }}</span></div></div></div>
   <div class="glass">""" + _GEMS + """
@@ -5765,7 +5803,7 @@ STYLES = {
                 "facility": FACILITY_TMPL, "tech": TECH_TMPL, "grid": GRID_TMPL, "map": MAP_TMPL,
                 "lab_overview": LAB_OVERVIEW_TMPL, "lab_list": LAB_LIST_TMPL, "lab_detail": LAB_DETAIL_TMPL,
                 "bag": BAG_TMPL, "team": TEAM_TMPL, "palbox": PALBOX_TMPL, "guild": GUILD_TMPL,
-                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL, "matroute": MATROUTE_TMPL, "techtree": TECHTREE_TMPL, "ranch": RANCH_TMPL,
+                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL, "matroute": MATROUTE_TMPL, "techtree": TECHTREE_TMPL, "ranch": RANCH_TMPL, "matuse": MATUSE_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "passdex": PASSDEX_TMPL, "passlist": PASSLIST_TMPL,
                 "awakening": AWAKENING_TMPL, "mutation": MUTATION_TMPL,
@@ -5784,7 +5822,7 @@ STYLES = {
               "facility": FACILITY_PIX, "tech": TECH_PIX, "grid": GRID_PIX, "map": MAP_PIX,
               "lab_overview": LAB_OVERVIEW_PIX, "lab_list": LAB_LIST_PIX, "lab_detail": LAB_DETAIL_PIX,
               "bag": BAG_PIX, "team": TEAM_PIX, "palbox": PALBOX_PIX, "guild": GUILD_PIX,
-              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX, "matroute": MATROUTE_PIX, "techtree": TECHTREE_PIX, "ranch": RANCH_PIX,
+              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX, "matroute": MATROUTE_PIX, "techtree": TECHTREE_PIX, "ranch": RANCH_PIX, "matuse": MATUSE_PIX,
               "element": ELEMENT_PIX, "habitat": HABITAT_PIX, "passrec": PASSREC_PIX,
               "passdex": PASSDEX_PIX, "passlist": PASSLIST_PIX,
               "awakening": AWAKENING_PIX, "mutation": MUTATION_PIX,
@@ -5805,6 +5843,7 @@ STYLES["ingame"]["growth"] = GROWTH_ING
 STYLES["ingame"]["matroute"] = MATROUTE_ING
 STYLES["ingame"]["techtree"] = TECHTREE_ING
 STYLES["ingame"]["ranch"] = RANCH_ING
+STYLES["ingame"]["matuse"] = MATUSE_ING
 # 阶段D:已改造为 ingame 专属布局的卡(其余仍临时回退 fantasy,见 INGAME_ICON_COVERAGE.md)
 STYLES["ingame"]["paldex"] = PALDEX_ING
 STYLES["ingame"]["passlist"] = PASSLIST_ING
