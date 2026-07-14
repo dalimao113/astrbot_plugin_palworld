@@ -2,6 +2,15 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.26.0] - 2026-07-14
+
+### 修复(重大:世界坐标→地图变换全错,导致所有地图点位错位)
+- 之前 `data/map_transform.json` 的世界坐标→地图%仿射变换是错的(X 轴翻转),**在线玩家地图/栖息区域/传送点/保护区/遗物/地牢的点位全部错位**。
+- 从权威来源 `DT_WorldMapUIData.landScapeRealPositionMin/Max`(主图 X[-1099400,349400] Y[-724400,724400])重新推导,并**用世界地图图像 + 塔主已知生物群系逐一校验**(沙漠右上/雪山中上/火山中左全部对上):
+  - `left% = 6.902e-7·worldY + 50`(Y大=东/右)、`top% = -6.902e-7·worldX + 24.12`(X大=北/上)。世界树地图同样修正(同一 X 翻转 bug)。
+- **重新生成全部坐标数据**:`pal_spawns`(栖息,138 帕鲁,旧数据用 180°翻转的变换)、`boss_spawns`、`map_ft_points/relics/dungeons`——均用校验后的正确变换,已渲染叠图肉眼确认点位落在正确岛屿上。
+- 修正 `build_spawns` 系:主生物群系 spawner 在真实世界系可直接用统一变换;island/worldtree/skyisland 等属别的坐标系,按名排除。
+
 ## [1.25.0] - 2026-07-14
 
 ### 修复 + 新增(地图收集:从关卡对象重新提取全量坐标)
