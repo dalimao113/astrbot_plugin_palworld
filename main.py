@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.26.1",
+    "1.27.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -3292,13 +3292,73 @@ class PalworldPlugin(Star):
         """当用户询问帕鲁服务器的设置、各种倍率(经验/捕捉/掉落)、难度、是否开启 PVP 等世界规则配置时调用。会自动发送服务器设置卡片图。"""
         yield await self._cmd_settings(event)
 
+    @staticmethod
+    def _edit_dist(a: str, b: str) -> int:
+        """Levenshtein 编辑距离(指令纠错用,字符串短、开销小)。"""
+        if a == b:
+            return 0
+        prev = list(range(len(b) + 1))
+        for i, ca in enumerate(a, 1):
+            cur = [i]
+            for j, cb in enumerate(b, 1):
+                cur.append(min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ca != cb)))
+            prev = cur
+        return prev[len(b)]
+
+    def _suggest_commands(self, sub: str, n: int = 3) -> list:
+        """给未知子命令找最接近的已知指令 canonical 列表(子串命中优先,再按归一化编辑距离)。"""
+        sub = (sub or "").strip()
+        if len(sub) < 1:
+            return []
+        scored = []
+        for tok in COMMAND_TOKENS:
+            if len(tok) < 2:               # 跳过单字别名(噪声大)
+                continue
+            if sub in tok or tok in sub:
+                d = 0.2
+            else:
+                d = self._edit_dist(sub, tok) / max(len(sub), len(tok))
+            scored.append((d, COMMAND_ALIAS_MAP[tok].canonical))
+        scored.sort(key=lambda x: x[0])
+        out = []
+        for d, canon in scored:
+            if d > 0.55:                   # 太不像就不猜
+                break
+            if canon not in out:
+                out.append(canon)
+            if len(out) >= n:
+                break
+        return out
+
+    async def _unknown_card(self, event: AstrMessageEvent, sub: str):
+        """未知子命令:先看是不是帕鲁/物品名(引导对应查询),再猜最接近指令;都没头绪才给帮助。只提示不代执行。"""
+        sub = (sub or "").strip()
+        blocks = []
+        if sub:
+            content = []
+            if self._pals and self._find_pal(sub):
+                content.append(f"/帕鲁图鉴 {_esc(sub)}")
+            elif self._items and self._find_item(sub):
+                content.append(f"/帕鲁物品 {_esc(sub)}")
+            if content:
+                blocks.append("查这个内容:\n" + "\n".join("· " + c for c in content))
+        cmds = self._suggest_commands(sub)
+        if cmds:
+            blocks.append("你是不是想找:\n" + "\n".join(f"· /帕鲁{c}" for c in cmds))
+        if not blocks:
+            return await self._cmd_help(event)   # 完全没头绪 → 全量帮助
+        return await self._msg_card(
+            event, "🤔", f"没有「{_esc(sub)}」这条指令",
+            desc="\n\n".join(blocks) + "\n\n看全部指令发「/帕鲁帮助」。",
+            head="🔍 你可能想找", color="#7ab8ff")
+
     async def _dispatch(self, event: AstrMessageEvent, sub: str, args: list[str]):
         # 注册表驱动分发（commands/router.py 的 CommandSpec）。行为与旧 if 链严格一致：
         # 未知→帮助；先管理员鉴权(必要时写警告日志)，再冷却门，最后按 pass_args/extra 调 handler。
         sender = str(event.get_sender_id())
         spec = COMMAND_ALIAS_MAP.get(sub)
         if spec is None:
-            yield await self._cmd_help(event)
+            yield await self._unknown_card(event, sub)
             return
         if spec.admin and not self._is_admin(sender):
             if spec.log_denied:

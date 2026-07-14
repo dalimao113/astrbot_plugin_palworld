@@ -15,7 +15,7 @@ class Ev:
 def _mk(admin=False):
     o = P.__new__(P)
     log = []
-    for name in {s.handler for s in router.COMMANDS} | {"_cmd_help", "_no_perm_card"}:
+    for name in {s.handler for s in router.COMMANDS} | {"_cmd_help", "_no_perm_card", "_unknown_card"}:
         async def f(*a, _n=name, **k):
             log.append((_n, a[1:]))
             return _n
@@ -49,10 +49,10 @@ def test_boss_extra_category():
     assert log == [("_cmd_boss", (["x"], "塔主"))]
 
 
-def test_unknown_falls_to_help():
+def test_unknown_routes_to_suggestion():
     o, log = _mk()
-    _run(o, "乱码不存在xyz")
-    assert log == [("_cmd_help", ())]
+    _run(o, "乱码不存在xyz")           # 未知 → 智能纠错卡(内部再决定提示或回退帮助)
+    assert log == [("_unknown_card", ("乱码不存在xyz",))]
 
 
 def test_admin_denied_for_non_admin():
