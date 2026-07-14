@@ -10,7 +10,7 @@
 图鉴配种攻略随手查；管理员可公告 / 踢封 / 存档 / 关服。<br>
 **所有回复一律输出精美卡片图片**，附一键部署脚本。
 
-![version](https://img.shields.io/badge/version-1.18.0-6366F1?style=flat-square)
+![version](https://img.shields.io/badge/version-1.18.1-6366F1?style=flat-square)
 ![AstrBot](https://img.shields.io/badge/AstrBot-4.25%2B-8B5CF6?style=flat-square)
 ![OneBot](https://img.shields.io/badge/OneBot-v11-4ade80?style=flat-square)
 ![NapCat](https://img.shields.io/badge/adapter-NapCat-22c55e?style=flat-square)
@@ -92,7 +92,7 @@
 | `/帕鲁设置` | 主要倍率（经验/捕捉/掉落等）与 PVP 开关 |
 | `/帕鲁统计` | 今日在线峰值/平均/当前 + 近 7 日峰值趋势 |
 | `/帕鲁肝帝榜` | 本周在线时长排行榜（也可 `/帕鲁排行`）|
-| `/帕鲁图鉴 [名/字]` | 帕鲁图鉴：详情卡（**基础数值全项/牧场产出/进食量/刷新等级/蛋型/捕获率/售价/体型** + 技能/工作适性/伙伴技能/掉落/描述）；空=全表网格、模糊=列表、可翻页 |
+| `/帕鲁图鉴 [名/字]` | 帕鲁图鉴：详情卡（**基础数值全项/牧场产出/进食量/刷新等级/蛋型/捕获率/售价/体型 + 🧭习性:种属·遇敌反应·掠食者·夜行** + 技能/工作适性/伙伴技能/掉落/描述）；空=全表网格、模糊=列表、可翻页 |
 | `/帕鲁配种 <亲A> <亲B>` | 两只帕鲁的配种后代卡（含子代继续配种推荐）|
 | `/帕鲁反配种 <子代>` | 反查：要配出某只帕鲁有哪些亲代组合（也可 `/帕鲁反向`）|
 | `/帕鲁继承 <词条A｜词条B>` | 词条继承概率计算器：输入双亲词条，算后代同时继承的概率（社区实测模型）|

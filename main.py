@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.18.0",
+    "1.18.1",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -656,8 +656,26 @@ class PalworldPlugin(Star):
             except (TypeError, ValueError):
                 cap = None
         egg = egg_to_cn(ex.get("egg", ""))
+        # 习性(全部来自图鉴 DataTable 已有字段,不猜测):种属/遇敌AI/掠食者/夜行
+        _GENUS_CN = {"Humanoid": "人形", "Bird": "鸟类", "FourLegged": "四足兽",
+                     "Fish": "鱼类", "Dragon": "龙类", "Other": "其它"}
+        _AI_CN = {"Friendly": "友好(不主动攻击)", "Escape_to_Battle": "先逃后战",
+                  "Escape": "遇敌逃跑", "NotInterested": "无兴趣(不主动)",
+                  "Warlike": "好战(主动攻击)", "Warlike_Anyway": "极度好战"}
+        traits = []
+        _g = _GENUS_CN.get(p.get("genus_category"))
+        if _g:
+            traits.append({"k": "种属", "v": _g})
+        _ai = _AI_CN.get(p.get("ai_response"))
+        if _ai:
+            traits.append({"k": "遇敌", "v": _ai})
+        if p.get("predator"):   # 官方 ENABLE_PREDATOR_BOSS_PAL 对应的掠食者
+            traits.append({"k": "掠食者", "v": "夜间袭击"})
+        if p.get("nocturnal"):
+            traits.append({"k": "作息", "v": "夜行性"})
         return {
             "name": p["pal_name"], "index": p["pal_index"], "elements": p.get("elements", []),
+            "traits": traits,
             "icon": self._pal_icon(dev),
             "rarity": min(int(p.get("rarity", 0) or 0), 5), "nocturnal": bool(p.get("nocturnal")),
             "is_boss": bool(p.get("is_boss")), "is_tower_boss": bool(p.get("is_tower_boss")),

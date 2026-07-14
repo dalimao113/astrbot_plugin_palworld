@@ -493,6 +493,8 @@ PALDEX_TMPL = _HEAD + """
       {% if size %}<span class="pill soft">📏 体型 {{ size }}</span>{% endif %}
     </div>
     <div style="font-size:11px;color:#8a82a8;line-height:1.6;margin-bottom:12px">💰贩卖价＝把这只帕鲁卖给商人/帕鲁贩子得到的金币（非道具购买价，故「/帕鲁哪里买」查不到）　📈刷新＝野外出现的等级参考范围　📏体型＝帕鲁个头（XS最小 → XL最大，越大越占地、骑乘体感越壮）</div>{% endif %}
+    {% if traits %}<div class="sec-t">🧭 习性</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">{% for t in traits %}<span class="pill soft">{{ t.k }} · {{ t.v }}</span>{% endfor %}</div>{% endif %}
     <div class="sec-t">📊 基础数值</div>
     <div class="m3">
       <div class="tile tc"><div class="v gold">{{ hp }}</div><div class="k">生命</div></div>
@@ -1044,6 +1046,7 @@ PALDEX_ING = _IH + """</style></head><body><div class="page">
     {% if price %}<span class="ig-pill">贩卖价 {{ price }}金币</span>{% endif %}
     {% if size %}<span class="ig-pill">体型 {{ size }}</span>{% endif %}
   </div>{% endif %}
+  {% if traits %}<div class="ig-panel"><div class="ig-sec">习性</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for t in traits %}<span class="ig-pill">{{ t.k }} · {{ t.v }}</span>{% endfor %}</div></div>{% endif %}
   <div class="ig-panel">
     <div class="ig-sec">基础数值</div>
     <div class="ig-stiles">
@@ -3071,6 +3074,8 @@ PALDEX_PIX = _PH + """
       {% if size %}<span class="pill">体型 {{ size }}</span>{% endif %}
     </div>
     <div style="font-size:11px;color:#7a6a4a;line-height:1.6;margin-bottom:11px">贩卖价＝卖给商人/帕鲁贩子得的金币(非购买价,「哪里买」查不到)　刷新＝野外出现等级参考　体型＝个头大小(XS最小→XL最大)</div>{% endif %}
+    {% if traits %}<div class="sec-t">习性</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">{% for t in traits %}<span class="pill">{{ t.k }} · {{ t.v }}</span>{% endfor %}</div>{% endif %}
     <div class="sec-t">基础数值</div>
     <div class="m3">
       <div class="tile tc"><div class="v">{{ hp }}</div><div class="k">生命</div></div>
