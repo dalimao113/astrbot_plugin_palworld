@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.24.0",
+    "1.25.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -1967,12 +1967,16 @@ class PalworldPlugin(Star):
             with open(os.path.join(base, "map_regions.json"), encoding="utf-8") as _f:
                 reg = json.loads(_f.read())
             self._map_regions = [(n, d["X"], d["Y"]) for n, d in reg.items()]
-            self._ft_points = []                       # 传送点/瞭望塔(map_ft_points.json,可选)
-            try:
-                with open(os.path.join(base, "map_ft_points.json"), encoding="utf-8") as _f:
-                    self._ft_points = [(n, d["X"], d["Y"]) for n, d in json.loads(_f.read()).items()]
-            except Exception:  # noqa: BLE001
-                pass
+            # 传送点/遗物雕像/地牢入口(从关卡对象提取的真实坐标点集,可选文件)
+            def _load_pts(fname):
+                try:
+                    with open(os.path.join(base, fname), encoding="utf-8") as _f:
+                        return [(n, d["X"], d["Y"]) for n, d in json.loads(_f.read()).items()]
+                except Exception:  # noqa: BLE001
+                    return []
+            self._ft_points = _load_pts("map_ft_points.json")
+            self._relic_points = _load_pts("map_relics.json")
+            self._dungeon_points = _load_pts("map_dungeons.json")
             # 地图底图优先级：4096² 高清 hd.jpg > 2048² png > 1280 压缩图
             hd = os.path.join(base, "worldmap_hd.jpg")
             png = os.path.join(base, "worldmap.png")
@@ -2096,12 +2100,14 @@ class PalworldPlugin(Star):
         ("孤岛秘境", "🏝️", ("孤岛",)),
         ("其它地标", "📌", ()),   # 兜底:不属于上面任何类的命名地标
     )
-    _POI_PAGE = 40
+    _POI_PAGE = 200   # 收集图是"完整参考图",尽量一页标全(点多才有用)
 
     def _poi_index(self) -> dict:
         """类别 -> [(name, wx, wy)]。传送点来自 ft_points;其余按名字关键词归入地标类(首个命中)。"""
         if getattr(self, "_poi_cache", None) is None:
-            cats = {"传送点": list(getattr(self, "_ft_points", []) or [])}
+            cats = {"传送点": list(getattr(self, "_ft_points", []) or []),
+                    "遗物雕像": list(getattr(self, "_relic_points", []) or []),
+                    "地牢入口": list(getattr(self, "_dungeon_points", []) or [])}
             for cn, _emoji, _kws in self._POI_CATS:
                 cats.setdefault(cn, [])
             for name, wx, wy in (self._map_regions or []):
@@ -2121,12 +2127,12 @@ class PalworldPlugin(Star):
                                         desc="data/worldmap_hd.jpg / map_transform.json 未就绪。", color="#E5484D")
         idx = self._poi_index()
         query, page = self._parse_page_args(args)
-        emoji_of = {"传送点": "📍", **{cn: em for cn, em, _ in self._POI_CATS}}
+        emoji_of = {"传送点": "📍", "遗物雕像": "🗿", "地牢入口": "🕳️", **{cn: em for cn, em, _ in self._POI_CATS}}
         if not query:                                # 类别菜单
             lines = [f"{emoji_of.get(cn, '📌')} {cn} · {len(pts)} 处" for cn, pts in idx.items()]
             return await self._msg_card(event, "🗺️", "地图地标 / 收集点",
-                                        desc="\n".join(lines) + "\n\n发「/帕鲁地图收集 <类别>」把该类标到世界地图上,如 /帕鲁地图收集 禁猎区\n"
-                                        "注:游戏文件无单个雕像/遗物宝箱的逐点坐标,这里标的是命名地标/传送点/禁猎区等有坐标的探索点。",
+                                        desc="\n".join(lines) + "\n\n发「/帕鲁地图收集 <类别>」把该类标到世界地图上,如 /帕鲁地图收集 遗物雕像\n"
+                                        "坐标从游戏关卡对象直接提取,名称按就近地标标注(遗物/地牢无官方逐点名)。",
                                         head="🗺️ 地图收集", color="#7ab8ff")
         cat = next((c for c in idx if query == c or query in c), None)
         if not cat:

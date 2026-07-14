@@ -26,6 +26,12 @@ def _plugin():
     o._tree_mu = o._tree_mv = None
     o._map_regions = [(n, d["X"], d["Y"]) for n, d in reg.items()]
     o._ft_points = [(n, d["X"], d["Y"]) for n, d in ft.items()]
+
+    def _opt(fn):
+        p = os.path.join(_DATA, fn)
+        return [(n, d["X"], d["Y"]) for n, d in json.load(open(p, encoding="utf-8")).items()] if os.path.exists(p) else []
+    o._relic_points = _opt("map_relics.json")
+    o._dungeon_points = _opt("map_dungeons.json")
     o._map_img = "data:image/jpeg;base64,AAAA"
     o._map_ready = True                        # 跳过大图加载
     return o
@@ -49,6 +55,21 @@ def test_poimap_menu_lists_categories():
     o._msg_card = _msg
     asyncio.new_event_loop().run_until_complete(o._cmd_poimap(_E(), []))
     assert "地标" in cap["title"] and "禁猎区" in cap["desc"] and "传送点" in cap["desc"]
+    assert "遗物雕像" in cap["desc"] and "地牢入口" in cap["desc"]
+
+
+def test_poimap_relics_and_dungeons_have_points():
+    o = _plugin()
+    cap = {}
+
+    async def _img(event, tmpl, data, **k):
+        cap.update(cat=data["title"], n=len(data["points"]))
+        return "I"
+    o._img, o._t = _img, (lambda k: k)
+    loop = asyncio.new_event_loop()
+    for cat in ("遗物雕像", "地牢入口", "传送点"):
+        loop.run_until_complete(o._cmd_poimap(_E(), [cat]))
+        assert cap["n"] >= 100, f"{cat} 只有 {cap['n']} 点(数据应已补全)"
 
 
 def test_poimap_category_markers_on_main():
