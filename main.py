@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.20.1",
+    "1.20.2",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -673,6 +673,11 @@ class PalworldPlugin(Star):
             traits.append({"k": "掠食者", "v": "夜间袭击"})
         if p.get("nocturnal"):
             traits.append({"k": "作息", "v": "夜行性"})
+        # 公母比例(male_probability):偏离 50/50 才展示(默认均衡的不刷屏);配种/牧场参考
+        _mp = p.get("male_probability")
+        if isinstance(_mp, (int, float)) and 0 <= _mp <= 100 and int(_mp) != 50:
+            _mp = int(_mp)
+            traits.append({"k": "公母比", "v": f"♂{_mp}% ♀{100 - _mp}%"})
         return {
             "name": p["pal_name"], "index": p["pal_index"], "elements": p.get("elements", []),
             "traits": traits,
@@ -953,11 +958,21 @@ class PalworldPlugin(Star):
             except (TypeError, ValueError):
                 capn = cap
             sphere = {"cap": capn, "rank": ex.get("rank")}
+        # 重量(item_extra.weight,影响负重;NPC 专用道具常为 99999 哨兵值,不展示)
+        wt = ex.get("weight")
+        try:
+            wt = float(wt) if wt not in (None, "") else None
+            if wt is not None and (wt <= 0 or wt >= 9999):
+                wt = None
+            elif wt is not None:
+                wt = int(wt) if wt == int(wt) else round(wt, 1)
+        except (TypeError, ValueError):
+            wt = None
         return self._img(event, self._t("item"), {
             "name": it["name"], "type": self._item_type_cn(it.get("type")),
             "description": clean_text(it.get("description")),   # 详情:统一清洗,不截断
             "materials": mats, "benches": rec.get("bench", []),
-            "price": price, "sphere": sphere,
+            "price": price, "sphere": sphere, "weight": wt,
             "icon": self._item_icon(it.get("item_id"))})
 
     async def _cmd_item(self, event: AstrMessageEvent, args: list[str]):

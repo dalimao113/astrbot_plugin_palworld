@@ -1501,8 +1501,9 @@ ITEM_ING = _IH + """</style></head><body><div class="page">
       <div class="ig-sub"><span class="ig-pill">{{ type }}</span></div></div>
   </div>
   <div class="ig-panel"><div style="font-size:14.5px;color:var(--pal-text-2);line-height:1.85;white-space:pre-line;word-break:break-word">{{ description or "（暂无描述）" }}</div>
-    {% if price or sphere %}<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:12px">
+    {% if price or sphere or weight %}<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:12px">
       {% if price %}<span class="ig-badge">{% if icons.currency.gold %}<img src="{{ icons.currency.gold }}">{% endif %}商人价 <b style="color:var(--pal-gold);margin-left:2px">{{ price }}</b> 金币</span>{% endif %}
+      {% if weight %}<span class="ig-pill">重量 {{ weight }}</span>{% endif %}
       {% if sphere %}<span class="ig-pill">捕获力 ×{{ sphere.cap }}</span><span class="ig-pill">品阶 {{ sphere.rank }}</span>{% endif %}
     </div>{% endif %}
   </div>
@@ -3677,8 +3678,9 @@ ITEM_TMPL = _HEAD + """</style></head><body><div class="page">
   </div></div>
   <div class="glass">""" + _GEMS + """
     <div style="font-size:15px;color:#e9e0f5;line-height:1.9;white-space:pre-line;word-break:break-word">{{ description or "（暂无描述）" }}</div>
-    {% if price or sphere %}<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:13px">
+    {% if price or sphere or weight %}<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:13px">
       {% if price %}<span style="display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,rgba(232,198,106,.24),rgba(232,198,106,.07));border:1px solid rgba(232,198,106,.5);border-radius:11px;padding:5px 12px;font-size:14px;color:#f3e3b0">{% if icons.currency.gold %}<img src="{{ icons.currency.gold }}" style="width:15px;height:15px;object-fit:contain">{% else %}💰{% endif %} 商人价 <b style="color:#ffd86b">{{ price }}</b> 金币</span>{% endif %}
+      {% if weight %}<span style="display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,rgba(160,175,200,.2),rgba(160,175,200,.06));border:1px solid rgba(160,175,200,.42);border-radius:11px;padding:5px 12px;font-size:14px;color:#cdd6e6">⚖️ 重量 <b style="color:#e2e8f4">{{ weight }}</b></span>{% endif %}
       {% if sphere %}<span style="display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,rgba(124,252,154,.2),rgba(124,252,154,.06));border:1px solid rgba(124,252,154,.45);border-radius:11px;padding:5px 12px;font-size:14px;color:#bff7cc">🎯 捕获力 <b style="color:#9effb6">×{{ sphere.cap }}</b></span>
       <span style="display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,rgba(160,140,255,.2),rgba(160,140,255,.06));border:1px solid rgba(160,140,255,.45);border-radius:11px;padding:5px 12px;font-size:14px;color:#cfc4ff">⭐ 品阶 <b style="color:#c9bbff">{{ sphere.rank }}</b></span>{% endif %}
     </div>{% endif %}
@@ -3709,8 +3711,9 @@ ITEM_PIX = _PH + """</style></head><body><div class="page">
   </div></div>
   <div class="frame">
     <div style="font-size:15px;color:#382207;line-height:1.9;white-space:pre-line;word-break:break-word">{{ description or "（暂无描述）" }}</div>
-    {% if price or sphere %}<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:12px">
+    {% if price or sphere or weight %}<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:12px">
       {% if price %}<span style="background:rgba(156,107,26,.22);border:2px solid #6a4524;padding:4px 10px;font-size:13px;color:#46200a">{% if icons.currency.gold %}<img src="{{ icons.currency.gold }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-2px">{% else %}💰{% endif %} 商人价 {{ price }} 金币</span>{% endif %}
+      {% if weight %}<span style="background:rgba(90,90,110,.18);border:2px solid #6a4524;padding:4px 10px;font-size:13px;color:#3a3a4a">⚖️ 重量 {{ weight }}</span>{% endif %}
       {% if sphere %}<span style="background:rgba(31,122,54,.18);border:2px solid #6a4524;padding:4px 10px;font-size:13px;color:#1d5a2a">🎯 捕获力 ×{{ sphere.cap }}</span>
       <span style="background:rgba(122,74,160,.18);border:2px solid #6a4524;padding:4px 10px;font-size:13px;color:#4a2a6a">⭐ 品阶 {{ sphere.rank }}</span>{% endif %}
     </div>{% endif %}

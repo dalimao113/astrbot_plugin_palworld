@@ -39,6 +39,19 @@ def test_traits_absent_when_no_data():
     assert o._pal_card_data(p)["traits"] == []
 
 
+def test_traits_gender_ratio_only_when_skewed():
+    o = _plugin()
+    base = dict(next(iter(o._pals)))
+    base.update(genus_category=None, ai_response=None, predator=False, nocturnal=False)
+    # 50/50 均衡:不展示公母比,避免刷屏
+    p50 = dict(base); p50["male_probability"] = 50
+    assert all(t["k"] != "公母比" for t in o._pal_card_data(p50)["traits"])
+    # 偏公:展示 ♂90% ♀10%
+    p90 = dict(base); p90["male_probability"] = 90
+    kv = {t["k"]: t["v"] for t in o._pal_card_data(p90)["traits"]}
+    assert kv.get("公母比") == "♂90% ♀10%"
+
+
 def test_traits_render_all_three_themes():
     o = _plugin()
     p = dict(next(iter(o._pals)))
