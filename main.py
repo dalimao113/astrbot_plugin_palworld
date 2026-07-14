@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.34.0",
+    "1.34.1",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2488,10 +2488,14 @@ class PalworldPlugin(Star):
     async def _cmd_passive_find(self, event: AstrMessageEvent, args: list[str]):
         if not self._passives:
             return await self._msg_card(event, "📜", "词条数据未加载", desc="data/passives.json 未就绪。", color="#E5484D")
-        q = " ".join(args).strip()
+        a = list(args)
+        pick = 0
+        if len(a) > 1 and a[-1].isdigit():        # 结果后带编号 -> 看那只详情
+            pick = int(a[-1]); a = a[:-1]
+        q = " ".join(a).strip()
         if not q:
             return await self._msg_card(event, "✏️", "查你哪只帕鲁带某词条",
-                                        desc="用法：/帕鲁词条查 <词条名>\n列出你队伍/帕鲁箱里带这个词条的帕鲁——帕鲁太多也能一键定位在哪只身上。\n例：/帕鲁词条查 提升攻击",
+                                        desc="用法：/帕鲁词条查 <词条名> [结果编号]\n列出你队伍/帕鲁箱里带这个词条的帕鲁;帕鲁太多也能一键定位。\n再发「/帕鲁词条查 <词条名> <编号>」看列表里第几只的完整详情。\n例：/帕鲁词条查 提升攻击　→　/帕鲁词条查 提升攻击 2",
                                         head="🔎 词条查帕鲁", color="#7ab8ff")
         exact = {pid for pid, v in self._passives.items() if (v.get("name") or "") == q}
         matched = exact or {pid for pid, v in self._passives.items() if q in (v.get("name") or "")}
@@ -2502,12 +2506,29 @@ class PalworldPlugin(Star):
         sp, uname, err = await self._resolve_target_sp(event, [])   # 仅自己(隐私门控)
         if err:
             return err
-        rows = [r for r in (self._passfind_row(p, matched, "队伍") for p in (sp.get("party") or [])) if r]
-        rows += [r for r in (self._passfind_row(p, matched, f"箱 #{i}")
-                             for i, p in enumerate(self._palbox_sorted(sp.get("palbox") or []), 1)) if r]
-        if not rows:
+        matches = []   # [(展示行, 原始 pal dict)]
+        for p in (sp.get("party") or []):
+            r = self._passfind_row(p, matched, "队伍")
+            if r:
+                matches.append((r, p))
+        for i, p in enumerate(self._palbox_sorted(sp.get("palbox") or []), 1):
+            r = self._passfind_row(p, matched, f"箱 #{i}")
+            if r:
+                matches.append((r, p))
+        if not matches:
             return await self._msg_card(event, "📦", f"你没有带「{_esc(q)}」的帕鲁",
                                         desc="队伍/帕鲁箱里没有帕鲁带这个词条。", head="🔎 词条查帕鲁", color="#9a8a91")
+        if 1 <= pick <= len(matches):             # 指定编号 -> 那只完整详情(复用队伍卡)
+            row, pal_obj = matches[pick - 1]
+            pv = self._pal_view(pal_obj)
+            return await self._img(event, self._t("team"),
+                                   {"title": f"🔎 带「{_esc(q)}」· 第 {pick} 只",
+                                    "subtitle": f"{pv['name']}（图鉴 #{pv['index']}） · {row['loc']}",
+                                    "pals": [pv]})
+        rows = []
+        for no, (r, _) in enumerate(matches, 1):
+            r["no"] = no
+            rows.append(r)
         return await self._img(event, self._t("passfind"), {
             "query": _esc(q), "owner": _esc(uname or ""), "total": len(rows),
             "matched_names": [_esc(n) for n in matched_names], "rows": rows})

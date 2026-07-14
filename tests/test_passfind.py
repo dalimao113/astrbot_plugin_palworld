@@ -63,8 +63,25 @@ def test_passfind_lists_owning_pals():
     assert d["total"] == 2                       # 队伍1 + 箱1(不含无关那只)
     locs = {r["loc"] for r in d["rows"]}
     assert "队伍" in locs and any(l.startswith("箱 #") for l in locs)
-    # 匹配词条带 rank 图标键
+    # 匹配词条带 rank 图标键 + 结果编号连续
     assert all(r["matched"] and r["matched"][0]["rank_key"].startswith("rank_") for r in d["rows"])
+    assert [r["no"] for r in d["rows"]] == [1, 2]
+
+
+def test_passfind_pick_shows_detail():
+    o = _plugin()
+    pid = next(k for k, v in o._passives.items() if v.get("name"))
+    pname = o._passives[pid]["name"]
+    dev = list(o._pal_by_name.values())[0]["pal_dev_name"]
+    party = [{"char_id": dev, "level": 40, "nickname": "第一只", "passives": [pid],
+              "iv_hp": 5, "iv_atk": 5, "iv_def": 5, "rank": 1, "equip_waza": [], "lucky": False, "is_alpha": False}]
+    palbox = [{"char_id": dev, "level": 50, "nickname": "第二只", "passives": [pid],
+               "iv_hp": 5, "iv_atk": 5, "iv_def": 5, "rank": 1, "equip_waza": [], "lucky": False, "is_alpha": False}]
+    o._palbox_sorted = staticmethod(main.PalworldPlugin._palbox_sorted).__func__
+    _stub_sp(o, party, palbox)
+    cap = _run(o, [pname, "2"])          # 看第 2 只详情
+    assert cap["kind"] == "img"
+    assert "第 2 只" in cap["data"]["title"] and cap["data"]["pals"]   # 走队伍详情卡
 
 
 def test_passfind_none_owned():
@@ -89,7 +106,7 @@ def test_passfind_renders_all_themes():
     o = _plugin()
     d = {"query": "提升攻击", "owner": "阿狸", "total": 1,
          "matched_names": ["提升攻击Lv3"],
-         "rows": [{"name": "火绒狐", "icon": "", "elements": ["火属性"], "nickname": "小火",
+         "rows": [{"no": 1, "name": "火绒狐", "icon": "", "elements": ["火属性"], "nickname": "小火",
                    "level": 45, "loc": "箱 #2", "lucky": True, "alpha": False,
                    "matched": [{"name": "提升攻击Lv3", "rank_key": "rank_up3", "hex": "#ffce4a"}],
                    "total_passives": 4}]}

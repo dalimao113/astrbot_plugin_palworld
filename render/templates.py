@@ -5592,7 +5592,8 @@ PASSFIND_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div><div class="title" style="font-size:23px">🔎 带「{{ query }}」的帕鲁</div>
     <div class="subtitle"><span class="pill soft">{{ owner }} · 共 {{ total }} 只</span>{% for n in matched_names %}<span class="pill soft">{{ n }}</span>{% endfor %}</div></div></div>
   <div class="glass">""" + _GEMS + """
-    {% for r in rows %}<div style="display:flex;align-items:center;gap:11px;padding:9px 2px;{% if not loop.last %}border-bottom:1px solid rgba(232,198,106,0.12){% endif %}">
+    {% for r in rows %}<div style="display:flex;align-items:center;gap:10px;padding:9px 2px;{% if not loop.last %}border-bottom:1px solid rgba(232,198,106,0.12){% endif %}">
+      <span style="flex:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#f3d98a,#e8c66a);color:#0d0820;font-size:13px;font-weight:800;text-align:center;line-height:26px">{{ r.no }}</span>
       {% if r.icon %}<img src="{{ r.icon }}" style="width:44px;height:44px;object-fit:contain;flex:none">{% endif %}
       <div style="flex:1;min-width:0">
         <div style="font-size:15px;font-weight:800;color:#f3ecd2">{{ r.name }}{% if r.nickname %} <span style="font-size:12px;color:#9c8fc0">「{{ r.nickname }}」</span>{% endif %}{% if r.lucky %} ✨{% endif %}{% if r.alpha %} 👑{% endif %}</div>
@@ -5600,7 +5601,7 @@ PASSFIND_TMPL = _HEAD + """</style></head><body><div class="page">
       </div>
       <div style="flex:none;text-align:right"><div style="font-size:13px;color:#e8c466;font-weight:700">{{ r.loc }}</div><div style="font-size:11.5px;color:#9c8fc0">Lv.{{ r.level }}</div></div>
     </div>{% endfor %}
-    <div style="margin-top:10px;font-size:11px;color:#8a82a8">「箱 #N」编号与 /帕鲁箱 一致(闪光/头目/高等级在前),照编号翻页即可定位。</div>
+    <div style="margin-top:10px;font-size:11px;color:#8a82a8;line-height:1.6">发「/帕鲁词条查 {{ query }} <编号>」看列表里第几只的完整详情(如 /帕鲁词条查 {{ query }} 2)。<br>「箱 #N」是它在帕鲁箱里的编号(闪光/头目/高等级在前),也可发「/帕鲁箱查询 N」单独查那只。</div>
   </div>
   """ + _FOOT + """
 </div></body></html>"""
@@ -5609,7 +5610,8 @@ PASSFIND_PIX = _PH + """</style></head><body><div class="page">
   <div class="head"><div><div class="title" style="font-size:21px">🔎 带「{{ query }}」的帕鲁</div>
     <div class="subtitle"><span class="pill">{{ owner }} · 共 {{ total }} 只</span>{% for n in matched_names %}<span class="pill">{{ n }}</span>{% endfor %}</div></div></div>
   <div class="frame">
-    {% for r in rows %}<div style="display:flex;align-items:center;gap:10px;padding:8px 2px;{% if not loop.last %}border-bottom:2px dotted rgba(90,58,30,.24){% endif %}">
+    {% for r in rows %}<div style="display:flex;align-items:center;gap:9px;padding:8px 2px;{% if not loop.last %}border-bottom:2px dotted rgba(90,58,30,.24){% endif %}">
+      <span style="flex:none;width:24px;height:24px;background:#caa860;border:2px solid #6a4524;color:#3a2410;font-size:12px;font-weight:800;text-align:center;line-height:20px">{{ r.no }}</span>
       {% if r.icon %}<img src="{{ r.icon }}" style="width:40px;height:40px;object-fit:contain;flex:none;image-rendering:pixelated">{% endif %}
       <div style="flex:1;min-width:0">
         <div style="font-size:14.5px;font-weight:700;color:#382207">{{ r.name }}{% if r.nickname %} <span style="font-size:12px;color:#7a5a1a">「{{ r.nickname }}」</span>{% endif %}{% if r.lucky %} ✨{% endif %}{% if r.alpha %} 👑{% endif %}</div>
@@ -5617,7 +5619,7 @@ PASSFIND_PIX = _PH + """</style></head><body><div class="page">
       </div>
       <div style="flex:none;text-align:right"><div style="font-size:13px;color:#7a3604;font-weight:700">{{ r.loc }}</div><div style="font-size:11.5px;color:#523f10">Lv.{{ r.level }}</div></div>
     </div>{% endfor %}
-    <div style="margin-top:9px;font-size:11px;color:#7a6a4a">「箱 #N」编号与 /帕鲁箱 一致,照编号翻页即可定位。</div>
+    <div style="margin-top:9px;font-size:11px;color:#7a6a4a;line-height:1.6">发「/帕鲁词条查 {{ query }} <编号>」看第几只详情(如 …{{ query }} 2)。「箱 #N」是箱内编号,也可「/帕鲁箱查询 N」。</div>
   </div>
   """ + _PF + """
 </div></body></html>"""
@@ -5625,13 +5627,14 @@ PASSFIND_PIX = _PH + """</style></head><body><div class="page">
 PASSFIND_ING = _IH + """</style></head><body><div class="page">
   <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">带「{{ query }}」的帕鲁</div><div class="ig-sub"><span class="ig-pill">{{ owner }} · 共 {{ total }} 只</span>{% for n in matched_names %}<span class="ig-pill">{{ n }}</span>{% endfor %}</div></div></div>
   <div class="ig-panel">
-    {% for r in rows %}<div style="display:flex;align-items:center;gap:10px;padding:8px 2px;{% if not loop.last %}border-bottom:1px solid var(--pal-line){% endif %}">
+    {% for r in rows %}<div style="display:flex;align-items:center;gap:9px;padding:8px 2px;{% if not loop.last %}border-bottom:1px solid var(--pal-line){% endif %}">
+      <span style="flex:none;width:24px;height:24px;border-radius:50%;background:var(--pal-gold);color:#0e1015;font-size:12px;font-weight:800;text-align:center;line-height:24px">{{ r.no }}</span>
       {% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;flex:none">{% endif %}
       <div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:700;color:var(--pal-text);display:flex;align-items:center;gap:4px">{{ r.name }}{% if r.nickname %} 「{{ r.nickname }}」{% endif %}{% if r.lucky and icons.pal.lucky %}<img src="{{ icons.pal.lucky }}" style="width:15px;height:15px;object-fit:contain">{% elif r.alpha and icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:15px;height:15px;object-fit:contain">{% endif %}</div>
       <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:4px">{% for m in r.matched %}<span class="ig-pill" style="display:inline-flex;align-items:center;gap:4px">{% if icons.passive_rank[m.rank_key] %}<span style="display:inline-block;width:13px;height:13px;background:{{ m.hex }};-webkit-mask:url('{{ icons.passive_rank[m.rank_key] }}') center/contain no-repeat;mask:url('{{ icons.passive_rank[m.rank_key] }}') center/contain no-repeat"></span>{% endif %}<span style="color:{{ m.hex }}">{{ m.name }}</span></span>{% endfor %}</div></div>
       <div style="flex:none;text-align:right"><div style="font-size:13px;color:var(--pal-gold);font-weight:700">{{ r.loc }}</div><div style="font-size:11.5px;color:var(--pal-dim)">Lv.{{ r.level }}</div></div>
     </div>{% endfor %}
-    <div style="margin-top:9px;font-size:11px;color:var(--pal-dim)">「箱 #N」编号与 /帕鲁箱 一致,照编号翻页即可定位。</div>
+    <div style="margin-top:9px;font-size:11px;color:var(--pal-dim);line-height:1.6">发「/帕鲁词条查 {{ query }} <编号>」看第几只详情(如 …{{ query }} 2)。「箱 #N」是箱内编号,也可「/帕鲁箱查询 N」。</div>
   </div>
   """ + _IF + """
 </div></body></html>"""
