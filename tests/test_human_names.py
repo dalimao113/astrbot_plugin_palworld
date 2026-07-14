@@ -43,3 +43,16 @@ def test_variant_suffix_resolves_to_paldex():
     dev = list(o._pal_by_name.values())[0]["pal_dev_name"]
     v = o._pal_view({"char_id": f"BOSS_{dev}", "level": 30, "passives": [], "equip_waza": []})
     assert not v["is_human"] and v["name"] != f"BOSS_{dev}"   # 回退到本体图鉴名
+
+
+def test_human_icon_from_game_asset():
+    o = _plugin()
+    # 具名人类应取到游戏头像(已提取到 data/images)
+    for cid in ("Hunter_Rifle", "Believer_CrossBow", "GrassBoss", "Female_Soldier03", "SalesPerson_Wander", "Male_Soldier"):
+        assert o._human_icon(cid), f"{cid} 应有游戏人物头像"
+
+
+def test_pal_view_human_has_icon():
+    o = _plugin()
+    v = o._pal_view({"char_id": "Hunter_Rifle", "level": 30, "passives": [], "equip_waza": []})
+    assert v["is_human"] and v["icon"] and v["icon"].startswith("data:image")

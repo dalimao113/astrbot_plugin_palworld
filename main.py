@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.35.0",
+    "1.36.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -562,6 +562,37 @@ class PalworldPlugin(Star):
                 return uri
             except Exception as e:  # noqa: BLE001
                 logger.warning(f"{LOG_PREFIX} 帕鲁图标 {dev_name} 读取失败: {e}")
+        return ""
+
+    _HUMAN_WEAP = r"(_Rifle|_Shotgun|_Handgun|_Bat|_CrossBow|_FlameThrower|_GatlingGun|_GiantClub|_Spear|_MiniOilrig)"
+
+    def _image_keys(self) -> set:
+        if getattr(self, "_imgkeys", None) is None:
+            d = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "images")
+            try:
+                self._imgkeys = {f[:-4] for f in os.listdir(d) if f.endswith(".png")}
+            except OSError:
+                self._imgkeys = set()
+        return self._imgkeys
+
+    def _human_icon(self, char_id: str) -> str:
+        """抓到的人类 NPC -> 游戏人物头像(T_<key>_icon_normal 提取到 data/images)。容错武器/区域/编号后缀。"""
+        cid = str(char_id or "")
+        if not cid:
+            return ""
+        keys = self._image_keys()
+        base_w = re.sub(self._HUMAN_WEAP + r"+$", "", cid)                       # 去武器后缀
+        base_region = re.sub(r"(_Volcano|_Wander|_Green|_Snow|_Desert)\d*$", "", cid)
+        base_pad = re.sub(r"(\d+)$", lambda m: f"{int(m.group(1)):02d}", cid)    # People2 -> People02
+        cands = [cid, "Human_" + cid, base_w, base_region, base_pad,
+                 cid + "01", base_w + "01", base_region + "01", re.sub(r"_v\d+$", "", cid)]
+        for c in dict.fromkeys(cands):
+            if c in keys:
+                return self._pal_icon(c)
+        for c in (cid, base_w, base_region):        # 前缀兜底(Male_Trader01 -> Male_Trader01_v04)
+            m = next((k for k in keys if k.startswith(c)), None)
+            if m:
+                return self._pal_icon(m)
         return ""
 
     def _canon_iid(self, iid):
@@ -3676,12 +3707,15 @@ class PalworldPlugin(Star):
         mxp = top[0][0] or 1
         rows = []
         for i, (pw, pal, owner) in enumerate(top, 1):
-            p = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
-            name = pal.get("nickname") or (p or {}).get("pal_name") or pal.get("char_id", "?")
+            cid = str(pal.get("char_id", ""))
+            p = self._resolve_owned_pal(cid)
+            hname = None if p else self._human_name(cid)   # 抓到的人类给中文名
+            name = pal.get("nickname") or (p or {}).get("pal_name") or hname or cid or "?"
             rows.append({
                 "rank": i, "name": _esc(name), "owner": _esc(owner),
                 "level": pal.get("level", 1), "power": pw, "pct": int(pw / mxp * 100),
-                "icon": self._pal_icon((p or {}).get("pal_dev_name", "")),
+                "icon": self._pal_icon((p or {}).get("pal_dev_name", "")) or (self._human_icon(cid) if hname else ""),
+                "is_human": bool(hname),
                 "lucky": bool(pal.get("lucky")), "alpha": bool(pal.get("is_alpha")),
                 "medal": ["🥇", "🥈", "🥉"][i - 1] if i <= 3 else str(i)})
         return await self._img(event, self._t("power"),
@@ -3708,14 +3742,16 @@ class PalworldPlugin(Star):
         page = min(page, pages)
         rows = []
         for i, (pw, pal) in enumerate(pals[(page - 1) * size: page * size], (page - 1) * size + 1):
-            p = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
-            pnm = pal.get("nickname") or (p or {}).get("pal_name") or pal.get("char_id", "?")
+            cid = str(pal.get("char_id", ""))
+            p = self._resolve_owned_pal(cid)
+            hname = None if p else self._human_name(cid)
+            pnm = pal.get("nickname") or (p or {}).get("pal_name") or hname or cid or "?"
             els = (p or {}).get("elements") or []
             rows.append({
-                "rank": i, "name": _esc(pnm), "owner": "",
+                "rank": i, "name": _esc(pnm), "owner": "", "is_human": bool(hname),
                 "element": "".join(e.replace("属性", "") for e in els[:2]),
                 "level": pal.get("level", 1), "power": pw, "pct": int(pw / mxp * 100),
-                "icon": self._pal_icon((p or {}).get("pal_dev_name", "")),
+                "icon": self._pal_icon((p or {}).get("pal_dev_name", "")) or (self._human_icon(cid) if hname else ""),
                 "lucky": bool(pal.get("lucky")), "alpha": bool(pal.get("is_alpha")),
                 "medal": ["🥇", "🥈", "🥉"][i - 1] if i <= 3 else str(i)})
         pager = ""
@@ -4897,7 +4933,7 @@ class PalworldPlugin(Star):
     def _human_name(self, char_id: str):
         """存档 char_id 是抓到的人类时给中文名(先查名表,再按类型兜底);非人类返回 None。"""
         cid = str(char_id or "").lower()
-        hn = (self._human_names or {}).get(cid)
+        hn = (getattr(self, "_human_names", None) or {}).get(cid)
         if hn:
             return hn
         return next((cn for key, cn in self._HUMAN_TYPE if key in cid), None)
@@ -4943,7 +4979,7 @@ class PalworldPlugin(Star):
         return {
             "name": (p["pal_name"] if p else (hname or "未知")),
             "index": str(p.get("pal_index", "")) if p else "",
-            "icon": self._pal_icon(p.get("pal_dev_name")) if p else "",
+            "icon": self._pal_icon(p.get("pal_dev_name")) if p else (self._human_icon(cid) if hname else ""),
             "is_human": bool(hname), "elements": p.get("elements", []) if p else [],
             "level": pal.get("level", 1), "gender": self._gender_cn(pal.get("gender", "")),
             "alpha": bool(pal.get("is_alpha")), "lucky": bool(pal.get("lucky")),

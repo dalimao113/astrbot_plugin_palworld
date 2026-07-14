@@ -1494,7 +1494,7 @@ POWER_ING = _IH + """</style></head><body><div class="page">
     {% for r in rows %}
     <div class="ig-rankrow{% if r.rank <= 3 %} top{% endif %}">
       <div class="mdl">{{ r.medal }}</div>
-      {% if r.icon %}<img class="pic" src="{{ r.icon }}">{% endif %}
+      {% if r.icon %}<img class="pic" src="{{ r.icon }}">{% elif r.is_human %}<span class="pic" style="display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--pal-sub)">人</span>{% endif %}
       <div style="flex:1;min-width:0"><div class="rn">{{ r.name }}{% if r.lucky %}<img class="inl" src="{{ icons.pal.lucky }}">{% elif r.alpha %}<img class="inl" src="{{ icons.pal.alpha }}">{% endif %}</div><div class="rs">Lv.{{ r.level }}{% if r.owner %} · {{ r.owner }}{% endif %}{% if r.element %} · {{ r.element }}{% endif %}</div></div>
       <div style="text-align:right;flex:none"><div class="rv">{{ r.power }}</div><div class="ig-track" style="width:56px;margin-top:4px"><div class="ig-fill" style="width:{{ r.pct }}%"></div></div></div>
     </div>
@@ -1513,7 +1513,7 @@ PALPOWER_ING = _IH + """</style></head><body><div class="page">
     {% for r in rows %}
     <div class="ig-rankrow{% if r.rank <= 3 %} top{% endif %}">
       <div class="mdl">{{ r.medal }}</div>
-      {% if r.icon %}<img class="pic" src="{{ r.icon }}">{% endif %}
+      {% if r.icon %}<img class="pic" src="{{ r.icon }}">{% elif r.is_human %}<span class="pic" style="display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--pal-sub)">人</span>{% endif %}
       <div style="flex:1;min-width:0"><div class="rn">{{ r.name }}{% if r.boss=='tower' %}<img class="inl" src="{{ icons.pal.alpha }}">{% elif r.boss=='boss' %}<img class="inl" src="{{ icons.pal.alpha }}">{% endif %}</div><div class="rs">{{ r.element }} · 稀有度 {{ r.rarity }}</div></div>
       <div style="text-align:right;flex:none"><div class="rv">{{ r.power }}</div><div class="ig-track" style="width:56px;margin-top:4px"><div class="ig-fill" style="width:{{ r.pct }}%"></div></div></div>
     </div>
@@ -3166,7 +3166,7 @@ POWER_TMPL = _HEAD + """</style></head><body><div class="page">
     {% for r in rows %}
     <div class="row" {% if r.rank <= 3 %}style="padding:9px 12px;gap:9px;align-items:center;background:linear-gradient(100deg,rgba(232,198,106,0.16),rgba(18,12,48,0.5) 60%);border-color:rgba(232,198,106,0.4)"{% else %}style="padding:9px 12px;gap:9px;align-items:center"{% endif %}>
       <div style="width:30px;flex-shrink:0;text-align:center;font-size:17px;font-weight:900;color:#e8c466">{{ r.medal }}</div>
-      {% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;flex-shrink:0">{% else %}<span style="font-size:24px">🐾</span>{% endif %}
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;flex-shrink:0">{% elif r.is_human %}<span style="font-size:24px">🧑</span>{% else %}<span style="font-size:24px">🐾</span>{% endif %}
       <div style="flex:1;min-width:0">
         <div style="font-size:15px;font-weight:700;color:#f3ecd2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.lucky %} ✨{% elif r.alpha %} 👑{% endif %}</div>
         <div style="font-size:12px;color:#9c8fc0">Lv.{{ r.level }}{% if r.owner %} · 🧑{{ r.owner }}{% endif %}{% if r.element %} · {{ r.element }}{% endif %}</div>
@@ -3194,7 +3194,7 @@ PALPOWER_TMPL = _HEAD + """</style></head><body><div class="page">
     {% for r in rows %}
     <div class="row" {% if r.rank <= 3 %}style="padding:9px 12px;gap:9px;align-items:center;background:linear-gradient(100deg,rgba(232,198,106,0.16),rgba(18,12,48,0.5) 60%);border-color:rgba(232,198,106,0.4)"{% else %}style="padding:9px 12px;gap:9px;align-items:center"{% endif %}>
       <div style="width:30px;flex-shrink:0;text-align:center;font-size:17px;font-weight:900;color:#e8c466">{{ r.medal }}</div>
-      {% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;flex-shrink:0">{% else %}<span style="font-size:24px">🐾</span>{% endif %}
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;flex-shrink:0">{% elif r.is_human %}<span style="font-size:24px">🧑</span>{% else %}<span style="font-size:24px">🐾</span>{% endif %}
       <div style="flex:1;min-width:0">
         <div style="font-size:15px;font-weight:700;color:#f3ecd2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.boss=='tower' %} <span style="font-size:10.5px;background:#c0392b;color:#fff;padding:1px 6px;border-radius:5px;font-weight:800">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}🗼{% endif %}塔主</span>{% elif r.boss=='boss' %} <span style="font-size:10.5px;background:#d68910;color:#fff;padding:1px 6px;border-radius:5px;font-weight:800">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}👑{% endif %}头目</span>{% endif %}</div>
         <div style="font-size:12px;color:#9c8fc0">{{ r.element }} · 稀有度 {{ r.rarity }}</div>
@@ -3251,7 +3251,7 @@ POWER_PIX = _PH + """</style></head><body><div class="page">
     {% for r in rows %}
     <div class="row" style="padding:8px 11px;gap:8px;align-items:center">
       <div style="width:28px;flex-shrink:0;text-align:center;font-size:16px;color:#7a1f1f">{{ r.medal }}</div>
-      {% if r.icon %}<img src="{{ r.icon }}" style="width:38px;height:38px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% else %}<span style="font-size:22px">🐾</span>{% endif %}
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:38px;height:38px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% elif r.is_human %}<span style="font-size:22px">🧑</span>{% else %}<span style="font-size:22px">🐾</span>{% endif %}
       <div style="flex:1;min-width:0">
         <div style="font-size:15px;color:#382207;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.lucky %} ✨{% elif r.alpha %} 👑{% endif %}</div>
         <div style="font-size:12px;color:#7a5a1a">Lv.{{ r.level }}{% if r.owner %} · {{ r.owner }}{% endif %}{% if r.element %} · {{ r.element }}{% endif %}</div>
@@ -4809,7 +4809,7 @@ PALPOWER_PIX = _PH + """</style></head><body><div class="page">
     {% for r in rows %}
     <div class="row" style="padding:8px 11px;gap:8px;align-items:center">
       <div style="width:28px;flex-shrink:0;text-align:center;font-size:16px;color:#7a1f1f">{{ r.medal }}</div>
-      {% if r.icon %}<img src="{{ r.icon }}" style="width:38px;height:38px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% else %}<span style="font-size:22px">🐾</span>{% endif %}
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:38px;height:38px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% elif r.is_human %}<span style="font-size:22px">🧑</span>{% else %}<span style="font-size:22px">🐾</span>{% endif %}
       <div style="flex:1;min-width:0">
         <div style="font-size:15px;color:#382207;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.boss=='tower' %} <span class="pill red" style="font-size:10.5px">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}🗼{% endif %}塔主</span>{% elif r.boss=='boss' %} <span class="pill" style="font-size:10.5px">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}👑{% endif %}头目</span>{% endif %}</div>
         <div style="font-size:12px;color:#7a5a1a">{{ r.element }} · 稀有度 {{ r.rarity }}</div>
