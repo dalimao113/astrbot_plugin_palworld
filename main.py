@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.33.0",
+    "1.34.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2468,6 +2468,50 @@ class PalworldPlugin(Star):
         return await self._msg_card(event, "🔍", "查无此词条",
                                     desc=f"没有名字含「{q}」的词条。\n发「/帕鲁词条大全」看全部分类。", color="#F5A623")
 
+    # 词条查帕鲁(/帕鲁词条查 <词条名>):列出你队伍/帕鲁箱里带某词条的帕鲁,帕鲁多了也能一键定位。
+    def _passfind_row(self, pal: dict, matched: set, loc: str):
+        pv = [str(x) for x in (pal.get("passives") or [])]
+        hit = [pid for pid in pv if pid in matched]
+        if not hit:
+            return None
+        meta = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
+        disp = [self._passive_view(pid) for pid in hit]
+        return {
+            "name": _esc(meta["pal_name"] if meta else pal.get("char_id", "未知帕鲁")),
+            "icon": self._pal_icon(meta.get("pal_dev_name", "")) if meta else "",
+            "elements": meta.get("elements", []) if meta else [],
+            "nickname": _esc(pal.get("nickname") or ""), "level": pal.get("level", 1), "loc": loc,
+            "lucky": bool(pal.get("lucky")), "alpha": bool(pal.get("is_alpha")),
+            "matched": [{"name": _esc(m["name"]), "rank_key": m["rank_key"], "hex": m["hex"]} for m in disp],
+            "total_passives": len(pv)}
+
+    async def _cmd_passive_find(self, event: AstrMessageEvent, args: list[str]):
+        if not self._passives:
+            return await self._msg_card(event, "📜", "词条数据未加载", desc="data/passives.json 未就绪。", color="#E5484D")
+        q = " ".join(args).strip()
+        if not q:
+            return await self._msg_card(event, "✏️", "查你哪只帕鲁带某词条",
+                                        desc="用法：/帕鲁词条查 <词条名>\n列出你队伍/帕鲁箱里带这个词条的帕鲁——帕鲁太多也能一键定位在哪只身上。\n例：/帕鲁词条查 提升攻击",
+                                        head="🔎 词条查帕鲁", color="#7ab8ff")
+        exact = {pid for pid, v in self._passives.items() if (v.get("name") or "") == q}
+        matched = exact or {pid for pid, v in self._passives.items() if q in (v.get("name") or "")}
+        if not matched:
+            return await self._msg_card(event, "🔍", "没有这个词条",
+                                        desc=f"没找到名字含「{_esc(q)}」的词条。\n发「/帕鲁词条大全」看全部词条。", color="#F5A623")
+        matched_names = sorted({self._passives[pid].get("name") or pid for pid in matched})
+        sp, uname, err = await self._resolve_target_sp(event, [])   # 仅自己(隐私门控)
+        if err:
+            return err
+        rows = [r for r in (self._passfind_row(p, matched, "队伍") for p in (sp.get("party") or [])) if r]
+        rows += [r for r in (self._passfind_row(p, matched, f"箱 #{i}")
+                             for i, p in enumerate(self._palbox_sorted(sp.get("palbox") or []), 1)) if r]
+        if not rows:
+            return await self._msg_card(event, "📦", f"你没有带「{_esc(q)}」的帕鲁",
+                                        desc="队伍/帕鲁箱里没有帕鲁带这个词条。", head="🔎 词条查帕鲁", color="#9a8a91")
+        return await self._img(event, self._t("passfind"), {
+            "query": _esc(q), "owner": _esc(uname or ""), "total": len(rows),
+            "matched_names": [_esc(n) for n in matched_names], "rows": rows})
+
     # ------------------------------------------------------------------
     # 任务（/帕鲁任务 /帕鲁主线 /帕鲁支线）
     # ------------------------------------------------------------------
@@ -3269,7 +3313,7 @@ class PalworldPlugin(Star):
                 return alias, (([rest] + list(args)) if rest else list(args))
         return sub, args
 
-    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|材料路线|材料|配方展开|总材料|matroute|种属|分类图鉴|种族分类|genus|科技树|科技路线|解锁路线|techtree|牧场产出|牧场|放牧|家畜牧场|ranch|材料用途|用途|能做什么|matuse|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|养成|培养|养成进度|养成路线|growth|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我的战力|个人战力|我的最强帕鲁|我的帕鲁战力|mypower|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点体检|基地体检|据点健康|基地健康|basehealth|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图收集|地图地标|收集地图|地标|poimap|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
+    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|材料路线|材料|配方展开|总材料|matroute|种属|分类图鉴|种族分类|genus|科技树|科技路线|解锁路线|techtree|牧场产出|牧场|放牧|家畜牧场|ranch|材料用途|用途|能做什么|matuse|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条查|查词条|词条帕鲁|谁带词条|passfind|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|养成|培养|养成进度|养成路线|growth|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我的战力|个人战力|我的最强帕鲁|我的帕鲁战力|mypower|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点体检|基地体检|据点健康|基地健康|basehealth|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图收集|地图地标|收集地图|地标|poimap|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
     async def palworld(self, event: AstrMessageEvent):
         raw = (event.message_str or "").strip()
         # 去掉可选的「/」前缀和指令词「帕鲁」，剩余既可能是「在线」也可能是「在线 参数」

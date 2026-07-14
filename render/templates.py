@@ -5588,6 +5588,55 @@ RANCH_ING = _IH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+PASSFIND_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div><div class="title" style="font-size:23px">🔎 带「{{ query }}」的帕鲁</div>
+    <div class="subtitle"><span class="pill soft">{{ owner }} · 共 {{ total }} 只</span>{% for n in matched_names %}<span class="pill soft">{{ n }}</span>{% endfor %}</div></div></div>
+  <div class="glass">""" + _GEMS + """
+    {% for r in rows %}<div style="display:flex;align-items:center;gap:11px;padding:9px 2px;{% if not loop.last %}border-bottom:1px solid rgba(232,198,106,0.12){% endif %}">
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:44px;height:44px;object-fit:contain;flex:none">{% endif %}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:15px;font-weight:800;color:#f3ecd2">{{ r.name }}{% if r.nickname %} <span style="font-size:12px;color:#9c8fc0">「{{ r.nickname }}」</span>{% endif %}{% if r.lucky %} ✨{% endif %}{% if r.alpha %} 👑{% endif %}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:4px">{% for m in r.matched %}<span class="pill soft" style="display:inline-flex;align-items:center;gap:4px">{% if icons.passive_rank[m.rank_key] %}<span style="display:inline-block;width:13px;height:13px;background:{{ m.hex }};-webkit-mask:url('{{ icons.passive_rank[m.rank_key] }}') center/contain no-repeat;mask:url('{{ icons.passive_rank[m.rank_key] }}') center/contain no-repeat"></span>{% endif %}<span style="color:{{ m.hex }}">{{ m.name }}</span></span>{% endfor %}</div>
+      </div>
+      <div style="flex:none;text-align:right"><div style="font-size:13px;color:#e8c466;font-weight:700">{{ r.loc }}</div><div style="font-size:11.5px;color:#9c8fc0">Lv.{{ r.level }}</div></div>
+    </div>{% endfor %}
+    <div style="margin-top:10px;font-size:11px;color:#8a82a8">「箱 #N」编号与 /帕鲁箱 一致(闪光/头目/高等级在前),照编号翻页即可定位。</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+PASSFIND_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div><div class="title" style="font-size:21px">🔎 带「{{ query }}」的帕鲁</div>
+    <div class="subtitle"><span class="pill">{{ owner }} · 共 {{ total }} 只</span>{% for n in matched_names %}<span class="pill">{{ n }}</span>{% endfor %}</div></div></div>
+  <div class="frame">
+    {% for r in rows %}<div style="display:flex;align-items:center;gap:10px;padding:8px 2px;{% if not loop.last %}border-bottom:2px dotted rgba(90,58,30,.24){% endif %}">
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:40px;height:40px;object-fit:contain;flex:none;image-rendering:pixelated">{% endif %}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14.5px;font-weight:700;color:#382207">{{ r.name }}{% if r.nickname %} <span style="font-size:12px;color:#7a5a1a">「{{ r.nickname }}」</span>{% endif %}{% if r.lucky %} ✨{% endif %}{% if r.alpha %} 👑{% endif %}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:4px">{% for m in r.matched %}<span class="pill" style="display:inline-flex;align-items:center;gap:4px">{% if icons.passive_rank[m.rank_key] %}<span style="display:inline-block;width:13px;height:13px;background:{{ m.hex }};-webkit-mask:url('{{ icons.passive_rank[m.rank_key] }}') center/contain no-repeat;mask:url('{{ icons.passive_rank[m.rank_key] }}') center/contain no-repeat"></span>{% endif %}<span style="color:{{ m.hex }}">{{ m.name }}</span></span>{% endfor %}</div>
+      </div>
+      <div style="flex:none;text-align:right"><div style="font-size:13px;color:#7a3604;font-weight:700">{{ r.loc }}</div><div style="font-size:11.5px;color:#523f10">Lv.{{ r.level }}</div></div>
+    </div>{% endfor %}
+    <div style="margin-top:9px;font-size:11px;color:#7a6a4a">「箱 #N」编号与 /帕鲁箱 一致,照编号翻页即可定位。</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+PASSFIND_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">带「{{ query }}」的帕鲁</div><div class="ig-sub"><span class="ig-pill">{{ owner }} · 共 {{ total }} 只</span>{% for n in matched_names %}<span class="ig-pill">{{ n }}</span>{% endfor %}</div></div></div>
+  <div class="ig-panel">
+    {% for r in rows %}<div style="display:flex;align-items:center;gap:10px;padding:8px 2px;{% if not loop.last %}border-bottom:1px solid var(--pal-line){% endif %}">
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;flex:none">{% endif %}
+      <div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:700;color:var(--pal-text);display:flex;align-items:center;gap:4px">{{ r.name }}{% if r.nickname %} 「{{ r.nickname }}」{% endif %}{% if r.lucky and icons.pal.lucky %}<img src="{{ icons.pal.lucky }}" style="width:15px;height:15px;object-fit:contain">{% elif r.alpha and icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:15px;height:15px;object-fit:contain">{% endif %}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:4px">{% for m in r.matched %}<span class="ig-pill" style="display:inline-flex;align-items:center;gap:4px">{% if icons.passive_rank[m.rank_key] %}<span style="display:inline-block;width:13px;height:13px;background:{{ m.hex }};-webkit-mask:url('{{ icons.passive_rank[m.rank_key] }}') center/contain no-repeat;mask:url('{{ icons.passive_rank[m.rank_key] }}') center/contain no-repeat"></span>{% endif %}<span style="color:{{ m.hex }}">{{ m.name }}</span></span>{% endfor %}</div></div>
+      <div style="flex:none;text-align:right"><div style="font-size:13px;color:var(--pal-gold);font-weight:700">{{ r.loc }}</div><div style="font-size:11.5px;color:var(--pal-dim)">Lv.{{ r.level }}</div></div>
+    </div>{% endfor %}
+    <div style="margin-top:9px;font-size:11px;color:var(--pal-dim)">「箱 #N」编号与 /帕鲁箱 一致,照编号翻页即可定位。</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
 STYLES = {
     "fantasy": {"status": STATUS_TMPL, "players": PLAYERS_TMPL, "settings": SETTINGS_TMPL,
                 "help": HELP_TMPL, "message": MSG_TMPL, "stats": STATS_TMPL, "rank": RANK_TMPL,
@@ -5600,7 +5649,7 @@ STYLES = {
                 "facility": FACILITY_TMPL, "tech": TECH_TMPL, "grid": GRID_TMPL, "map": MAP_TMPL,
                 "lab_overview": LAB_OVERVIEW_TMPL, "lab_list": LAB_LIST_TMPL, "lab_detail": LAB_DETAIL_TMPL,
                 "bag": BAG_TMPL, "team": TEAM_TMPL, "palbox": PALBOX_TMPL, "guild": GUILD_TMPL,
-                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL, "matroute": MATROUTE_TMPL, "techtree": TECHTREE_TMPL, "ranch": RANCH_TMPL, "matuse": MATUSE_TMPL, "poimap": POIMAP_TMPL,
+                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL, "matroute": MATROUTE_TMPL, "techtree": TECHTREE_TMPL, "ranch": RANCH_TMPL, "matuse": MATUSE_TMPL, "poimap": POIMAP_TMPL, "passfind": PASSFIND_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "passdex": PASSDEX_TMPL, "passlist": PASSLIST_TMPL,
                 "awakening": AWAKENING_TMPL, "mutation": MUTATION_TMPL,
@@ -5619,7 +5668,7 @@ STYLES = {
               "facility": FACILITY_PIX, "tech": TECH_PIX, "grid": GRID_PIX, "map": MAP_PIX,
               "lab_overview": LAB_OVERVIEW_PIX, "lab_list": LAB_LIST_PIX, "lab_detail": LAB_DETAIL_PIX,
               "bag": BAG_PIX, "team": TEAM_PIX, "palbox": PALBOX_PIX, "guild": GUILD_PIX,
-              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX, "matroute": MATROUTE_PIX, "techtree": TECHTREE_PIX, "ranch": RANCH_PIX, "matuse": MATUSE_PIX, "poimap": POIMAP_PIX,
+              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX, "matroute": MATROUTE_PIX, "techtree": TECHTREE_PIX, "ranch": RANCH_PIX, "matuse": MATUSE_PIX, "poimap": POIMAP_PIX, "passfind": PASSFIND_PIX,
               "element": ELEMENT_PIX, "habitat": HABITAT_PIX, "passrec": PASSREC_PIX,
               "passdex": PASSDEX_PIX, "passlist": PASSLIST_PIX,
               "awakening": AWAKENING_PIX, "mutation": MUTATION_PIX,
@@ -5642,6 +5691,7 @@ STYLES["ingame"]["techtree"] = TECHTREE_ING
 STYLES["ingame"]["ranch"] = RANCH_ING
 STYLES["ingame"]["matuse"] = MATUSE_ING
 STYLES["ingame"]["poimap"] = POIMAP_ING
+STYLES["ingame"]["passfind"] = PASSFIND_ING
 # 阶段D:已改造为 ingame 专属布局的卡(其余仍临时回退 fantasy,见 INGAME_ICON_COVERAGE.md)
 STYLES["ingame"]["paldex"] = PALDEX_ING
 STYLES["ingame"]["passlist"] = PASSLIST_ING

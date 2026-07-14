@@ -62,6 +62,7 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("属性克制", "_cmd_element", ("克制", "属性", "克制图", "element"), cooldown=True, pass_args=True, description="属性克制图 / 按属性列帕鲁", category="paldex"),
     CommandSpec("栖息区域", "_cmd_habitat", ("栖息地", "栖息", "分布", "habitat"), cooldown=True, pass_args=True, description="帕鲁栖息区域", category="paldex"),
     CommandSpec("推荐词条", "_cmd_passrec", ("词条", "推荐", "passive"), cooldown=True, pass_args=True, description="推荐被动词条", category="paldex"),
+    CommandSpec("词条查", "_cmd_passive_find", ("查词条", "词条帕鲁", "谁带词条", "passfind"), cooldown=True, pass_args=True, description="查你哪只帕鲁带某词条", category="player"),
     CommandSpec("词条大全", "_cmd_passive_dex", ("词条分类", "词条图鉴", "全部词条", "词条查询", "词条百科", "passivedex"), cooldown=True, pass_args=True, description="全部词条分类查询", category="paldex"),
     CommandSpec("觉醒", "_cmd_awakening", ("帕鲁觉醒", "觉醒系统", "awakening"), cooldown=True, pass_args=True, description="1.0觉醒材料与机制", category="paldex"),
     CommandSpec("突变", "_cmd_mutation", ("突变配种", "突变系统", "特殊蛋糕", "mutation"), cooldown=True, pass_args=True, description="1.0突变机制与特殊蛋糕", category="paldex"),
