@@ -1010,13 +1010,10 @@ PASSLIST_ING = _IH + """</style></head><body><div class="page">
         <div><span class="pn">{{ it.name }}</span>{% if it.rank %}<span class="tag">Lv{{ it.rank }}</span>{% endif %}{% if it.cat %}<span class="tag">{{ it.cat }}</span>{% endif %}</div>
         {% if it.effect %}<div class="pe">{{ it.effect }}</div>{% endif %}
       </div>
-      {% set lv = it.rank if it.rank else 1 %}
-      {% if it.sign < 0 %}<img class="ig-rank neg" src="{{ rk.rank_down }}">
-      {% elif it.sign > 0 %}<img class="ig-rank pos" src="{{ rk.rank_up3 if lv >= 3 else (rk.rank_up2 if lv == 2 else rk.rank_up1) }}">
-      {% else %}<img class="ig-rank" src="{{ rk.rank_up1 }}">{% endif %}
+      {% if icons.passive_rank[it.rank_key] %}<span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);display:inline-block;width:22px;height:22px;background:{{ it.color }};-webkit-mask:url('{{ icons.passive_rank[it.rank_key] }}') center/contain no-repeat;mask:url('{{ icons.passive_rank[it.rank_key] }}') center/contain no-repeat"></span>{% endif %}
     </div>
     {% endfor %}
-    <div style="margin-top:6px;text-align:center;font-size:11px;color:var(--pal-dim)">↑金=增益 · ↓红=减益 · 箭头层数=词条等级 — 发「/帕鲁词条大全」看全部分类</div>
+    <div style="margin-top:6px;text-align:center;font-size:11px;color:var(--pal-dim)">词条按 +1银→+2绿→+3金→+4紫→+5青虹(顶阶) 分档,箭头/颜色为游戏内品阶 · ↓红=减益 — 发「/帕鲁词条大全」看全部分类</div>
   </div>
   """ + _IF + """
 </div></body></html>"""
@@ -1282,7 +1279,7 @@ TEAM_ING = _IH + """</style></head><body><div class="page">
         {% if p.passives %}<div class="ig-subsec">词条</div>
         {% for s in p.passives %}<div class="ig-passrow {% if s.color=='bad' %}neg{% elif s.color in ['legend','epic','rare'] %}pos{% endif %}" style="padding:8px 40px 8px 11px;margin-bottom:6px">
           <div style="flex:1;min-width:0"><span class="pn" style="font-size:13.5px">{{ s.name }}</span>{% if s.effect %}<div class="pe">{{ s.effect }}</div>{% endif %}</div>
-          {% if s.color=='bad' %}<img class="ig-rank neg" src="{{ icons.passive_rank.rank_down }}">{% else %}<img class="ig-rank pos" src="{{ icons.passive_rank.rank_up3 if (s.arrows|length)>=3 else (icons.passive_rank.rank_up2 if (s.arrows|length)==2 else icons.passive_rank.rank_up1) }}">{% endif %}
+          {% if icons.passive_rank[s.rank_key] %}<span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);display:inline-block;width:20px;height:20px;background:{{ s.hex }};-webkit-mask:url('{{ icons.passive_rank[s.rank_key] }}') center/contain no-repeat;mask:url('{{ icons.passive_rank[s.rank_key] }}') center/contain no-repeat"></span>{% endif %}
         </div>{% endfor %}{% endif %}
         {% if p.wazas %}<div class="ig-subsec">技能</div>
         {% for w in p.wazas %}<div class="ig-sk"><div class="nm" style="font-size:13.5px">{{ w.name }}</div><div class="pw">{% if w.elem and icons.element[w.elem] %}<span class="ig-eplate"><img src="{{ icons.element[w.elem] }}"></span>{% endif %}{% if w.power %}威力 {{ w.power }}{% endif %}</div></div>{% endfor %}{% endif %}
@@ -4161,7 +4158,7 @@ PASSLIST_TMPL = _HEAD + """</style></head><body><div class="page">
       </div>
     </div>
     {% endfor %}
-    <div style="margin-top:5px;text-align:center;font-size:11.5px;color:#9c8fc0">箭头/颜色为游戏内词条品阶(↑金=好词条·↓红=减益) — 发「/帕鲁词条大全」看全部分类</div>
+    <div style="margin-top:5px;text-align:center;font-size:11.5px;color:#9c8fc0">品阶:+1银→+2绿→+3金→+4紫→+5青虹(顶阶),箭头为游戏真实图标·↓红=减益 — 发「/帕鲁词条大全」看全部分类</div>
   </div>
   """ + _FOOT + """
 </div></body></html>"""
@@ -5067,7 +5064,7 @@ PASSLIST_PIX = _PH + """</style></head><body><div class="page">
       </div>
     </div>
     {% endfor %}
-    <div style="margin-top:5px;text-align:center;font-size:11.5px;color:#7a5a1a">箭头/颜色为游戏内词条品阶(↑金=好词条·↓红=减益) — 发「/帕鲁词条大全」看全部分类</div>
+    <div style="margin-top:5px;text-align:center;font-size:11.5px;color:#7a5a1a">品阶:+1银→+2绿→+3金→+4紫→+5青虹(顶阶),箭头为游戏真实图标·↓红=减益 — 发「/帕鲁词条大全」看全部分类</div>
   </div>
   """ + _PF + """
 </div></body></html>"""

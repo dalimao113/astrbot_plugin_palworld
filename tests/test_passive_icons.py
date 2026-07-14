@@ -21,7 +21,8 @@ def test_rank_meta_mapping():
     assert m(3, 1)[0] == "rank_up3" and m(3, 1)[1].startswith("#")
     assert m(1, -1)[0] == "rank_down"
     assert m(2, 1)[0] == "rank_up2" and m(1, 1)[0] == "rank_up1"
-    assert m(5, 1)[0] == "rank_up3_plus"
+    assert m(5, 1)[0] == "rank_up5"     # 顶阶钻石
+    assert m(4, 1)[0] == "rank_up3_plus"
 
 
 def test_passlist_shows_game_arrow_all_themes():

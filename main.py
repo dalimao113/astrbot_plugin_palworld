@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.31.0",
+    "1.32.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2399,17 +2399,22 @@ class PalworldPlugin(Star):
 
     @staticmethod
     def _passive_rank_meta(rank: int, sign: int) -> tuple:
-        """词条等级/正负 → (游戏箭头图标键, 品阶颜色)。金色=高阶好词条,红=减益。白遮罩由模板 CSS 上色。"""
+        """词条等级/正负 → (游戏箭头图标键, 品阶颜色)。
+        游戏真实有 6 档箭头(T_icon_skillstatus_rank_arrow_00~05):
+          减益↓ / +1↑ / +2↑↑ / +3↑↑↑ / +4(↑↑↑加号) / +5(↑↑↑钻石,最高档)。
+        颜色按档位递进,金色(+3)之上还有紫(+4)/青虹(+5)——即"比金色更好"的彩色高阶词条。"""
         if sign < 0:
             return "rank_down", "#e0685f"          # 减益(↓ 红)
         r = rank or 1
-        if r >= 4:
-            return "rank_up3_plus", "#ffd94a"      # 顶阶(↑↑↑+ 亮金)
+        if r >= 5:
+            return "rank_up5", "#35e0d8"           # +5 顶阶(3↑+钻石):青虹(最高,比金更好)
+        if r == 4:
+            return "rank_up3_plus", "#c58cff"      # +4(3↑+加号):紫(比金更好)
         if r == 3:
-            return "rank_up3", "#ffce4a"           # +3(↑↑↑ 金)
+            return "rank_up3", "#ffce4a"           # +3(↑↑↑):金
         if r == 2:
-            return "rank_up2", "#eab84a"           # +2(↑↑ 琥珀)
-        return "rank_up1", "#cdba7a"               # +1(↑ 浅金)
+            return "rank_up2", "#6fcf7f"           # +2(↑↑):绿
+        return "rank_up1", "#cfd6e4"               # +1(↑):银白
 
     def _passive_item(self, name: str, effect: str, rank: int, sign: int) -> dict:
         key, color = self._passive_rank_meta(rank, sign)

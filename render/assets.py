@@ -217,7 +217,7 @@ class AssetResolver:
         stat = {k: self.img(f"stat.{k}", style) for k in ("hp", "attack", "defense", "weight", "hunger",
                                                           "san", "work_speed", "stamina", "speed")}
         rank = {k: self.img(f"passive_rank.{k}", style)
-                for k in ("rank_down", "rank_up1", "rank_up2", "rank_up3", "rank_up3_plus")}
+                for k in ("rank_down", "rank_up1", "rank_up2", "rank_up3", "rank_up3_plus", "rank_up5")}
         # server/plugin 概念(游戏无)→ ingame 用插件扩展 SVG;fantasy/pixel 空串
         server = {k: self.img(f"server.{k}", style)
                   for k in ("online", "offline", "player_count", "fps", "uptime",

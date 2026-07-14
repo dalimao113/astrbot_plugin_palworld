@@ -361,8 +361,14 @@
     },
     "rank_up3_plus": {
       "ingame": "icons/passive/rank_up3_plus.png",
-      "role": "顶阶(↑↑↑+)",
+      "role": "+4(3↑+加号,rank4)",
       "game_source": "T_icon_skillstatus_rank_arrow_04",
+      "status": "verified"
+    },
+    "rank_up5": {
+      "ingame": "icons/passive/rank_up5.png",
+      "role": "+5 顶阶(3↑+钻石,rank5 最高档)",
+      "game_source": "T_icon_skillstatus_rank_arrow_05",
       "status": "verified"
     }
   },
