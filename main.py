@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.20.2",
+    "1.21.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -1141,6 +1141,49 @@ class PalworldPlugin(Star):
             "mode": "level", "level": level, "items": view,
             "points_total": sum(v["points"] for v in view if not v["ancient"]),
             "ancient_count": sum(1 for v in view if v["ancient"])})
+
+    # 牧场产出总览(/帕鲁牧场 [产物]):组合已有数据——牧场适性帕鲁 × 伙伴技能里的产物。
+    # 产物从"分派到家畜牧场"那句真实游戏文本里按物品名匹配;挖道具类如实标"随机道具"。
+    def _ranch_index(self) -> list:
+        if getattr(self, "_ranch_cache", None) is None:
+            inames = [nm for nm in self._item_by_name if len(nm) >= 2]
+            out = []
+            for p in self._pals:
+                if not (p.get("work_suitability") or {}).get("monster_farm"):
+                    continue
+                desc = p.get("partner_skill_description") or ""
+                seg = desc.split("家畜牧场", 1)[1] if "家畜牧场" in desc else desc
+                found = sorted({nm for nm in inames if nm in seg}, key=len, reverse=True)
+                dedup = []
+                for nm in found:                      # 去子串重复(留最长,如"帕鲁蛋"盖过"蛋")
+                    if not any(nm in d and nm != d for d in dedup):
+                        dedup.append(nm)
+                if not dedup and "蛋" in seg:          # 皮皮鸡等"产下蛋":蛋非独立词条名
+                    dedup = ["蛋"]
+                products = [{"name": nm, "icon": self._item_icon((self._item_by_name.get(nm) or {}).get("item_id"))}
+                            for nm in dedup]
+                out.append({"pal": p["pal_name"], "icon": self._pal_icon(p.get("pal_dev_name", "")),
+                            "products": products, "random": not dedup})
+            out.sort(key=lambda x: (x["random"], x["pal"]))   # 有具体产物的在前
+            self._ranch_cache = out
+        return self._ranch_cache
+
+    async def _cmd_ranch(self, event: AstrMessageEvent, args: list[str]):
+        if not self._pals:
+            return await self._msg_card(event, "🐑", "图鉴数据未加载", desc="data/paldex.json 缺失。", color="#E5484D")
+        q = " ".join(args).strip()
+        idx = self._ranch_index()
+        if q:
+            rows = [r for r in idx if any(q in pr["name"] for pr in r["products"])]
+            if not rows:
+                prods = sorted({pr["name"] for r in idx for pr in r["products"]})
+                return await self._msg_card(event, "🔍", f"没有牧场产「{_esc(q)}」的帕鲁",
+                                            desc="可产的有：" + "、".join(prods), color="#F5A623")
+            title, sub = f"牧场产「{_esc(q)}」", f"共 {len(rows)} 只可产"
+        else:
+            title, sub = "牧场产出一览", f"共 {len(idx)} 只有牧场适性"
+            rows = idx
+        return await self._img(event, self._t("ranch"), {"title": title, "sub": sub, "rows": rows})
 
     _LAB_CAT_EMOJI = {"手工": "🔨", "点火": "🔥", "浇水": "💧", "播种": "🌱", "发电": "⚡",
                       "砍伐": "🪓", "采矿": "⛏️", "冷却": "❄️", "制药": "💊", "通用": "🔬"}
@@ -3077,7 +3120,7 @@ class PalworldPlugin(Star):
                 return alias, (([rest] + list(args)) if rest else list(args))
         return sub, args
 
-    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|材料路线|材料|配方展开|总材料|matroute|种属|分类图鉴|种族分类|genus|科技树|科技路线|解锁路线|techtree|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|养成|培养|养成进度|养成路线|growth|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我的战力|个人战力|我的最强帕鲁|我的帕鲁战力|mypower|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点体检|基地体检|据点健康|基地健康|basehealth|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
+    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|材料路线|材料|配方展开|总材料|matroute|种属|分类图鉴|种族分类|genus|科技树|科技路线|解锁路线|techtree|牧场产出|牧场|放牧|家畜牧场|ranch|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|养成|培养|养成进度|养成路线|growth|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我的战力|个人战力|我的最强帕鲁|我的帕鲁战力|mypower|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点体检|基地体检|据点健康|基地健康|basehealth|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
     async def palworld(self, event: AstrMessageEvent):
         raw = (event.message_str or "").strip()
         # 去掉可选的「/」前缀和指令词「帕鲁」，剩余既可能是「在线」也可能是「在线 参数」

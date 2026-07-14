@@ -98,6 +98,7 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("材料路线", "_cmd_matroute", ("材料", "配方展开", "总材料", "matroute"), cooldown=True, pass_args=True, description="配方递归展开:总原料/中间产物/制作台", category="paldex"),
     CommandSpec("种属", "_cmd_genus", ("分类图鉴", "种族分类", "genus"), cooldown=True, pass_args=True, description="按种属(人形/鸟/四足/龙/鱼)分类浏览图鉴", category="paldex"),
     CommandSpec("科技树", "_cmd_techtree", ("科技路线", "解锁路线", "techtree"), cooldown=True, pass_args=True, description="按等级看科技/建造解锁路线", category="paldex"),
+    CommandSpec("牧场", "_cmd_ranch", ("牧场产出", "放牧", "家畜牧场", "ranch"), cooldown=True, pass_args=True, description="牧场适性帕鲁的产出一览/按产物反查", category="paldex"),
 
     # ---------------- 玩家自助 ----------------
     CommandSpec("绑定", "_cmd_bind", ("bind",), pass_args=True, description="绑定游戏角色", category="player"),

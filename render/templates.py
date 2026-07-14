@@ -5717,6 +5717,42 @@ TECHTREE_ING = _IH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+RANCH_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div><div class="title" style="font-size:23px">🐑 {{ title }}</div><div class="subtitle"><span class="pill soft">{{ sub }}</span></div></div></div>
+  <div class="glass">""" + _GEMS + """
+    {% for r in rows %}<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(232,198,106,0.1)">
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:38px;height:38px;object-fit:contain;flex:none">{% endif %}
+      <span style="flex:none;min-width:88px;font-size:15px;font-weight:700;color:#f3ecd2">{{ r.pal }}</span>
+      <span style="color:#7a6ca0">→</span>
+      <span style="flex:1;display:flex;flex-wrap:wrap;gap:6px">{% if r.products %}{% for pr in r.products %}<span class="pill soft" style="display:inline-flex;align-items:center;gap:5px">{% if pr.icon %}<img src="{{ pr.icon }}" style="width:20px;height:20px;object-fit:contain">{% endif %}{{ pr.name }}</span>{% endfor %}{% else %}<span class="pill soft" style="color:#9c8fc0">随机道具</span>{% endif %}</span></div>{% endfor %}
+    <div style="margin-top:11px;font-size:11px;color:#8a82a8;line-height:1.6">产物取自各帕鲁伙伴技能「分派到家畜牧场」的真实描述;挖掘类如实标「随机道具」。发「/帕鲁牧场 <产物>」查谁产它。</div>
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+RANCH_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div><div class="title" style="font-size:21px">🐑 {{ title }}</div><div class="subtitle"><span class="pill">{{ sub }}</span></div></div></div>
+  <div class="frame">
+    {% for r in rows %}<div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:2px dotted rgba(90,58,30,.24)">
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:34px;height:34px;object-fit:contain;flex:none;image-rendering:pixelated">{% endif %}
+      <span style="flex:none;min-width:82px;font-size:14px;font-weight:700;color:#382207">{{ r.pal }}</span>
+      <span style="color:#8a6a3a">→</span>
+      <span style="flex:1;display:flex;flex-wrap:wrap;gap:5px">{% if r.products %}{% for pr in r.products %}<span class="pill" style="display:inline-flex;align-items:center;gap:4px">{% if pr.icon %}<img src="{{ pr.icon }}" style="width:18px;height:18px;object-fit:contain;image-rendering:pixelated">{% endif %}{{ pr.name }}</span>{% endfor %}{% else %}<span class="pill">随机道具</span>{% endif %}</span></div>{% endfor %}
+    <div style="margin-top:10px;font-size:11px;color:#7a6a4a;line-height:1.6">产物取自伙伴技能「分派到家畜牧场」真实描述;挖掘类标「随机道具」。发「/帕鲁牧场 <产物>」查谁产。</div>
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+RANCH_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ title }}</div><div class="ig-sub"><span class="ig-pill">{{ sub }}</span></div></div></div>
+  <div class="ig-panel">
+    {% for r in rows %}<div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid var(--pal-line)">{% if r.icon %}<img src="{{ r.icon }}" style="width:34px;height:34px;object-fit:contain;flex:none">{% endif %}<span style="flex:none;min-width:82px;font-size:14px;font-weight:700;color:var(--pal-text)">{{ r.pal }}</span><span style="color:var(--pal-sub)">→</span><span style="flex:1;display:flex;flex-wrap:wrap;gap:5px">{% if r.products %}{% for pr in r.products %}<span class="ig-pill" style="display:inline-flex;align-items:center;gap:4px">{% if pr.icon %}<img src="{{ pr.icon }}" style="width:18px;height:18px;object-fit:contain">{% endif %}{{ pr.name }}</span>{% endfor %}{% else %}<span class="ig-pill">随机道具</span>{% endif %}</span></div>{% endfor %}
+    <div style="margin-top:9px;font-size:11px;color:var(--pal-dim)">产物取自伙伴技能「分派到家畜牧场」真实描述;挖掘类标「随机道具」。发「/帕鲁牧场 <产物>」查谁产。</div>
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
 STYLES = {
     "fantasy": {"status": STATUS_TMPL, "players": PLAYERS_TMPL, "settings": SETTINGS_TMPL,
                 "help": HELP_TMPL, "message": MSG_TMPL, "stats": STATS_TMPL, "rank": RANK_TMPL,
@@ -5729,7 +5765,7 @@ STYLES = {
                 "facility": FACILITY_TMPL, "tech": TECH_TMPL, "grid": GRID_TMPL, "map": MAP_TMPL,
                 "lab_overview": LAB_OVERVIEW_TMPL, "lab_list": LAB_LIST_TMPL, "lab_detail": LAB_DETAIL_TMPL,
                 "bag": BAG_TMPL, "team": TEAM_TMPL, "palbox": PALBOX_TMPL, "guild": GUILD_TMPL,
-                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL, "matroute": MATROUTE_TMPL, "techtree": TECHTREE_TMPL,
+                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL, "matroute": MATROUTE_TMPL, "techtree": TECHTREE_TMPL, "ranch": RANCH_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "passdex": PASSDEX_TMPL, "passlist": PASSLIST_TMPL,
                 "awakening": AWAKENING_TMPL, "mutation": MUTATION_TMPL,
@@ -5748,7 +5784,7 @@ STYLES = {
               "facility": FACILITY_PIX, "tech": TECH_PIX, "grid": GRID_PIX, "map": MAP_PIX,
               "lab_overview": LAB_OVERVIEW_PIX, "lab_list": LAB_LIST_PIX, "lab_detail": LAB_DETAIL_PIX,
               "bag": BAG_PIX, "team": TEAM_PIX, "palbox": PALBOX_PIX, "guild": GUILD_PIX,
-              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX, "matroute": MATROUTE_PIX, "techtree": TECHTREE_PIX,
+              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX, "matroute": MATROUTE_PIX, "techtree": TECHTREE_PIX, "ranch": RANCH_PIX,
               "element": ELEMENT_PIX, "habitat": HABITAT_PIX, "passrec": PASSREC_PIX,
               "passdex": PASSDEX_PIX, "passlist": PASSLIST_PIX,
               "awakening": AWAKENING_PIX, "mutation": MUTATION_PIX,
@@ -5768,6 +5804,7 @@ STYLES["ingame"]["basehealth"] = BASEHEALTH_ING
 STYLES["ingame"]["growth"] = GROWTH_ING
 STYLES["ingame"]["matroute"] = MATROUTE_ING
 STYLES["ingame"]["techtree"] = TECHTREE_ING
+STYLES["ingame"]["ranch"] = RANCH_ING
 # 阶段D:已改造为 ingame 专属布局的卡(其余仍临时回退 fantasy,见 INGAME_ICON_COVERAGE.md)
 STYLES["ingame"]["paldex"] = PALDEX_ING
 STYLES["ingame"]["passlist"] = PASSLIST_ING
