@@ -136,12 +136,12 @@ def test_resolver_plugin_key_alias():
 
 def test_resolver_missing_ingame_falls_back_to_placeholder_not_error():
     r = _resolver()
-    # pending-extract(有键无图) → 统一缺失占位(stat.san 尚未提取到游戏图标)
-    assert r.img("stat.san", "ingame") == r.missing_uri
+    # 无游戏图标的 stat(text-keep,如 speed/stamina)→ 统一缺失占位
+    assert r.img("stat.speed", "ingame") == r.missing_uri
     # 完全未知键 → 缺失占位,不抛异常
     assert r.img("totally.unknown", "ingame") == r.missing_uri
     # fallback 文字仍可取到
-    assert r.text("stat.san", "fantasy") == "🧠"
+    assert r.text("stat.speed", "fantasy")
 
 
 def test_resolver_plugin_ext_svg():

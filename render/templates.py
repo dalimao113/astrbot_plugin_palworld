@@ -1028,7 +1028,7 @@ PASSDEX_ING = _IH + """</style></head><body><div class="page">
   <div class="ig-panel">
     {% for c in cats %}
     <div class="ig-catrow" style="border-left-color:{{ c.color }}">
-      <div><span class="cn">{{ c.name }}</span><span class="cc" style="color:{{ c.color }}">{{ c.count }} 个词条</span></div>
+      <div style="display:flex;align-items:center;gap:7px">{% if c.icon %}<img src="{{ c.icon }}" style="width:20px;height:20px;object-fit:contain">{% elif c.emoji %}<span style="font-size:18px">{{ c.emoji }}</span>{% endif %}<span class="cn">{{ c.name }}</span><span class="cc" style="color:{{ c.color }};margin-left:auto">{{ c.count }} 个词条</span></div>
       {% if c.sample %}<div class="cs">{{ c.sample }}…</div>{% endif %}
     </div>
     {% endfor %}
@@ -2690,7 +2690,7 @@ TEAM_TMPL = _HEAD + _PCHIP + _TEAM_STAT_F + """
         <div class="ivb talent"><div class="ivk">防御天赋</div><div class="ivv">{{ p.iv_def }}</div></div>
       </div>
       {% if p.works %}<div class="sec-t" style="margin-top:12px">工作适性</div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">{% for w in p.works %}<span class="pill">{{ w.icon }} {{ w.name }} Lv{{ w.level }}</span>{% endfor %}</div>{% endif %}
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">{% for w in p.works %}<span class="pill">{% if icons.work[w.name] %}<img src="{{ icons.work[w.name] }}" style="width:15px;height:15px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% else %}{{ w.icon }} {% endif %}{{ w.name }} Lv{{ w.level }}</span>{% endfor %}</div>{% endif %}
       {% if p.partner.title %}<div class="sec-t" style="margin-top:12px">伙伴技能</div>
       <div class="prow"><span class="pname pl-legend">{{ p.partner.title }}</span>{% if p.partner.desc %}<span class="pdesc">{{ p.partner.desc }}</span>{% endif %}</div>{% endif %}
       {% if p.passives %}<div class="sec-t" style="margin-top:12px">词条</div>
@@ -2751,7 +2751,7 @@ TEAM_PIX = _PH + _PCHIP_PIX + _TEAM_STAT_P + """
         <div class="ivb talent"><div class="ivk">防御天赋</div><div class="ivv">{{ p.iv_def }}</div></div>
       </div>
       {% if p.works %}<div class="sec-t" style="margin-top:12px">工作适性</div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">{% for w in p.works %}<span class="pill">{{ w.icon }} {{ w.name }} Lv{{ w.level }}</span>{% endfor %}</div>{% endif %}
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">{% for w in p.works %}<span class="pill">{% if icons.work[w.name] %}<img src="{{ icons.work[w.name] }}" style="width:15px;height:15px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% else %}{{ w.icon }} {% endif %}{{ w.name }} Lv{{ w.level }}</span>{% endfor %}</div>{% endif %}
       {% if p.partner.title %}<div class="sec-t" style="margin-top:12px">伙伴技能</div>
       <div class="prow"><span class="pname pl-legend">{{ p.partner.title }}</span>{% if p.partner.desc %}<span class="pdesc">{{ p.partner.desc }}</span>{% endif %}</div>{% endif %}
       {% if p.passives %}<div class="sec-t" style="margin-top:12px">词条</div>
@@ -4119,7 +4119,7 @@ PASSDEX_TMPL = _HEAD + """</style></head><body><div class="page">
       <div style="position:relative;padding:13px 14px 12px 19px;border-radius:15px;background:linear-gradient(135deg,{{c.color}}26,rgba(18,12,48,.5) 78%);border:1px solid {{c.color}}55;overflow:hidden">
         <div style="position:absolute;left:0;top:0;bottom:0;width:5px;background:{{c.color}}"></div>
         <div style="display:flex;align-items:center;gap:10px">
-          <div style="flex:none;width:40px;height:40px;border-radius:11px;background:{{c.color}}30;border:1px solid {{c.color}}66;display:flex;align-items:center;justify-content:center;font-size:21px">{{c.icon}}</div>
+          <div style="flex:none;width:40px;height:40px;border-radius:11px;background:{{c.color}}30;border:1px solid {{c.color}}66;display:flex;align-items:center;justify-content:center;font-size:21px">{% if c.icon %}<img src="{{c.icon}}" style="width:26px;height:26px;object-fit:contain">{% else %}{{c.emoji}}{% endif %}</div>
           <div style="flex:1;min-width:0">
             <div style="font-size:16px;font-weight:800;color:#f3ecd2">{{c.name}}</div>
             <div style="font-size:11px;color:{{c.color}};font-weight:800">{{c.count}} 个词条</div>
@@ -5027,7 +5027,7 @@ PASSDEX_PIX = _PH + """</style></head><body><div class="page">
     {% for c in cats %}
       <div class="tile" style="padding:12px 13px 11px 16px;border-left:5px solid {{c.color}}">
         <div style="display:flex;align-items:center;gap:9px">
-          <div style="flex:none;width:36px;height:36px;background:#caa860;border:2px solid #6a4524;display:flex;align-items:center;justify-content:center;font-size:19px">{{c.icon}}</div>
+          <div style="flex:none;width:36px;height:36px;background:#caa860;border:2px solid #6a4524;display:flex;align-items:center;justify-content:center;font-size:19px">{% if c.icon %}<img src="{{c.icon}}" style="width:24px;height:24px;object-fit:contain;image-rendering:pixelated">{% else %}{{c.emoji}}{% endif %}</div>
           <div style="flex:1;min-width:0">
             <div style="font-size:15px;color:#46200a">{{c.name}}</div>
             <div style="font-size:11px;color:#7a3604">{{c.count}} 个词条</div>

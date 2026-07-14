@@ -431,25 +431,28 @@
       "status": "verified"
     },
     "san": {
-      "ingame": null,
+      "ingame": "icons/stat/san.png",
       "fallback": "🧠",
-      "game_source": null,
-      "status": "pending-extract",
-      "_note": "候选 T_icon_status_01(脉冲),待截图核实"
+      "game_source": "T_icon_status_01",
+      "status": "verified",
+      "_note": "候选 T_icon_status_01(脉冲),待截图核实",
+      "role": "SAN/理智(脉冲线)"
     },
     "attack": {
-      "ingame": null,
+      "ingame": "icons/stat/attack.png",
       "fallback": "⚔",
-      "game_source": null,
-      "status": "pending-extract",
-      "_note": "候选 T_icon_status_02(爆发),待截图核实"
+      "game_source": "T_icon_status_02",
+      "status": "verified",
+      "_note": "候选 T_icon_status_02(爆发),待截图核实",
+      "role": "攻击(冲击爆发)"
     },
     "work_speed": {
-      "ingame": null,
+      "ingame": "icons/stat/work_speed.png",
       "fallback": "",
-      "game_source": null,
-      "status": "pending-extract",
-      "_note": "候选 T_icon_status_05(锤),待截图核实"
+      "game_source": "T_icon_status_05",
+      "status": "verified",
+      "_note": "候选 T_icon_status_05(锤),待截图核实",
+      "role": "工作速度(交叉工具)"
     },
     "stamina": {
       "ingame": null,

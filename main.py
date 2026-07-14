@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.32.0",
+    "1.33.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2370,6 +2370,9 @@ class PalworldPlugin(Star):
     _PASSDEX_CATS = ["攻击", "防御", "生命", "工作", "移动", "元素", "生存", "训练师", "其他"]
     _PASSDEX_ICON = {"攻击": "⚔️", "防御": "🛡️", "生命": "❤️", "工作": "🔨",
                      "移动": "💨", "元素": "🔮", "生存": "🍖", "训练师": "🧑", "其他": "✨"}
+    # 词条分类 → 游戏内数值图标键(有对应的用真实游戏图标,其余回退 emoji)
+    _PASSDEX_STAT = {"攻击": "attack", "防御": "defense", "生命": "hp", "工作": "work_speed",
+                     "移动": "speed", "生存": "hunger"}
     _PASSDEX_COLOR = {"攻击": "#e15b5b", "防御": "#5b9ae1", "生命": "#5cc97a", "工作": "#e6942e",
                       "移动": "#2ec8b0", "元素": "#b06ee0", "生存": "#e8c466", "训练师": "#9aa6c0", "其他": "#c9a86a"}
 
@@ -2441,7 +2444,9 @@ class PalworldPlugin(Star):
         g = self._passdex_group()
         q = " ".join(args).strip().rstrip("类")
         if not q:
-            cats = [{"name": c, "icon": self._PASSDEX_ICON.get(c, "✨"),
+            cats = [{"name": c, "emoji": self._PASSDEX_ICON.get(c, "✨"),
+                     "icon": (self._assets.game_icon(f"stat.{self._PASSDEX_STAT[c]}")
+                              if (c in self._PASSDEX_STAT and getattr(self, "_assets", None)) else ""),
                      "color": self._PASSDEX_COLOR.get(c, "#c9a86a"), "count": len(g.get(c, [])),
                      "sample": "、".join(x["name"] for x in g.get(c, [])[:4])}
                     for c in self._PASSDEX_CATS if g.get(c)]
