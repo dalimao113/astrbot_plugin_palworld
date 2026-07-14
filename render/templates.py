@@ -192,101 +192,13 @@ HELP_TMPL = _HEAD + """
   .cmd .d { display:block; font-size:12px; color:#b9a9d6; margin-top:3px; }
 </style></head><body><div class="page">
   <div class="head"><div>
-    <div class="title">📖 帕鲁指令帮助</div>
-    <div class="subtitle">指令一行一条，看清楚再发哦～</div>
+    <div class="title">{{ help_title | default('📖 帕鲁指令帮助') }}</div>
+    <div class="subtitle">{{ help_sub | default('发「/帕鲁帮助 关键词」可搜指令 · 前缀 / 可省') }}</div>
   </div></div>
   <div class="glass">""" + _GEMS + """
-    <div class="sec-t">🔍 查询（所有人可用）</div>
-    <div class="cmd"><div class="c"><b>/帕鲁</b></div><div class="d">查看服务器状态</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁状态</b></div><div class="d">同上，服务器状态总览</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁在线</b></div><div class="d">查看在线玩家列表</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁设置</b></div><div class="d">查看服务器倍率与规则</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁统计</b></div><div class="d">今日峰值/平均 + 近7日趋势</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁热力</b></div><div class="d">7×24 在线热力图·看高峰时段</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁战力榜</b></div><div class="d">已知帕鲁战力等级排行(翻页/详情)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁玩家战力榜</b></div><div class="d">玩家拥有/抓捕帕鲁战力排行</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁闪光墙</b></div><div class="d">全服闪光帕鲁收藏展示</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁头目墙</b></div><div class="d">全服头目(Alpha)收藏展示</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁图鉴榜</b></div><div class="d">全服图鉴收集进度排行</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁资产榜</b></div><div class="d">全服帕鲁身价排行</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁公会战力</b></div><div class="d">各公会战力总和排行</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁更新公告</b></div><div class="d">官方最新更新公告(中文)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁肝帝榜</b> <span style="opacity:.7">[今日/总榜]</span></div><div class="d">在线时长排行(默认本周,可加 今日/总榜)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁图鉴</b> [名/字]</div><div class="d">详情或模糊列表·空=全部·翻页</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁编号</b> 13B</div><div class="d">按图鉴编号查(支持变种)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁配种</b> 亲A 亲B</div><div class="d">查后代 + 子代继续配</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁反配种</b> 帕鲁名</div><div class="d">列出能配成它的组合</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁怎么配</b> 帕鲁名</div><div class="d">用你现有帕鲁算配种路线</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁继承</b> 词条A｜词条B</div><div class="d">算后代继承词条的概率</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁哪里掉</b> 物品</div><div class="d">查哪些帕鲁掉落该物品</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁物品</b> [名/类]</div><div class="d">详情/分类浏览/翻页</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁设施</b> [名/字]</div><div class="d">详情或模糊列表·空=全部·翻页</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁科技</b> [名/字]</div><div class="d">详情或模糊列表·空=全部·翻页</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁研究所</b> [类/名]</div><div class="d">🆕 全局增益研究·9大适性·材料/前置</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁栖息区域</b> 帕鲁名</div><div class="d">地图上涂出它的刷新热区</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁推荐词条</b> 帕鲁名</div><div class="d">按角色推荐高价值词条</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁词条大全</b> [分类]</div><div class="d">全部词条分类查询详情</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁觉醒</b></div><div class="d">1.0 觉醒材料与机制</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁突变</b></div><div class="d">1.0 突变机制与特殊蛋糕</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁属性克制</b></div><div class="d">九系属性克制关系图</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁主线</b> [页]</div><div class="d">按剧情顺序列出主线任务</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁支线</b> [NPC]</div><div class="d">支线任务（可按 NPC 筛选）</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁任务</b> 任务名</div><div class="d">任务详细攻略：目标/坐标/奖励</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁塔主</b> [名]</div><div class="d">高塔塔主：属性/等级/血量/攻略</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁突袭</b> [名]</div><div class="d">突袭 Boss 数据与打法提示</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁竞技场</b> [段位]</div><div class="d">竞技场对手阵容/段位奖励</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁商人</b> [名]</div><div class="d">各商店卖什么 + 价格/货币</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁哪里买</b> 物品</div><div class="d">某物品在哪个商店买、多少钱</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁技能</b> 名/属性</div><div class="d">主动技能威力/冷却/效果</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁技能果实</b> [属性/名]</div><div class="d">🆕 92种果实图鉴·带图标·教什么技能</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁植入体</b> [名/页]</div><div class="d">🆕 68种改造词条·编号查:/帕鲁植入体查询 N</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁世界树</b></div><div class="d">🆕 1.0最终boss专题:暮尘蛾&夜蔓爵</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁1.0</b></div><div class="d">🆕 1.0正式版支持总览·数据统计·新功能导览</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁钓鱼</b></div><div class="d">钓鱼能钓到什么 + 概率</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁工作</b> 工种</div><div class="d">某工种(采矿/搬运…)最强帕鲁排行</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁坐骑</b></div><div class="d">可骑乘帕鲁按奔跑速度排行</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁对比</b> A B</div><div class="d">两只帕鲁数值并排对比</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁料理</b> [效果]</div><div class="d">有增益的料理(攻击/工作速度/配种…)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁武器</b> [名]</div><div class="d">武器攻击力/解锁科技/弹药</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁帮助</b></div><div class="d">显示本帮助卡片</div></div>
-  </div>
-  <div class="glass">""" + _GEMS + """
-    <div class="sec-t">🙋 玩家自助（所有人可用）</div>
-    <div class="cmd"><div class="c"><b>/帕鲁绑定</b> 游戏名</div><div class="d">绑定你的帕鲁角色</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁我</b></div><div class="d">个人档案·等级/技术点/队伍/背包</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁背包</b></div><div class="d">查看自己的背包物品明细</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁队伍</b></div><div class="d">查看自己出战帕鲁的面板</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁箱</b> [页]</div><div class="d">帕鲁箱全部帕鲁·翻页</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁可孵化</b></div><div class="d">用你箱里的帕鲁能配出哪些新帕鲁</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁据点</b></div><div class="d">据点帕鲁：工作/适性/血量/SAN/伤病</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁症状</b> [状态]</div><div class="d">伤病治疗速查(骨折/濒死/低SAN…)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁公会帕鲁</b> [页]</div><div class="d">公会终端：全公会成员帕鲁汇总</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁箱查询</b> 编号</div><div class="d">看帕鲁箱某只的详细面板</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁公会</b></div><div class="d">查看自己公会的成员/会长</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁公会榜</b></div><div class="d">公会在线时长排行榜</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁订阅</b> 游戏名</div><div class="d">某玩家上线时 @ 你</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁退订</b> 游戏名</div><div class="d">取消上线提醒</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁找人</b> 游戏名</div><div class="d">查某玩家是否在线</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁喊话</b> 内容</div><div class="d">把话广播到游戏内</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁喊</b> 游戏名</div><div class="d">@绑定的玩家喊TA上线</div></div>
-  </div>
-  <div class="glass">""" + _GEMS + """
-    <div class="sec-t">🛠️ 管理（仅管理员）</div>
-    <div class="cmd"><div class="c"><b>/帕鲁公告</b> 内容</div><div class="d">向服务器广播公告</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁踢</b> ID [理由]</div><div class="d">踢出指定玩家</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁封</b> ID [理由]</div><div class="d">封禁玩家（需确认）</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁解封</b> ID</div><div class="d">解除封禁</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁存档</b></div><div class="d">立即保存世界存档</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁关服</b> 秒 [提示]</div><div class="d">定时关服（需确认）</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁重启服务器</b></div><div class="d">存档后重启服务器（需确认）</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁备份列表</b></div><div class="d">查看所有自动备份存档</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁回档</b> 编号</div><div class="d">回档到指定备份（需确认）</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁重置存档</b></div><div class="d">删档重开·全新世界（需确认）</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁恢复存档</b></div><div class="d">还原上一次重置前的存档（需确认）</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁审计</b></div><div class="d">查看最近管理操作记录</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁自检</b></div><div class="d">一键体检配置/连接/存档/渲染</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁地图</b></div><div class="d">在线玩家世界地图分布</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁确认</b></div><div class="d">确认上一条危险操作</div></div>
+    {% for sec in sections %}<div class="sec-t">{{ sec.title }}</div>
+    {% for c in sec.cmds %}<div class="cmd"><div class="c"><b>{{ c.cmd }}</b></div><div class="d">{{ c.desc }}</div></div>{% endfor %}
+    {% endfor %}
   </div>
   """ + _FOOT + """
 </div></body></html>"""
@@ -2112,99 +2024,11 @@ DAILY_ING = _IH + """</style></head><body><div class="page">
 # ---- ingame 版帮助菜单(静态命令表)。无动态数据 ----
 _IGN = '<span class="ig-new">NEW</span>'
 HELP_ING = _IH + """</style></head><body><div class="page">
-  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁指令帮助</div><div class="ig-sub">指令一行一条,看清楚再发哦～</div></div></div>
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ help_title | default('帕鲁指令帮助') }}</div><div class="ig-sub">{{ help_sub | default('发「/帕鲁帮助 关键词」可搜指令') }}</div></div></div>
   <div class="ig-panel">
-    <div class="ig-sec">查询(所有人可用)</div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁</b></div><div class="d">查看服务器状态</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁状态</b></div><div class="d">同上,服务器状态总览</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁在线</b></div><div class="d">查看在线玩家列表</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁设置</b></div><div class="d">查看服务器倍率与规则</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁统计</b></div><div class="d">今日峰值/平均 + 近7日趋势</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁热力</b></div><div class="d">7×24 在线热力图·看高峰时段</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁战力榜</b></div><div class="d">已知帕鲁战力等级排行(翻页/详情)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁玩家战力榜</b></div><div class="d">玩家拥有/抓捕帕鲁战力排行</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁闪光墙</b></div><div class="d">全服闪光帕鲁收藏展示</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁头目墙</b></div><div class="d">全服头目(Alpha)收藏展示</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁图鉴榜</b></div><div class="d">全服图鉴收集进度排行</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁资产榜</b></div><div class="d">全服帕鲁身价排行</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁公会战力</b></div><div class="d">各公会战力总和排行</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁更新公告</b></div><div class="d">官方最新更新公告(中文)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁肝帝榜</b> <span style="opacity:.7">[今日/总榜]</span></div><div class="d">在线时长排行(默认本周,可加 今日/总榜)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁图鉴</b> [名/字]</div><div class="d">详情或模糊列表·空=全部·翻页</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁编号</b> 13B</div><div class="d">按图鉴编号查(支持变种)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁配种</b> 亲A 亲B</div><div class="d">查后代 + 子代继续配</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁反配种</b> 帕鲁名</div><div class="d">列出能配成它的组合</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁怎么配</b> 帕鲁名</div><div class="d">用你现有帕鲁算配种路线</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁继承</b> 词条A｜词条B</div><div class="d">算后代继承词条的概率</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁哪里掉</b> 物品</div><div class="d">查哪些帕鲁掉落该物品</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁物品</b> [名/类]</div><div class="d">详情/分类浏览/翻页</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁设施</b> [名/字]</div><div class="d">详情或模糊列表·空=全部·翻页</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁科技</b> [名/字]</div><div class="d">详情或模糊列表·空=全部·翻页</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁研究所</b> [类/名]</div><div class="d">""" + _IGN + """ 全局增益研究·9大适性·材料/前置</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁栖息区域</b> 帕鲁名</div><div class="d">地图上涂出它的刷新热区</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁推荐词条</b> 帕鲁名</div><div class="d">按角色推荐高价值词条</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁词条大全</b> [分类]</div><div class="d">全部词条分类查询详情</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁觉醒</b></div><div class="d">1.0 觉醒材料与机制</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁突变</b></div><div class="d">1.0 突变机制与特殊蛋糕</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁属性克制</b></div><div class="d">九系属性克制关系图</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁主线</b> [页]</div><div class="d">按剧情顺序列出主线任务</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁支线</b> [NPC]</div><div class="d">支线任务(可按 NPC 筛选)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁任务</b> 任务名</div><div class="d">任务详细攻略：目标/坐标/奖励</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁塔主</b> [名]</div><div class="d">高塔塔主：属性/等级/血量/攻略</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁突袭</b> [名]</div><div class="d">突袭 Boss 数据与打法提示</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁竞技场</b> [段位]</div><div class="d">竞技场对手阵容/段位奖励</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁商人</b> [名]</div><div class="d">各商店卖什么 + 价格/货币</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁哪里买</b> 物品</div><div class="d">某物品在哪个商店买、多少钱</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁技能</b> 名/属性</div><div class="d">主动技能威力/冷却/效果</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁技能果实</b> [属性/名]</div><div class="d">""" + _IGN + """ 92种果实图鉴·带图标·教什么技能</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁植入体</b> [名/页]</div><div class="d">""" + _IGN + """ 68种改造词条·编号查:/帕鲁植入体查询 N</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁世界树</b></div><div class="d">""" + _IGN + """ 1.0最终boss专题:暮尘蛾&夜蔓爵</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁1.0</b></div><div class="d">""" + _IGN + """ 1.0正式版支持总览·数据统计·新功能导览</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁钓鱼</b></div><div class="d">钓鱼能钓到什么 + 概率</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁工作</b> 工种</div><div class="d">某工种(采矿/搬运…)最强帕鲁排行</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁坐骑</b></div><div class="d">可骑乘帕鲁按奔跑速度排行</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁对比</b> A B</div><div class="d">两只帕鲁数值并排对比</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁料理</b> [效果]</div><div class="d">有增益的料理(攻击/工作速度/配种…)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁武器</b> [名]</div><div class="d">武器攻击力/解锁科技/弹药</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁帮助</b></div><div class="d">显示本帮助卡片</div></div>
-  </div>
-  <div class="ig-panel hi">
-    <div class="ig-sec">玩家自助(所有人可用)</div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁绑定</b> 游戏名</div><div class="d">绑定你的帕鲁角色</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁我</b></div><div class="d">个人档案·等级/技术点/队伍/背包</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁背包</b></div><div class="d">查看自己的背包物品明细</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁队伍</b></div><div class="d">查看自己出战帕鲁的面板</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁箱</b> [页]</div><div class="d">帕鲁箱全部帕鲁·翻页</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁可孵化</b></div><div class="d">用你箱里的帕鲁能配出哪些新帕鲁</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁据点</b></div><div class="d">据点帕鲁：工作/适性/血量/SAN/伤病</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁症状</b> [状态]</div><div class="d">伤病治疗速查(骨折/濒死/低SAN…)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁公会帕鲁</b> [页]</div><div class="d">公会终端：全公会成员帕鲁汇总</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁箱查询</b> 编号</div><div class="d">看帕鲁箱某只的详细面板</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁公会</b></div><div class="d">查看自己公会的成员/会长</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁公会榜</b></div><div class="d">公会在线时长排行榜</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁订阅</b> 游戏名</div><div class="d">某玩家上线时 @ 你</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁退订</b> 游戏名</div><div class="d">取消上线提醒</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁找人</b> 游戏名</div><div class="d">查某玩家是否在线</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁喊话</b> 内容</div><div class="d">把话广播到游戏内</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁喊</b> 游戏名</div><div class="d">@绑定的玩家喊TA上线</div></div>
-  </div>
-  <div class="ig-panel">
-    <div class="ig-sec">管理(仅管理员)</div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁公告</b> 内容</div><div class="d">向服务器广播公告</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁踢</b> ID [理由]</div><div class="d">踢出指定玩家</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁封</b> ID [理由]</div><div class="d">封禁玩家(需确认)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁解封</b> ID</div><div class="d">解除封禁</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁存档</b></div><div class="d">立即保存世界存档</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁关服</b> 秒 [提示]</div><div class="d">定时关服(需确认)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁重启服务器</b></div><div class="d">存档后重启服务器(需确认)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁备份列表</b></div><div class="d">查看所有自动备份存档</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁回档</b> 编号</div><div class="d">回档到指定备份(需确认)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁重置存档</b></div><div class="d">删档重开·全新世界(需确认)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁恢复存档</b></div><div class="d">还原上一次重置前的存档(需确认)</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁审计</b></div><div class="d">查看最近管理操作记录</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁自检</b></div><div class="d">一键体检配置/连接/存档/渲染</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁地图</b></div><div class="d">在线玩家世界地图分布</div></div>
-    <div class="ig-cmd"><div class="c"><b>/帕鲁确认</b></div><div class="d">确认上一条危险操作</div></div>
+    {% for sec in sections %}<div class="ig-sec">{{ sec.title }}</div>
+    {% for c in sec.cmds %}<div class="ig-cmd"><div class="c"><b>{{ c.cmd }}</b></div><div class="d">{{ c.desc }}</div></div>{% endfor %}
+    {% endfor %}
   </div>
   """ + _IF + """
 </div></body></html>"""
@@ -2337,93 +2161,11 @@ HELP_PIX = _PH + """
   .cmd .c b { color:#fff3d0; background:#7a3604; padding:2px 7px; border:2px solid #5a3a1e; }
   .cmd .d { display:block; font-size:11px; color:#523f10; margin-top:3px; }
 </style></head><body><div class="page">
-  <div class="head"><div><div class="title">▤ 帕鲁指令帮助</div><div class="subtitle">指令一行一条，看清楚再发</div></div></div>
+  <div class="head"><div><div class="title">▤ {{ (help_title | default('帕鲁指令帮助')).replace('📖 ','').replace('🔍 ','搜索:') }}</div><div class="subtitle">{{ help_sub | default('发「/帕鲁帮助 关键词」可搜指令') }}</div></div></div>
   <div class="frame">
-    <div class="sec-t">查询（所有人可用）</div>
-    <div class="cmd"><div class="c"><b>/帕鲁</b></div><div class="d">查看服务器状态</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁在线</b></div><div class="d">查看在线玩家列表</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁设置</b></div><div class="d">查看服务器倍率与规则</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁统计</b></div><div class="d">今日峰值/平均 + 近7日趋势</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁热力</b></div><div class="d">7×24 在线热力图·看高峰时段</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁战力榜</b></div><div class="d">已知帕鲁战力等级排行(翻页/详情)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁玩家战力榜</b></div><div class="d">玩家拥有/抓捕帕鲁战力排行</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁闪光墙</b></div><div class="d">全服闪光帕鲁收藏展示</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁头目墙</b></div><div class="d">全服头目(Alpha)收藏展示</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁图鉴榜</b></div><div class="d">全服图鉴收集进度排行</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁资产榜</b></div><div class="d">全服帕鲁身价排行</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁公会战力</b></div><div class="d">各公会战力总和排行</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁更新公告</b></div><div class="d">官方最新更新公告(中文)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁肝帝榜</b> <span style="opacity:.7">[今日/总榜]</span></div><div class="d">在线时长排行(默认本周,可加 今日/总榜)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁图鉴</b> [名/字]</div><div class="d">详情/模糊列表/翻页</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁编号</b> 13B</div><div class="d">按编号查(支持变种)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁配种</b> 亲A 亲B</div><div class="d">查后代+子代继续配</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁反配种</b> 名</div><div class="d">能配成它的组合</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁怎么配</b> 名</div><div class="d">用现有帕鲁算配种路线</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁继承</b> 词条A｜词条B</div><div class="d">算后代继承词条概率</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁哪里掉</b> 物品</div><div class="d">查哪些帕鲁掉该物品</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁物品</b> [名/类]</div><div class="d">详情/分类/翻页</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁设施</b> [名/字]</div><div class="d">详情/模糊列表/翻页</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁科技</b> [名/字]</div><div class="d">详情/模糊列表/翻页</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁研究所</b> [类/名]</div><div class="d">🆕 全局增益研究/9适性/材料</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁栖息区域</b> 帕鲁名</div><div class="d">地图上涂出刷新热区</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁推荐词条</b> 帕鲁名</div><div class="d">按角色推荐词条</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁词条大全</b> [分类]</div><div class="d">全部词条分类查询</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁觉醒</b></div><div class="d">觉醒材料与机制</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁突变</b></div><div class="d">突变机制与特殊蛋糕</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁属性克制</b></div><div class="d">九系属性克制图</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁主线</b> [页]</div><div class="d">主线任务列表(剧情序)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁支线</b> [NPC]</div><div class="d">支线任务(可筛选NPC)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁任务</b> 任务名</div><div class="d">任务详细攻略</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁塔主</b> [名]</div><div class="d">高塔塔主数据/攻略</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁突袭</b> [名]</div><div class="d">突袭Boss数据/打法</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁竞技场</b> [段位]</div><div class="d">对手阵容/段位奖励</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁商人</b> [名]</div><div class="d">商店卖什么+价格</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁哪里买</b> 物品</div><div class="d">物品在哪买/多少钱</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁技能</b> 名/属性</div><div class="d">技能威力/冷却/效果</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁技能果实</b> [属性/名]</div><div class="d">🆕 92种果实图鉴/带图标</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁植入体</b> [名/页]</div><div class="d">🆕 68种·编号查/帕鲁植入体查询 N</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁世界树</b></div><div class="d">🆕 1.0最终boss:暮尘蛾&夜蔓爵</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁1.0</b></div><div class="d">🆕 1.0支持总览/新功能导览</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁钓鱼</b></div><div class="d">钓鱼可获得物+概率</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁工作</b> 工种</div><div class="d">工种最强帕鲁排行</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁坐骑</b></div><div class="d">坐骑奔跑速度榜</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁对比</b> A B</div><div class="d">两帕鲁数值对比</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁料理</b> [效果]</div><div class="d">增益料理一览</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁武器</b> [名]</div><div class="d">武器攻击力/科技/弹药</div></div>
-  </div>
-  <div class="frame">
-    <div class="sec-t">玩家自助（所有人可用）</div>
-    <div class="cmd"><div class="c"><b>/帕鲁绑定</b> 游戏名</div><div class="d">绑定你的帕鲁角色</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁我</b></div><div class="d">个人档案·等级/技术点/队伍/背包</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁背包</b></div><div class="d">查看自己的背包物品明细</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁队伍</b></div><div class="d">查看自己出战帕鲁的面板</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁箱</b> [页]</div><div class="d">帕鲁箱全部帕鲁·翻页</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁可孵化</b></div><div class="d">用你箱里的帕鲁能配出哪些新帕鲁</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁据点</b></div><div class="d">据点帕鲁：工作/适性/血量/SAN/伤病</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁症状</b> [状态]</div><div class="d">伤病治疗速查(骨折/濒死/低SAN…)</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁公会帕鲁</b> [页]</div><div class="d">公会终端：全公会成员帕鲁汇总</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁箱查询</b> 编号</div><div class="d">看帕鲁箱某只的详细面板</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁公会</b></div><div class="d">查看自己公会的成员/会长</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁公会榜</b></div><div class="d">公会在线时长排行榜</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁订阅</b> 游戏名</div><div class="d">某玩家上线时 @ 你</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁找人</b> 游戏名</div><div class="d">查某玩家是否在线</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁喊话</b> 内容</div><div class="d">把话广播到游戏内</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁喊</b> 游戏名</div><div class="d">@绑定玩家喊TA上线</div></div>
-  </div>
-  <div class="frame">
-    <div class="sec-t">管理（仅管理员）</div>
-    <div class="cmd"><div class="c"><b>/帕鲁公告</b> 内容</div><div class="d">向服务器广播公告</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁踢/封/解封</b></div><div class="d">踢出/封禁/解封玩家</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁存档</b></div><div class="d">立即保存世界存档</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁关服</b> 秒</div><div class="d">定时关服（需确认）</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁重启服务器</b></div><div class="d">存档后重启（需确认）</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁备份列表</b></div><div class="d">查看所有自动备份</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁回档</b> 编号</div><div class="d">回档到指定备份（需确认）</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁重置存档</b></div><div class="d">删档重开（需确认）</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁恢复存档</b></div><div class="d">还原上一次重置（需确认）</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁审计</b></div><div class="d">最近管理操作记录</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁自检</b></div><div class="d">一键体检配置/连接/存档/渲染</div></div>
-    <div class="cmd"><div class="c"><b>/帕鲁地图</b></div><div class="d">在线玩家世界地图</div></div>
+    {% for sec in sections %}<div class="sec-t">{{ sec.title }}</div>
+    {% for c in sec.cmds %}<div class="cmd"><div class="c"><b>{{ c.cmd }}</b></div><div class="d">{{ c.desc }}</div></div>{% endfor %}
+    {% endfor %}
   </div>
   """ + _PF + """
 </div></body></html>"""

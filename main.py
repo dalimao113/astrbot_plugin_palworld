@@ -45,7 +45,7 @@ from .render.templates import (  # noqa: F401
     MISSION_GROUP_CN,   # 支线委托 NPC 分组中文名(此前漏导致 /帕鲁支线 NameError)
 )
 # 命令注册表：子命令→处理器 的单一事实来源，驱动 _dispatch 与 _SUB_ALIASES。
-from .commands.router import ALIAS_MAP as COMMAND_ALIAS_MAP, COMMAND_TOKENS
+from .commands.router import ALIAS_MAP as COMMAND_ALIAS_MAP, COMMAND_TOKENS, COMMANDS as COMMAND_SPECS
 # 配置默认值(规范来源) + 启动合法性校验。
 from . import config as _config
 # 存档拉取/缓存/负缓存/强制存盘 编排服务（palsave.py 只管纯解析）。
@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.28.0",
+    "1.29.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -4162,9 +4162,44 @@ class PalworldPlugin(Star):
             "rank_sub": f"各公会成员帕鲁战力总和 · {len(board)} 个公会",
             "note": "各公会全体成员帕鲁的综合战力(等级/种族/天赋/浓缩/被动)求和;共享据点帕鲁全局去重,只计一次。"})
 
-    async def _cmd_help(self, event: AstrMessageEvent):
-        # 一行一条指令，玩家一眼看清；指令清单硬编码在 HELP_TMPL 模板里。
-        return await self._img(event, self._t("help"), {})
+    # 帮助卡分区(类别 -> 中文标题),数据驱动:直接读命令注册表,永远与实际指令同步。
+    _HELP_CATS = (("server", "🖥️ 服务器"), ("rank", "🏆 排行榜"),
+                  ("paldex", "📚 图鉴 / 攻略查询"), ("player", "🧑 玩家自助(建议先绑定)"),
+                  ("guild", "👥 公会"), ("admin", "🔧 管理(仅 admin_qq)"))
+
+    def _help_sections(self, query: str = "") -> list:
+        """按类别分区的指令清单;query 非空则只留名字/别名/说明含关键词的(搜索)。"""
+        q = (query or "").strip()
+        secs = []
+        for cat, title in self._HELP_CATS:
+            cmds = []
+            for s in COMMAND_SPECS:
+                if s.category != cat or s.canonical == "帮助":
+                    continue
+                if q:
+                    hay = s.canonical + " " + " ".join(s.aliases) + " " + (s.description or "")
+                    if q.lower() not in hay.lower():
+                        continue
+                cmds.append({"cmd": "/帕鲁" + s.canonical, "desc": s.description or ""})
+            if cmds:
+                secs.append({"title": title, "cmds": cmds})
+        return secs
+
+    async def _cmd_help(self, event: AstrMessageEvent, args: list[str] | None = None):
+        q = " ".join(args or []).strip()
+        secs = self._help_sections(q)
+        if q and not secs:
+            cmds = self._suggest_commands(q)
+            return await self._msg_card(
+                event, "🔍", f"没搜到含「{_esc(q)}」的指令",
+                desc=("你是不是想找:\n" + "\n".join(f"· /帕鲁{c}" for c in cmds) if cmds else "")
+                + "\n\n发不带关键词的「/帕鲁帮助」看全部指令。", color="#F5A623")
+        data = {"sections": secs}
+        if q:
+            n = sum(len(s["cmds"]) for s in secs)
+            data["help_title"] = f"🔍 含「{_esc(q)}」的指令 · {n} 条"
+            data["help_sub"] = "发不带关键词的「/帕鲁帮助」看全部"
+        return await self._img(event, self._t("help"), data)
 
     # ------------------------------------------------------------------
     # 首选1：小队进度(/帕鲁小队进度)——按群聚合已绑定成员的探索/收集/塔主等进度(存档只读自动同步)

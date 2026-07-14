@@ -54,7 +54,7 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("公会战力", "_cmd_guild_power", ("公会战力榜", "工会战力", "公会榜战力", "guildpower"), cooldown=True, description="公会战力榜", category="rank"),
     CommandSpec("更新公告", "_cmd_patchnotes", ("更新内容", "更新日志", "补丁说明", "patchnotes", "更新资讯"), cooldown=True, description="服务器更新公告", category="server"),
     CommandSpec("排行", "_cmd_rank", ("肝帝榜", "榜", "排行榜", "rank"), cooldown=True, pass_args=True, description="肝帝榜(本周/今日/总榜)", category="rank"),
-    CommandSpec("帮助", "_cmd_help", ("help", "菜单"), description="帮助菜单", category="misc"),
+    CommandSpec("帮助", "_cmd_help", ("help", "菜单"), pass_args=True, description="帮助菜单(可加关键词搜指令)", category="misc"),
 
     # ---------------- 图鉴 / 配种 ----------------
     CommandSpec("图鉴", "_cmd_paldex", ("paldex",), cooldown=True, pass_args=True, description="帕鲁图鉴", category="paldex"),
