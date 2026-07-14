@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.34.1",
+    "1.35.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -337,6 +337,13 @@ class PalworldPlugin(Star):
                         self._lab_by_cat.setdefault(it.get("category", "通用"), []).append(it)
         except Exception as e:  # noqa: BLE001
             logger.warning(f"{LOG_PREFIX} 研究所数据 data/lab_research.json 加载失败: {e}")
+        # 人类/NPC 名字(存档里能抓到人类:盗猎者/士兵/商人等,不在图鉴里)
+        self._human_names: dict = {}
+        try:
+            with open(os.path.join(base, "human_names.json"), encoding="utf-8") as _f:
+                self._human_names = (json.loads(_f.read()) or {}).get("names", {})
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"{LOG_PREFIX} 人类名字 data/human_names.json 加载失败: {e}")
         # 词条(被动技能) id -> {name,rank,sign,effect}; 主动技能枚举 -> 中文名
         self._passives: dict = {}
         self._wazas: dict = {}
@@ -4881,9 +4888,35 @@ class PalworldPlugin(Star):
                 logger.warning(f"{LOG_PREFIX} 跳过异常{label}记录 {it!r}: {e}")
         return out
 
+    _HUMAN_TYPE = (("hunter", "盗猎者"), ("believer", "信徒"), ("firecult", "火祭教团"),
+                   ("police", "警察"), ("salesperson", "流浪商人"), ("trader", "商人"),
+                   ("soldier", "士兵"), ("guard", "守卫"), ("scientist", "研究员"),
+                   ("desertpeople", "沙漠居民"), ("snowpeople", "雪地居民"),
+                   ("people", "平民"), ("male_", "居民"), ("female_", "居民"), ("boss", "头目"))
+
+    def _human_name(self, char_id: str):
+        """存档 char_id 是抓到的人类时给中文名(先查名表,再按类型兜底);非人类返回 None。"""
+        cid = str(char_id or "").lower()
+        hn = (self._human_names or {}).get(cid)
+        if hn:
+            return hn
+        return next((cn for key, cn in self._HUMAN_TYPE if key in cid), None)
+
+    def _resolve_owned_pal(self, char_id: str):
+        """存档 char_id -> 图鉴 pal(容错 boss/元素变种前后缀);查不到返回 None。"""
+        cid = str(char_id or "").lower()
+        p = self._pal_by_dev.get(cid)
+        if p:
+            return p
+        base = re.sub(r"^(boss_|gym_|raid_|predator_)", "", cid)
+        base = re.sub(r"(_otomo|_\d+|_water|_fire|_ground|_dark|_ice|_leaf|_electric|_dragon)$", "", base)
+        return self._pal_by_dev.get(base)
+
     def _pal_view(self, pal: dict) -> dict:
         """_pal_brief 原始字段 -> 卡片展示字段(中文名/图标/属性/词条/技能)。"""
-        p = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
+        cid = str(pal.get("char_id", ""))
+        p = self._resolve_owned_pal(cid)
+        hname = None if p else self._human_name(cid)   # 抓到的人类给中文名
         condense = max(0, int(pal.get("rank", 1) or 1) - 1)   # 浓缩星 0~4
         rarity = int((p.get("rarity") if p else 0) or 0)
         # 种族基础值 / 工作速度 / 工作适性 / 伙伴技能（均来自图鉴 paldex，准确数据）
@@ -4908,10 +4941,10 @@ class PalworldPlugin(Star):
         # 生命值：满血含灵魂/状态点时存档更准、受伤时公式 MaxHP 更准 → 取较大者
         _hp_display = max(int(pal.get("hp", 0) or 0), _hp_f)
         return {
-            "name": p["pal_name"] if p else pal.get("char_id", "未知帕鲁"),
+            "name": (p["pal_name"] if p else (hname or "未知")),
             "index": str(p.get("pal_index", "")) if p else "",
             "icon": self._pal_icon(p.get("pal_dev_name")) if p else "",
-            "elements": p.get("elements", []) if p else [],
+            "is_human": bool(hname), "elements": p.get("elements", []) if p else [],
             "level": pal.get("level", 1), "gender": self._gender_cn(pal.get("gender", "")),
             "alpha": bool(pal.get("is_alpha")), "lucky": bool(pal.get("lucky")),
             "nickname": _esc(pal.get("nickname", "")), "hp": _hp_display,

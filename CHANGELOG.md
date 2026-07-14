@@ -2,6 +2,15 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.35.0] - 2026-07-14
+
+### 修复(帕鲁箱里抓到的人类 NPC 显示英文名/无图)
+- 帕鲁箱里可以抓到**人类 NPC**(盗猎者/士兵/商人/信徒/警察等),它们不在帕鲁图鉴里,之前显示**英文 char_id + 无图标**。
+- 新增 `data/human_names.json`(从游戏 `DT_HumanNameText_Common` zh-Hans 提取的 129 个人类中文名):
+  - 具名通缉犯用真名(如 Hunter_Rifle → 通缉犯 霍克、GrassBoss → 佐伊);泛用 NPC 按类型给中文名(Hunter→盗猎者 / SalesPerson→流浪商人 / Soldier→士兵 / Believer→信徒 …),boss 兜底「头目」。
+  - 真实存档 1365 只帕鲁**全部有中文名**(原 25 只英文,现 0)。人类无立绘 → 帕鲁箱用人形占位(🧑,ingame 用「人」)。
+- 顺带:pal 变种前后缀(`BOSS_`/`_otomo`/`_Fire` 等)容错回退到本体图鉴,避免个别变种也显示英文。
+
 ## [1.34.1] - 2026-07-14
 
 ### 改进(词条查帕鲁:结果编号 + 一键看详情 + 纠正定位说明)

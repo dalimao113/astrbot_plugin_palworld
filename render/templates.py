@@ -1160,7 +1160,7 @@ PALBOX_ING = _IH + """</style></head><body><div class="page">
     {% for c in cells %}<div class="ig-palcell rt-{{ c.rtier }}{% if c.health.hurt %} hurt{% endif %}">
       <span class="no">{{ c.no }}</span>
       {% if c.lucky %}<img class="mk" src="{{ icons.pal.lucky }}">{% elif c.alpha %}<img class="mk" src="{{ icons.pal.alpha }}">{% endif %}
-      <div class="pv">{% if c.icon %}<img src="{{ c.icon }}">{% endif %}</div>
+      <div class="pv">{% if c.icon %}<img src="{{ c.icon }}">{% elif c.is_human %}<span style="font-size:22px;color:var(--pal-sub)">人</span>{% endif %}</div>
       <div class="pn">{{ c.name }}</div><div class="pl">Lv.{{ c.level }}{% if c.condense %} <span class="cd">{{ "★"*c.condense }}</span>{% endif %}</div>
       {% if c.health.hurt %}<div class="hb hb-{{ c.health.tone }}">{{ c.health.label }}</div>{% endif %}
     </div>{% endfor %}
@@ -2357,7 +2357,7 @@ PALBOX_TMPL = _HEAD + """
     {% for c in cells %}<div class="pbc rt-{{ c.rtier }}{% if c.health.hurt %} hurt{% endif %}">
       <span class="num">{{ c.no }}</span>
       {% if c.lucky %}<span class="bdg">✨</span>{% elif c.alpha %}<span class="bdg">👑</span>{% endif %}
-      {% if c.icon %}<img src="{{ c.icon }}">{% else %}<div class="ph">🐾</div>{% endif %}
+      {% if c.icon %}<img src="{{ c.icon }}">{% elif c.is_human %}<div class="ph">🧑</div>{% else %}<div class="ph">🐾</div>{% endif %}
       <div class="pn">{{ c.name }}</div><div class="pl">Lv.{{ c.level }}{% if c.condense %} <span style="color:#ffd34d">{{ "★"*c.condense }}</span>{% endif %}</div>
       {% if c.health.hurt %}<div class="hb hb-{{ c.health.tone }}">{{ c.health.label }}</div>{% endif %}
     </div>{% endfor %}
@@ -2392,7 +2392,7 @@ PALBOX_PIX = _PH + """
     {% for c in cells %}<div class="pbc rt-{{ c.rtier }}{% if c.health.hurt %} hurt{% endif %}">
       <span class="num">{{ c.no }}</span>
       {% if c.lucky %}<span class="bdg">✨</span>{% elif c.alpha %}<span class="bdg">♛</span>{% endif %}
-      {% if c.icon %}<img src="{{ c.icon }}">{% else %}<div class="ph">▥</div>{% endif %}
+      {% if c.icon %}<img src="{{ c.icon }}">{% elif c.is_human %}<div class="ph">🧑</div>{% else %}<div class="ph">▥</div>{% endif %}
       <div class="pn">{{ c.name }}</div><div class="pl">Lv.{{ c.level }}{% if c.condense %} <span style="color:#b06a00">{{ "★"*c.condense }}</span>{% endif %}</div>
       {% if c.health.hurt %}<div class="hb hb-{{ c.health.tone }}">{{ c.health.label }}</div>{% endif %}
     </div>{% endfor %}
