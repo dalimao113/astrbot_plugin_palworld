@@ -97,6 +97,7 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("研究所", "_cmd_lab", ("研究", "实验室", "lab"), cooldown=True, pass_args=True, description="研究所图鉴(1.0)", category="paldex"),
     CommandSpec("材料路线", "_cmd_matroute", ("材料", "配方展开", "总材料", "matroute"), cooldown=True, pass_args=True, description="配方递归展开:总原料/中间产物/制作台", category="paldex"),
     CommandSpec("种属", "_cmd_genus", ("分类图鉴", "种族分类", "genus"), cooldown=True, pass_args=True, description="按种属(人形/鸟/四足/龙/鱼)分类浏览图鉴", category="paldex"),
+    CommandSpec("科技树", "_cmd_techtree", ("科技路线", "解锁路线", "techtree"), cooldown=True, pass_args=True, description="按等级看科技/建造解锁路线", category="paldex"),
 
     # ---------------- 玩家自助 ----------------
     CommandSpec("绑定", "_cmd_bind", ("bind",), pass_args=True, description="绑定游戏角色", category="player"),

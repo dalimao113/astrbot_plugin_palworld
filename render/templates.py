@@ -5662,6 +5662,58 @@ MATROUTE_ING = _IH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+TECHTREE_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title" style="font-size:23px">🔬 科技树{% if mode == 'level' %} · Lv.{{ level }}{% endif %}</div>
+    {% if mode == 'level' %}<div class="subtitle"><span class="pill soft">本级 {{ items|length }} 项</span>{% if points_total %}<span class="pill soft">技术点合计 {{ points_total }}</span>{% endif %}{% if ancient_count %}<span class="pill soft">🏛️ 古代 {{ ancient_count }}</span>{% endif %}</div>
+    {% else %}<div class="subtitle"><span class="pill soft">共 {{ total }} 项</span><span class="pill soft">Lv.1~{{ max_level }}</span><span class="pill soft">🏛️ 古代 {{ ancient_total }}</span></div>{% endif %}
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    {% if mode == 'level' %}
+    {% for t in items %}<div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid rgba(232,198,106,0.1)">
+      {% if t.icon %}<img src="{{ t.icon }}" style="width:30px;height:30px;object-fit:contain">{% endif %}
+      <span style="flex:1;font-size:15px;font-weight:700;color:#f3ecd2">{{ t.name }}</span>
+      {% if t.ancient %}<span class="pill soft">🏛️ 古代科技点</span>{% else %}<span class="pill soft">{{ t.points }} 技术点</span>{% endif %}</div>{% endfor %}
+    <div style="margin-top:11px;font-size:11px;color:#8a82a8;line-height:1.6">达到角色等级 Lv.{{ level }} 后,用技术点(古代科技用古代科技点)在科技栏解锁 · 数据来自客户端科技表</div>
+    {% else %}
+    <div class="sec-t">各等级解锁路线</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for l in levels %}<span class="pill soft">Lv.{{ l.lv }} · {{ l.n }}项{% if l.ancient %} 🏛️{{ l.ancient }}{% endif %}</span>{% endfor %}</div>
+    <div style="margin-top:12px;font-size:12px;color:#cfc1ea">发「/帕鲁科技树 <等级>」看某等级解锁的全部科技(带图标/技术点)。</div>{% endif %}
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+TECHTREE_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title" style="font-size:21px">🔬 科技树{% if mode == 'level' %} · Lv.{{ level }}{% endif %}</div>
+    {% if mode == 'level' %}<div class="subtitle"><span class="pill">本级 {{ items|length }} 项</span>{% if points_total %}<span class="pill">技术点 {{ points_total }}</span>{% endif %}{% if ancient_count %}<span class="pill">古代 {{ ancient_count }}</span>{% endif %}</div>
+    {% else %}<div class="subtitle"><span class="pill">共 {{ total }} 项</span><span class="pill">Lv.1~{{ max_level }}</span><span class="pill">古代 {{ ancient_total }}</span></div>{% endif %}
+  </div></div>
+  <div class="frame">
+    {% if mode == 'level' %}
+    {% for t in items %}<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(120,80,20,0.15)">
+      {% if t.icon %}<img src="{{ t.icon }}" style="width:28px;height:28px;object-fit:contain;image-rendering:pixelated">{% endif %}
+      <span style="flex:1;font-size:14px;font-weight:700;color:#3a2708">{{ t.name }}</span>
+      {% if t.ancient %}<span class="pill">古代科技点</span>{% else %}<span class="pill">{{ t.points }} 技术点</span>{% endif %}</div>{% endfor %}
+    <div style="margin-top:10px;font-size:11px;color:#7a6a4a;line-height:1.6">达到 Lv.{{ level }} 后用技术点(古代科技用古代科技点)解锁 · 数据来自客户端科技表</div>
+    {% else %}
+    <div class="sec-t">各等级解锁路线</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for l in levels %}<span class="pill">Lv.{{ l.lv }}·{{ l.n }}项{% if l.ancient %} 古{{ l.ancient }}{% endif %}</span>{% endfor %}</div>
+    <div style="margin-top:11px;font-size:12px;color:#523f10">发「/帕鲁科技树 <等级>」看某等级解锁的全部科技。</div>{% endif %}
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+TECHTREE_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">科技树{% if mode == 'level' %} · Lv.{{ level }}{% endif %}</div><div class="ig-sub">{% if mode == 'level' %}<span class="ig-pill">本级 {{ items|length }} 项</span>{% if points_total %}<span class="ig-pill">技术点 {{ points_total }}</span>{% endif %}{% if ancient_count %}<span class="ig-pill">古代 {{ ancient_count }}</span>{% endif %}{% else %}<span class="ig-pill">共 {{ total }} 项</span><span class="ig-pill">Lv.1~{{ max_level }}</span><span class="ig-pill">古代 {{ ancient_total }}</span>{% endif %}</div></div></div>
+  <div class="ig-panel">{% if mode == 'level' %}
+    {% for t in items %}<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--pal-line)">{% if t.icon %}<img src="{{ t.icon }}" style="width:28px;height:28px;object-fit:contain">{% endif %}<span style="flex:1;font-size:14px;color:var(--pal-text)">{{ t.name }}</span>{% if t.ancient %}<span class="ig-pill">古代科技点</span>{% else %}<span class="ig-pill">{{ t.points }} 技术点</span>{% endif %}</div>{% endfor %}
+    <div style="margin-top:9px;font-size:11px;color:var(--pal-dim)">达到 Lv.{{ level }} 后用技术点(古代科技用古代科技点)解锁 · 客户端科技表</div>
+    {% else %}<div class="ig-sec">各等级解锁路线</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for l in levels %}<span class="ig-pill">Lv.{{ l.lv }}·{{ l.n }}项{% if l.ancient %} 古{{ l.ancient }}{% endif %}</span>{% endfor %}</div><div style="margin-top:10px;font-size:12px;color:var(--pal-sub)">发「/帕鲁科技树 <等级>」看某等级解锁的全部科技。</div>{% endif %}</div>
+  """ + _IF + """
+</div></body></html>"""
+
+
 STYLES = {
     "fantasy": {"status": STATUS_TMPL, "players": PLAYERS_TMPL, "settings": SETTINGS_TMPL,
                 "help": HELP_TMPL, "message": MSG_TMPL, "stats": STATS_TMPL, "rank": RANK_TMPL,
@@ -5674,7 +5726,7 @@ STYLES = {
                 "facility": FACILITY_TMPL, "tech": TECH_TMPL, "grid": GRID_TMPL, "map": MAP_TMPL,
                 "lab_overview": LAB_OVERVIEW_TMPL, "lab_list": LAB_LIST_TMPL, "lab_detail": LAB_DETAIL_TMPL,
                 "bag": BAG_TMPL, "team": TEAM_TMPL, "palbox": PALBOX_TMPL, "guild": GUILD_TMPL,
-                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL, "matroute": MATROUTE_TMPL,
+                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL, "matroute": MATROUTE_TMPL, "techtree": TECHTREE_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "passdex": PASSDEX_TMPL, "passlist": PASSLIST_TMPL,
                 "awakening": AWAKENING_TMPL, "mutation": MUTATION_TMPL,
@@ -5693,7 +5745,7 @@ STYLES = {
               "facility": FACILITY_PIX, "tech": TECH_PIX, "grid": GRID_PIX, "map": MAP_PIX,
               "lab_overview": LAB_OVERVIEW_PIX, "lab_list": LAB_LIST_PIX, "lab_detail": LAB_DETAIL_PIX,
               "bag": BAG_PIX, "team": TEAM_PIX, "palbox": PALBOX_PIX, "guild": GUILD_PIX,
-              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX, "matroute": MATROUTE_PIX,
+              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX, "matroute": MATROUTE_PIX, "techtree": TECHTREE_PIX,
               "element": ELEMENT_PIX, "habitat": HABITAT_PIX, "passrec": PASSREC_PIX,
               "passdex": PASSDEX_PIX, "passlist": PASSLIST_PIX,
               "awakening": AWAKENING_PIX, "mutation": MUTATION_PIX,
@@ -5712,6 +5764,7 @@ STYLES["ingame"]["squad"] = SQUAD_ING
 STYLES["ingame"]["basehealth"] = BASEHEALTH_ING
 STYLES["ingame"]["growth"] = GROWTH_ING
 STYLES["ingame"]["matroute"] = MATROUTE_ING
+STYLES["ingame"]["techtree"] = TECHTREE_ING
 # 阶段D:已改造为 ingame 专属布局的卡(其余仍临时回退 fantasy,见 INGAME_ICON_COVERAGE.md)
 STYLES["ingame"]["paldex"] = PALDEX_ING
 STYLES["ingame"]["passlist"] = PASSLIST_ING
