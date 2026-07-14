@@ -100,6 +100,7 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("科技树", "_cmd_techtree", ("科技路线", "解锁路线", "techtree"), cooldown=True, pass_args=True, description="按等级看科技/建造解锁路线", category="paldex"),
     CommandSpec("牧场", "_cmd_ranch", ("牧场产出", "放牧", "家畜牧场", "ranch"), cooldown=True, pass_args=True, description="牧场适性帕鲁的产出一览/按产物反查", category="paldex"),
     CommandSpec("用途", "_cmd_matuse", ("材料用途", "能做什么", "matuse"), cooldown=True, pass_args=True, description="反查某材料是哪些配方的原料", category="paldex"),
+    CommandSpec("地图收集", "_cmd_poimap", ("地图地标", "收集地图", "地标", "poimap"), cooldown=True, pass_args=True, description="把命名地标/传送点/禁猎区标到世界地图", category="paldex"),
 
     # ---------------- 玩家自助 ----------------
     CommandSpec("绑定", "_cmd_bind", ("bind",), pass_args=True, description="绑定游戏角色", category="player"),

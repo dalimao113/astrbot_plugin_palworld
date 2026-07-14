@@ -5717,6 +5717,51 @@ TECHTREE_ING = _IH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+POIMAP_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div><div class="title">{{ title }}</div><div class="subtitle">{{ sub }}</div></div></div>
+  <div style="position:relative;width:100%;border-radius:16px;overflow:hidden;border:1px solid rgba(232,198,106,.3);box-shadow:0 4px 16px rgba(0,0,0,.45)">
+    <img src="{{ mapimg }}" style="display:block;width:100%">
+    {% for p in points %}<div style="position:absolute;left:{{ p.left }}%;top:{{ p.top }}%;transform:translate(-50%,-100%);width:17px;height:22px;z-index:5">
+      <div style="position:absolute;top:0;left:0;width:17px;height:17px;border-radius:50%;background:radial-gradient(circle at 55% 40%,#8fe3d0,#1f9e86);border:1.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.7)"></div>
+      <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:3.5px solid transparent;border-right:3.5px solid transparent;border-top:6px solid #1f9e86"></div>
+      <div style="position:absolute;top:0;left:0;width:17px;height:17px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.6)">{{ p.no }}</div></div>{% endfor %}
+  </div>
+  <div class="glass" style="margin-top:12px">""" + _GEMS + """
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px 14px">{% for p in points %}<div style="display:flex;align-items:center;gap:7px;font-size:12.5px;min-width:0">
+      <span style="flex:none;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#8fe3d0,#1f9e86);color:#04231d;font-size:11px;font-weight:800;text-align:center;line-height:20px">{{ p.no }}</span>
+      <span style="flex:1;color:#f3ecd2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</span>
+      <span style="flex:none;font-size:10.5px;color:#9a93b8">{{ p.coord }}</span></div>{% endfor %}</div>
+    {% if pager %}<div style="margin-top:12px;text-align:center;font-size:13px;color:#d8cdf0;background:rgba(99,102,241,.16);border:1px solid rgba(232,198,106,.2);border-radius:12px;padding:9px 12px">📖 {{ pager }}</div>{% endif %}
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+POIMAP_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div><div class="title">{{ title }}</div><div class="subtitle">{{ sub }}</div></div></div>
+  <div style="position:relative;width:100%;border:3px solid #6a4524;box-shadow:4px 4px 0 rgba(90,58,30,.4)">
+    <img src="{{ mapimg }}" style="display:block;width:100%;image-rendering:auto">
+    {% for p in points %}<div style="position:absolute;left:{{ p.left }}%;top:{{ p.top }}%;transform:translate(-50%,-100%);width:16px;height:16px;z-index:5;background:#1f9e86;border:2px solid #fff;color:#fff;font-size:9px;font-weight:800;text-align:center;line-height:14px;box-shadow:1px 1px 0 rgba(0,0,0,.6)">{{ p.no }}</div>{% endfor %}
+  </div>
+  <div class="frame" style="margin-top:12px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px 12px">{% for p in points %}<div style="display:flex;align-items:center;gap:6px;font-size:12.5px;min-width:0">
+      <span style="flex:none;width:19px;height:19px;background:#caa860;border:2px solid #6a4524;color:#3a2410;font-size:10px;font-weight:800;text-align:center;line-height:15px">{{ p.no }}</span>
+      <span style="flex:1;color:#382207;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</span>
+      <span style="flex:none;font-size:10px;color:#7a6a4a">{{ p.coord }}</span></div>{% endfor %}</div>
+    {% if pager %}<div style="margin-top:11px;text-align:center;font-size:13px;color:#46200a;background:rgba(221,198,149,0.55);border:2px solid #6a4524;padding:8px 11px">▶ {{ pager }}</div>{% endif %}
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+POIMAP_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ title }}</div><div class="ig-sub">{{ sub }}</div></div></div>
+  <div style="position:relative;width:100%;border:1px solid var(--pal-line);border-radius:10px;overflow:hidden">
+    <img src="{{ mapimg }}" style="display:block;width:100%">
+    {% for p in points %}<div style="position:absolute;left:{{ p.left }}%;top:{{ p.top }}%;transform:translate(-50%,-100%);width:17px;height:17px;z-index:5;border-radius:50%;background:#1f9e86;border:1.5px solid #fff;color:#fff;font-size:9px;font-weight:800;text-align:center;line-height:15px">{{ p.no }}</div>{% endfor %}
+  </div>
+  <div class="ig-panel" style="margin-top:12px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:5px 12px">{% for p in points %}<div style="display:flex;align-items:center;gap:6px;font-size:12.5px;min-width:0"><span style="flex:none;width:19px;height:19px;border-radius:50%;background:#1f9e86;color:#fff;font-size:10px;font-weight:800;text-align:center;line-height:19px">{{ p.no }}</span><span style="flex:1;color:var(--pal-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</span><span style="flex:none;font-size:10px;color:var(--pal-dim)">{{ p.coord }}</span></div>{% endfor %}</div>{% if pager %}<div style="margin-top:11px;text-align:center;font-size:12.5px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}</div>
+  """ + _IF + """
+</div></body></html>"""
+
 MATUSE_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div style="display:flex;align-items:center;gap:12px;width:100%">
     {% if icon %}<img src="{{ icon }}" style="flex:none;width:56px;height:56px;object-fit:contain">{% endif %}
@@ -5803,7 +5848,7 @@ STYLES = {
                 "facility": FACILITY_TMPL, "tech": TECH_TMPL, "grid": GRID_TMPL, "map": MAP_TMPL,
                 "lab_overview": LAB_OVERVIEW_TMPL, "lab_list": LAB_LIST_TMPL, "lab_detail": LAB_DETAIL_TMPL,
                 "bag": BAG_TMPL, "team": TEAM_TMPL, "palbox": PALBOX_TMPL, "guild": GUILD_TMPL,
-                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL, "matroute": MATROUTE_TMPL, "techtree": TECHTREE_TMPL, "ranch": RANCH_TMPL, "matuse": MATUSE_TMPL,
+                "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL, "matroute": MATROUTE_TMPL, "techtree": TECHTREE_TMPL, "ranch": RANCH_TMPL, "matuse": MATUSE_TMPL, "poimap": POIMAP_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "passdex": PASSDEX_TMPL, "passlist": PASSLIST_TMPL,
                 "awakening": AWAKENING_TMPL, "mutation": MUTATION_TMPL,
@@ -5822,7 +5867,7 @@ STYLES = {
               "facility": FACILITY_PIX, "tech": TECH_PIX, "grid": GRID_PIX, "map": MAP_PIX,
               "lab_overview": LAB_OVERVIEW_PIX, "lab_list": LAB_LIST_PIX, "lab_detail": LAB_DETAIL_PIX,
               "bag": BAG_PIX, "team": TEAM_PIX, "palbox": PALBOX_PIX, "guild": GUILD_PIX,
-              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX, "matroute": MATROUTE_PIX, "techtree": TECHTREE_PIX, "ranch": RANCH_PIX, "matuse": MATUSE_PIX,
+              "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX, "matroute": MATROUTE_PIX, "techtree": TECHTREE_PIX, "ranch": RANCH_PIX, "matuse": MATUSE_PIX, "poimap": POIMAP_PIX,
               "element": ELEMENT_PIX, "habitat": HABITAT_PIX, "passrec": PASSREC_PIX,
               "passdex": PASSDEX_PIX, "passlist": PASSLIST_PIX,
               "awakening": AWAKENING_PIX, "mutation": MUTATION_PIX,
@@ -5844,6 +5889,7 @@ STYLES["ingame"]["matroute"] = MATROUTE_ING
 STYLES["ingame"]["techtree"] = TECHTREE_ING
 STYLES["ingame"]["ranch"] = RANCH_ING
 STYLES["ingame"]["matuse"] = MATUSE_ING
+STYLES["ingame"]["poimap"] = POIMAP_ING
 # 阶段D:已改造为 ingame 专属布局的卡(其余仍临时回退 fantasy,见 INGAME_ICON_COVERAGE.md)
 STYLES["ingame"]["paldex"] = PALDEX_ING
 STYLES["ingame"]["passlist"] = PASSLIST_ING
