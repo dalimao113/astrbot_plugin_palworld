@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.29.0",
+    "1.30.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2138,7 +2138,8 @@ class PalworldPlugin(Star):
                                         desc="\n".join(lines) + "\n\n发「/帕鲁地图收集 <类别>」把该类标到世界地图上,如 /帕鲁地图收集 遗物雕像\n"
                                         "坐标从游戏关卡对象直接提取,名称按就近地标标注(遗物/地牢无官方逐点名)。",
                                         head="🗺️ 地图收集", color="#7ab8ff")
-        cat = next((c for c in idx if query == c or query in c), None)
+        qn = query.replace("其他", "其它")   # 常见异写归一(其他=其它)
+        cat = next((c for c in idx if qn == c or qn in c or c in qn), None)
         if not cat:
             return await self._msg_card(event, "🔍", "没有这个类别",
                                         desc="可选：" + "、".join(idx.keys()) + "\n如 /帕鲁地图收集 遗迹遗址", color="#F5A623")
@@ -2309,8 +2310,9 @@ class PalworldPlugin(Star):
             if not m:
                 return None
             rk = int(m.get("rank") or 0)
+            rkey, rcolor = self._passive_rank_meta(rk, int(m.get("sign") or 1))
             return {"name": m.get("name", ""), "effect": m.get("effect", ""),
-                    "rank": rk, "stars": "★" * rk}
+                    "rank": rk, "stars": "★" * rk, "rank_key": rkey, "color": rcolor}
 
         def collect(keys: list):
             out, seen = [], set()
@@ -2395,14 +2397,33 @@ class PalworldPlugin(Star):
             return "生存"
         return "其他"
 
+    @staticmethod
+    def _passive_rank_meta(rank: int, sign: int) -> tuple:
+        """词条等级/正负 → (游戏箭头图标键, 品阶颜色)。金色=高阶好词条,红=减益。白遮罩由模板 CSS 上色。"""
+        if sign < 0:
+            return "rank_down", "#e0685f"          # 减益(↓ 红)
+        r = rank or 1
+        if r >= 4:
+            return "rank_up3_plus", "#ffd94a"      # 顶阶(↑↑↑+ 亮金)
+        if r == 3:
+            return "rank_up3", "#ffce4a"           # +3(↑↑↑ 金)
+        if r == 2:
+            return "rank_up2", "#eab84a"           # +2(↑↑ 琥珀)
+        return "rank_up1", "#cdba7a"               # +1(↑ 浅金)
+
+    def _passive_item(self, name: str, effect: str, rank: int, sign: int) -> dict:
+        key, color = self._passive_rank_meta(rank, sign)
+        return {"name": name, "effect": effect, "rank": rank, "sign": sign,
+                "rank_key": key, "color": color}
+
     def _passdex_group(self) -> dict:
         if getattr(self, "_passdex_cache", None) is None:
             from collections import defaultdict
             g = defaultdict(list)
             for pid, v in (self._passives or {}).items():
                 cat = self._passive_category(pid, v.get("effect", ""))
-                g[cat].append({"name": v.get("name", pid), "effect": v.get("effect", ""),
-                               "rank": int(v.get("rank", 0) or 0), "sign": int(v.get("sign", 0) or 0)})
+                g[cat].append(self._passive_item(v.get("name", pid), v.get("effect", ""),
+                                                 int(v.get("rank", 0) or 0), int(v.get("sign", 0) or 0)))
             for c in g:
                 g[c].sort(key=lambda x: (-x["rank"], x["name"]))
             self._passdex_cache = dict(g)

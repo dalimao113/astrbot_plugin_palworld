@@ -87,6 +87,19 @@ def test_poimap_category_markers_on_main():
         assert -3 <= p["left"] <= 103 and -3 <= p["top"] <= 103 and p["no"] >= 1
 
 
+def test_poimap_category_variant_spelling():
+    o = _plugin()
+    cap = {}
+
+    async def _img(event, tmpl, data, **k):
+        cap.update(title=data["title"])
+        return "I"
+    o._img, o._t = _img, (lambda k: k)
+    # 用户常写"其他"(≠"其它")也应命中"其它地标"
+    asyncio.new_event_loop().run_until_complete(o._cmd_poimap(_E(), ["其他地标"]))
+    assert "其它地标" in cap["title"]
+
+
 def test_poimap_unknown_category():
     o = _plugin()
     cap = {}

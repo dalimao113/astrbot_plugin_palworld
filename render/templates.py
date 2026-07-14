@@ -1054,7 +1054,7 @@ PASSREC_ING = _IH + """</style></head><body><div class="page">
   <div class="ig-panel {% if not loop.first %}hi{% endif %}">
     <div class="ig-sec">{{ sec.title }}</div>
     {% for it in sec['items'] %}
-    <div class="ig-recrow"><span class="rn">{{ it.name }}</span><span class="re">{{ it.effect }}</span><span class="rs">{{ it.stars }}</span></div>
+    <div class="ig-recrow"><span class="rn">{{ it.name }}</span><span class="re">{{ it.effect }}</span>{% if icons.passive_rank[it.rank_key] %}<span style="flex:none;display:inline-block;width:17px;height:17px;background:{{ it.color }};-webkit-mask:url('{{ icons.passive_rank[it.rank_key] }}') center/contain no-repeat;mask:url('{{ icons.passive_rank[it.rank_key] }}') center/contain no-repeat"></span>{% else %}<span class="rs">{{ it.stars }}</span>{% endif %}</div>
     {% endfor %}
   </div>
   {% endfor %}
@@ -4094,7 +4094,7 @@ PASSREC_TMPL = _HEAD + """</style></head><body><div class="page">
       <div style="display:flex;align-items:center;gap:10px;background:rgba(12,8,38,.42);border:1px solid {{ sec.color }}44;border-radius:12px;padding:8px 12px">
         <span style="flex:none;font-size:14px;font-weight:800;color:{{ sec.color }};min-width:74px">{{ it.name }}</span>
         <span style="flex:1;font-size:12.5px;color:#e9e0f5;line-height:1.45">{{ it.effect }}</span>
-        <span style="flex:none;font-size:12px;color:#ffd86b;letter-spacing:1px">{{ it.stars }}</span>
+        {% if icons.passive_rank[it.rank_key] %}<span style="flex:none;display:inline-block;width:18px;height:18px;background:{{ it.color }};-webkit-mask:url('{{ icons.passive_rank[it.rank_key] }}') center/contain no-repeat;mask:url('{{ icons.passive_rank[it.rank_key] }}') center/contain no-repeat" title="{{ it.stars }}"></span>{% else %}<span style="flex:none;font-size:12px;color:#ffd86b;letter-spacing:1px">{{ it.stars }}</span>{% endif %}
       </div>
       {% endfor %}
     </div>
@@ -4149,19 +4149,19 @@ PASSLIST_TMPL = _HEAD + """</style></head><body><div class="page">
   </div></div>
   <div class="glass">""" + _GEMS + """
     {% for it in items %}
-    <div style="display:flex;align-items:center;gap:11px;padding:10px 12px;margin-bottom:7px;border-radius:12px;background:rgba(12,8,38,.45);border:1px solid rgba(232,198,106,.12);border-left:3px solid {% if it.sign>0 %}#5cc97a{% elif it.sign<0 %}#e15b5b{% else %}#9c8fc0{% endif %}">
+    <div style="display:flex;align-items:center;gap:11px;padding:10px 12px;margin-bottom:7px;border-radius:12px;background:rgba(12,8,38,.45);border:1px solid rgba(232,198,106,.12);border-left:3px solid {{ it.color }}">
+      {% if icons.passive_rank[it.rank_key] %}<span style="flex:none;display:inline-block;width:20px;height:20px;background:{{ it.color }};-webkit-mask:url('{{ icons.passive_rank[it.rank_key] }}') center/contain no-repeat;mask:url('{{ icons.passive_rank[it.rank_key] }}') center/contain no-repeat"></span>{% endif %}
       <div style="flex:1;min-width:0">
         <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
-          <span style="font-size:14.5px;font-weight:800;color:#f3ecd2">{{ it.name }}</span>
-          {% if it.rank %}<span style="font-size:10px;background:{{color}}33;color:{{color}};border:1px solid {{color}}66;padding:1px 6px;border-radius:5px;font-weight:800">Lv{{ it.rank }}</span>{% endif %}
+          <span style="font-size:14.5px;font-weight:800;color:{{ it.color }}">{{ it.name }}</span>
+          {% if it.rank %}<span style="font-size:10px;background:{{ it.color }}22;color:{{ it.color }};border:1px solid {{ it.color }}66;padding:1px 6px;border-radius:5px;font-weight:800">{% if it.sign<0 %}减益{% else %}+{{ it.rank }}{% endif %}</span>{% endif %}
           {% if it.cat %}<span class="pill soft" style="font-size:10px">{{ it.cat }}</span>{% endif %}
         </div>
         {% if it.effect %}<div style="font-size:12.5px;color:#cbbde8;margin-top:3px;line-height:1.45">{{ it.effect }}</div>{% endif %}
       </div>
-      <span style="flex:none;font-size:14px">{% if it.sign>0 %}🟢{% elif it.sign<0 %}🔴{% else %}⚪{% endif %}</span>
     </div>
     {% endfor %}
-    <div style="margin-top:5px;text-align:center;font-size:11.5px;color:#9c8fc0">🟢增益 · 🔴减益 · ⚪中性 — 发「/帕鲁词条大全」看全部分类</div>
+    <div style="margin-top:5px;text-align:center;font-size:11.5px;color:#9c8fc0">箭头/颜色为游戏内词条品阶(↑金=好词条·↓红=减益) — 发「/帕鲁词条大全」看全部分类</div>
   </div>
   """ + _FOOT + """
 </div></body></html>"""
@@ -4182,7 +4182,7 @@ PASSREC_PIX = _PH + """</style></head><body><div class="page">
       <div style="display:flex;align-items:center;gap:9px;background:rgba(221,198,149,.5);border:2px solid #6a4524;padding:6px 11px">
         <span style="flex:none;font-size:14px;color:#46200a;min-width:70px">{{ it.name }}</span>
         <span style="flex:1;font-size:12px;color:#382207;line-height:1.45">{{ it.effect }}</span>
-        <span style="flex:none;font-size:12px;color:#8f1212;letter-spacing:1px">{{ it.stars }}</span>
+        {% if icons.passive_rank[it.rank_key] %}<span style="flex:none;display:inline-block;width:17px;height:17px;background:{{ it.color }};-webkit-mask:url('{{ icons.passive_rank[it.rank_key] }}') center/contain no-repeat;mask:url('{{ icons.passive_rank[it.rank_key] }}') center/contain no-repeat;image-rendering:pixelated"></span>{% else %}<span style="flex:none;font-size:12px;color:#8f1212;letter-spacing:1px">{{ it.stars }}</span>{% endif %}
       </div>
       {% endfor %}
     </div>
@@ -5055,19 +5055,19 @@ PASSLIST_PIX = _PH + """</style></head><body><div class="page">
   </div></div>
   <div class="frame">
     {% for it in items %}
-    <div class="row" style="gap:11px;border-left:4px solid {% if it.sign>0 %}#7c8a46{% elif it.sign<0 %}#9a4636{% else %}#6a4524{% endif %}">
+    <div class="row" style="gap:11px;border-left:4px solid {{ it.color }}">
+      {% if icons.passive_rank[it.rank_key] %}<span style="flex:none;display:inline-block;width:20px;height:20px;background:{{ it.color }};-webkit-mask:url('{{ icons.passive_rank[it.rank_key] }}') center/contain no-repeat;mask:url('{{ icons.passive_rank[it.rank_key] }}') center/contain no-repeat;image-rendering:pixelated"></span>{% endif %}
       <div style="flex:1;min-width:0">
         <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
-          <span style="font-size:14.5px;color:#382207">{{ it.name }}</span>
-          {% if it.rank %}<span class="pill" style="font-size:10px">Lv{{ it.rank }}</span>{% endif %}
+          <span style="font-size:14.5px;font-weight:700;color:{{ it.color }}">{{ it.name }}</span>
+          {% if it.rank %}<span class="pill" style="font-size:10px">{% if it.sign<0 %}减益{% else %}+{{ it.rank }}{% endif %}</span>{% endif %}
           {% if it.cat %}<span class="pill" style="font-size:10px">{{ it.cat }}</span>{% endif %}
         </div>
         {% if it.effect %}<div style="font-size:12.5px;color:#574012;margin-top:3px;line-height:1.45">{{ it.effect }}</div>{% endif %}
       </div>
-      <span style="flex:none;font-size:14px">{% if it.sign>0 %}🟢{% elif it.sign<0 %}🔴{% else %}⚪{% endif %}</span>
     </div>
     {% endfor %}
-    <div style="margin-top:5px;text-align:center;font-size:11.5px;color:#7a5a1a">🟢增益 · 🔴减益 · ⚪中性 — 发「/帕鲁词条大全」看全部分类</div>
+    <div style="margin-top:5px;text-align:center;font-size:11.5px;color:#7a5a1a">箭头/颜色为游戏内词条品阶(↑金=好词条·↓红=减益) — 发「/帕鲁词条大全」看全部分类</div>
   </div>
   """ + _PF + """
 </div></body></html>"""
