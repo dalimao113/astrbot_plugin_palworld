@@ -10,7 +10,7 @@
 图鉴配种攻略随手查；管理员可公告 / 踢封 / 存档 / 关服。<br>
 **所有回复一律输出精美卡片图片**，附一键部署脚本。
 
-![version](https://img.shields.io/badge/version-1.22.0-6366F1?style=flat-square)
+![version](https://img.shields.io/badge/version-1.23.0-6366F1?style=flat-square)
 ![AstrBot](https://img.shields.io/badge/AstrBot-4.25%2B-8B5CF6?style=flat-square)
 ![OneBot](https://img.shields.io/badge/OneBot-v11-4ade80?style=flat-square)
 ![NapCat](https://img.shields.io/badge/adapter-NapCat-22c55e?style=flat-square)
@@ -99,6 +99,7 @@
 | `/帕鲁栖息区域 <名>` | 以世界地图为底图，用属性色块涂出该帕鲁的刷新热区 + 主要出没区域（也可 `/帕鲁栖息地`）|
 | `/帕鲁推荐词条 <名>` | 按帕鲁角色（战斗/生产/搬运）定制推荐高价值被动词条（也可 `/帕鲁推荐`）|
 | `/帕鲁属性克制` | 九系属性克制关系图（也可 `/帕鲁克制`）|
+| `/帕鲁属性 <草/水/火/雷/暗/地/冰/龙/无>` | 列出某属性的**全部帕鲁**（真实立绘网格，翻页）；无参/`克制`则出克制关系图；支持别名（火/火系/fire）|
 | `/帕鲁主线 [页]` | 按剧情顺序（next 链拓扑）列出全部主线任务（1.0 共 55 个，翻页）|
 | `/帕鲁支线 [NPC]` | 支线任务（1.0 共 50 个，可按 农民/学者/佐伊 等 NPC 筛选，翻页）|
 | `/帕鲁任务 <任务名>` | 任务详细攻略：剧情 + 目标 + 地图坐标 + 奖励 + 下一环 |

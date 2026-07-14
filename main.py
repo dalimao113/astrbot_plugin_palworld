@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.22.0",
+    "1.23.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2095,10 +2095,37 @@ class PalworldPlugin(Star):
             })
         return {"elems": elems}
 
-    async def _cmd_element(self, event: AstrMessageEvent):
+    # 属性名归一化(火/火系/火属性/fire → 火属性),供「按属性列帕鲁」用
+    _ELEM_ALIAS = {"fire": "火属性", "water": "水属性", "grass": "草属性", "leaf": "草属性",
+                   "electric": "雷属性", "thunder": "雷属性", "elec": "雷属性", "dark": "暗属性",
+                   "ground": "地属性", "earth": "地属性", "ice": "冰属性", "dragon": "龙属性",
+                   "neutral": "无属性", "normal": "无属性", "none": "无属性"}
+    for _b in ("无", "草", "水", "火", "雷", "暗", "地", "冰", "龙"):
+        for _form in (_b, _b + "系", _b + "属性"):
+            _ELEM_ALIAS[_form] = _b + "属性"
+    del _b, _form
+
+    def _elem_map(self) -> dict:
+        if getattr(self, "_elem_cache", None) is None:
+            self._elem_cache = {p.get("pal_dev_name"): (p.get("elements") or []) for p in self._pals}
+        return self._elem_cache
+
+    async def _cmd_element(self, event: AstrMessageEvent, args: list[str] | None = None):
         if not self._elements:
             return await self._msg_card(event, "⚔️", "克制数据缺失",
                                         desc="data/elements.json 未就绪。", color="#E5484D")
+        query, page = self._parse_page_args(list(args or []))
+        if query and query not in ("克制", "克制图", "关系", "图", "克制关系"):
+            el = self._ELEM_ALIAS.get(query)
+            if not el:
+                return await self._msg_card(event, "🔍", "没有这个属性",
+                                            desc="支持：草 / 水 / 火 / 雷 / 暗 / 地 / 冰 / 龙 / 无。\n如 /帕鲁属性 火\n(看克制关系发 /帕鲁属性克制)",
+                                            color="#F5A623")
+            emap = self._elem_map()
+            entries = [e for e in self._ordered_pals() if el in emap.get(e["ik"], [])]
+            if not entries:
+                return await self._msg_card(event, "⚔️", f"{el}帕鲁暂无", desc="该属性下没有帕鲁。", color="#9a8a91")
+            return await self._render_grid(event, f"{el}帕鲁", "⚔️", entries, page, "/帕鲁属性", query)
         return await self._img(event, self._t("element"), self._element_data())
 
     # ------------------------------------------------------------------

@@ -59,7 +59,7 @@ COMMANDS: list[CommandSpec] = [
     # ---------------- 图鉴 / 配种 ----------------
     CommandSpec("图鉴", "_cmd_paldex", ("paldex",), cooldown=True, pass_args=True, description="帕鲁图鉴", category="paldex"),
     CommandSpec("编号", "_cmd_pal_index", ("图鉴编号", "编号查询", "palid", "no"), cooldown=True, pass_args=True, description="按图鉴编号查询", category="paldex"),
-    CommandSpec("属性克制", "_cmd_element", ("克制", "属性", "克制图", "element"), cooldown=True, description="属性克制图", category="paldex"),
+    CommandSpec("属性克制", "_cmd_element", ("克制", "属性", "克制图", "element"), cooldown=True, pass_args=True, description="属性克制图 / 按属性列帕鲁", category="paldex"),
     CommandSpec("栖息区域", "_cmd_habitat", ("栖息地", "栖息", "分布", "habitat"), cooldown=True, pass_args=True, description="帕鲁栖息区域", category="paldex"),
     CommandSpec("推荐词条", "_cmd_passrec", ("词条", "推荐", "passive"), cooldown=True, pass_args=True, description="推荐被动词条", category="paldex"),
     CommandSpec("词条大全", "_cmd_passive_dex", ("词条分类", "词条图鉴", "全部词条", "词条查询", "词条百科", "passivedex"), cooldown=True, pass_args=True, description="全部词条分类查询", category="paldex"),
