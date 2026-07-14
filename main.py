@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.18.1",
+    "1.19.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -841,6 +841,44 @@ class PalworldPlugin(Star):
             return await self._msg_card(event, "🔍", "查无此编号",
                                         desc=f"没有编号「{q}」的帕鲁。变种记得带字母，如 13B。", color="#F5A623")
         return await self._img(event, self._t("paldex"), self._pal_card_data(p))
+
+    # 种属分类(genus_category,图鉴 DataTable 已有字段):无游戏图标 → Emoji 兜底
+    _GENUS_MENU = [("人形", "Humanoid", "🧍"), ("四足兽", "FourLegged", "🐾"),
+                   ("鸟类", "Bird", "🐦"), ("鱼类", "Fish", "🐟"),
+                   ("龙类", "Dragon", "🐉"), ("其它", "Other", "❓")]
+    _GENUS_ALIAS = {"人": "Humanoid", "人形": "Humanoid", "四足": "FourLegged", "四足兽": "FourLegged",
+                    "兽": "FourLegged", "鸟": "Bird", "鸟类": "Bird", "鱼": "Fish", "鱼类": "Fish",
+                    "龙": "Dragon", "龙类": "Dragon", "龙系": "Dragon", "其它": "Other", "其他": "Other"}
+
+    def _genus_map(self) -> dict:
+        if getattr(self, "_genus_cache", None) is None:
+            self._genus_cache = {p.get("pal_dev_name"): p.get("genus_category") for p in self._pals}
+        return self._genus_cache
+
+    async def _cmd_genus(self, event: AstrMessageEvent, args: list[str]):
+        if not self._pals:
+            return await self._msg_card(event, "📕", "图鉴数据未加载",
+                                        desc="data/paldex.json 缺失或损坏。", color="#E5484D")
+        query, page = self._parse_page_args(args)
+        gmap = self._genus_map()
+        if not query:                                # 分类菜单(带各种属数量)
+            cnt = {}
+            for e in self._ordered_pals():
+                cnt[gmap.get(e["ik"])] = cnt.get(gmap.get(e["ik"]), 0) + 1
+            lines = [f"{em} {cn} · {cnt.get(key, 0)} 只" for cn, key, em in self._GENUS_MENU if cnt.get(key)]
+            return await self._msg_card(event, "🧬", "帕鲁种属分类",
+                                        desc="\n".join(lines) + "\n\n发「/帕鲁种属 <种属>」看该类全部帕鲁,如 /帕鲁种属 龙",
+                                        head="🧬 种属图鉴", color="#7ab8ff")
+        key = self._GENUS_ALIAS.get(query) or next((k for cn, k, _ in self._GENUS_MENU if query in cn), None)
+        if not key:
+            alln = "、".join(cn for cn, _, _ in self._GENUS_MENU)
+            return await self._msg_card(event, "🔍", "没有这个种属",
+                                        desc=f"支持的种属：{alln}。\n如 /帕鲁种属 四足兽", color="#F5A623")
+        cn, _, em = next(g for g in self._GENUS_MENU if g[1] == key)
+        entries = [e for e in self._ordered_pals() if gmap.get(e["ik"]) == key]
+        if not entries:
+            return await self._msg_card(event, em, f"{cn}帕鲁暂无", desc="该种属下没有帕鲁。", color="#9a8a91")
+        return await self._render_grid(event, f"{cn}帕鲁", em, entries, page, "/帕鲁种属", cn)
 
     async def _cmd_breed(self, event: AstrMessageEvent, args: list[str]):
         if not self._breed:
@@ -2986,7 +3024,7 @@ class PalworldPlugin(Star):
                 return alias, (([rest] + list(args)) if rest else list(args))
         return sub, args
 
-    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|材料路线|材料|配方展开|总材料|matroute|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|养成|培养|养成进度|养成路线|growth|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我的战力|个人战力|我的最强帕鲁|我的帕鲁战力|mypower|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点体检|基地体检|据点健康|基地健康|basehealth|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
+    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|材料路线|材料|配方展开|总材料|matroute|种属|分类图鉴|种族分类|genus|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|养成|培养|养成进度|养成路线|growth|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我的战力|个人战力|我的最强帕鲁|我的帕鲁战力|mypower|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点体检|基地体检|据点健康|基地健康|basehealth|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
     async def palworld(self, event: AstrMessageEvent):
         raw = (event.message_str or "").strip()
         # 去掉可选的「/」前缀和指令词「帕鲁」，剩余既可能是「在线」也可能是「在线 参数」

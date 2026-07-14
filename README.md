@@ -10,7 +10,7 @@
 图鉴配种攻略随手查；管理员可公告 / 踢封 / 存档 / 关服。<br>
 **所有回复一律输出精美卡片图片**，附一键部署脚本。
 
-![version](https://img.shields.io/badge/version-1.18.1-6366F1?style=flat-square)
+![version](https://img.shields.io/badge/version-1.19.0-6366F1?style=flat-square)
 ![AstrBot](https://img.shields.io/badge/AstrBot-4.25%2B-8B5CF6?style=flat-square)
 ![OneBot](https://img.shields.io/badge/OneBot-v11-4ade80?style=flat-square)
 ![NapCat](https://img.shields.io/badge/adapter-NapCat-22c55e?style=flat-square)
@@ -118,6 +118,7 @@
 | `/帕鲁设施 [名/字]` | 建筑设施图鉴：详情（描述+**建造材料+解锁科技**）/网格/翻页（也可 `/帕鲁建筑`）|
 | `/帕鲁科技 [名/字]` | 科技图鉴：详情（描述+**解锁条件**：等级/技术点/古代科技点）/网格/翻页（也可 `/帕鲁技术`）|
 | `/帕鲁材料路线 <物品> [数量]` | 把配方**递归展开到底**：直接配方 + 需预制的中间产物 + **原料总需求**（拆到采集/掉落原料的合计）+ 全链路制作台；带数量算 N 份（也可 `/帕鲁材料`）|
+| `/帕鲁种属 [人形/四足兽/鸟类/鱼类/龙类/其它]` | 按**种属**分类浏览图鉴：无参给分类菜单（各类数量），带种属出网格（真实立绘）；支持别名（龙/四足/鱼…）|
 | `/帕鲁帮助` | 指令帮助卡片（也可 `/帕鲁菜单`）|
 
 ### 管理类（仅 `admin_qq` 白名单可用）
