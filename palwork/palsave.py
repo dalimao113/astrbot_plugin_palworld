@@ -23,6 +23,30 @@ if not getattr(_archive.FArchiveReader, "_pal_setprop_patched", False):
     _archive.FArchiveReader.property = _ar_property_with_set
     _archive.FArchiveReader._pal_setprop_patched = True
 
+# 1.x 存档兼容:worldSaveData 新增 LevelObjectRecoverPartySaveData,其内 PlayerLastUsedTimes 是
+# Map<Guid, Int64Property>。锁定的 save-tools 的 prop_value 只认 Struct/Enum/Name/Int/Bool 作 Map 值类型,
+# 读到 Int64Property 就抛 "Unknown property value type: Int64Property",整份存档解析中断、玩家信息全查不到。
+# 该结构提取用不到,但 Map 元素必须逐个按正确字节数读掉才能对齐到下一属性——所以这里补齐标量值类型
+# (按 UE 属性字节宽度精确读取),不是整块跳过。
+if not getattr(_archive.FArchiveReader, "_pal_propval_patched", False):
+    _orig_prop_value = _archive.FArchiveReader.prop_value
+    _SCALAR_VALUE_READERS = {
+        "Int64Property": lambda s: s.i64(),
+        "UInt64Property": lambda s: s.u64(),
+        "UInt32Property": lambda s: s.u32(),
+        "FloatProperty": lambda s: s.float(),
+        "DoubleProperty": lambda s: s.double(),
+    }
+
+    def _prop_value_scalar(self, type_name, struct_type_name, path):
+        reader = _SCALAR_VALUE_READERS.get(type_name)
+        if reader is not None:
+            return reader(self)
+        return _orig_prop_value(self, type_name, struct_type_name, path)
+
+    _archive.FArchiveReader.prop_value = _prop_value_scalar
+    _archive.FArchiveReader._pal_propval_patched = True
+
 # 本服游戏版本的角色 blob 尾部有额外字节，0.24.0 解析器会报 "EOF not reached"。
 # object(全部真实数据) 已在前面读完，这里宽容吞掉尾部不报错。
 import palworld_save_tools.rawdata.character as _char

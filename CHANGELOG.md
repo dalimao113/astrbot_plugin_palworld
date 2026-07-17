@@ -2,6 +2,12 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.36.2] - 2026-07-17
+
+### 修复(存档运行一段时间后又读取不到)
+- 服务器世界运行一段时间后,存档新增 `LevelObjectRecoverPartySaveData`(队伍恢复数据),其内 `PlayerLastUsedTimes` 是 `Map<Guid, Int64Property>`。锁定的 save-tools 的 `prop_value` 只认 Struct/Enum/Name/Int/Bool 作 Map 值类型,读到 `Int64Property` 抛 `Unknown property value type: Int64Property`,导致**整份存档解析中断、玩家信息全查不到**(且负缓存 45s 内反复失败)。
+- 修复:`palwork/palsave.py` 补齐 `prop_value` 的标量 Map 值类型(Int64/UInt64/UInt32/Float/Double),**按 UE 属性字节宽度精确读取**以对齐到下一元素(不是整块跳过、不吞关键数据)。已用真实存档只读副本验证:13 个玩家档案正常解析;加了回归测试(patch 注册 + Int64 按 8 字节读取)。
+
 ## [1.36.1] - 2026-07-15
 
 ### 修复(世界树地图/boss/在线玩家 —— v1.26 坐标大修的回归)

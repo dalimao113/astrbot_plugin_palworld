@@ -48,3 +48,31 @@ def test_setproperty_handler_skips_by_size():
     out = archive.FArchiveReader.property(r, "SetProperty", 4826, ".x")
     assert r.skipped == 4826, "SetProperty 应按 size 跳过整块"
     assert out.get("skipped_set") is True
+
+
+def test_propval_scalar_patch_registered():
+    """1.x 存档 LevelObjectRecoverPartySaveData.PlayerLastUsedTimes 是 Map<Guid,Int64Property>,
+    锁定 save-tools 的 prop_value 不认 Int64Property 作 Map 值类型 → 抛
+    'Unknown property value type: Int64Property' → 整份存档解析崩溃、玩家信息全查不到。"""
+    importlib.import_module("astrbot_plugin_palworld.palwork.palsave")
+    from palworld_save_tools import archive
+    assert getattr(archive.FArchiveReader, "_pal_propval_patched", False), \
+        "prop_value 标量值类型 patch 未注册（新版存档会解析崩溃）"
+
+
+def test_propval_reads_int64_map_value_by_width():
+    """Map 值类型 Int64Property 必须按 8 字节精确读取，才能对齐到下一元素。"""
+    importlib.import_module("astrbot_plugin_palworld.palwork.palsave")
+    from palworld_save_tools import archive
+
+    class FakeReader:
+        def __init__(self):
+            self.i64_called = 0
+
+        def i64(self):
+            self.i64_called += 1
+            return 1234567890123
+
+    r = FakeReader()
+    out = archive.FArchiveReader.prop_value(r, "Int64Property", None, ".PlayerLastUsedTimes.Value")
+    assert r.i64_called == 1 and out == 1234567890123, "Int64Property 应按 i64(8字节)读取"
