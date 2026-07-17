@@ -170,7 +170,8 @@ def validate_config(cfg) -> list[tuple[str, str]]:
 
     # card_style
     style = get_str(cfg, "card_style")
-    if style and style not in ("fantasy", "pixel"):
+    # 三套正式主题(与 _conf_schema.json 枚举、render.templates.STYLES 一致)。
+    if style and style not in ("fantasy", "pixel", "ingame"):
         out.append(("提示", f"card_style「{style}」未知，将回退 fantasy。"))
 
     # 被 clamp 的项，提示实际生效值

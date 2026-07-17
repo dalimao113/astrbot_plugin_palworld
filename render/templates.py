@@ -1,5 +1,6 @@
 """卡片 HTML/CSS 模板与皮肤表（从 main.py 原样迁出，字符不改）。
-两套皮肤 fantasy/pixel 的全部 Jinja 模板 + STYLES/TEMPLATE_KEYS。
+三套独立主题 fantasy/pixel/ingame 的全部 Jinja 模板 + STYLES/TEMPLATE_KEYS
+（三套模板键集合完全一致，见 tests/test_theme.py 回归）。
 注意：Jinja autoescape 关闭，模板内含大量刻意内嵌 HTML；
 不可信字段必须由调用方用 utils.text._esc 逐字段转义后再注入。"""
 from __future__ import annotations
@@ -5967,9 +5968,9 @@ STYLES = {
               "hatch": HATCH_PIX, "inherit": INHERIT_PIX,
               "arena": ARENA_PIX, "arena_tier": ARENA_TIER_PIX},
 }
-# ingame 游戏原生主题(独立第三套)。**开发期临时回退**:各卡尚未逐一改造前,
-# 复用 fantasy 模板串以保证 56 个模板键齐全、指令不异常;逐卡替换后再改为 ingame 专属模板。
-# 该临时回退是**显式记录**的(见 docs/INGAME_ICON_COVERAGE.md),非「悄悄用别的主题」。
+# ingame 游戏原生主题(独立第三套)。**已全量落地**:68 个模板键全部为 ingame 专属模板,
+# 0 键回退 fantasy(下方逐键覆盖,tests/test_theme.py 校验三主题键集合一致)。
+# 这里先 dict(fantasy) 只是取一份键骨架,紧接着被逐键覆盖为 ingame 专属串。
 STYLES["ingame"] = dict(STYLES["fantasy"])
 STYLES["ingame"]["squad"] = SQUAD_ING
 STYLES["ingame"]["basehealth"] = BASEHEALTH_ING

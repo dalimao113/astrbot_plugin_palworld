@@ -2191,7 +2191,11 @@ class PalworldPlugin(Star):
         供删档/恢复等按目录批处理用(不依赖具体世界 GUID，即便未配置也可用)。"""
         configured = self._configured_save_dir()
         if configured:
-            return configured.rsplit("/", 1)[0]
+            base = configured.rsplit("/", 1)[0]
+            # 安全护栏:误配置(如填 "/" 或过浅路径)会让 base 变空/过短,下游
+            # 删档/恢复脚本的 rm -rf "$base"/*/ 可能误删容器内顶层目录 → 回退默认基目录。
+            if base.startswith("/") and base.count("/") >= 3:
+                return base
         return self._DEFAULT_SAVEGAMES_BASE
 
     async def _resolve_container(self, sock: str) -> str:
@@ -6618,8 +6622,11 @@ class PalworldPlugin(Star):
             script = (
                 "set -e; "
                 f'SG="{sg}"; BK="{RESET_BACKUP_DIR}"; TS="{ts}"; '
+                # 护栏:SG 必须是足够深的绝对路径(至少 3 段),否则 "$SG"/*/ 可能误删顶层目录。
+                'case "$SG" in /*/*/*) ;; *) echo "BADSG"; exit 6;; esac; '
                 'ls "$BK"/*_"$TS".tar.gz >/dev/null 2>&1 || { echo "NOBACKUP"; exit 5; }; '
-                'for d in "$SG"/*/; do d="${d%/}"; [ -d "$d" ] && rm -rf "$d"; done; '
+                # 只清含 Level.sav 的真实世界目录(与删档一致),不碰其它目录;untar 会重建世界内容。
+                'for d in "$SG"/*/; do d="${d%/}"; [ -f "$d/Level.sav" ] && rm -rf "$d"; done; '
                 'n=0; '
                 'for f in "$BK"/*_"$TS".tar.gz; do '
                 '  [ -f "$f" ] || continue; '

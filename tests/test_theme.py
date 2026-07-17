@@ -69,7 +69,7 @@ def test_manifest_valid_and_files_exist():
         for k, v in entries.items():
             if k.startswith("_") or not isinstance(v, dict):
                 continue
-            rel = v.get("ingame")
+            rel = v.get("game") or v.get("ingame")  # 与 assets._asset_rel 同源,新旧字段都校验
             if rel:
                 assert os.path.exists(os.path.join(base, rel)), f"{ns}.{k} 素材缺失: {rel}"
                 verified += 1
