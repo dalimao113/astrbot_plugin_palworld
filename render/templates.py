@@ -1668,16 +1668,18 @@ ELEMENT_ING = _IH + """</style></head><body><div class="page">
 
 # ---- ingame 版栖息分布(带地图)。变量契约与 HABITAT_TMPL 一致 ----
 HABITAT_ING = _IH + """</style></head><body><div class="page">
-  <div class="ig-head">{% if icon %}<div class="ig-portrait" style="width:76px;height:76px;border-width:11px"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ name }} · 栖息分布</div><div class="ig-sub"><span class="ig-pill">No.{{ index }}</span>{% for e in elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}{% if nocturnal %}<span class="ig-pill">夜行</span>{% endif %}{% if map_label %}<span class="ig-pill">{{ map_label }}</span>{% endif %}</div></div></div>
+  <div class="ig-head">{% if icon %}<div class="ig-portrait" style="width:76px;height:76px;border-width:11px"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ name }} · 栖息分布</div><div class="ig-sub"><span class="ig-pill">No.{{ index }}</span>{% for e in elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}{% if nocturnal %}<span class="ig-pill">夜行</span>{% endif %}{% for k in kinds %}<span class="ig-pill"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:{{k.c}};border:1px solid #fff;margin-right:3px"></span>{{ k.label }}</span>{% endfor %}{% if map_label %}<span class="ig-pill">{{ map_label }}</span>{% endif %}</div></div></div>
   <div style="position:relative;width:100%;border:1px solid var(--pal-line);border-radius:3px;overflow:hidden">
     <img src="{{ mapimg }}" style="display:block;width:100%">
-    <div style="position:absolute;inset:0;mix-blend-mode:screen">{% for pt in points %}<div style="position:absolute;left:{{pt.l}}%;top:{{pt.t}}%;width:26px;height:26px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,{{color}}d0,{{color}}00 62%)"></div>{% endfor %}</div>
-    {% for pt in boss_points %}<img src="{{ icons.pal.alpha }}" style="position:absolute;left:{{pt.l}}%;top:{{pt.t}}%;transform:translate(-50%,-100%);z-index:6;width:22px;height:22px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.95))">{% endfor %}
+    <div style="position:absolute;inset:0;filter:blur(4px);opacity:.82">{% for pt in points %}<div style="position:absolute;left:{{pt.l}}%;top:{{pt.t}}%;width:26px;height:26px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,{{color}} 0%,{{color}}dd 45%,{{color}}00 72%)"></div>{% endfor %}</div>
+    {% for m in markers %}<div style="position:absolute;left:{{m.l}}%;top:{{m.t}}%;transform:translate(-50%,-50%);z-index:6;width:9px;height:9px;border-radius:50%;background:{{m.c}};border:1.5px solid #fff;box-shadow:0 0 3px rgba(0,0,0,.95)"></div>{% endfor %}
   </div>
   <div class="ig-panel" style="margin-top:12px">
-    <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:13px;color:var(--pal-text-2)"><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:50%;background:{{color}};display:inline-block"></span>栖息热区</span>{% if boss_points %}<span class="ig-pill" style="background:#d42c2c;color:#fff">{{ boss_label }} {{ boss_lv }} · {{ boss_points|length }}处</span>{% endif %}<span class="ig-pill">{{ count }} 个刷新点</span>{% if has_day and has_night %}<span class="ig-pill">日夜均刷</span>{% elif nocturnal %}<span class="ig-pill">夜间为主</span>{% endif %}</div>
+    <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:13px;color:var(--pal-text-2)">{% if points %}<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:50%;background:{{color}};display:inline-block"></span>栖息热区</span><span class="ig-pill">{{ count }} 个刷新点</span>{% endif %}{% for lg in legend %}<span class="ig-pill"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:{{lg.c}};border:1px solid #fff;margin-right:4px"></span>{{ lg.label }} · {{ lg.detail }}</span>{% endfor %}{% if has_day and has_night %}<span class="ig-pill">日夜均刷</span>{% elif nocturnal %}<span class="ig-pill">夜间为主</span>{% endif %}</div>
     {% if regions %}<div class="ig-sec" style="margin-top:13px">主要出没区域</div>
     <div style="display:flex;flex-direction:column;gap:7px">{% for r in regions %}<div style="display:flex;align-items:center;gap:9px"><span style="flex:none;width:92px;font-size:13px;color:var(--pal-text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</span><span style="flex:1;height:10px;border-radius:2px;background:rgba(0,0,0,.35);overflow:hidden"><span style="display:block;height:100%;width:{{ r.pct }}%;background:linear-gradient(90deg,{{color}}88,{{color}})"></span></span><span style="flex:none;width:36px;text-align:right;font-size:12px;color:var(--pal-sub)">{{ r.pct }}%</span></div>{% endfor %}</div>{% endif %}
+    {% if dungeon_note %}<div style="margin-top:12px;padding:8px 10px;background:rgba(212,44,44,.1);border:1px solid var(--pal-line);border-radius:3px;font-size:12px;color:var(--pal-sub);line-height:1.75">地牢刷新说明:{{ dungeon_note }}</div>{% endif %}
+    {% if points %}<div style="margin-top:11px;font-size:12px;color:var(--pal-dim);line-height:1.7">彩色区域为野生栖息热区（范围取自游戏刷新数据，不逐点标坐标）；头目/塔主/boss 才标具体坐标点。</div>{% endif %}
   </div>
   """ + _IF + """
 </div></body></html>"""
@@ -4006,21 +4008,21 @@ HABITAT_TMPL = _HEAD + """</style></head><body><div class="page">
     {% if icon %}<div style="flex:none;width:84px;height:84px;border-radius:18px;background:radial-gradient(circle at 50% 38%,{{color}}44,rgba(18,12,48,.5) 72%);border:2px solid {{color}}aa;display:flex;align-items:center;justify-content:center"><img src="{{ icon }}" style="width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))"></div>{% endif %}
     <div style="flex:1;min-width:0">
       <div class="title">🗺️ {{ name }} · 栖息分布</div>
-      <div class="subtitle"><span class="pill soft">No.{{ index }}</span>{% for e in elements %}<span class="pill soft">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ e }}</span>{% endfor %}{% if nocturnal %}<span class="pill soft">🌙 夜行</span>{% endif %}{% if map_label %}<span class="pill" style="background:rgba(92,201,122,.25);border-color:rgba(92,201,122,.5);color:#8fe0a8">🗺️ {{ map_label }}</span>{% endif %}</div>
+      <div class="subtitle"><span class="pill soft">No.{{ index }}</span>{% for e in elements %}<span class="pill soft">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ e }}</span>{% endfor %}{% if nocturnal %}<span class="pill soft">🌙 夜行</span>{% endif %}{% for k in kinds %}<span class="pill soft">{{ k.sym }} {{ k.label }}</span>{% endfor %}{% if map_label %}<span class="pill" style="background:rgba(92,201,122,.25);border-color:rgba(92,201,122,.5);color:#8fe0a8">🗺️ {{ map_label }}</span>{% endif %}</div>
     </div>
   </div></div>
   <div style="position:relative;width:100%;border-radius:16px;overflow:hidden;border:1px solid {{color}}66;box-shadow:0 4px 16px rgba(0,0,0,.45)">
     <img src="{{ mapimg }}" style="display:block;width:100%">
-    <div style="position:absolute;inset:0;mix-blend-mode:screen">
-      {% for pt in points %}<div style="position:absolute;left:{{pt.l}}%;top:{{pt.t}}%;width:26px;height:26px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,{{color}}d0,{{color}}00 62%)"></div>{% endfor %}
+    <div style="position:absolute;inset:0;filter:blur(4px);opacity:.82">
+      {% for pt in points %}<div style="position:absolute;left:{{pt.l}}%;top:{{pt.t}}%;width:26px;height:26px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,{{color}} 0%,{{color}}dd 45%,{{color}}00 72%)"></div>{% endfor %}
     </div>
-    {% for pt in boss_points %}<div style="position:absolute;left:{{pt.l}}%;top:{{pt.t}}%;transform:translate(-50%,-100%);z-index:6;font-size:20px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.95))">{% if boss_is_tower %}🗼{% else %}👑{% endif %}</div>{% endfor %}
+    {% for m in markers %}<div style="position:absolute;left:{{m.l}}%;top:{{m.t}}%;transform:translate(-50%,-50%);z-index:6;width:9px;height:9px;border-radius:50%;background:{{m.c}};border:1.5px solid #fff;box-shadow:0 0 3px rgba(0,0,0,.95)"></div>{% endfor %}
   </div>
   <div class="glass" style="margin-top:12px">""" + _GEMS + """
     <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:13.5px;color:#e9e0f5">
-      <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:13px;height:13px;border-radius:50%;background:{{color}};display:inline-block;box-shadow:0 0 7px {{color}}"></span>栖息热区</span>
-      {% if boss_points %}<span class="pill" style="background:#c0392b;color:#fff">{{ boss_label }} {{ boss_lv }} · {{ boss_points|length }}处</span>{% endif %}
-      <span class="pill soft">{{ count }} 个刷新点</span>
+      {% if points %}<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:13px;height:13px;border-radius:50%;background:{{color}};display:inline-block;box-shadow:0 0 7px {{color}}"></span>栖息热区</span>
+      <span class="pill soft">{{ count }} 个刷新点</span>{% endif %}
+      {% for lg in legend %}<span class="pill soft"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:{{lg.c}};border:1px solid #fff;margin-right:4px"></span>{{ lg.label }} · {{ lg.detail }}</span>{% endfor %}
       {% if has_day and has_night %}<span class="pill soft">日夜均刷</span>{% elif nocturnal %}<span class="pill soft">夜间为主</span>{% endif %}
     </div>
     {% if regions %}<div class="sec-t" style="margin-top:13px">📍 主要出没区域</div>
@@ -4033,7 +4035,8 @@ HABITAT_TMPL = _HEAD + """</style></head><body><div class="page">
       </div>
       {% endfor %}
     </div>{% endif %}
-    <div style="margin-top:13px;font-size:12px;color:#b9a9d6;line-height:1.7">💡 色块越亮表示该处刷新越密集；区域占比按刷新点落点就近估算，仅供参考。</div>
+    {% if dungeon_note %}<div style="margin-top:12px;padding:9px 11px;background:rgba(142,68,173,.16);border:1px solid rgba(142,68,173,.45);border-radius:9px;font-size:12px;color:#e3d3f2;line-height:1.75">🚪 {{ dungeon_note }}</div>{% endif %}
+    {% if points %}<div style="margin-top:13px;font-size:12px;color:#b9a9d6;line-height:1.7">💡 彩色区域为野生栖息热区（范围取自游戏刷新数据，不逐点标坐标）；头目/塔主/boss 才标具体坐标点。</div>{% endif %}
   </div>
   """ + _FOOT + """
 </div></body></html>"""
@@ -4043,19 +4046,21 @@ HABITAT_PIX = _PH + """</style></head><body><div class="page">
     {% if icon %}<div style="flex:none;width:80px;height:80px;background:{{color}}33;border:3px solid #6b4a24;box-shadow:inset 0 0 0 2px rgba(255,247,224,.5);display:flex;align-items:center;justify-content:center"><img src="{{ icon }}" style="width:66px;height:66px;object-fit:contain;image-rendering:pixelated"></div>{% endif %}
     <div style="flex:1;min-width:0">
       <div class="title">▦ {{ name }} · 栖息分布</div>
-      <div class="subtitle"><span class="pill">No.{{ index }}</span>{% for e in elements %}<span class="pill">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ e }}</span>{% endfor %}{% if nocturnal %}<span class="pill">夜行</span>{% endif %}</div>
+      <div class="subtitle"><span class="pill">No.{{ index }}</span>{% for e in elements %}<span class="pill">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ e }}</span>{% endfor %}{% if nocturnal %}<span class="pill">夜行</span>{% endif %}{% for k in kinds %}<span class="pill">{{ k.sym }} {{ k.label }}</span>{% endfor %}{% if map_label %}<span class="pill">{{ map_label }}</span>{% endif %}</div>
     </div>
   </div></div>
   <div style="position:relative;width:100%;border:3px solid #6b4a24;box-shadow:inset 0 0 0 2px rgba(255,247,224,.4)">
     <img src="{{ mapimg }}" style="display:block;width:100%">
-    <div style="position:absolute;inset:0;mix-blend-mode:screen">
-      {% for pt in points %}<div style="position:absolute;left:{{pt.l}}%;top:{{pt.t}}%;width:26px;height:26px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,{{color}}d0,{{color}}00 62%)"></div>{% endfor %}
+    <div style="position:absolute;inset:0;filter:blur(4px);opacity:.82">
+      {% for pt in points %}<div style="position:absolute;left:{{pt.l}}%;top:{{pt.t}}%;width:26px;height:26px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,{{color}} 0%,{{color}}dd 45%,{{color}}00 72%)"></div>{% endfor %}
     </div>
+    {% for m in markers %}<div style="position:absolute;left:{{m.l}}%;top:{{m.t}}%;transform:translate(-50%,-50%);z-index:6;width:9px;height:9px;background:{{m.c}};border:2px solid #2c1a0a;box-shadow:0 0 0 1px #fff"></div>{% endfor %}
   </div>
   <div class="frame" style="margin-top:12px">
     <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:13.5px;color:#382207">
-      <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:12px;height:12px;background:{{color}};display:inline-block;border:1px solid #2c1a0a"></span>栖息热区</span>
-      <span class="pill">{{ count }} 个刷新点</span>
+      {% if points %}<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:12px;height:12px;background:{{color}};display:inline-block;border:1px solid #2c1a0a"></span>栖息热区</span>
+      <span class="pill">{{ count }} 个刷新点</span>{% endif %}
+      {% for lg in legend %}<span class="pill"><span style="display:inline-block;width:9px;height:9px;background:{{lg.c}};border:1px solid #2c1a0a;margin-right:4px"></span>{{ lg.label }} · {{ lg.detail }}</span>{% endfor %}
       {% if has_day and has_night %}<span class="pill">日夜均刷</span>{% elif nocturnal %}<span class="pill">夜间为主</span>{% endif %}
     </div>
     {% if regions %}<div class="sec-t" style="margin-top:12px">主要出没区域</div>
@@ -4068,7 +4073,8 @@ HABITAT_PIX = _PH + """</style></head><body><div class="page">
       </div>
       {% endfor %}
     </div>{% endif %}
-    <div style="margin-top:12px;font-size:12px;color:#574012;line-height:1.7">色块越亮表示刷新越密集；区域占比按刷新点就近估算，仅供参考。</div>
+    {% if dungeon_note %}<div style="margin-top:11px;padding:8px 10px;background:rgba(122,43,28,.14);border:1px solid #7a2b1c;font-size:12px;color:#5a2410;line-height:1.75">🚪 {{ dungeon_note }}</div>{% endif %}
+    {% if points %}<div style="margin-top:12px;font-size:12px;color:#574012;line-height:1.7">彩色区域为野生栖息热区（范围取自游戏刷新数据，不逐点标坐标）；头目/塔主/boss 才标具体坐标点。</div>{% endif %}
   </div>
   """ + _PF + """
 </div></body></html>"""

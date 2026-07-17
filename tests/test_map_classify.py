@@ -77,3 +77,94 @@ def test_habitat_worldtree_boss_uses_tree_map():
     d = o._habitat_data(p)
     assert d["map_label"] == "世界树" and d["mapimg"].endswith("TREE")
     assert d["boss_points"]   # 有 boss 位置点
+
+
+def test_habitat_spawn_coverage():
+    """回归:旧 pal_spawns 每个刷新点只取到 1~2 只帕鲁,同坐标其余帕鲁全丢,导致图鉴查得到
+    却 /帕鲁栖息 查不到。修复后从 spawner 组展开全部 Pal_1/2/3,覆盖数应远超旧版 137。"""
+    import json
+    import os
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sp = json.load(open(os.path.join(root, "data", "pal_spawns.json"), encoding="utf-8"))
+    pals = {k for k in sp if k != "_meta"}
+    assert len(pals) >= 240, f"栖息覆盖回退到 {len(pals)}(应 >=240)"
+    # 这些常见早期帕鲁曾整只丢失,现必须有野外刷新点
+    for dev in ("PinkCat", "ChickenPal", "NegativeOctopus", "SamuraiDog", "SweetsSheep"):
+        e = sp.get(dev) or {}
+        assert e.get("day") or e.get("night"), f"{dev} 缺主大陆野外刷新点"
+
+
+def test_habitat_main_and_tree_wild_points():
+    """主大陆野生帕鲁落主图并带生物群系统计;世界树野生帕鲁落世界树独立底图。"""
+    o = main.PalworldPlugin.__new__(main.PalworldPlugin)
+    o._load_paldex()
+    assert o._load_map(), "地图素材应加载成功"
+    o._map_img = "data:image/jpeg;base64,MAIN"
+    o._tree_map_img = "data:image/jpeg;base64,TREE"
+    # 主大陆:捣蛋猫(旧版整只丢失)
+    d = o._habitat_data(o._find_pal("捣蛋猫"))
+    assert d["mapimg"].endswith("MAIN") and d["map_label"] == ""
+    assert d["points"] and d["regions"]   # 有热区点 + 生物群系占比
+    # 纯世界树野生(凌角马 只在世界树刷、非头目) -> 世界树独立底图
+    t = o._habitat_data(o._pal_by_dev.get("kirin_ice"))
+    assert t["mapimg"].endswith("TREE") and t["map_label"] == "世界树"
+    assert t["points"]
+
+
+def test_habitat_boss_coords_priority_over_tree_wild():
+    """回归:塔主/头目的具体坐标要显示出来。暴电熊 既是主图塔主、又在世界树野生,
+    栖息应优先显示塔主坐标(主图),不被跨区世界树野生盖掉。"""
+    o = main.PalworldPlugin.__new__(main.PalworldPlugin)
+    o._load_paldex()
+    assert o._load_map()
+    o._map_img = "data:image/jpeg;base64,MAIN"
+    o._tree_map_img = "data:image/jpeg;base64,TREE"
+    d = o._habitat_data(o._pal_by_dev.get("elecpanda"))
+    assert d["mapimg"].endswith("MAIN")
+    assert any(k["label"] == "塔主" for k in d["kinds"])   # 塔主坐标已标出
+    assert d["markers"]
+
+
+def test_habitat_field_boss_from_authoritative_spots():
+    """回归:云海鹿曾显示 2 个野外头目点(外部 boss_spawns.json 多编了 1 个刷新表里不存在的点)。
+    野外头目坐标应只用权威 spawner 提取(FengyunDeeper 实际只有 1 个 FieldBoss，Lv.25)。"""
+    o = main.PalworldPlugin.__new__(main.PalworldPlugin)
+    o._load_paldex()
+    assert o._load_map()
+    o._map_img = "data:image/jpeg;base64,MAIN"
+    o._tree_map_img = "data:image/jpeg;base64,TREE"
+    d = o._habitat_data(o._pal_by_dev.get("fengyundeeper"))
+    fboss = [m for m in d["markers"] if any(lg["label"] == "野外头目" for lg in d["legend"])]
+    # 只有 1 个野外头目标记(不是 boss_spawns 的 2 个)
+    assert sum(1 for _l, _t, k, _r in (o._pal_spawns.get("FengyunDeeper", {}).get("spots") or [])
+               if k == "fboss") == 1
+    assert d["markers"] and any(k["label"] == "野外头目" for k in d["kinds"])
+    assert any("Lv.25" in lg["detail"] for lg in d["legend"] if lg["label"] == "野外头目")
+
+
+def test_habitat_dungeon_boss_shows_coords_and_type():
+    """回归:地牢限定帕鲁(炽巫猫=CatMage_Fire,樱花岛地牢)旧版 /帕鲁栖息 查不到。
+    现应从 Dungeon/DungeonBoss placement 取坐标显示,并标注类型=地牢头目。"""
+    o = main.PalworldPlugin.__new__(main.PalworldPlugin)
+    o._load_paldex()
+    assert o._load_map()
+    o._map_img = "data:image/jpeg;base64,MAIN"
+    o._tree_map_img = "data:image/jpeg;base64,TREE"
+    d = o._habitat_data(o._pal_by_dev.get("catmage_fire"))
+    assert not d["points"]           # 无野外热区
+    assert d["markers"]              # 但有地牢坐标标记
+    assert any(k["label"] == "地牢头目" for k in d["kinds"])   # 类型已标注
+    assert d["mapimg"].endswith("MAIN")
+
+
+def test_habitat_wild_pal_no_dungeon_noise():
+    """有野外热区的常见帕鲁(捣蛋猫)不应被大量'地牢随机池'点污染 —— 地牢标记仅对
+    无野生栖息的地牢限定帕鲁显示。"""
+    o = main.PalworldPlugin.__new__(main.PalworldPlugin)
+    o._load_paldex()
+    assert o._load_map()
+    o._map_img = "data:image/jpeg;base64,MAIN"
+    o._tree_map_img = "data:image/jpeg;base64,TREE"
+    d = o._habitat_data(o._find_pal("捣蛋猫"))
+    assert d["points"]                                   # 有野外热区
+    assert not any(k["label"] in ("地牢", "地牢头目") for k in d["kinds"])

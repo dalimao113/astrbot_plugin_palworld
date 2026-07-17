@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.36.2",
+    "1.37.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -2273,46 +2273,118 @@ class PalworldPlugin(Star):
             return 0.0, 0.0
         return (L * e - b * T) / det, (a * T - L * d) / det
 
+    # 栖息特殊点(非野生热区)种类:kind -> (符号, 中文标注, 是否头目档, 排序, 地图标记色)。
+    # 地图上用小圆点标记(按此色 + 白边),既小又能按颜色区分种类;符号只用于图例/副标题文字。
+    _HAB_KINDS = {
+        "tower":   ("🗼", "塔主", True, 0, "#ffcc33"),
+        "fboss":   ("👑", "野外头目", True, 1, "#ff4d4d"),
+        "dboss":   ("👑", "地牢头目", True, 2, "#c062ff"),
+        "prison":  ("⛓️", "关押头目", True, 3, "#ff7a3d"),
+        "dungeon": ("🚪", "地牢", False, 4, "#5b9bff"),
+    }
+
     def _habitat_data(self, p: dict) -> dict:
         dev = p.get("pal_dev_name", "")
         sp = (self._pal_spawns or {}).get(dev) or {}
+        # 主大陆点(day/night，主图百分比) 与 世界树点(tree_day/tree_night，世界树图百分比)
+        # 是**两套独立坐标系**，各自落各自底图，不混用。
         day = sp.get("day") or []
         night = sp.get("night") or []
-        pts = list(day) + list(night)
+        tree_day = sp.get("tree_day") or []
+        tree_night = sp.get("tree_night") or []
+        main_pts = list(day) + list(night)
+        tree_pts = list(tree_day) + list(tree_night)
         els = p.get("elements", []) or []
         cn = els[0].replace("属性", "").strip() if els else ""
         color = (self._elements or {}).get(cn, {}).get("color") or "#ff6a3d"
-        # 各刷新点就近归属「主要生物群系」-> 统计占比(用精选大区，避免就近偏到小锚点)
+        # 热区要鲜艳:无属性(灰 #9CA3AF)在地图上几乎看不见,提亮成暖橙;其余属性色本身够艳。
+        if color.upper() in ("#9CA3AF", "#9CA3AFFF"):
+            color = "#FF8C42"
+        tree_img = getattr(self, "_tree_map_img", None)
+        # 特殊点(地牢/头目)。**野外头目/地牢头目/地牢/关押 一律用权威 spawner 提取的 spots**
+        # (坐标+等级都取自 DT_PalSpawnerPlacement/WildSpawner);外部 boss_spawns.json 经核对有
+        # 假点/多点(如云海鹿多编一个不存在的头目点),故只保留它独有的**塔主**(高塔不在刷新表)。
+        bs = (self._boss_spawns or {}).get(dev) or {}
+        raw_spots: list = []          # (region, l, t, kind)
+        lv_by_kind: dict = {}         # kind -> [min, max]
+        if bs.get("points") and bs.get("is_tower"):
+            bs_region = "tree" if bs.get("region") == "tree" else "main"
+            for x, y in bs["points"]:
+                raw_spots.append((bs_region, x, y, "tower"))
+            if bs.get("lv_min"):
+                lv_by_kind["tower"] = [bs["lv_min"], bs.get("lv_max", bs["lv_min"])]
+        # 地牢刷新是**按地牢随机池**——常见野生帕鲁也会作为地牢(头目)出现在大量地牢里,
+        # 对有野外热区的帕鲁这些点是噪声(不是"去哪找它")。故地牢/地牢头目仅在该帕鲁**无野生
+        # 热区**(地牢是其主要栖息)时显示;野外头目/关押是固定单点,始终显示。
+        has_wild = bool(main_pts or tree_pts)
+        spot_lv = sp.get("spot_lv") or {}
+        for l, t, kind, region in sp.get("spots", []):
+            if kind in ("dungeon", "dboss") and has_wild:
+                continue
+            if kind in self._HAB_KINDS:
+                raw_spots.append((region, l, t, kind))
+                if kind in spot_lv:
+                    lv_by_kind[kind] = spot_lv[kind]
+        # 选底图:主大陆有内容(野生热区 或 头目/塔主/boss 坐标) > 世界树有内容。
+        # 头目/塔主/boss 的具体坐标要能显示出来,故其所在区域参与选图(不被跨区野生盖掉)。
+        main_content = bool(main_pts) or any(r == "main" for r, _, _, _ in raw_spots)
+        tree_content = bool(tree_pts) or any(r == "tree" for r, _, _, _ in raw_spots)
+        use_tree = bool((not main_content) and tree_content and tree_img)
+        region_sel = "tree" if use_tree else "main"
+        pts = tree_pts if use_tree else main_pts
+        # 生物群系占比只对主大陆野生有意义(世界树是独立小地图，不按主图群系归属)
         region_count: dict = {}
-        for x, y in pts:
-            wx, wy = self._mappct_to_world(x, y)
-            best, bd = None, None
-            for bn, (bx, by) in MAJOR_BIOMES.items():
-                dd = (wx - bx) ** 2 + (wy - by) ** 2
-                if bd is None or dd < bd:
-                    bd, best = dd, bn
-            if best:
-                region_count[best] = region_count.get(best, 0) + 1
+        if not use_tree:
+            for x, y in pts:
+                wx, wy = self._mappct_to_world(x, y)
+                best, bd = None, None
+                for bn, (bx, by) in MAJOR_BIOMES.items():
+                    dd = (wx - bx) ** 2 + (wy - by) ** 2
+                    if bd is None or dd < bd:
+                        bd, best = dd, bn
+                if best:
+                    region_count[best] = region_count.get(best, 0) + 1
         top = sorted(region_count.items(), key=lambda kv: -kv[1])[:6]
         regions = [{"name": n, "pct": max(1, round(c * 100.0 / len(pts)))} for n, c in top] if pts else []
         points = [{"l": round(x, 2), "t": round(y, 2)} for x, y in pts]
-        # 头目/塔主固定位置(叠加显示；栖息刷新点查不到 boss 时靠这个)
-        bs = (self._boss_spawns or {}).get(dev) or {}
-        boss_points = [{"l": round(x, 2), "t": round(y, 2)} for x, y in bs.get("points", [])]
-        blv = ""
-        if bs.get("lv_min"):
-            blv = f"Lv.{bs['lv_min']}" if bs["lv_min"] == bs.get("lv_max") else f"Lv.{bs['lv_min']}~{bs.get('lv_max')}"
-        # 世界树(Sunreach)区域帕鲁：无主图刷新点、boss 标为 tree 区域 → 用世界树独立底图
-        use_tree = (bs.get("region") == "tree" and not points and getattr(self, "_tree_map_img", None))
+        # 只保留与所选底图同区域的特殊点(避免主图上画世界树坐标、或反之)
+        sel = [(l, t, kind) for region, l, t, kind in raw_spots if region == region_sel]
+        markers = []
+        kind_count: dict = {}
+        for l, t, kind in sel:
+            sym, label, boss_tier, _o, mcolor = self._HAB_KINDS[kind]
+            markers.append({"l": round(l, 2), "t": round(t, 2), "sym": sym, "boss": boss_tier, "c": mcolor})
+            kind_count[kind] = kind_count.get(kind, 0) + 1
+        # 图例(带数量/等级/颜色) + 副标题类型标签,按种类排序
+        legend, kinds = [], []
+        if points:
+            kinds.append({"sym": "🔥", "label": "野生", "c": color})
+        for kind in sorted(kind_count, key=lambda k: self._HAB_KINDS[k][3]):
+            sym, label, _b, _o, mcolor = self._HAB_KINDS[kind]
+            lr = lv_by_kind.get(kind)
+            lvs = ("" if not lr else (f"Lv.{lr[0]}" if lr[0] == lr[1] else f"Lv.{lr[0]}~{lr[1]}"))
+            detail = (f"{lvs} · " if lvs else "") + f"{kind_count[kind]}处"
+            legend.append({"sym": sym, "label": label, "detail": detail, "c": mcolor})
+            kinds.append({"sym": sym, "label": label, "c": mcolor})
+        has_day = bool(tree_day if use_tree else day)
+        has_night = bool(tree_night if use_tree else night)
+        # 地牢刷新规则说明(有地牢/地牢头目标记时展示,解释地图上的点是什么)
+        dungeon_note = ""
+        if kind_count.get("dungeon") or kind_count.get("dboss"):
+            dungeon_note = ("地牢帕鲁按「地牢随机池」刷新:进入地牢后从该地牢的帕鲁池里随机抽取,"
+                            "不是每次必刷。图中标的是**该帕鲁可能出现的地牢入口位置**,"
+                            "进对应地牢多刷几次即可遇到。")
         return {"name": p["pal_name"], "index": p.get("pal_index", "?"),
                 "icon": self._pal_icon(dev), "elements": els, "color": color,
                 "mapimg": (self._tree_map_img if use_tree else self._map_img),
                 "map_label": ("世界树" if use_tree else ""),
                 "points": points, "regions": regions,
+                "markers": markers, "legend": legend, "kinds": kinds,
+                "dungeon_note": dungeon_note,
                 "nocturnal": bool(p.get("nocturnal")), "count": len(pts),
-                "has_day": bool(day), "has_night": bool(night),
-                "boss_points": boss_points, "boss_is_tower": bool(bs.get("is_tower")),
-                "boss_lv": blv, "boss_label": ("🗼塔主" if bs.get("is_tower") else "👑头目")}
+                "has_day": has_day, "has_night": has_night,
+                # 兼容旧测试键(templates 已改用 markers/legend/kinds)
+                "boss_points": markers}
 
     async def _cmd_habitat(self, event: AstrMessageEvent, args: list):
         if not self._pals:
@@ -2331,9 +2403,9 @@ class PalworldPlugin(Star):
             desc = "未找到该帕鲁。" + ("\n你是否想找：" + " / ".join(sug) if sug else "")
             return await self._msg_card(event, "🔍", "查无此帕鲁", desc=desc, color="#F5A623")
         data = self._habitat_data(p)
-        if not data["points"] and not data["boss_points"]:
-            return await self._msg_card(event, "🗺️", f"{p['pal_name']} 无野外刷新点",
-                                        desc="该帕鲁可能是 塔主／配种或活动获取，地图上没有野生栖息点。",
+        if not data["points"] and not data["markers"]:
+            return await self._msg_card(event, "🗺️", f"{p['pal_name']} 无固定刷新坐标",
+                                        desc="游戏刷新表里没有该帕鲁的固定坐标(野外/地牢/头目均无)——通常靠 配种／捕食者游荡刷新／剧情或活动 获取。",
                                         color="#9a8a91")
         return await self._img(event, self._t("habitat"), data, width=MAP_WIDTH, dsf=1.6)
 
