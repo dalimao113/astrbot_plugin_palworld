@@ -88,3 +88,24 @@
 以下改变时必须同步 README、CHANGELOG、测试:指令 / 配置 / 主题 / 游戏数据版本 / 存档兼容范围 / 素材生成方式 / 项目版本。
 
 **版本一致性(测试强制)**:`metadata.yaml`、`pyproject.toml`、`main.py @register`、README 徽章、CHANGELOG 最新条目 必须完全相同。
+
+## 可用子智能体(subagents)与 skill
+
+> 这些只是「有哪些兵、各管什么」的备忘。**能不能调用取决于对应文件是否存在**(项目级 `.claude/agents/`、本机级 `~/.claude/agents/`),不取决于本文档。
+> 调用方式:在对话里点名(如「用后端架构师看这段」「让代码审查员审这次改动」),Claude 才会拉起对应 agent;不点名不自动起。名字统一用中文。
+
+**项目级(本仓库 `.claude/agents/`,随 git 走):**
+- **技术文档工程师**(`engineering-technical-writer.md`)——README/CHANGELOG/教程/API 文档;对口本项目「文档 / 版本同步」三同步硬规则。
+- **数据管线工程师**(`engineering-data-engineer.md`)——ETL/数据管线纪律;辅助 `tools/game_data/` 提取与数据重解校验(注:原角色偏云数据平台,取其管线纪律)。
+- **虚幻引擎系统工程师**(`unreal-systems-engineer.md`)——懂 UE5 DataTable/资产结构;辅助理解帕鲁数据来源(注:原角色偏做 UE 游戏,非解包工具)。
+
+**本机级(`~/.claude/agents/`,全机通用,已装):**
+- **前端开发者**——`render/` 卡片模板(HTML/CSS,非 React)布局与展示。
+- **后端架构师**——Python 业务逻辑、接口、服务结构。
+- **软件架构师**——`main.py` 拆分/重构、模块边界。
+- **代码审查员**——正确性/可维护性/安全审查(非风格挑刺)。
+- **最小变更工程师**——只改被要求的,拒绝范围蔓延(契合本项目「小步、可回滚」)。
+- **数据库优化师** / **UI 设计师** / **UX 架构师** / **UX 研究员** / **API 测试员** / **微信小程序开发者**——按需。
+
+**Skill:**
+- **`frontend-design`**(anthropic 官方)——设计/重做 UI 视觉、排版、配色时**由 Claude 按语义自动加载**,或对话里显式点名。用于三套主题卡片视觉方向。非常驻,该用时才触发。

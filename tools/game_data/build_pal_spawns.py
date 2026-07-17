@@ -107,11 +107,39 @@ def _dedupe_cap(pts: set) -> list:
     return [[uniq[int(i * step)][0], uniq[int(i * step)][1]] for i in range(CAP)]
 
 
+def _tree_island_mask():
+    """世界树底图:从四角 flood-fill 连通背景,返回 offisland(l,t)->bool(点是否落在岛轮廓外的黑背景)。
+    世界树是不规则岛,tree 仿射的 0~100 框含岛外黑海;部分 worldtree spawner(尤其 WorldTreeAura)
+    变换后落在黑海,底图画不出会「出界」。用连通背景 mask 剔除(岛内熔岩暗区不与外部连通,不误删)。
+    PIL 不可用或底图缺失时返回 None(不过滤,退回原行为)。"""
+    try:
+        from PIL import Image, ImageDraw
+    except Exception:  # noqa: BLE001
+        return None
+    p = os.path.join(_DATA, "treemap_hd.jpg")
+    if not os.path.exists(p):
+        return None
+    S = 512
+    im = Image.open(p).convert("RGB").resize((S, S))
+    MARK = (255, 0, 255)
+    for seed in [(0, 0), (S - 1, 0), (0, S - 1), (S - 1, S - 1),
+                 (S // 2, 0), (0, S // 2), (S - 1, S // 2), (S // 2, S - 1)]:
+        ImageDraw.floodfill(im, seed, MARK, thresh=40)
+    px = im.load()
+
+    def offisland(l: float, t: float) -> bool:
+        x = min(S - 1, max(0, int(l / 100 * S)))
+        y = min(S - 1, max(0, int(t / 100 * S)))
+        return px[x, y] == MARK
+    return offisland
+
+
 def build() -> dict:
     ws = _load("DT_PalWildSpawner.json")
     pl = _load("DT_PalSpawnerPlacement.json")
     main = _affine(json.load(open(os.path.join(_DATA, "map_transform.json"), encoding="utf-8")))
     tree = _affine(json.load(open(os.path.join(_DATA, "map_transform_tree.json"), encoding="utf-8")))
+    tree_off = _tree_island_mask()   # 世界树岛外(黑背景)判断,None=不过滤
 
     # spawner 组 -> {pal_dev: {'day','night'}}(Undefined 记为日夜均刷)
     ws_by = defaultdict(list)
@@ -144,20 +172,28 @@ def build() -> dict:
         return out
 
     def to_map(x, y, is_tree_name):
-        """世界坐标 -> (map%, region)。worldtree spawner 用世界树变换,否则主图;都不落图内返回 None。"""
+        """世界坐标 -> (l, t, region, off_island)。off_island=tree 点落在岛轮廓外黑背景
+        (底图画不出会「出界」;不直接丢弃而是标记,组装时优先剔除、但全出界的帕鲁保底回退)。
+        主图/世界树都不落 0~100 内则返回 None。"""
         if is_tree_name:
             l, t = tree(x, y)
-            return ((l, t), "tree") if 0 <= l <= 100 and 0 <= t <= 100 else None
+            if not (0 <= l <= 100 and 0 <= t <= 100):
+                return None
+            return l, t, "tree", bool(tree_off and tree_off(l, t))
         l, t = main(x, y)
         if 0 <= l <= 100 and 0 <= t <= 100:
-            return (l, t), "main"
+            return l, t, "main", False
         l, t = tree(x, y)                  # 少数非 worldtree 命名但实处世界树的兜底
-        return ((l, t), "tree") if 0 <= l <= 100 and 0 <= t <= 100 else None
+        if not (0 <= l <= 100 and 0 <= t <= 100):
+            return None
+        return l, t, "tree", bool(tree_off and tree_off(l, t))
 
     base = lambda n: n[5:] if n.startswith("BOSS_") else n   # noqa: E731
 
     # 野生热区:pal -> {day,night,tree_day,tree_night} 点集
     wild = defaultdict(lambda: {"day": set(), "night": set(), "tree_day": set(), "tree_night": set()})
+    # 世界树岛外(黑背景)点,保底用:某帕鲁世界树点全出界时回退,避免栖息查不到
+    wild_off = defaultdict(lambda: {"tree_day": set(), "tree_night": set()})
     # 特殊点(地牢/头目):pal -> {(kind, region): set(点)}
     spots = defaultdict(lambda: defaultdict(set))
     # 特殊点等级:pal -> {kind: [min, max]}(用于图例显示头目等级,取自权威 spawner 表)
@@ -173,14 +209,18 @@ def build() -> dict:
         mapped = to_map(x, y, sn.lower().startswith("worldtree"))
         if mapped is None:
             continue
-        (l, t), region = mapped
+        l, t, region, off = mapped
         pref = "tree_" if region == "tree" else ""
         for pal, info in group_pals(sn).items():
             dev = base(pal)
             is_boss = pal.startswith("BOSS_")
             if pt == "EPalSpawnerPlacementType::Field" and not is_boss:
                 for tm in info["times"]:    # 野外常规刷新 -> 热区
-                    wild[dev][pref + tm].add((l, t))
+                    key = pref + tm
+                    if off:                 # 岛外点先存保底桶,不进主桶
+                        wild_off[dev][key].add((l, t))
+                    else:
+                        wild[dev][key].add((l, t))
             else:
                 kind = _spot_kind(pt, is_boss)
                 if kind:
@@ -196,12 +236,16 @@ def build() -> dict:
     devset = set(order)
 
     out: dict = {}
-    for dev in set(wild) | set(spots):
+    for dev in set(wild) | set(wild_off) | set(spots):
         if dev not in devset:
             continue
         entry = {}
         for key in ("day", "night", "tree_day", "tree_night"):
-            pts = _dedupe_cap(wild[dev][key])
+            src = wild[dev][key]
+            # 世界树点全落岛外(底图画不出)时保底回退岛外点,避免该帕鲁栖息查不到
+            if not src and wild_off[dev].get(key):
+                src = wild_off[dev][key]
+            pts = _dedupe_cap(src)
             if pts:
                 entry[key] = pts
         # spots: [[l,t,kind,region], ...]。同一坐标同时是地牢+地牢头目(同一地牢入口)时,

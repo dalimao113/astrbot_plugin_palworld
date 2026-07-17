@@ -458,6 +458,7 @@ BREED_TMPL = _HEAD + """</style></head><body><div class="page">
         <div style="font-size:18px;font-weight:800;color:#f3ecd2;word-break:break-word">{{ a.name }}</div>
         <div style="font-size:12px;color:#9c8fc0;margin-top:3px">#{{ a.index }}</div>
         <div style="margin-top:8px;display:flex;gap:5px;justify-content:center;flex-wrap:wrap">{% for e in a.elements %}<span class="pill soft" style="font-size:11px;padding:2px 9px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
+        {% if a.works %}<div style="margin-top:6px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for w in a.works %}<span class="pill soft" style="font-size:10px;padding:1px 7px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}
       </div>
       <div style="font-size:30px;font-weight:900;color:#e8c466;flex-shrink:0">＋</div>
       <div class="tile" style="flex:1;max-width:150px;text-align:center;padding:15px 8px">
@@ -465,6 +466,7 @@ BREED_TMPL = _HEAD + """</style></head><body><div class="page">
         <div style="font-size:18px;font-weight:800;color:#f3ecd2;word-break:break-word">{{ b.name }}</div>
         <div style="font-size:12px;color:#9c8fc0;margin-top:3px">#{{ b.index }}</div>
         <div style="margin-top:8px;display:flex;gap:5px;justify-content:center;flex-wrap:wrap">{% for e in b.elements %}<span class="pill soft" style="font-size:11px;padding:2px 9px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
+        {% if b.works %}<div style="margin-top:6px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for w in b.works %}<span class="pill soft" style="font-size:10px;padding:1px 7px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}
       </div>
     </div>
     <div style="text-align:center;font-size:14px;color:#e8c466;font-weight:800;margin:4px 0 2px">═══ 后代 ═══</div>
@@ -473,16 +475,21 @@ BREED_TMPL = _HEAD + """</style></head><body><div class="page">
       <div class="num-gold" style="font-size:30px">{{ c.name }}</div>
       <div style="font-size:13px;color:#9c8fc0;margin-top:4px">图鉴 #{{ c.index }} · {{ "★" * (c.rarity if c.rarity <= 5 else 5) if c.rarity else "★" }}</div>
       <div style="display:flex;gap:6px;justify-content:center;margin-top:10px">{% for e in c.elements %}<span class="pill gold" style="font-size:13px;padding:4px 13px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ e }}</span>{% endfor %}</div>
+      {% if c.works %}<div style="margin-top:12px"><div style="font-size:12px;color:#e8c466;font-weight:700;margin-bottom:6px">后代工作适性 <span style="font-weight:400;font-size:10px;color:#9c8fc0">(该物种游戏固定值)</span></div><div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap">{% for w in c.works %}<span class="pill soft" style="font-size:12px;padding:3px 10px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-2px;margin-right:3px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div></div>{% endif %}
     </div>
     {% if child_breeds %}
     <div style="margin-top:12px;border-top:1px solid rgba(232,198,106,0.25);padding-top:12px">
       <div class="sec-t">🐣 用 {{ child_name }} 继续配</div>
       {% for cb in child_breeds %}
-      <div style="display:flex;align-items:center;gap:7px;padding:6px 2px;font-size:14px">
-        <span style="color:#c2b2dd;flex:1;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ child_name }} ＋ {{ cb.partner }}</span>
-        <span style="color:#e8c466;flex-shrink:0">→</span>
-        {% if cb.result_icon %}<img src="{{ cb.result_icon }}" style="width:30px;height:30px;object-fit:contain;flex-shrink:0">{% endif %}
-        <b style="color:#f3ecd2;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ cb.result }}</b>
+      <div style="background:rgba(232,198,106,0.06);border:1px solid rgba(232,198,106,0.18);border-radius:12px;padding:9px 11px;margin-bottom:8px">
+        <div style="font-size:12px;color:#c2b2dd;margin-bottom:7px;line-height:1.4">{{ child_name }} ＋ {{ cb.partner }} <span style="color:#e8c466">→</span></div>
+        <div style="display:flex;align-items:center;gap:9px">
+          {% if cb.result_icon %}<img src="{{ cb.result_icon }}" style="width:42px;height:42px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,.45))">{% endif %}
+          <div style="min-width:0;flex:1">
+            <div style="font-size:16px;font-weight:800;color:#f3ecd2;word-break:break-word;line-height:1.3">{{ cb.result }}</div>
+            {% if cb.result_works %}<div style="margin-top:6px;display:flex;gap:5px;flex-wrap:wrap">{% for w in cb.result_works %}<span class="pill soft" style="font-size:11px;padding:2px 8px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}
+          </div>
+        </div>
       </div>
       {% endfor %}
     </div>
@@ -1620,7 +1627,7 @@ SYMPTOM_ING = _IH + """</style></head><body><div class="page">
 
 # ---- ingame 版反配种。变量契约与 REVERSE_TMPL 一致 ----
 REVERSE_ING = _IH + """</style></head><body><div class="page">
-  <div class="ig-head">{% if target_icon %}<div class="ig-portrait" style="width:70px;height:70px;border-width:10px"><img src="{{ target_icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">反配种</div><div class="ig-sub">配出「{{ target }}」#{{ target_index }} 的亲代组合 · 共 {{ total }} 组 · 第 {{ page }}/{{ pages }} 页</div></div></div>
+  <div class="ig-head">{% if target_icon %}<div class="ig-portrait" style="width:70px;height:70px;border-width:10px"><img src="{{ target_icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">反配种</div><div class="ig-sub">配出「{{ target }}」#{{ target_index }} 的亲代组合 · 共 {{ total }} 组 · 第 {{ page }}/{{ pages }} 页</div>{% if target_works %}<div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap">{% for w in target_works %}<span class="ig-work" style="font-size:10px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}</div></div>
   <div class="ig-panel">
     {% for r in rows %}<div class="ig-breedrow">
       <div class="pa"><span class="nm">{{ r.a }}</span>{% if r.a_icon %}<img src="{{ r.a_icon }}">{% endif %}</div>
@@ -1882,15 +1889,24 @@ BREED_ING = _IH + """</style></head><body><div class="page">
   <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁配种</div><div class="ig-sub">亲代组合的后代</div></div></div>
   <div class="ig-panel">
     <div style="display:flex;align-items:center;justify-content:center;gap:10px;padding:4px 0 12px">
-      <div class="ig-stile" style="flex:1;max-width:150px;padding:14px 8px">{% if a.icon %}<img src="{{ a.icon }}" style="width:50px;height:50px;object-fit:contain;display:block;margin:0 auto 6px">{% endif %}<div style="font-size:17px;font-weight:800;color:var(--pal-text)">{{ a.name }}</div><div style="font-size:11px;color:var(--pal-sub);margin-top:3px">#{{ a.index }}</div><div style="margin-top:7px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for e in a.elements %}<span class="ig-badge" style="font-size:11px;padding:1px 6px 1px 4px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}</div></div>
+      <div class="ig-stile" style="flex:1;max-width:150px;padding:14px 8px">{% if a.icon %}<img src="{{ a.icon }}" style="width:50px;height:50px;object-fit:contain;display:block;margin:0 auto 6px">{% endif %}<div style="font-size:17px;font-weight:800;color:var(--pal-text)">{{ a.name }}</div><div style="font-size:11px;color:var(--pal-sub);margin-top:3px">#{{ a.index }}</div><div style="margin-top:7px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for e in a.elements %}<span class="ig-badge" style="font-size:11px;padding:1px 6px 1px 4px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}</div>{% if a.works %}<div style="margin-top:6px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for w in a.works %}<span class="ig-work" style="font-size:10px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}</div>
       <div style="font-size:26px;font-weight:900;color:var(--pal-gold);flex:none">＋</div>
-      <div class="ig-stile" style="flex:1;max-width:150px;padding:14px 8px">{% if b.icon %}<img src="{{ b.icon }}" style="width:50px;height:50px;object-fit:contain;display:block;margin:0 auto 6px">{% endif %}<div style="font-size:17px;font-weight:800;color:var(--pal-text)">{{ b.name }}</div><div style="font-size:11px;color:var(--pal-sub);margin-top:3px">#{{ b.index }}</div><div style="margin-top:7px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for e in b.elements %}<span class="ig-badge" style="font-size:11px;padding:1px 6px 1px 4px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}</div></div>
+      <div class="ig-stile" style="flex:1;max-width:150px;padding:14px 8px">{% if b.icon %}<img src="{{ b.icon }}" style="width:50px;height:50px;object-fit:contain;display:block;margin:0 auto 6px">{% endif %}<div style="font-size:17px;font-weight:800;color:var(--pal-text)">{{ b.name }}</div><div style="font-size:11px;color:var(--pal-sub);margin-top:3px">#{{ b.index }}</div><div style="margin-top:7px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for e in b.elements %}<span class="ig-badge" style="font-size:11px;padding:1px 6px 1px 4px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}</div>{% if b.works %}<div style="margin-top:6px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for w in b.works %}<span class="ig-work" style="font-size:10px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}</div>
     </div>
     <div style="text-align:center;font-size:13px;color:var(--pal-gold);font-weight:800;margin:2px 0">═══ 后代 ═══</div>
-    <div style="text-align:center;padding:6px 0">{% if c.icon %}<img src="{{ c.icon }}" style="width:70px;height:70px;object-fit:contain;display:block;margin:0 auto 4px">{% endif %}<div style="font-size:26px;font-weight:800;color:var(--pal-text)">{{ c.name }}</div><div style="font-size:12px;color:var(--pal-sub);margin-top:4px">图鉴 #{{ c.index }} · <span style="color:var(--pal-gold)">{{ "★" * (c.rarity if c.rarity <= 5 else 5) if c.rarity else "★" }}</span></div><div style="display:flex;gap:6px;justify-content:center;margin-top:9px">{% for e in c.elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}</div></div>
+    <div style="text-align:center;padding:6px 0">{% if c.icon %}<img src="{{ c.icon }}" style="width:70px;height:70px;object-fit:contain;display:block;margin:0 auto 4px">{% endif %}<div style="font-size:26px;font-weight:800;color:var(--pal-text)">{{ c.name }}</div><div style="font-size:12px;color:var(--pal-sub);margin-top:4px">图鉴 #{{ c.index }} · <span style="color:var(--pal-gold)">{{ "★" * (c.rarity if c.rarity <= 5 else 5) if c.rarity else "★" }}</span></div><div style="display:flex;gap:6px;justify-content:center;margin-top:9px">{% for e in c.elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}</div>{% if c.works %}<div style="margin-top:11px"><div style="font-size:12px;color:var(--pal-gold);font-weight:800;margin-bottom:6px">后代工作适性 <span style="font-weight:400;font-size:10px;color:var(--pal-sub)">(该物种游戏固定值)</span></div><div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap">{% for w in c.works %}<span class="ig-work">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div></div>{% endif %}</div>
   </div>
   {% if child_breeds %}<div class="ig-panel hi"><div class="ig-sec">用 {{ child_name }} 继续配</div>
-    {% for cb in child_breeds %}<div class="ig-breedrow"><div class="pa"><span class="nm" style="font-size:12.5px">{{ child_name }} ＋ {{ cb.partner }}</span></div><span class="plus">→</span><div class="pb">{% if cb.result_icon %}<img src="{{ cb.result_icon }}">{% endif %}<span class="nm" style="font-size:12.5px">{{ cb.result }}</span></div></div>{% endfor %}
+    {% for cb in child_breeds %}<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(240,207,122,0.18);border-radius:10px;padding:8px 10px;margin-bottom:7px">
+      <div style="font-size:12px;color:var(--pal-sub);margin-bottom:6px;line-height:1.4">{{ child_name }} ＋ {{ cb.partner }} <span style="color:var(--pal-gold)">→</span></div>
+      <div style="display:flex;align-items:center;gap:9px">
+        {% if cb.result_icon %}<img src="{{ cb.result_icon }}" style="width:40px;height:40px;object-fit:contain;flex-shrink:0">{% endif %}
+        <div style="min-width:0;flex:1">
+          <div style="font-size:15px;font-weight:800;color:var(--pal-text);word-break:break-word;line-height:1.3">{{ cb.result }}</div>
+          {% if cb.result_works %}<div style="margin-top:6px;display:flex;gap:5px;flex-wrap:wrap">{% for w in cb.result_works %}<span class="ig-work" style="font-size:10px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}
+        </div>
+      </div>
+    </div>{% endfor %}
   </div>{% endif %}
   """ + _IF + """
 </div></body></html>"""
@@ -1898,7 +1914,7 @@ BREED_ING = _IH + """</style></head><body><div class="page">
 
 # ---- ingame 版配种路线。变量契约与 ROUTE_TMPL 一致 ----
 ROUTE_ING = _IH + """</style></head><body><div class="page">
-  <div class="ig-head">{% if target_icon %}<div class="ig-portrait" style="width:66px;height:66px;border-width:9px"><img src="{{ target_icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">配种路线 → {{ target }}</div><div class="ig-sub">{{ sub }}</div></div></div>
+  <div class="ig-head">{% if target_icon %}<div class="ig-portrait" style="width:66px;height:66px;border-width:9px"><img src="{{ target_icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">配种路线 → {{ target }}</div><div class="ig-sub">{{ sub }}</div>{% if target_works %}<div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap">{% for w in target_works %}<span class="ig-work" style="font-size:10px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}</div></div>
   <div class="ig-panel">
     {% for s in steps %}<div class="ig-rankrow{% if s.is_target %} top{% endif %}" style="gap:5px;padding:8px 8px">
       <span style="width:18px;flex:none;color:var(--pal-gold);font-weight:800;font-size:12px">{{ s.n }}</span>
@@ -2871,6 +2887,7 @@ BREED_PIX = _PH + """</style></head><body><div class="page">
         <div style="font-size:17px;color:#46200a;word-break:break-word">{{ a.name }}</div>
         <div style="font-size:11px;color:#523f10;margin-top:3px">#{{ a.index }}</div>
         <div style="margin-top:7px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for e in a.elements %}<span class="pill" style="font-size:10px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
+        {% if a.works %}<div style="margin-top:5px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for w in a.works %}<span class="pill" style="font-size:10px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}
       </div>
       <div style="font-size:26px;color:#8f1212;flex-shrink:0">+</div>
       <div class="tile" style="flex:1;max-width:150px;text-align:center;padding:13px 8px">
@@ -2878,6 +2895,7 @@ BREED_PIX = _PH + """</style></head><body><div class="page">
         <div style="font-size:17px;color:#46200a;word-break:break-word">{{ b.name }}</div>
         <div style="font-size:11px;color:#523f10;margin-top:3px">#{{ b.index }}</div>
         <div style="margin-top:7px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for e in b.elements %}<span class="pill" style="font-size:10px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
+        {% if b.works %}<div style="margin-top:5px;display:flex;gap:4px;justify-content:center;flex-wrap:wrap">{% for w in b.works %}<span class="pill" style="font-size:10px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}
       </div>
     </div>
     <div style="text-align:center;font-size:14px;color:#7a3604;margin:2px 0">==== 后代 ====</div>
@@ -2886,16 +2904,21 @@ BREED_PIX = _PH + """</style></head><body><div class="page">
       <div class="num-big" style="font-size:28px">{{ c.name }}</div>
       <div style="font-size:12px;color:#523f10;margin-top:4px">图鉴 #{{ c.index }} · {{ "★"*(c.rarity if c.rarity <= 5 else 5) if c.rarity else "★" }}</div>
       <div style="display:flex;gap:5px;justify-content:center;margin-top:9px">{% for e in c.elements %}<span class="pill red" style="font-size:13px;padding:3px 12px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ e }}</span>{% endfor %}</div>
+      {% if c.works %}<div style="margin-top:11px"><div style="font-size:12px;color:#7a3604;margin-bottom:6px">后代工作适性 <span style="font-size:10px;color:#7a5a1a">(该物种游戏固定值)</span></div><div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap">{% for w in c.works %}<span class="pill" style="font-size:12px;padding:3px 10px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-2px;margin-right:3px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div></div>{% endif %}
     </div>
     {% if child_breeds %}
     <div style="margin-top:10px;border-top:2px dotted rgba(90,58,30,0.35);padding-top:10px">
       <div class="sec-t">用 {{ child_name }} 继续配</div>
       {% for cb in child_breeds %}
-      <div style="display:flex;align-items:center;gap:6px;padding:5px 2px;font-size:13px">
-        <span style="color:#523f10;flex:1;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ child_name }} + {{ cb.partner }}</span>
-        <span style="color:#7a1f1f;flex-shrink:0">→</span>
-        {% if cb.result_icon %}<img src="{{ cb.result_icon }}" style="width:28px;height:28px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% endif %}
-        <b style="color:#382207;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ cb.result }}</b>
+      <div style="border:2px solid #6a4524;background:rgba(221,198,149,0.35);padding:8px 10px;margin-bottom:7px">
+        <div style="font-size:12px;color:#523f10;margin-bottom:6px;line-height:1.4">{{ child_name }} + {{ cb.partner }} <span style="color:#7a1f1f">→</span></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          {% if cb.result_icon %}<img src="{{ cb.result_icon }}" style="width:40px;height:40px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% endif %}
+          <div style="min-width:0;flex:1">
+            <div style="font-size:16px;color:#46200a;word-break:break-word;line-height:1.3">{{ cb.result }}</div>
+            {% if cb.result_works %}<div style="margin-top:6px;display:flex;gap:5px;flex-wrap:wrap">{% for w in cb.result_works %}<span class="pill" style="font-size:11px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}
+          </div>
+        </div>
       </div>
       {% endfor %}
     </div>
@@ -2909,6 +2932,7 @@ REVERSE_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div>
     <div class="title">🔄 反配种</div>
     <div class="subtitle">配出「{{ target }}」#{{ target_index }} 的亲代组合 · 共 {{ total }} 组 · 第 {{ page }}/{{ pages }} 页</div>
+    {% if target_works %}<div style="margin-top:7px;display:flex;gap:5px;flex-wrap:wrap">{% for w in target_works %}<span class="pill soft" style="font-size:11px;padding:2px 9px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}
   </div>{% if target_icon %}<img src="{{ target_icon }}" style="width:54px;height:54px;object-fit:contain;filter:drop-shadow(0 2px 5px rgba(0,0,0,.5))">{% endif %}</div>
   <div class="glass">""" + _GEMS + """
     {% for r in rows %}
@@ -2934,6 +2958,7 @@ REVERSE_PIX = _PH + """</style></head><body><div class="page">
   <div class="head"><div>
     <div class="title">🔄 反配种</div>
     <div class="subtitle">配出「{{ target }}」#{{ target_index }} · 共 {{ total }} 组 · 第 {{ page }}/{{ pages }} 页</div>
+    {% if target_works %}<div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap">{% for w in target_works %}<span class="pill" style="font-size:11px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}
   </div>{% if target_icon %}<img src="{{ target_icon }}" style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated">{% endif %}</div>
   <div class="frame">
     {% for r in rows %}
@@ -3101,6 +3126,7 @@ ROUTE_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div>
     <div class="title">🧬 配种路线 → {{ target }}</div>
     <div class="subtitle">{{ sub }}</div>
+    {% if target_works %}<div style="margin-top:7px;display:flex;gap:5px;flex-wrap:wrap">{% for w in target_works %}<span class="pill soft" style="font-size:11px;padding:2px 9px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}
   </div>{% if target_icon %}<img src="{{ target_icon }}" style="width:50px;height:50px;object-fit:contain;filter:drop-shadow(0 2px 5px rgba(0,0,0,.5))">{% endif %}</div>
   <div class="glass">""" + _GEMS + """
     {% for s in steps %}
@@ -3132,6 +3158,7 @@ ROUTE_PIX = _PH + """</style></head><body><div class="page">
   <div class="head"><div>
     <div class="title">🧬 配种路线 → {{ target }}</div>
     <div class="subtitle">{{ sub }}</div>
+    {% if target_works %}<div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap">{% for w in target_works %}<span class="pill" style="font-size:11px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}</div>{% endif %}
   </div>{% if target_icon %}<img src="{{ target_icon }}" style="width:46px;height:46px;object-fit:contain;image-rendering:pixelated">{% endif %}</div>
   <div class="frame">
     {% for s in steps %}
@@ -5646,11 +5673,263 @@ PASSFIND_ING = _IH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+# ---- 正向亲代展开(/帕鲁配出谁):某帕鲁作为亲代 × 各搭档 → 全部后代 ----
+BREEDOUT_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">🧬 能配出</div>
+    <div class="subtitle">「{{ target }}」#{{ target_index }} 作为亲代能配出 · 共 {{ total }} 种 · 第 {{ page }}/{{ pages }} 页</div>
+  </div>{% if target_icon %}<img src="{{ target_icon }}" style="width:54px;height:54px;object-fit:contain;filter:drop-shadow(0 2px 5px rgba(0,0,0,.5))">{% endif %}</div>
+  <div class="glass">""" + _GEMS + """
+    {% for r in rows %}
+    <div class="row" style="padding:9px 12px;flex-direction:column;align-items:stretch;gap:7px">
+      <div style="display:flex;align-items:center;gap:9px">
+        {% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;flex-shrink:0">{% endif %}
+        <div style="flex:1;min-width:0">
+          <div style="font-size:15px;font-weight:800;color:#f3ecd2;word-break:break-word">{{ r.name }}</div>
+          <div style="font-size:12px;color:#9c8fc0;margin-top:3px">#{{ r.index }} · <span style="color:#e8c466">{{ "★" * r.stars }}</span>{% for e in r.elements %} <span class="pill soft" style="font-size:10px;padding:1px 7px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
+        </div>
+      </div>
+      {% if r.works %}<div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center;padding-left:2px">
+        <span style="font-size:12px;color:#c2b2dd;flex-shrink:0">适性</span>
+        {% for w in r.works %}<span class="pill soft" style="font-size:11px;padding:2px 8px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:13px;height:13px;object-fit:contain;vertical-align:-2px;margin-right:3px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}
+      </div>{% endif %}
+      <div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center;padding-left:2px">
+        <span style="font-size:12px;color:#c2b2dd;flex-shrink:0">搭配</span>
+        {% for pt in r.partners %}<span class="pill soft" style="font-size:11px;padding:2px 8px">{% if pt.icon %}<img src="{{ pt.icon }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-2px;margin-right:3px">{% endif %}{{ pt.name }}</span>{% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+    {% if pager %}<div style="margin-top:13px;text-align:center;font-size:13px;color:#d8cdf0;background:rgba(99,102,241,.16);border:1px solid rgba(232,198,106,.2);border-radius:12px;padding:9px 12px">📖 {{ pager }}</div>{% endif %}
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+
+BREEDOUT_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">⚗ 能配出</div>
+    <div class="subtitle">「{{ target }}」#{{ target_index }} 作为亲代 · 共 {{ total }} 种 · 第 {{ page }}/{{ pages }} 页</div>
+  </div>{% if target_icon %}<img src="{{ target_icon }}" style="width:48px;height:48px;object-fit:contain;image-rendering:pixelated">{% endif %}</div>
+  <div class="frame">
+    {% for r in rows %}
+    <div class="row" style="padding:8px 10px;flex-direction:column;align-items:stretch;gap:6px">
+      <div style="display:flex;align-items:center;gap:8px">
+        {% if r.icon %}<img src="{{ r.icon }}" style="width:40px;height:40px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% endif %}
+        <div style="flex:1;min-width:0">
+          <div style="font-size:15px;color:#46200a;word-break:break-word">{{ r.name }}</div>
+          <div style="font-size:12px;color:#523f10;margin-top:3px">#{{ r.index }} · {{ "★" * r.stars }}{% for e in r.elements %} <span class="pill" style="font-size:10px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
+        </div>
+      </div>
+      {% if r.works %}<div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center">
+        <span style="font-size:12px;color:#7a3604;flex-shrink:0">适性</span>
+        {% for w in r.works %}<span class="pill" style="font-size:11px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}" style="width:13px;height:13px;object-fit:contain;image-rendering:pixelated;vertical-align:-2px;margin-right:3px">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}
+      </div>{% endif %}
+      <div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center">
+        <span style="font-size:12px;color:#7a3604;flex-shrink:0">搭配</span>
+        {% for pt in r.partners %}<span class="pill" style="font-size:11px">{% if pt.icon %}<img src="{{ pt.icon }}" style="width:14px;height:14px;object-fit:contain;image-rendering:pixelated;vertical-align:-2px;margin-right:3px">{% endif %}{{ pt.name }}</span>{% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+    {% if pager %}<div style="margin-top:12px;text-align:center;font-size:13px;color:#46200a;background:rgba(221,198,149,0.55);border:2px solid #6a4524;padding:8px 11px">▶ {{ pager }}</div>{% endif %}
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+
+# ---- ingame 版正向亲代展开。变量契约与 BREEDOUT_TMPL 一致 ----
+BREEDOUT_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head">{% if target_icon %}<div class="ig-portrait" style="width:70px;height:70px;border-width:10px"><img src="{{ target_icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">能配出</div><div class="ig-sub">「{{ target }}」#{{ target_index }} 作为亲代能配出 · 共 {{ total }} 种 · 第 {{ page }}/{{ pages }} 页</div></div></div>
+  <div class="ig-panel">
+    {% for r in rows %}
+    <div style="border:1px solid rgba(240,207,122,0.18);border-radius:10px;padding:8px 10px;margin-bottom:7px">
+      <div style="display:flex;align-items:center;gap:9px">
+        {% if r.icon %}<img src="{{ r.icon }}" style="width:40px;height:40px;object-fit:contain;flex-shrink:0">{% endif %}
+        <div style="flex:1;min-width:0">
+          <div style="font-size:15px;font-weight:800;color:var(--pal-text);word-break:break-word">{{ r.name }}</div>
+          <div style="font-size:12px;color:var(--pal-sub);margin-top:3px">#{{ r.index }} · <span style="color:var(--pal-gold)">{{ "★" * r.stars }}</span>{% for e in r.elements %} <span class="ig-badge" style="font-size:10px;padding:1px 6px 1px 4px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}</div>
+        </div>
+      </div>
+      {% if r.works %}<div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:7px">
+        <span style="font-size:12px;color:var(--pal-sub);flex-shrink:0">适性</span>
+        {% for w in r.works %}<span class="ig-work" style="font-size:10px">{% if icons.work[w.k] %}<img src="{{ icons.work[w.k] }}">{% endif %}{{ w.k }} Lv{{ w.lv }}</span>{% endfor %}
+      </div>{% endif %}
+      <div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:7px">
+        <span style="font-size:12px;color:var(--pal-sub);flex-shrink:0">搭配</span>
+        {% for pt in r.partners %}<span style="display:inline-flex;align-items:center;gap:3px;font-size:11px;color:var(--pal-text);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:2px 7px">{% if pt.icon %}<img src="{{ pt.icon }}" style="width:14px;height:14px;object-fit:contain">{% endif %}{{ pt.name }}</span>{% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+    {% if pager %}<div style="margin-top:12px;text-align:center;font-size:12.5px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- 配种榜(/帕鲁配种榜):能配出后代种类最多的帕鲁排行 ----
+BREEDRANK_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">🏆 帕鲁配种榜</div>
+    <div class="subtitle">能配出的后代种类越多排名越高 · 共 {{ total }} 只 · 第 {{ page }}/{{ pages }} 页</div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    {% for r in rows %}
+    <div class="row" {% if r.rank <= 3 %}style="padding:9px 12px;gap:10px;align-items:center;background:linear-gradient(100deg,rgba(232,198,106,0.16),rgba(18,12,48,0.5) 60%);border-color:rgba(232,198,106,0.4)"{% else %}style="padding:9px 12px;gap:10px;align-items:center"{% endif %}>
+      <div style="width:30px;flex-shrink:0;text-align:center;font-size:16px;font-weight:900;color:#e8c466">{{ r.medal }}</div>
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:44px;height:44px;object-fit:contain;flex-shrink:0">{% else %}<span style="font-size:24px">🐾</span>{% endif %}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:15px;font-weight:800;color:#f3ecd2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</div>
+        <div style="font-size:12px;color:#9c8fc0;margin-top:2px">#{{ r.index }}{% for e in r.elements %} <span class="pill soft" style="font-size:10px;padding:1px 7px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
+      </div>
+      <div style="flex-shrink:0;text-align:right"><div style="font-size:20px;font-weight:900;color:#e8c466;line-height:1">{{ r.count }}</div><div style="font-size:11px;color:#9c8fc0">种后代</div></div>
+    </div>
+    {% endfor %}
+    {% if pager %}<div style="margin-top:13px;text-align:center;font-size:13px;color:#d8cdf0;background:rgba(99,102,241,.16);border:1px solid rgba(232,198,106,.2);border-radius:12px;padding:9px 12px">📖 {{ pager }}</div>{% endif %}
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+
+BREEDRANK_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">🏆 帕鲁配种榜</div>
+    <div class="subtitle">能配出后代越多排名越高 · 共 {{ total }} 只 · 第 {{ page }}/{{ pages }} 页</div>
+  </div></div>
+  <div class="frame">
+    {% for r in rows %}
+    <div class="row" style="padding:8px 10px;gap:9px;align-items:center">
+      <div style="width:28px;flex-shrink:0;text-align:center;font-size:15px;color:#7a1f1f">{{ r.medal }}</div>
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:40px;height:40px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% else %}<span style="font-size:22px">🐾</span>{% endif %}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:15px;color:#46200a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</div>
+        <div style="font-size:12px;color:#523f10;margin-top:2px">#{{ r.index }}{% for e in r.elements %} <span class="pill" style="font-size:10px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
+      </div>
+      <div style="flex-shrink:0;text-align:right"><div style="font-size:19px;color:#7a3604;line-height:1">{{ r.count }}</div><div style="font-size:11px;color:#523f10">种后代</div></div>
+    </div>
+    {% endfor %}
+    {% if pager %}<div style="margin-top:12px;text-align:center;font-size:13px;color:#46200a;background:rgba(221,198,149,0.55);border:2px solid #6a4524;padding:8px 11px">▶ {{ pager }}</div>{% endif %}
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+
+# ---- ingame 版配种榜。变量契约与 BREEDRANK_TMPL 一致 ----
+BREEDRANK_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁配种榜</div><div class="ig-sub">能配出的后代种类越多排名越高 · 共 {{ total }} 只 · 第 {{ page }}/{{ pages }} 页</div></div></div>
+  <div class="ig-panel">
+    {% for r in rows %}
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid rgba(240,207,122,0.1);{% if r.rank <= 3 %}background:rgba(240,207,122,0.08);{% endif %}">
+      <div style="width:28px;flex-shrink:0;text-align:center;font-size:15px;font-weight:800;color:var(--pal-gold)">{{ r.medal }}</div>
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;flex-shrink:0">{% endif %}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:15px;font-weight:800;color:var(--pal-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</div>
+        <div style="font-size:12px;color:var(--pal-sub);margin-top:2px">#{{ r.index }}{% for e in r.elements %} <span class="ig-badge" style="font-size:10px;padding:1px 6px 1px 4px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}</div>
+      </div>
+      <div style="flex-shrink:0;text-align:right"><div style="font-size:19px;font-weight:900;color:var(--pal-gold);line-height:1">{{ r.count }}</div><div style="font-size:11px;color:var(--pal-sub)">种后代</div></div>
+    </div>
+    {% endfor %}
+    {% if pager %}<div style="margin-top:12px;text-align:center;font-size:12.5px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
+# ---- 配工种(/帕鲁配工种):满足某工作适性等级的帕鲁 + 各自配种组合 ----
+WORKCOMBO_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">🔧 配工种 · {{ work }} Lv≥{{ lv }}</div>
+    <div class="subtitle">满足该适性的帕鲁及其配种组合 · 共 {{ total }} 种 · 第 {{ page }}/{{ pages }} 页</div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    {% for r in rows %}
+    <div class="row" style="padding:9px 12px;flex-direction:column;align-items:stretch;gap:7px">
+      <div style="display:flex;align-items:center;gap:9px">
+        {% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;flex-shrink:0">{% endif %}
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+            <span style="font-size:15px;font-weight:800;color:#f3ecd2">{{ r.name }}</span>
+            <span class="pill gold" style="font-size:11px;padding:2px 9px">{% if icons.work[work] %}<img src="{{ icons.work[work] }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ work }} Lv{{ r.wlv }}</span>
+          </div>
+          <div style="font-size:12px;color:#9c8fc0;margin-top:3px">#{{ r.index }} · <span style="color:#e8c466">{{ "★" * r.stars }}</span>{% for e in r.elements %} <span class="pill soft" style="font-size:10px;padding:1px 7px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
+        </div>
+      </div>
+      {% if r.no_recipe %}<div style="font-size:12.5px;color:#c2b2dd;padding-left:2px">🎣 只能捕捉获得(无配种组合)</div>
+      {% else %}<div style="padding-left:2px">
+        {% for cb in r.combos %}<div style="font-size:13px;color:#f3ecd2;display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:4px">{% if cb.a_icon %}<img src="{{ cb.a_icon }}" style="width:22px;height:22px;object-fit:contain">{% endif %}<span>{{ cb.a }}</span><span style="color:#e8c466;font-weight:800">×</span>{% if cb.b_icon %}<img src="{{ cb.b_icon }}" style="width:22px;height:22px;object-fit:contain">{% endif %}<span>{{ cb.b }}</span></div>{% endfor %}
+        {% if r.more %}<div style="font-size:11px;color:#9c8fc0">…等 {{ r.more }} 组，详见 /帕鲁反配种 {{ r.name }}</div>{% endif %}
+      </div>{% endif %}
+    </div>
+    {% endfor %}
+    {% if pager %}<div style="margin-top:13px;text-align:center;font-size:13px;color:#d8cdf0;background:rgba(99,102,241,.16);border:1px solid rgba(232,198,106,.2);border-radius:12px;padding:9px 12px">📖 {{ pager }}</div>{% endif %}
+  </div>
+  """ + _FOOT + """
+</div></body></html>"""
+
+
+WORKCOMBO_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div>
+    <div class="title">⚗ 配工种 · {{ work }} Lv≥{{ lv }}</div>
+    <div class="subtitle">满足该适性的帕鲁及配种组合 · 共 {{ total }} 种 · 第 {{ page }}/{{ pages }} 页</div>
+  </div></div>
+  <div class="frame">
+    {% for r in rows %}
+    <div class="row" style="padding:8px 10px;flex-direction:column;align-items:stretch;gap:6px">
+      <div style="display:flex;align-items:center;gap:8px">
+        {% if r.icon %}<img src="{{ r.icon }}" style="width:40px;height:40px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% endif %}
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span style="font-size:15px;color:#46200a">{{ r.name }}</span>
+            <span class="pill red" style="font-size:11px">{% if icons.work[work] %}<img src="{{ icons.work[work] }}" style="width:12px;height:12px;object-fit:contain;image-rendering:pixelated;vertical-align:-2px;margin-right:2px">{% endif %}{{ work }} Lv{{ r.wlv }}</span>
+          </div>
+          <div style="font-size:12px;color:#523f10;margin-top:3px">#{{ r.index }} · {{ "★" * r.stars }}{% for e in r.elements %} <span class="pill" style="font-size:10px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}" style="width:11px;height:11px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% endif %}{{ e }}</span>{% endfor %}</div>
+        </div>
+      </div>
+      {% if r.no_recipe %}<div style="font-size:12.5px;color:#7a3604;padding-left:2px">🎣 只能捕捉获得(无配种组合)</div>
+      {% else %}<div style="padding-left:2px">
+        {% for cb in r.combos %}<div style="font-size:13px;color:#46200a;display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:4px">{% if cb.a_icon %}<img src="{{ cb.a_icon }}" style="width:22px;height:22px;object-fit:contain;image-rendering:pixelated">{% endif %}<span>{{ cb.a }}</span><span style="color:#7a1f1f">×</span>{% if cb.b_icon %}<img src="{{ cb.b_icon }}" style="width:22px;height:22px;object-fit:contain;image-rendering:pixelated">{% endif %}<span>{{ cb.b }}</span></div>{% endfor %}
+        {% if r.more %}<div style="font-size:11px;color:#523f10">…等 {{ r.more }} 组，详见 /帕鲁反配种 {{ r.name }}</div>{% endif %}
+      </div>{% endif %}
+    </div>
+    {% endfor %}
+    {% if pager %}<div style="margin-top:12px;text-align:center;font-size:13px;color:#46200a;background:rgba(221,198,149,0.55);border:2px solid #6a4524;padding:8px 11px">▶ {{ pager }}</div>{% endif %}
+  </div>
+  """ + _PF + """
+</div></body></html>"""
+
+
+# ---- ingame 版配工种。变量契约与 WORKCOMBO_TMPL 一致 ----
+WORKCOMBO_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">配工种 · {{ work }} Lv≥{{ lv }}</div><div class="ig-sub">满足该适性的帕鲁及配种组合 · 共 {{ total }} 种 · 第 {{ page }}/{{ pages }} 页</div></div></div>
+  <div class="ig-panel">
+    {% for r in rows %}
+    <div style="border:1px solid rgba(240,207,122,0.18);border-radius:10px;padding:8px 10px;margin-bottom:7px">
+      <div style="display:flex;align-items:center;gap:9px">
+        {% if r.icon %}<img src="{{ r.icon }}" style="width:40px;height:40px;object-fit:contain;flex-shrink:0">{% endif %}
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+            <span style="font-size:15px;font-weight:800;color:var(--pal-text)">{{ r.name }}</span>
+            <span class="ig-work" style="font-size:11px">{% if icons.work[work] %}<img src="{{ icons.work[work] }}">{% endif %}{{ work }} Lv{{ r.wlv }}</span>
+          </div>
+          <div style="font-size:12px;color:var(--pal-sub);margin-top:3px">#{{ r.index }} · <span style="color:var(--pal-gold)">{{ "★" * r.stars }}</span>{% for e in r.elements %} <span class="ig-badge" style="font-size:10px;padding:1px 6px 1px 4px">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}</div>
+        </div>
+      </div>
+      {% if r.no_recipe %}<div style="font-size:12.5px;color:var(--pal-sub);margin-top:6px">只能捕捉获得(无配种组合)</div>
+      {% else %}<div style="margin-top:6px">
+        {% for cb in r.combos %}<div style="font-size:13px;color:var(--pal-text);display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:4px">{% if cb.a_icon %}<img src="{{ cb.a_icon }}" style="width:22px;height:22px;object-fit:contain">{% endif %}<span>{{ cb.a }}</span><span style="color:var(--pal-gold);font-weight:800">×</span>{% if cb.b_icon %}<img src="{{ cb.b_icon }}" style="width:22px;height:22px;object-fit:contain">{% endif %}<span>{{ cb.b }}</span></div>{% endfor %}
+        {% if r.more %}<div style="font-size:11px;color:var(--pal-sub)">…等 {{ r.more }} 组，详见 /帕鲁反配种 {{ r.name }}</div>{% endif %}
+      </div>{% endif %}
+    </div>
+    {% endfor %}
+    {% if pager %}<div style="margin-top:12px;text-align:center;font-size:12.5px;color:var(--pal-dim)">{{ pager }}</div>{% endif %}
+  </div>
+  """ + _IF + """
+</div></body></html>"""
+
+
 STYLES = {
     "fantasy": {"status": STATUS_TMPL, "players": PLAYERS_TMPL, "settings": SETTINGS_TMPL,
                 "help": HELP_TMPL, "message": MSG_TMPL, "stats": STATS_TMPL, "rank": RANK_TMPL,
                 "profile": PROFILE_TMPL, "daily": DAILY_TMPL, "paldex": PALDEX_TMPL, "breed": BREED_TMPL,
-                "reverse": REVERSE_TMPL, "drop": DROP_TMPL, "droplist": DROPLIST_TMPL,
+                "reverse": REVERSE_TMPL, "breedout": BREEDOUT_TMPL, "breedrank": BREEDRANK_TMPL, "workcombo": WORKCOMBO_TMPL, "drop": DROP_TMPL, "droplist": DROPLIST_TMPL,
                 "heatmap": HEATMAP_TMPL, "power": POWER_TMPL, "route": ROUTE_TMPL, "shiny": SHINY_TMPL,
                 "palpower": PALPOWER_TMPL, "palpowerdetail": PALPOWERDETAIL_TMPL,
                 "symptom": SYMPTOM_TMPL,
@@ -5669,7 +5948,7 @@ STYLES = {
     "pixel": {"status": STATUS_PIX, "players": PLAYERS_PIX, "settings": SETTINGS_PIX,
               "help": HELP_PIX, "message": MSG_PIX, "stats": STATS_PIX, "rank": RANK_PIX,
               "profile": PROFILE_PIX, "daily": DAILY_PIX, "paldex": PALDEX_PIX, "breed": BREED_PIX,
-              "reverse": REVERSE_PIX, "drop": DROP_PIX, "droplist": DROPLIST_PIX,
+              "reverse": REVERSE_PIX, "breedout": BREEDOUT_PIX, "breedrank": BREEDRANK_PIX, "workcombo": WORKCOMBO_PIX, "drop": DROP_PIX, "droplist": DROPLIST_PIX,
               "heatmap": HEATMAP_PIX, "power": POWER_PIX, "route": ROUTE_PIX, "shiny": SHINY_PIX,
               "palpower": PALPOWER_PIX, "palpowerdetail": PALPOWERDETAIL_PIX,
               "symptom": SYMPTOM_PIX,
@@ -5731,6 +6010,9 @@ STYLES["ingame"]["droplist"] = DROPLIST_ING
 STYLES["ingame"]["shiny"] = SHINY_ING
 STYLES["ingame"]["symptom"] = SYMPTOM_ING
 STYLES["ingame"]["reverse"] = REVERSE_ING
+STYLES["ingame"]["breedout"] = BREEDOUT_ING
+STYLES["ingame"]["breedrank"] = BREEDRANK_ING
+STYLES["ingame"]["workcombo"] = WORKCOMBO_ING
 STYLES["ingame"]["heatmap"] = HEATMAP_ING
 STYLES["ingame"]["element"] = ELEMENT_ING
 STYLES["ingame"]["habitat"] = HABITAT_ING

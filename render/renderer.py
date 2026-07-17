@@ -96,22 +96,24 @@ class Renderer:
             await page.wait_for_timeout(60)
             # 截 .page 元素而非 full_page：full_page 截的是 html(默认填满视口高 900)，
             # 内容比视口短时会在底部补一大片空白。截元素正好是内容高度。
+            # jpeg q90:与远程 t2i 一致，避免无损 png 出图 8~10MB 致 napcat 上传超时；
+            # 同分辨率下 q90 只有约 1/6 大小，文字仍清晰。
             el = await page.query_selector(".page")
             if el is not None:
-                png = await el.screenshot(type="png")
+                png = await el.screenshot(type="jpeg", quality=90)
             else:
-                png = await page.screenshot(type="png", full_page=True)
+                png = await page.screenshot(type="jpeg", quality=90, full_page=True)
         finally:
             await page.close()
         tdir = tempfile.gettempdir()
         import glob as _glob                       # 顺手清掉 2 分钟前的旧卡图，避免堆积
-        for old in _glob.glob(os.path.join(tdir, "palcard_*.png")):
+        for old in _glob.glob(os.path.join(tdir, "palcard_*.jpg")):
             try:
                 if time.time() - os.path.getmtime(old) > 120:
                     os.remove(old)
             except OSError:
                 pass
-        path = os.path.join(tdir, f"palcard_{_uuid.uuid4().hex}.png")
+        path = os.path.join(tdir, f"palcard_{_uuid.uuid4().hex}.jpg")
         with open(path, "wb") as f:
             f.write(png)
         return path

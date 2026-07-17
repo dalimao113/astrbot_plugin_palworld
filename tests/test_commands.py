@@ -43,5 +43,5 @@ def test_handlers_and_tokens_wellformed():
 
 
 def test_expected_token_count():
-    # 回归护栏：改动别名时提醒同步（当前 400，含批准绑定/拒绝绑定 + 小队进度/勾选/重置 + 据点体检 + 我的战力 + 养成 + 材料路线 + 种属 + 科技树 + 牧场 + 用途 + 地图收集 + 词条查）
-    assert len(router.COMMAND_TOKENS) == 400
+    # 回归护栏：改动别名时提醒同步（当前 422，含批准绑定/拒绝绑定 + 小队进度/勾选/重置 + 据点体检 + 我的战力 + 养成 + 材料路线 + 种属 + 科技树 + 牧场 + 用途 + 地图收集 + 词条查 + 配出谁/正向亲代展开 + 配种榜 + 配工种 + 我可以配工种）
+    assert len(router.COMMAND_TOKENS) == 422

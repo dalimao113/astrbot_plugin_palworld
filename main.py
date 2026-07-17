@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.37.0",
+    "1.42.2",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -925,6 +925,15 @@ class PalworldPlugin(Star):
             return await self._msg_card(event, em, f"{cn}帕鲁暂无", desc="该种属下没有帕鲁。", color="#9a8a91")
         return await self._render_grid(event, f"{cn}帕鲁", em, entries, page, "/帕鲁种属", cn)
 
+    @staticmethod
+    def _pal_works(p: dict) -> list:
+        """帕鲁工作适性 -> [{k:中文工种, lv:等级}]，按等级降序，只留 lv>0。
+        中文工种键与模板 icons.work[...] 对齐（真实游戏工作图标，三主题共享）。"""
+        return sorted(
+            ({"k": WORK_LABELS.get(k, k), "lv": int(v)}
+             for k, v in (p.get("work_suitability") or {}).items() if v and int(v) > 0),
+            key=lambda w: -w["lv"])
+
     async def _cmd_breed(self, event: AstrMessageEvent, args: list[str]):
         if not self._breed:
             return await self._msg_card(event, "🧬", "配种数据未加载",
@@ -945,7 +954,7 @@ class PalworldPlugin(Star):
 
         def brief(x):
             return {"name": x["pal_name"], "index": x["pal_index"], "elements": x.get("elements", []),
-                    "icon": self._pal_icon(x.get("pal_dev_name"))}
+                    "icon": self._pal_icon(x.get("pal_dev_name")), "works": self._pal_works(x)}
         # 子代继续配种：C + 亲A、C + 亲B 各能配出什么
         child_breeds = []
         for partner in (pa, pb):
@@ -955,7 +964,8 @@ class PalworldPlugin(Star):
             if r:
                 child_breeds.append({"partner": partner["pal_name"], "result": r["pal_name"],
                                      "partner_icon": self._pal_icon(partner.get("pal_dev_name")),
-                                     "result_icon": self._pal_icon(r.get("pal_dev_name"))})
+                                     "result_icon": self._pal_icon(r.get("pal_dev_name")),
+                                     "result_works": self._pal_works(r)})
         data = {"a": brief(pa), "b": brief(pb),
                 "c": {**brief(child), "rarity": min(int(child.get("rarity", 0) or 0), 5)},
                 "child_name": child["pal_name"], "child_breeds": child_breeds}
@@ -1322,6 +1332,7 @@ class PalworldPlugin(Star):
         return await self._img(event, self._t("reverse"), {
             "target": p["pal_name"], "target_index": p["pal_index"],
             "target_icon": self._pal_icon(p.get("pal_dev_name")),
+            "target_works": self._pal_works(p),
             "total": len(combos), "page": page, "pages": pages, "rows": rows, "pager": pager})
 
     async def _cmd_drop(self, event: AstrMessageEvent, args: list[str]):
@@ -1455,6 +1466,12 @@ class PalworldPlugin(Star):
                                         desc=f"没找到「{q}」。" + ("\n是不是：" + "、".join(sug) if sug else ""),
                                         color="#F5A623")
         target = self._name_idx.get(p["pal_name"])
+        # 目标在游戏里无任何配种配方(传说/特殊帕鲁 IgnoreCombi,如空涡龙)——只能捕捉,任何帕鲁都配不出
+        if not self._breed_rev.get(target):
+            return await self._msg_card(
+                event, "🚫", "这只无法通过配种获得",
+                desc=f"「{p['pal_name']}」在游戏里没有任何配种配方,属于只能捕捉/特殊获取的帕鲁,"
+                     f"用任何帕鲁组合都配不出来。\n请去野外/头目/塔主处捕捉。", color="#F5A623")
         qq = str(event.get_sender_id())
         self._last_save_use = time.time()
         profiles = await self._fetch_save_profiles(max_age=self._fresh_ttl())
@@ -1473,14 +1490,14 @@ class PalworldPlugin(Star):
         if not owned:
             return await self._msg_card(event, "📦", "你的帕鲁箱是空的",
                                         desc="先去抓几只帕鲁，再来规划配种路线～", color="#9a8a91")
-        route = self._breed_route(owned, target)
-        if route == "owned":
-            return await self._msg_card(event, "✅", "你已经有这只啦",
-                                        desc=f"「{p['pal_name']}」已经在你的帕鲁箱里了，不用配。", color="#30A46C")
+        already_owned = target in owned
+        # 排除库存里目标本身:即便已拥有,也用「其他」帕鲁算出再配一只的路线(而非直接提示"已拥有")
+        route = self._breed_route(owned - {target}, target)
         if not route:
+            miss = "先去抓几只基础帕鲁" if not already_owned else "你现有的其他帕鲁还配不出它，需要更多基础帕鲁"
             return await self._msg_card(
                 event, "🤷", "现有帕鲁配不出",
-                desc=f"用你现在的帕鲁，暂时配不出「{p['pal_name']}」（还缺一些基础帕鲁）。\n"
+                desc=f"用你帕鲁箱里{'其他' if already_owned else '现在'}的帕鲁，暂时配不出「{p['pal_name']}」（{miss}）。\n"
                      "多抓几只、或发 /帕鲁反配种 看它的直接配对。", color="#F5A623")
         steps = []
         for i, (a, b, c) in enumerate(route, 1):
@@ -1495,8 +1512,324 @@ class PalworldPlugin(Star):
                 "is_target": c == target})
         return await self._img(event, self._t("route"), {
             "target": p["pal_name"], "target_icon": self._pal_icon(p.get("pal_dev_name")),
+            "target_works": self._pal_works(p),
             "steps": steps, "n_steps": len(steps),
-            "sub": f"用你现有帕鲁 · {len(steps)} 步配出"})
+            "sub": (f"你已有此帕鲁 · 用其他帕鲁再配一只 · {len(steps)} 步" if already_owned
+                    else f"用你现有帕鲁 · {len(steps)} 步配出")})
+
+    async def _cmd_breed_out(self, event: AstrMessageEvent, args: list[str]):
+        """正向亲代展开:某帕鲁作为亲代 × 各搭档 → 能配出的全部后代(按后代稀有度降序,分页)。
+        与 /帕鲁反配种(谁能配出它)互补——这里查「它能配出谁」。数据全来自 breeding.json。"""
+        if not self._breed:
+            return await self._msg_card(event, "🧬", "配种数据未加载",
+                                        desc="data/breeding.json 缺失或损坏。", color="#E5484D")
+        q, page = self._parse_page_args(args)   # 末位数字=页码
+        if not q:
+            return await self._msg_card(event, "✏️", "请输入帕鲁名",
+                                        desc="用法：/帕鲁配出谁 <帕鲁名>\n例：/帕鲁配出谁 棉悠悠\n"
+                                             "会列出它作为亲代能配出的全部后代。", color="#E5484D")
+        p = self._find_pal(q)
+        if not p:
+            sug = self._suggest_pals(q)
+            return await self._msg_card(event, "🔍", "查无此帕鲁",
+                                        desc=f"没找到「{q}」。" + ("\n是不是：" + "、".join(sug) if sug else ""),
+                                        color="#F5A623")
+        xi = self._norm_idx(str(p["pal_index"]))
+        # 遍历正向表:X 参与的每个配对 → 后代;同一后代可由多个搭档配出，合并搭档集合
+        child_partners: dict = {}
+        for fs, child in self._breed.items():
+            if xi in fs:
+                rest = fs - {xi}
+                partner = next(iter(rest)) if rest else xi   # rest 空=自配(X×X)
+                child_partners.setdefault(child, set()).add(partner)
+        if not child_partners:
+            return await self._msg_card(
+                event, "🚫", "这只不能作为亲代配种",
+                desc=f"「{p['pal_name']}」在游戏里被标记为不可配种(传说/塔主/boss 等,如空涡龙),"
+                     f"无法作为亲代配出任何后代。", color="#F5A623")
+
+        def _rar(idx: str) -> int:
+            return int((self._pal_idx.get(idx) or {}).get("rarity", 0) or 0)
+        # 后代按稀有度降序(玩家最关心配出强的)，同稀有度按图鉴号
+        children = sorted(child_partners.keys(),
+                          key=lambda c: (-_rar(c), int(c) if str(c).isdigit() else 9999))
+        PS = 10
+        pages = max(1, (len(children) + PS - 1) // PS)
+        page = min(max(1, page), pages)
+        rows = []
+        for c in children[(page - 1) * PS: page * PS]:
+            cp = self._pal_idx.get(c) or {}
+            r = _rar(c)
+            partners = sorted(child_partners[c], key=lambda z: -_rar(z))
+            rows.append({
+                "name": cp.get("pal_name", c), "index": str(c),
+                "icon": self._pal_icon(cp.get("pal_dev_name", "")),
+                "rarity": r, "stars": min(r, 5), "elements": cp.get("elements", []),
+                "works": self._pal_works(cp),
+                "partners": [{"name": (self._pal_idx.get(z) or {}).get("pal_name", z),
+                              "icon": self._pal_icon((self._pal_idx.get(z) or {}).get("pal_dev_name", ""))}
+                             for z in partners]})
+        pager = ""
+        if pages > 1:
+            nxt = page + 1 if page < pages else 1
+            pager = f"发「/帕鲁配出谁 {p['pal_name']} {nxt}」翻到第 {nxt} 页（共 {pages} 页）"
+        return await self._img(event, self._t("breedout"), {
+            "target": p["pal_name"], "target_index": p["pal_index"],
+            "target_icon": self._pal_icon(p.get("pal_dev_name")),
+            "total": len(children), "page": page, "pages": pages, "rows": rows, "pager": pager})
+
+    def _as_parent_map(self) -> dict:
+        """惰性构建并缓存:亲代图鉴号 -> {能配出的后代号...}(供配种榜/正向展开)。"""
+        ap = getattr(self, "_as_parent_cache", None)
+        if ap is None:
+            ap = {}
+            for fs, child in self._breed.items():
+                for x in fs:            # 自配 fs={X} 只遍历一次
+                    ap.setdefault(x, set()).add(child)
+            self._as_parent_cache = ap
+        return ap
+
+    async def _cmd_breed_rank(self, event: AstrMessageEvent, args: list[str]):
+        """配种榜:每只帕鲁作为亲代能配出的不同后代数量降序排行(数据来自 breeding.json)。"""
+        if not self._breed:
+            return await self._msg_card(event, "🧬", "配种数据未加载",
+                                        desc="data/breeding.json 缺失或损坏。", color="#E5484D")
+        _, page = self._parse_page_args(args)   # 榜无查询词,只取页码
+        ap = self._as_parent_map()
+        ranked = sorted(ap.items(),
+                        key=lambda kv: (-len(kv[1]), int(kv[0]) if str(kv[0]).isdigit() else 9999))
+        PS = 15
+        pages = max(1, (len(ranked) + PS - 1) // PS)
+        page = min(max(1, page), pages)
+        medals = {1: "🥇", 2: "🥈", 3: "🥉"}
+        rows = []
+        base = (page - 1) * PS
+        for i, (xi, kids) in enumerate(ranked[base: base + PS], base + 1):
+            p = self._pal_idx.get(xi) or {}
+            r = int(p.get("rarity", 0) or 0)
+            rows.append({"rank": i, "medal": medals.get(i, str(i)),
+                         "name": p.get("pal_name", xi), "index": str(xi),
+                         "icon": self._pal_icon(p.get("pal_dev_name", "")),
+                         "count": len(kids), "stars": min(r, 5),
+                         "elements": p.get("elements", [])})
+        pager = ""
+        if pages > 1:
+            nxt = page + 1 if page < pages else 1
+            pager = f"发「/帕鲁配种榜 {nxt}」翻到第 {nxt} 页（共 {pages} 页）"
+        return await self._img(event, self._t("breedrank"), {
+            "total": len(ranked), "page": page, "pages": pages, "rows": rows, "pager": pager})
+
+    def _breed_route_to_set(self, owned: set, targets: set, tie_break=None, require_bred=False):
+        """正向 BFS:从 owned 逐步配出更多,求配出 targets 中**任意**物种的最短链。
+        返回 (命中物种号, 拓扑序步骤[(父A,父B,子)]) / None。步数最少优先;
+        同步数用 tie_break(idx)->可比较值 降序打破(值越大越优,如工作适性等级)。
+        require_bred=True:即使 owned 已含目标也强制展开配种,只认「配出来的」目标
+        (用于「如何配出」,不把库存已有的那只当答案)。"""
+        if not targets:
+            return None
+        reach = {o: None for o in owned}       # 节点 -> 亲代(a,b) 或 None(=拥有的叶子)
+        depth = {o: 0 for o in owned}
+
+        def _bred_hit():                       # 命中目标(require_bred 时只算配出来的)
+            return {c for c in (set(reach) & targets)
+                    if (not require_bred) or reach.get(c) is not None}
+        if require_bred or not _bred_hit():    # owned 里尚无(可用)满足者才展开配种
+            for _ in range(60):
+                changed = False
+                for c, pairs in self._breed_rev.items():
+                    if c in reach:
+                        continue
+                    for a, b in pairs:
+                        if a in reach and b in reach:
+                            reach[c] = (a, b)
+                            depth[c] = max(depth[a], depth[b]) + 1
+                            changed = True
+                            break
+                if _bred_hit() or not changed:
+                    break
+        cand = _bred_hit()
+        if not cand:
+            return None
+        tb = tie_break or (lambda i: 0)
+
+        def _steps_len(t):                     # 配出 t 的总配种次数(需配的祖先数)
+            cnt, seen2, stack = 0, set(), [t]
+            while stack:
+                n = stack.pop()
+                if n in seen2 or reach.get(n) is None:
+                    continue
+                seen2.add(n)
+                cnt += 1
+                a, b = reach[n]
+                stack += [a, b]
+            return cnt
+        # 步数(总配种次数)最少优先;同步数 tie_break 大者优(如工作适性等级高)
+        best = min(cand, key=lambda c: (_steps_len(c), -tb(c)))
+        steps, seen = [], set()
+
+        def expand(n):
+            if n in seen or reach.get(n) is None:
+                return
+            seen.add(n)
+            a, b = reach[n]
+            expand(a)
+            expand(b)
+            steps.append((a, b, n))
+        expand(best)
+        return best, steps
+
+    def _parse_work_target(self, args: list[str]):
+        """解析 <工种> [等级] -> (wk_snake, lv, None) 或 (None, None, (emoji,title,desc,color))。"""
+        if not args:
+            works = "、".join(dict.fromkeys(WORK_LABELS.values()))
+            return None, None, ("✏️", "请输入工种和等级",
+                                f"用法：<工种> [最低等级]\n例：采矿 3\n支持工种：{works}", "#E5484D")
+        wk = WORK_ALIAS.get(args[0]) or (args[0] if args[0] in WORK_LABELS else None)
+        if not wk:
+            works = "、".join(dict.fromkeys(WORK_LABELS.values()))
+            return None, None, ("🔍", "未知工种", f"没有工种「{args[0]}」。\n支持：{works}", "#F5A623")
+        lv = 1
+        if len(args) >= 2 and str(args[1]).isdigit():
+            lv = max(1, int(args[1]))
+        return wk, lv, None
+
+    async def _cmd_breed_worksuit(self, event: AstrMessageEvent, args: list[str]):
+        """通用查询:列出所有满足「工种≥等级」的帕鲁 + 各自的配种组合(不看库存)。
+        工作适性是物种固定值,故先按工种等级降序列出目标帕鲁,再给出配出它的亲代组合。"""
+        if not self._breed_rev:
+            return await self._msg_card(event, "🧬", "配种数据未加载",
+                                        desc="data/breeding.json 缺失或损坏。", color="#E5484D")
+        wk, lv, err = self._parse_work_target(args)
+        if err:
+            return await self._msg_card(event, err[0], err[1], desc=err[2], color=err[3])
+        wk_cn = WORK_LABELS.get(wk, wk)
+
+        def _wlv(idx: str) -> int:
+            return int(((self._pal_idx.get(idx) or {}).get("work_suitability") or {}).get(wk, 0) or 0)
+        targets = [self._norm_idx(str(p["pal_index"]))
+                   for p in self._pals if _wlv(self._norm_idx(str(p["pal_index"]))) >= lv]
+        if not targets:
+            top = max((_wlv(self._norm_idx(str(p["pal_index"]))) for p in self._pals), default=0)
+            return await self._msg_card(
+                event, "🤷", "没有这么高适性的帕鲁",
+                desc=f"没有帕鲁的「{wk_cn}」适性达到 Lv{lv}(全图鉴最高 Lv{top})。\n换个更低等级再试。",
+                color="#F5A623")
+        # 工种等级降序,同级按图鉴号；第 3 个数字参数=页码(工种/等级各占前两位)
+        targets = sorted(set(targets),
+                         key=lambda i: (-_wlv(i), int(i) if str(i).isdigit() else 9999))
+        page = 1
+        if len(args) >= 3 and str(args[2]).isdigit():
+            page = int(args[2])
+        PS = 8
+        pages = max(1, (len(targets) + PS - 1) // PS)
+        page = min(max(1, page), pages)
+        rows = []
+        for t in targets[(page - 1) * PS: page * PS]:
+            tp = self._pal_idx.get(t) or {}
+            combos_raw = self._breed_rev.get(t, [])
+            combos = []
+            for a, b in combos_raw[:3]:
+                pa, pb = self._pal_idx.get(a) or {}, self._pal_idx.get(b) or {}
+                combos.append({"a": pa.get("pal_name", a), "a_icon": self._pal_icon(pa.get("pal_dev_name", "")),
+                               "b": pb.get("pal_name", b), "b_icon": self._pal_icon(pb.get("pal_dev_name", ""))})
+            r = int(tp.get("rarity", 0) or 0)
+            rows.append({"name": tp.get("pal_name", t), "index": str(t),
+                         "icon": self._pal_icon(tp.get("pal_dev_name", "")),
+                         "wlv": _wlv(t), "stars": min(r, 5), "elements": tp.get("elements", []),
+                         "combos": combos, "more": max(0, len(combos_raw) - 3),
+                         "no_recipe": not combos_raw})
+        pager = ""
+        if pages > 1:
+            nxt = page + 1 if page < pages else 1
+            pager = f"发「/帕鲁配工种 {wk_cn} {lv} {nxt}」翻到第 {nxt} 页（共 {pages} 页）"
+        return await self._img(event, self._t("workcombo"), {
+            "work": wk_cn, "lv": lv, "total": len(targets),
+            "page": page, "pages": pages, "rows": rows, "pager": pager})
+
+    async def _cmd_my_breed_worksuit(self, event: AstrMessageEvent, args: list[str]):
+        """用你帕鲁箱现有帕鲁,规划配出满足「工种≥等级」帕鲁的配种链(步数最少)。
+        即使库存已有满足者也**继续给配种链**(require_bred);配不出/太长回退通用最短链。"""
+        if not self._breed_rev:
+            return await self._msg_card(event, "🧬", "配种数据未加载",
+                                        desc="data/breeding.json 缺失或损坏。", color="#E5484D")
+        wk, lv, err = self._parse_work_target(args)
+        if err:
+            return await self._msg_card(event, err[0], err[1], desc=err[2], color=err[3])
+        wk_cn = WORK_LABELS.get(wk, wk)
+
+        def _wlv(idx: str) -> int:
+            return int(((self._pal_idx.get(idx) or {}).get("work_suitability") or {}).get(wk, 0) or 0)
+        targets = {self._norm_idx(str(p["pal_index"]))
+                   for p in self._pals if _wlv(self._norm_idx(str(p["pal_index"]))) >= lv}
+        if not targets:
+            top = max((_wlv(self._norm_idx(str(p["pal_index"]))) for p in self._pals), default=0)
+            return await self._msg_card(
+                event, "🤷", "没有这么高适性的帕鲁",
+                desc=f"没有帕鲁的「{wk_cn}」适性达到 Lv{lv}(全图鉴最高 Lv{top})。\n换个更低等级再试。",
+                color="#F5A623")
+        # 读库存
+        owned: set = set()
+        self._last_save_use = time.time()
+        profiles = await self._fetch_save_profiles(max_age=self._fresh_ttl())
+        qq = str(event.get_sender_id())
+        sp = self._match_save_profile(self.state.get("bindings", {}).get(qq), profiles) if profiles else None
+        if sp is None:
+            return await self._msg_card(
+                event, "🔗", "读不到你的帕鲁箱",
+                desc="请先 /帕鲁绑定 <游戏名> 并上线一次，让我能读到你的帕鲁箱。\n"
+                     "（也可发 /帕鲁配工种 " + wk_cn + " " + str(lv) + " 看通用配种组合）", color="#F5A623")
+        for pal in sp.get("party", []) + sp.get("palbox", []):
+            pp = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
+            if pp:
+                owned.add(self._norm_idx(str(pp.get("pal_index", ""))))
+        owned.discard("")
+        if not owned:
+            return await self._msg_card(event, "📦", "你的帕鲁箱是空的",
+                                        desc="先去抓几只帕鲁，再来规划配种～", color="#9a8a91")
+        # 强制配出(即使已有满足者也给配种链);库存配不出或 >8 步回退通用
+        MAX_INV_STEPS = 8
+        inv = self._breed_route_to_set(owned, targets, _wlv, require_bred=True)
+        if inv and len(inv[1]) <= MAX_INV_STEPS:
+            best, mode = inv, "库存"
+        else:
+            nodes: set = set()
+            for fs, c in self._breed.items():
+                nodes |= set(fs)
+                nodes.add(c)
+            uni = self._breed_route_to_set(nodes - targets, targets, _wlv)
+            if uni:
+                best, mode = uni, "通用"
+            elif inv:
+                best, mode = inv, "库存"
+            else:
+                best, mode = None, "库存"
+        if not best:
+            return await self._msg_card(
+                event, "🤷", "配不出这个适性",
+                desc=f"用你现有的帕鲁暂时配不出「{wk_cn}≥Lv{lv}」的帕鲁。\n"
+                     f"可发 /帕鲁配工种 {wk_cn} {lv} 看通用配法，或去野外捕捉。", color="#F5A623")
+        tgt, route = best
+        tp = self._pal_idx.get(tgt) or {}
+        owned_mark = owned if mode == "库存" else set()
+        steps = []
+        for i, (a, b, c) in enumerate(route, 1):
+            pa, pb, pc = self._pal_idx.get(a), self._pal_idx.get(b), self._pal_idx.get(c)
+            steps.append({
+                "n": i,
+                "a": (pa or {}).get("pal_name", a), "a_icon": self._pal_icon((pa or {}).get("pal_dev_name", "")),
+                "a_owned": a in owned_mark,
+                "b": (pb or {}).get("pal_name", b), "b_icon": self._pal_icon((pb or {}).get("pal_dev_name", "")),
+                "b_owned": b in owned_mark,
+                "c": (pc or {}).get("pal_name", c), "c_icon": self._pal_icon((pc or {}).get("pal_dev_name", "")),
+                "is_target": c == tgt})
+        if mode == "库存":
+            sub = f"目标 {wk_cn}≥Lv{lv} · 用你现有帕鲁 · {len(steps)} 步配出 {tp.get('pal_name', tgt)}（{wk_cn}Lv{_wlv(tgt)}）"
+        else:
+            sub = f"目标 {wk_cn}≥Lv{lv} · 通用配法(库存不足,亲代需自行获得) · {len(steps)} 步 → {tp.get('pal_name', tgt)}（{wk_cn}Lv{_wlv(tgt)}）"
+        return await self._img(event, self._t("route"), {
+            "target": tp.get("pal_name", tgt), "target_icon": self._pal_icon(tp.get("pal_dev_name", "")),
+            "target_works": self._pal_works(tp),
+            "steps": steps, "n_steps": len(steps), "sub": sub})
 
     # ------------------------------------------------------------------
     # 词条继承概率计算（/帕鲁继承 父A词条 | 母B词条）
@@ -3444,7 +3777,7 @@ class PalworldPlugin(Star):
                 return alias, (([rest] + list(args)) if rest else list(args))
         return sub, args
 
-    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|材料路线|材料|配方展开|总材料|matroute|种属|分类图鉴|种族分类|genus|科技树|科技路线|解锁路线|techtree|牧场产出|牧场|放牧|家畜牧场|ranch|材料用途|用途|能做什么|matuse|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条查|查词条|词条帕鲁|谁带词条|passfind|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|养成|培养|养成进度|养成路线|growth|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我的战力|个人战力|我的最强帕鲁|我的帕鲁战力|mypower|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点体检|基地体检|据点健康|基地健康|basehealth|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图收集|地图地标|收集地图|地标|poimap|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
+    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种榜|配种排行榜|配种排行|能配榜|breedrank|我可以配工种|我能配工种|我配工种|我可以配|mybreedwork|配工种|配工作帕鲁|按工种配|工种配种|worksuitbreed|配出谁|能配出谁|能配谁|当亲代|作为亲代|正向配种|breedout|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|材料路线|材料|配方展开|总材料|matroute|种属|分类图鉴|种族分类|genus|科技树|科技路线|解锁路线|techtree|牧场产出|牧场|放牧|家畜牧场|ranch|材料用途|用途|能做什么|matuse|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条查|查词条|词条帕鲁|谁带词条|passfind|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|养成|培养|养成进度|养成路线|growth|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我的战力|个人战力|我的最强帕鲁|我的帕鲁战力|mypower|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点体检|基地体检|据点健康|基地健康|basehealth|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图收集|地图地标|收集地图|地标|poimap|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
     async def palworld(self, event: AstrMessageEvent):
         raw = (event.message_str or "").strip()
         # 去掉可选的「/」前缀和指令词「帕鲁」，剩余既可能是「在线」也可能是「在线 参数」

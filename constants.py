@@ -100,11 +100,14 @@ GUILD_PAGE_SIZE = 20         # 公会成员每页人数(单行)，超出翻页
 #   导致卡片右侧露出底图)。
 # - full_page 让高度按内容延伸。
 # - device_scale_factor_level=ultra(本机上限,1.8x)叠加 zoom，进一步提清晰度。
-# - type=png 无损，避免 jpeg 压缩把文字边缘压糊(这是“放大就糊”的主因之一)。
+# - type=jpeg + quality=90：分辨率仍是 1944px(zoom×dsf)不变，文字够清晰；改用 jpeg 是因为
+#   png 无损出图长列表卡高达 8~10MB，napcat 上传 QQ 会 sendMsg 超时(retcode 1200)且很慢；
+#   同分辨率 jpeg q90 只有 ~1.3MB(约 1/6)，发送秒回。质量 90 边缘几乎无可见压缩痕。
 # 本机 AstrBot 官方 t2i 端点已验证支持这些键(参考 group_activity 插件)。
 RENDER_OPTIONS = {
     "full_page": True,
-    "type": "png",
+    "type": "jpeg",
+    "quality": 90,
     "scale": "device",
     "device_scale_factor_level": "ultra",
     "viewport_width": CARD_WIDTH * SUPERSCALE,
