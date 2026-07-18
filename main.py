@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.44.0",
+    "1.44.1",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -1483,7 +1483,7 @@ class PalworldPlugin(Star):
                      "（也可发 /帕鲁反配种 看通用配对）", color="#F5A623")
         owned = set()
         for pal in sp.get("party", []) + sp.get("palbox", []):
-            pp = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
+            pp = self._resolve_owned_pal(str(pal.get("char_id", "")))   # 容错 BOSS_/元素变种前后缀
             if pp:
                 owned.add(self._norm_idx(str(pp.get("pal_index", ""))))
         owned.discard("")
@@ -1779,7 +1779,7 @@ class PalworldPlugin(Star):
                 desc="请先 /帕鲁绑定 <游戏名> 并上线一次，让我能读到你的帕鲁箱。\n"
                      "（也可发 /帕鲁配工种 " + wk_cn + " " + str(lv) + " 看通用配种组合）", color="#F5A623")
         for pal in sp.get("party", []) + sp.get("palbox", []):
-            pp = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
+            pp = self._resolve_owned_pal(str(pal.get("char_id", "")))   # 容错 BOSS_/元素变种前后缀
             if pp:
                 owned.add(self._norm_idx(str(pp.get("pal_index", ""))))
         owned.discard("")
@@ -2921,12 +2921,15 @@ class PalworldPlugin(Star):
         hit = [pid for pid in pv if pid in matched]
         if not hit:
             return None
-        meta = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
+        cid = str(pal.get("char_id", ""))
+        meta = self._resolve_owned_pal(cid)                # 容错 BOSS_/元素变种前后缀
+        hname = None if meta else self._human_name(cid)    # 抓到的人类/头目给中文名
         disp = [self._passive_view(pid) for pid in hit]
         return {
-            "name": _esc(meta["pal_name"] if meta else pal.get("char_id", "未知帕鲁")),
-            "icon": self._pal_icon(meta.get("pal_dev_name", "")) if meta else "",
+            "name": _esc(meta["pal_name"] if meta else (hname or cid or "未知帕鲁")),
+            "icon": self._pal_icon(meta.get("pal_dev_name", "")) if meta else (self._human_icon(cid) if hname else ""),
             "elements": meta.get("elements", []) if meta else [],
+            "is_human": bool(hname),
             "nickname": _esc(pal.get("nickname") or ""), "level": pal.get("level", 1), "loc": loc,
             "lucky": bool(pal.get("lucky")), "alpha": bool(pal.get("is_alpha")),
             "matched": [{"name": _esc(m["name"]), "rank_key": m["rank_key"], "hex": m["hex"]} for m in disp],
@@ -4059,7 +4062,7 @@ class PalworldPlugin(Star):
 
     def _pal_power(self, brief: dict) -> int:
         """玩家帕鲁综合战力：游戏公式算真实 HP/攻/防(头目HP×1.2 + 等级+天赋+浓缩 + 被动加成)。"""
-        p = self._pal_by_dev.get(str(brief.get("char_id", "")).lower())
+        p = self._resolve_owned_pal(str(brief.get("char_id", "")))   # 容错 BOSS_/元素变种前后缀
         st = (p or {}).get("stats") or {}
         bhp = int(st.get("hp", 0) or 0) or 100
         batk = max(int(st.get("melee_attack", 0) or 0), int(st.get("shot_attack", 0) or 0)) or 100
@@ -4232,7 +4235,8 @@ class PalworldPlugin(Star):
             return err
         dev = str(p.get("pal_dev_name", "")).lower()
         mine = [pal for pal, _ in self._iter_prof_pals(sp, set(), include_shared=False)
-                if str(pal.get("char_id", "")).lower() == dev]
+                if str((self._resolve_owned_pal(str(pal.get("char_id", ""))) or {})
+                       .get("pal_dev_name", "")).lower() == dev]   # 容错 BOSS_/元素变种,头目也算本种
         if not mine:
             return await self._msg_card(event, "📦", f"你还没有「{_esc(p['pal_name'])}」",
                                         desc="养成卡只统计你自己捕捉的这只帕鲁。先去抓一只,再来看养成进度~", color="#9a8a91")
@@ -4489,10 +4493,14 @@ class PalworldPlugin(Star):
         for prof in profiles.values():
             for pal, owner in self._iter_prof_pals(prof, seen_shared):
                 if pal.get(field):
-                    p = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
-                    name = pal.get("nickname") or (p or {}).get("pal_name") or pal.get("char_id", "?")
+                    cid = str(pal.get("char_id", ""))
+                    p = self._resolve_owned_pal(cid)            # 容错 BOSS_/元素变种前后缀
+                    hname = None if p else self._human_name(cid)   # 抓到的人类/头目给中文名
+                    name = pal.get("nickname") or (p or {}).get("pal_name") or hname or cid or "?"
                     items.append({"name": _esc(name), "owner": _esc(owner), "badge": badge,
-                                  "icon": self._pal_icon((p or {}).get("pal_dev_name", ""))})
+                                  "is_human": bool(hname),
+                                  "icon": self._pal_icon((p or {}).get("pal_dev_name", ""))
+                                          or (self._human_icon(cid) if hname else "")})
                     owner_cnt[owner] = owner_cnt.get(owner, 0) + 1
         if not items:
             return await self._msg_card(event, badge, f"全服还没有{label}帕鲁",
@@ -4609,7 +4617,7 @@ class PalworldPlugin(Star):
         for prof in profiles.values():
             species = set()
             for pal, owner in self._iter_prof_pals(prof, seen_shared, include_shared=False):
-                p = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
+                p = self._resolve_owned_pal(str(pal.get("char_id", "")))   # 容错 BOSS_/元素变种前后缀
                 if p and p.get("pal_index"):
                     species.add(p["pal_index"])
             if species:
@@ -4642,7 +4650,7 @@ class PalworldPlugin(Star):
         for prof in profiles.values():
             worth, cnt = 0, 0
             for pal, owner in self._iter_prof_pals(prof, seen_shared, include_shared=False):
-                p = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
+                p = self._resolve_owned_pal(str(pal.get("char_id", "")))   # 容错 BOSS_/元素变种前后缀
                 if p:
                     worth += int(p.get("price", 0) or 0)
                     cnt += 1
@@ -5635,7 +5643,7 @@ class PalworldPlugin(Star):
         注意：Hp 是「当前血量」非最大值(会浮动)，最大值按公式算；FullStomach/SanityValue
         是真实值(断粮时确实归 0)，饥饿状态另用 HungerType 枚举校验、工作病用 WorkerSick。"""
         v = self._pal_view(pal)
-        p = self._pal_by_dev.get(str(pal.get("char_id", "")).lower())
+        p = self._resolve_owned_pal(str(pal.get("char_id", "")))   # 容错 BOSS_/元素变种前后缀
         works = []
         if p:
             ws = p.get("work_suitability") or {}
@@ -5795,7 +5803,7 @@ class PalworldPlugin(Star):
                                         desc="先抓些帕鲁放进帕鲁箱，再来看能配出什么～", color="#9a8a91")
         owned = set()
         for p in box:
-            pl = self._pal_by_dev.get(str(p.get("char_id", "")).lower())
+            pl = self._resolve_owned_pal(str(p.get("char_id", "")))   # 容错 BOSS_/元素变种前后缀
             if pl:
                 idx = self._name_idx.get(pl.get("pal_name"))
                 if idx:
