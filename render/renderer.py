@@ -93,7 +93,13 @@ class Renderer:
                                       device_scale_factor=dsf)
         try:
             await page.set_content(html, wait_until="load")
-            await page.wait_for_timeout(60)
+            # 等字体真正就绪再截图:内联 woff2(pixel 中文像素字体)经 @font-face 异步解析,
+            # 仅靠 load 事件 + 固定延时可能截到回退字体导致字形不稳。fonts.ready 消除竞态。
+            try:
+                await page.evaluate("async () => { await document.fonts.ready; }")
+            except Exception:
+                pass
+            await page.wait_for_timeout(30)
             # 截 .page 元素而非 full_page：full_page 截的是 html(默认填满视口高 900)，
             # 内容比视口短时会在底部补一大片空白。截元素正好是内容高度。
             # jpeg q90:与远程 t2i 一致，避免无损 png 出图 8~10MB 致 napcat 上传超时；

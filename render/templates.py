@@ -5,8 +5,31 @@
 不可信字段必须由调用方用 utils.text._esc 逐字段转义后再注入。"""
 from __future__ import annotations
 
+import base64
+import os
+
 # 少数网格模板在构造时内嵌列数常量（str(GRID_COLS) 拼接），需从父包常量表取值。
 from ..constants import GRID_COLS
+
+
+def _font_data_uri(rel: str) -> str:
+    """读插件内字体文件 → woff2 data URI(自包含,不依赖 CDN/外网)。
+    文件缺失时返回空串,调用方据此省略 @font-face,pixel 主题回退 Noto CJK,不炸。"""
+    try:
+        path = os.path.join(os.path.dirname(os.path.dirname(__file__)), rel)
+        with open(path, "rb") as f:
+            return "data:font/woff2;base64," + base64.b64encode(f.read()).decode("ascii")
+    except Exception:
+        return ""
+
+
+# pixel 主题中文像素字体:Fusion Pixel(OFL,允许嵌入/子集化/再分发)子集内联。
+# 见 data/fonts/README.md。字体缺失则 _PIX_FONTFACE 为空,自动回退 Noto CJK。
+_PIX_FONT_URI = _font_data_uri("data/fonts/fusion-pixel-12px-proportional-zh_hans.subset.woff2")
+_PIX_FONTFACE = (
+    f"@font-face {{ font-family:'FusionPixel'; src:url('{_PIX_FONT_URI}') format('woff2'); "
+    f"font-display:swap; }}\n  " if _PIX_FONT_URI else ""
+)
 
 
 # ----------------------------------------------------------------------
@@ -502,13 +525,13 @@ BREED_TMPL = _HEAD + """</style></head><body><div class="page">
 
 # ====================================================================
 # 像素羊皮纸风格模板集(STYLES['pixel'])。低像素 + aged 羊皮纸 + 复古墨色。
-# 中文像素字体 Zpix 经 CDN @font-face 加载(已验证渲染服务可加载)。
+# 中文像素字体 Fusion Pixel(OFL,子集内联,见 data/fonts/)。**不依赖 CDN/外网**;
+# 字体文件缺失时 @font-face 省略,回退 Noto CJK(仍可读,非豆腐)。
 # 不使用插画 bg，羊皮纸纹理由 CSS+SVG 噪点生成，自包含。
 # ====================================================================
-_PIX_CSS = """
-  @font-face { font-family:'Zpix'; src:url('https://cdn.jsdelivr.net/gh/SolidZORO/zpix-pixel-font/dist/Zpix.ttf') format('truetype'); }
+_PIX_CSS = _PIX_FONTFACE + """
   * { margin:0; padding:0; box-sizing:border-box;
-      font-family:'Zpix','Microsoft YaHei','monospace'; }
+      font-family:'FusionPixel','Noto Sans CJK SC','Noto Sans SC','Microsoft YaHei',monospace; }
   html { zoom:{{ zoom }}; } html,body { width:{{ cw|default(540) }}px; }
   body { display:flex; flex-direction:column; position:relative; color:#382207; image-rendering:pixelated;
     background-color:#cdae74;
