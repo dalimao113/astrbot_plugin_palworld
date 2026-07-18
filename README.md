@@ -10,7 +10,7 @@
 图鉴配种攻略随手查；管理员可公告 / 踢封 / 存档 / 关服。<br>
 **所有回复一律输出精美卡片图片**，附一键部署脚本。
 
-![version](https://img.shields.io/badge/version-1.42.2-6366F1?style=flat-square)
+![version](https://img.shields.io/badge/version-1.43.0-6366F1?style=flat-square)
 ![AstrBot](https://img.shields.io/badge/AstrBot-4.25%2B-8B5CF6?style=flat-square)
 ![OneBot](https://img.shields.io/badge/OneBot-v11-4ade80?style=flat-square)
 ![NapCat](https://img.shields.io/badge/adapter-NapCat-22c55e?style=flat-square)
@@ -370,11 +370,20 @@ networks:
 装好 [1Panel](https://1panel.cn/) 后，在它的**终端**里跑一行，自动装好「帕鲁服 + AstrBot + NapCat + 本插件」并补齐所有必需配置（含状态卡 CPU/内存要用的 `docker.sock` 挂载）：
 
 ```bash
+# 便捷一键(信任本仓库时)——指向已发布的 tag，非 main，避免跟随未发布改动：
 # 先演练看看(只检测不改动)：
-curl -fsSL https://raw.githubusercontent.com/dalimao113/astrbot_plugin_palworld/main/install.sh | bash -s -- --dry-run
+curl -fsSL https://raw.githubusercontent.com/dalimao113/astrbot_plugin_palworld/v1.43.0/install.sh | bash -s -- --dry-run
 # 正式安装：
-curl -fsSL https://raw.githubusercontent.com/dalimao113/astrbot_plugin_palworld/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/dalimao113/astrbot_plugin_palworld/v1.43.0/install.sh | bash
 ```
+
+> 🔐 **更稳妥：先校验哈希再执行**（防脚本在传输/仓库被篡改）：
+> ```bash
+> curl -fsSLO https://raw.githubusercontent.com/dalimao113/astrbot_plugin_palworld/v1.43.0/install.sh
+> echo "849919359442cfeff9934850e22e53752023cec1fbf07053827a287f89fa5571  install.sh" | sha256sum -c \
+>   && bash install.sh --dry-run   # 校验通过→先演练；确认无误再 bash install.sh 正式装
+> ```
+> 上面的 SHA256 对应 `v1.43.0` 的 `install.sh`；每次发版会随 Release 说明更新。
 已装过 astrbot/napcat/帕鲁服的会**只体检补配置**（改前备份+显示diff+确认，不破坏你的自定义配置）。完整图文教程见 **[docs/DEPLOY.md](docs/DEPLOY.md)** 第 1.5 章。
 
 > ⚙️ **非 1Panel / 自定义路径**：脚本默认面向 **1Panel + Ubuntu**（默认 `ASTRBOT_DIR=/opt/1panel/docker/compose/astrbot`、`PAL_DIR=/opt/palworld`、网络 `astrbot_default`）。若你的目录/网络不同，用**环境变量覆盖**后再跑，例如：

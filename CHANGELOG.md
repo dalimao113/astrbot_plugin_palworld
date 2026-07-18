@@ -2,6 +2,20 @@
 
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.43.0] - 2026-07-18
+
+### 开源就绪 · 合规 / 瘦身 / 可移植（首个公开发布版）
+- **pixel 主题去 CDN 字体依赖**：原用的 Zpix 为付费字体、禁止子集化/再分发，不能进开源仓库；改用 **Fusion Pixel（缝合像素字体，OFL-1.1）** 子集化内联 woff2（约 244KB，覆盖 GB2312+项目实际用字），并补 `Noto Sans CJK` 兜底 → 修复「CDN 不可达时中文豆腐块」，且离线自包含、开源合规。`renderer` 改等 `document.fonts.ready` 再截图，消除字体加载竞态。
+- **仓库瘦身**：31 张 README 展示截图 PNG→WebP（缩至 900px 宽 + q85），`docs/screenshots/` 从 66M 降到约 2.4M；清理 `data/*.old.json` 编辑残留；补 `palwork/__init__.py` 统一包结构。
+- **开源合规**：新增 `NOTICE.md` 披露全部第三方素材与授权（Pocketpair 游戏图标/地图/名称数值、Oodle 专有库、OFL 字体、依赖库、背景插画）；README 顶部前置版权提示。
+- **一键脚本可移植**：`install.sh` 的 `ASTRBOT_DIR`/`PAL_DIR`/`EXTERNAL_NET` 改为**环境变量可覆盖**（非 1Panel 环境可用）；README 补「非 1Panel / 自定义路径」说明。
+
+### 修复（安全 / 正确性）
+- **恢复存档误配置防护**：`_do_restore_save` 补 `SG` 深度护栏 + 只删含 `Level.sav` 的真实世界目录（与删档一致），并在 `_save_games_base()` 根部加固，避免 `save_dir_in_container` 误填（如 `/`）时 `rm -rf` 波及容器内顶层目录。
+- **`card_style=ingame` 不再被配置校验误报**「未知，回退 fantasy」（`config.py` 补齐 ingame 为正式主题）。
+- `SECURITY.md` 澄清 docker.sock `:ro` **不构成 API 安全边界**（等价宿主 root），避免误导性「最小权限」表述。
+- 素材存在性测试对 manifest 新 `game` 字段生效（与 `assets._asset_rel` 同源）；更新 templates 过时注释（「两套皮肤」→三主题、ingame 已全量落地非临时回退）。
+
 ## [1.42.2] - 2026-07-17
 
 ### 修复(回复慢 + napcat 发送超时报错)
