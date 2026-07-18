@@ -21,6 +21,8 @@
 让 QQ 群友通过指令查询帕鲁(Palworld)服务器状态，管理员可执行管理操作。
 **所有回复一律输出精美卡片图片**（基于 AstrBot `html_render`），不发纯文字（仅渲染失败时兜底文字提示）。
 
+> ⚖️ **版权提示**：本插件源码按根目录 `LICENSE` 开源；仓库内含的**游戏图标/地图/名称/数值**等素材版权归 **Pocketpair, Inc.**（《幻兽帕鲁》），仅供非商业的服务器查询参考，**不在本开源协议范围内**。另含 Oodle 专有库、OFL 像素字体等第三方组件。完整清单与授权见 **[NOTICE.md](NOTICE.md)**。本项目与 Pocketpair 无隶属关系；权利人如有异议将应要求下架相关素材。
+
 - 目标环境：AstrBot **4.25.5+**（兼容 `>=4.25,<5`，4.26.x 实测可用；OneBot v11 / NapCat）
 - 帕鲁服务端：`thijsvanloef/palworld-server-docker`，需开启 REST API
 
@@ -374,6 +376,13 @@ curl -fsSL https://raw.githubusercontent.com/dalimao113/astrbot_plugin_palworld/
 curl -fsSL https://raw.githubusercontent.com/dalimao113/astrbot_plugin_palworld/main/install.sh | bash
 ```
 已装过 astrbot/napcat/帕鲁服的会**只体检补配置**（改前备份+显示diff+确认，不破坏你的自定义配置）。完整图文教程见 **[docs/DEPLOY.md](docs/DEPLOY.md)** 第 1.5 章。
+
+> ⚙️ **非 1Panel / 自定义路径**：脚本默认面向 **1Panel + Ubuntu**（默认 `ASTRBOT_DIR=/opt/1panel/docker/compose/astrbot`、`PAL_DIR=/opt/palworld`、网络 `astrbot_default`）。若你的目录/网络不同，用**环境变量覆盖**后再跑，例如：
+> ```bash
+> ASTRBOT_DIR=/your/astrbot PAL_DIR=/your/palworld EXTERNAL_NET=your_net \
+>   bash install.sh --dry-run
+> ```
+> 完全不同的环境建议走下方「已有 AstrBot，只想加插件（4 步）」手动安装。
 
 > 🖼️ **关于出图（t2i 渲染）**：本插件所有回复都是渲染成图片发出的。AstrBot 自带的渲染默认走**官方公共 t2i 端点**，偶发偏慢/502。一键脚本会额外部署一个**本地渲染服务** `astrbot-t2i`（`soulter/astrbot-t2i-service`），并把 AstrBot 的 `t2i_endpoint` 指向它（容器内 `http://astrbot-t2i:8999`），出图更快更稳。若出图很慢或失败，去 AstrBot WebUI「配置 → 其它 → 文转图」确认 `t2i_strategy=remote`、`t2i_endpoint` 已指向本地服务。
 

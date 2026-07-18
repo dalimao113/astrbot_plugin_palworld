@@ -20,16 +20,19 @@
 set -euo pipefail
 
 # ---------------------------------------------------------------------------
-# 0. 全局常量与路径 (依据已核实的真实环境)
+# 0. 全局常量与路径
+# 默认值面向 1Panel + Ubuntu 部署;非该环境可用环境变量覆盖,例如:
+#   ASTRBOT_DIR=/your/astrbot PAL_DIR=/your/palworld EXTERNAL_NET=your_net bash install.sh
+# 详见 README「非 1Panel / 自定义路径安装」。
 # ---------------------------------------------------------------------------
-ASTRBOT_DIR="/opt/1panel/docker/compose/astrbot"
+ASTRBOT_DIR="${ASTRBOT_DIR:-/opt/1panel/docker/compose/astrbot}"
 ASTRBOT_COMPOSE="${ASTRBOT_DIR}/docker-compose.yml"
 ASTRBOT_DATA="${ASTRBOT_DIR}/astrbot/data"
 ASTRBOT_CMD_CONFIG="${ASTRBOT_DATA}/cmd_config.json"   # AstrBot 顶层配置(含 t2i 策略/端点), 首启后生成, 带 UTF-8 BOM
 PLUGIN_DIR="${ASTRBOT_DATA}/plugins/astrbot_plugin_palworld"
 PLUGIN_CONFIG="${ASTRBOT_DATA}/config/astrbot_plugin_palworld_config.json"
 
-PAL_DIR="/opt/palworld"
+PAL_DIR="${PAL_DIR:-/opt/palworld}"
 PAL_COMPOSE="${PAL_DIR}/compose.yaml"
 PAL_ENV="${PAL_DIR}/.env"
 
@@ -41,7 +44,7 @@ YQ_MIRRORS=(
   "https://mirror.ghproxy.com/https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64"
 )
 
-EXTERNAL_NET="astrbot_default"   # 所有容器共享的外部网络
+EXTERNAL_NET="${EXTERNAL_NET:-astrbot_default}"   # 所有容器共享的外部网络(可 env 覆盖)
 
 # 本地 t2i(文/HTML 转图片) 渲染服务的容器内端点: 插件所有卡片出图都走它。
 # 不部署它 → AstrBot 只能用内置 playwright(慢) 或公共端点(常年 502), 出图延迟极高。
