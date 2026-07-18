@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.45.0",
+    "1.46.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -3212,9 +3212,29 @@ class PalworldPlugin(Star):
             tip_parts.append("掠夺者在野外随机出没，等级很高，击败可得「捕食者核心」「究极帕鲁之魂」")
         else:
             tip_parts.append("野外头目血厚，建议多人或满配队伍速攻")
+        # 从图鉴取该头目本体的真实详情：弱点属性 / 基础攻防 / 主要技能（补全"详细信息"）
+        pal = (self._pal_by_dev or {}).get(str(b.get("dev", "")).lower()) or {}
+        st = pal.get("stats") or {}
+        atk = max(st.get("melee_attack", 0), st.get("shot_attack", 0)) or ""
+        defense = st.get("defense", "") or ""
+        weakness = [w + "属性" for w in dict.fromkeys(weak)]
+        skills = []
+        for sk in (pal.get("active_skills") or []):
+            nm = sk.get("name")
+            if not nm:
+                continue
+            se = ELEM_CN.get(sk.get("element_type") or "", "")
+            skills.append({"name": nm, "power": sk.get("power") or "",
+                           "element": (se + "属性") if se else ""})
+        skills.sort(key=lambda s: -(s["power"] if isinstance(s["power"], (int, float)) else 0))
+        skills = skills[:6]
         return {"name": b.get("short") or b["name"], "emoji": "🗼" if is_tower else "👹",
                 "catlabel": b.get("category", "Boss"), "color": color,
-                "elements": [e + "属性" for e in els], "difficulty": b.get("difficulty", ""),
+                "elements": [e + "属性" for e in els],
+                "difficulty": {"Normal": "普通", "Hard": "困难", "Extreme": "残酷"}.get(
+                    b.get("difficulty", ""), b.get("difficulty", "")),
+                "weakness": weakness, "attack": str(atk) if atk else "", "defense": str(defense) if defense else "",
+                "rarity": pal.get("rarity", ""), "skills": skills,
                 "level": b.get("level", ""), "hp": b.get("hp", ""), "location": b.get("location", ""),
                 "drops": [s for s in (self._fmt_drop(d) for d in (b.get("drops") or [])) if s],
                 "icon": self._pal_icon(b.get("dev", "")),

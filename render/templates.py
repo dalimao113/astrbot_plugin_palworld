@@ -1766,7 +1766,9 @@ MISSIONLIST_ING = _IH + """</style></head><body><div class="page">
 BOSS_ING = _IH + """</style></head><body><div class="page">
   <div class="ig-head">{% if icon %}<div class="ig-portrait" style="width:78px;height:78px;border-width:11px"><img src="{{ icon }}"></div>{% endif %}<div style="flex:1;min-width:0"><div class="ig-title">{{ name }}</div><div class="ig-sub"><span class="ig-pill" style="color:{{color}}">{{ catlabel }}</span>{% for e in elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}{% if difficulty %}<span class="ig-pill">{{ difficulty }}</span>{% endif %}</div></div></div>
   <div class="ig-panel">
-    <div class="ig-ivr" style="margin-top:0"><div class="ig-ivb"><div class="ivv">Lv.{{ level or "—" }}</div><div class="ivk">等级</div></div><div class="ig-ivb"><div class="ivv" style="color:var(--pal-danger)">{{ hp or "—" }}</div><div class="ivk">生命值</div></div></div>
+    <div class="ig-ivr" style="margin-top:0"><div class="ig-ivb"><div class="ivv">Lv.{{ level or "—" }}</div><div class="ivk">等级</div></div><div class="ig-ivb"><div class="ivv" style="color:var(--pal-danger)">{{ hp or "—" }}</div><div class="ivk">生命值</div></div>{% if attack %}<div class="ig-ivb"><div class="ivv" style="color:var(--pal-gold)">{{ attack }}</div><div class="ivk">基础攻击</div></div>{% endif %}{% if defense %}<div class="ig-ivb"><div class="ivv" style="color:var(--pal-accent)">{{ defense }}</div><div class="ivk">基础防御</div></div>{% endif %}</div>
+    {% if weakness %}<div class="ig-sec" style="margin-top:13px">弱点属性</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for w in weakness %}<span class="ig-badge">{% if icons.element[w] %}<img src="{{ icons.element[w] }}">{% endif %}{{ w }}</span>{% endfor %}</div>{% endif %}
+    {% if skills %}<div class="ig-sec" style="margin-top:13px">主要技能</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for s in skills %}<span class="ig-pill">{% if s.element and icons.element[s.element] %}<img src="{{ icons.element[s.element] }}">{% endif %}{{ s.name }}{% if s.power %} · 威力{{ s.power }}{% endif %}</span>{% endfor %}</div>{% endif %}
     {% if location %}<div class="ig-sec" style="margin-top:13px">所在</div><div style="font-size:14px;color:var(--pal-text-2)">{{ location }}</div>{% endif %}
     {% if drops %}<div class="ig-sec" style="margin-top:13px">掉落</div><div style="display:flex;flex-wrap:wrap;gap:6px">{% for d in drops %}<span class="ig-pill">{{ d }}</span>{% endfor %}</div>{% endif %}
     <div class="ig-sec" style="margin-top:13px">攻略提示</div><div style="font-size:13px;color:var(--pal-sub);line-height:1.8">{{ tip }}</div>
@@ -4354,7 +4356,13 @@ BOSS_TMPL = _HEAD + """</style></head><body><div class="page">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       <div style="background:rgba(12,8,38,.42);border:1px solid {{color}}44;border-radius:12px;padding:10px 12px"><div style="font-size:12px;color:#b9a9d6">等级</div><div style="font-size:20px;font-weight:800;color:#f3ecd2">Lv.{{ level or "—" }}</div></div>
       <div style="background:rgba(12,8,38,.42);border:1px solid {{color}}44;border-radius:12px;padding:10px 12px"><div style="font-size:12px;color:#b9a9d6">生命值</div><div style="font-size:20px;font-weight:800;color:#ff9a9a">{{ hp or "—" }}</div></div>
+      {% if attack %}<div style="background:rgba(12,8,38,.42);border:1px solid {{color}}44;border-radius:12px;padding:10px 12px"><div style="font-size:12px;color:#b9a9d6">基础攻击</div><div style="font-size:20px;font-weight:800;color:#ffcf8f">{{ attack }}</div></div>{% endif %}
+      {% if defense %}<div style="background:rgba(12,8,38,.42);border:1px solid {{color}}44;border-radius:12px;padding:10px 12px"><div style="font-size:12px;color:#b9a9d6">基础防御</div><div style="font-size:20px;font-weight:800;color:#9fd6ff">{{ defense }}</div></div>{% endif %}
     </div>
+    {% if weakness %}<div class="sec-t" style="margin-top:13px">🛡️ 弱点属性（带这些属性更克它）</div>
+    <div style="display:flex;flex-wrap:wrap;gap:7px">{% for w in weakness %}<span class="pill soft">{% if icons.element[w] %}<img src="{{ icons.element[w] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ w }}</span>{% endfor %}</div>{% endif %}
+    {% if skills %}<div class="sec-t" style="margin-top:13px">💥 主要技能（注意闪避）</div>
+    <div style="display:flex;flex-wrap:wrap;gap:7px">{% for s in skills %}<span class="pill soft">{% if s.element and icons.element[s.element] %}<img src="{{ icons.element[s.element] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ s.name }}{% if s.power %} · 威力{{ s.power }}{% endif %}</span>{% endfor %}</div>{% endif %}
     {% if location %}<div class="sec-t" style="margin-top:13px">📍 所在</div><div style="font-size:14.5px;color:#ece3f7">{{ location }}</div>{% endif %}
     {% if drops %}<div class="sec-t" style="margin-top:13px">🎁 掉落</div>
     <div style="display:flex;flex-wrap:wrap;gap:7px">{% for d in drops %}<span class="pill soft">{{ d }}</span>{% endfor %}</div>{% endif %}
@@ -4376,7 +4384,13 @@ BOSS_PIX = _PH + """</style></head><body><div class="page">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
       <div style="background:rgba(221,198,149,.5);border:2px solid #6a4524;padding:9px 11px"><div style="font-size:12px;color:#574012">等级</div><div style="font-size:19px;color:#46200a">Lv.{{ level or "—" }}</div></div>
       <div style="background:rgba(221,198,149,.5);border:2px solid #6a4524;padding:9px 11px"><div style="font-size:12px;color:#574012">生命值</div><div style="font-size:19px;color:#8f1212">{{ hp or "—" }}</div></div>
+      {% if attack %}<div style="background:rgba(221,198,149,.5);border:2px solid #6a4524;padding:9px 11px"><div style="font-size:12px;color:#574012">基础攻击</div><div style="font-size:19px;color:#8a4a12">{{ attack }}</div></div>{% endif %}
+      {% if defense %}<div style="background:rgba(221,198,149,.5);border:2px solid #6a4524;padding:9px 11px"><div style="font-size:12px;color:#574012">基础防御</div><div style="font-size:19px;color:#2a5a7a">{{ defense }}</div></div>{% endif %}
     </div>
+    {% if weakness %}<div class="sec-t" style="margin-top:12px">弱点属性</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for w in weakness %}<span class="pill">{% if icons.element[w] %}<img src="{{ icons.element[w] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ w }}</span>{% endfor %}</div>{% endif %}
+    {% if skills %}<div class="sec-t" style="margin-top:12px">主要技能</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">{% for s in skills %}<span class="pill">{% if s.element and icons.element[s.element] %}<img src="{{ icons.element[s.element] }}" style="width:14px;height:14px;object-fit:contain;vertical-align:-3px;margin-right:3px">{% endif %}{{ s.name }}{% if s.power %} · 威力{{ s.power }}{% endif %}</span>{% endfor %}</div>{% endif %}
     {% if location %}<div class="sec-t" style="margin-top:12px">所在</div><div style="font-size:14.5px;color:#46200a">{{ location }}</div>{% endif %}
     {% if drops %}<div class="sec-t" style="margin-top:12px">掉落</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px">{% for d in drops %}<span class="pill">{{ d }}</span>{% endfor %}</div>{% endif %}
