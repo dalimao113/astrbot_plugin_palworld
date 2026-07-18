@@ -61,7 +61,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.44.1",
+    "1.45.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -362,11 +362,14 @@ class PalworldPlugin(Star):
         # 植入体(1.0) list + 名字/词条名索引（/帕鲁植入体）
         self._implants: list = []
         self._implant_by_name: dict = {}
+        self._implant_by_id: dict = {}
         try:
             with open(os.path.join(base, "implants.json"), encoding="utf-8") as _f:
                 self._implants = json.loads(_f.read())
             for im in self._implants:
                 self._implant_by_name.setdefault(im["name"], im)   # 完整名唯一(区分耗材/永久)
+                if im.get("item_id"):
+                    self._implant_by_id.setdefault(im["item_id"], im)
         except Exception:  # noqa: BLE001
             pass
         try:
@@ -1018,9 +1021,24 @@ class PalworldPlugin(Star):
                 wt = int(wt) if wt == int(wt) else round(wt, 1)
         except (TypeError, ValueError):
             wt = None
+        # 描述:游戏物品表有则用;植入体游戏无物品描述→用其真实词条效果兜底(见 implants.json)
+        desc = clean_text(it.get("description"))
+        if not desc:
+            im = (self._implant_by_id or {}).get(it.get("item_id"))
+            if im:
+                eff = (im.get("effect") or "").strip()
+                psv = (im.get("passive") or "").strip()
+                bits = []
+                if psv:
+                    bits.append(f"为帕鲁植入「{psv}」词条")
+                if eff:
+                    bits.append(f"效果：{eff}")
+                if im.get("consumable"):
+                    bits.append("（耗材型，使用后消耗）")
+                desc = "。".join(b for b in bits if b)
         return self._img(event, self._t("item"), {
             "name": it["name"], "type": self._item_type_cn(it.get("type")),
-            "description": clean_text(it.get("description")),   # 详情:统一清洗,不截断
+            "description": desc,   # 详情:统一清洗,不截断
             "materials": mats, "benches": rec.get("bench", []),
             "price": price, "sphere": sphere, "weight": wt,
             "related": ([f"/帕鲁材料路线 {it['name']}", f"/帕鲁用途 {it['name']}"]
@@ -3145,6 +3163,26 @@ class PalworldPlugin(Star):
                 break
         return out
 
+    @staticmethod
+    def _fmt_drop(d) -> str:
+        """把掉落项(dict 或字符串)格式化成可读文案：名称 ×数量 · 概率。"""
+        if not isinstance(d, dict):
+            return str(d)
+        name = str(d.get("name") or "").strip()
+        if not name:
+            return ""
+        parts = [name]
+        qty = str(d.get("qty") or "").strip()
+        if qty and qty not in ("1", "1~1"):
+            parts.append(f"×{qty}")
+        rate = d.get("rate")
+        if isinstance(rate, (int, float)) and rate:
+            rate_s = f"{rate:g}%"
+            parts.append("必掉" if rate >= 100 else rate_s)
+        elif isinstance(rate, str) and rate.strip():
+            parts.append(rate.strip())
+        return " ".join(parts)
+
     def _boss_detail_data(self, b: dict) -> dict:
         els = [e for e in (b.get("element") or "").split("/") if e]
         color = "#e8c466"
@@ -3164,15 +3202,22 @@ class PalworldPlugin(Star):
                 tip_parts.append("推荐打手：" + "、".join(recs))
         if b.get("level"):
             tip_parts.append(f"建议练到 Lv.{b['level']} 左右再来打")
+        loc = b.get("location") or ""
         if is_tower:
             tip_parts.append("塔主战限时、限带 5 只帕鲁，注意躲技能、备好治疗")
+        elif "召唤的祭坛" in loc:
+            tip_parts.append(f"需合成「{b.get('pal') or b.get('short') or b['name']}的石板」，再到「召唤的祭坛」召唤挑战")
+            tip_parts.append("石板碎片可从掉落/换购获得，集齐合成石板；血厚建议多人速攻")
+        elif "掠夺者" in loc:
+            tip_parts.append("掠夺者在野外随机出没，等级很高，击败可得「捕食者核心」「究极帕鲁之魂」")
         else:
-            tip_parts.append("突袭 boss 血厚，建议多人或满配队伍速攻")
+            tip_parts.append("野外头目血厚，建议多人或满配队伍速攻")
         return {"name": b.get("short") or b["name"], "emoji": "🗼" if is_tower else "👹",
                 "catlabel": b.get("category", "Boss"), "color": color,
                 "elements": [e + "属性" for e in els], "difficulty": b.get("difficulty", ""),
                 "level": b.get("level", ""), "hp": b.get("hp", ""), "location": b.get("location", ""),
-                "drops": b.get("drops", []), "icon": self._pal_icon(b.get("dev", "")),
+                "drops": [s for s in (self._fmt_drop(d) for d in (b.get("drops") or [])) if s],
+                "icon": self._pal_icon(b.get("dev", "")),
                 "tip": "；".join(tip_parts) + "。"}
 
     async def _cmd_boss(self, event: AstrMessageEvent, args: list, category: str = ""):
