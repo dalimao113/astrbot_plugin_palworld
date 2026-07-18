@@ -14,12 +14,23 @@ dist/
 htmlcov/
 
 # Editor / OS / 本地设置
-.claude/*
-!.claude/rules/
 .vscode/
 .idea/
 *.swp
 .DS_Store
+
+# 开发/AI 工具与内部文档:本地保留,不上传公开仓库(只保留能让插件运行+玩家部署的文件)
+.claude/
+CLAUDE.md
+tests/
+tools/
+.github/
+CONTRIBUTING.md
+docs/DATA_QUALITY_REPORT.md
+docs/DEVELOPMENT_ROADMAP.md
+docs/PROJECT_STATUS.md
+docs/INGAME_UI_REFERENCE.md
+docs/THEME_ICON_COVERAGE.md
 
 # Plugin runtime / local state
 state.json
