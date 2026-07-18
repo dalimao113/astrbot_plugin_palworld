@@ -7,7 +7,7 @@
 
 ## 关键结论:`docs/screenshots/` 不是游戏截图
 
-已逐张核实:`docs/screenshots/*.png`(31 张)是**本插件自己渲染的 fantasy 卡片**(README 展示用),
+已逐张核实:`docs/screenshots/*.webp`(31 张)是**本插件自己渲染的 fantasy 卡片**(README 展示用),
 **不是《幻兽帕鲁》游戏内 UI 截图**。例如:
 
 - `status.png`:插件卡,含 ⚡FPS / 📅游戏天数 / ⏱运行时长 / 👥在线玩家 / ◆服务器负载 / CPU / 内存 —— 全是 Emoji + 主机指标,正是要被替换的**当前状态**。

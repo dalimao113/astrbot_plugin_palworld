@@ -32,51 +32,51 @@
 
 <table>
 <tr>
-<td align="center" width="50%"><b>服务器状态</b> · <code>/帕鲁状态</code><br><img src="docs/screenshots/status.png" width="300"></td>
-<td align="center" width="50%"><b>个人档案</b> · <code>/帕鲁我</code><br><img src="docs/screenshots/profile.png" width="300"></td>
+<td align="center" width="50%"><b>服务器状态</b> · <code>/帕鲁状态</code><br><img src="docs/screenshots/status.webp" width="300"></td>
+<td align="center" width="50%"><b>个人档案</b> · <code>/帕鲁我</code><br><img src="docs/screenshots/profile.webp" width="300"></td>
 </tr>
 <tr>
-<td align="center"><b>出战队伍</b>（HP/个体值/词条/技能）· <code>/帕鲁队伍</code><br><img src="docs/screenshots/team.png" width="300"></td>
-<td align="center"><b>帕鲁箱</b>（编号/翻页/稀有度配色）· <code>/帕鲁箱</code><br><img src="docs/screenshots/palbox.png" width="300"></td>
+<td align="center"><b>出战队伍</b>（HP/个体值/词条/技能）· <code>/帕鲁队伍</code><br><img src="docs/screenshots/team.webp" width="300"></td>
+<td align="center"><b>帕鲁箱</b>（编号/翻页/稀有度配色）· <code>/帕鲁箱</code><br><img src="docs/screenshots/palbox.webp" width="300"></td>
 </tr>
 <tr>
-<td align="center"><b>物品详情</b>（买卖价格 / 帕鲁球捕获力）· <code>/帕鲁物品 帕鲁球</code><br><img src="docs/screenshots/item.png" width="300"></td>
-<td align="center"><b>科技详情</b>（解锁条件）· <code>/帕鲁科技</code><br><img src="docs/screenshots/tech.png" width="300"></td>
+<td align="center"><b>物品详情</b>（买卖价格 / 帕鲁球捕获力）· <code>/帕鲁物品 帕鲁球</code><br><img src="docs/screenshots/item.webp" width="300"></td>
+<td align="center"><b>科技详情</b>（解锁条件）· <code>/帕鲁科技</code><br><img src="docs/screenshots/tech.webp" width="300"></td>
 </tr>
 <tr>
-<td align="center"><b>公会信息</b> · <code>/帕鲁公会</code><br><img src="docs/screenshots/guild.png" width="300"></td>
-<td align="center"><b>公会肝帝榜</b> · <code>/帕鲁公会榜</code><br><img src="docs/screenshots/guildrank.png" width="300"></td>
+<td align="center"><b>公会信息</b> · <code>/帕鲁公会</code><br><img src="docs/screenshots/guild.webp" width="300"></td>
+<td align="center"><b>公会肝帝榜</b> · <code>/帕鲁公会榜</code><br><img src="docs/screenshots/guildrank.webp" width="300"></td>
 </tr>
 <tr>
-<td align="center"><b>帕鲁图鉴详情</b>（数值/牧场产出/掉落/进食/刷新等级）· <code>/帕鲁图鉴 棉悠悠</code><br><img src="docs/screenshots/paldex.png" width="300"></td>
-<td align="center"><b>配种推演</b> · <code>/帕鲁配种 冰棘兽 清雀</code><br><img src="docs/screenshots/breed.png" width="300"></td>
+<td align="center"><b>帕鲁图鉴详情</b>（数值/牧场产出/掉落/进食/刷新等级）· <code>/帕鲁图鉴 棉悠悠</code><br><img src="docs/screenshots/paldex.webp" width="300"></td>
+<td align="center"><b>配种推演</b> · <code>/帕鲁配种 冰棘兽 清雀</code><br><img src="docs/screenshots/breed.webp" width="300"></td>
 </tr>
 <tr>
-<td align="center"><b>属性克制图</b>（九系克制关系）· <code>/帕鲁属性克制</code><br><img src="docs/screenshots/element.png" width="300"></td>
-<td align="center"><b>帕鲁栖息区域</b>（地图热区色块）· <code>/帕鲁栖息区域 火绒狐</code><br><img src="docs/screenshots/habitat.png" width="300"></td>
+<td align="center"><b>属性克制图</b>（九系克制关系）· <code>/帕鲁属性克制</code><br><img src="docs/screenshots/element.webp" width="300"></td>
+<td align="center"><b>帕鲁栖息区域</b>（地图热区色块）· <code>/帕鲁栖息区域 火绒狐</code><br><img src="docs/screenshots/habitat.webp" width="300"></td>
 </tr>
 <tr>
-<td align="center"><b>推荐词条</b>（按战斗/生产/搬运角色定制）· <code>/帕鲁推荐词条 火绒狐</code><br><img src="docs/screenshots/passrec.png" width="300"></td>
-<td align="center"><b>物品配方</b>（材料+制作台）· <code>/帕鲁物品 火箭发射器</code><br><img src="docs/screenshots/recipe.png" width="300"></td>
+<td align="center"><b>推荐词条</b>（按战斗/生产/搬运角色定制）· <code>/帕鲁推荐词条 火绒狐</code><br><img src="docs/screenshots/passrec.webp" width="300"></td>
+<td align="center"><b>物品配方</b>（材料+制作台）· <code>/帕鲁物品 火箭发射器</code><br><img src="docs/screenshots/recipe.webp" width="300"></td>
 </tr>
 <tr>
-<td align="center"><b>任务攻略</b>（剧情/目标/坐标/奖励）· <code>/帕鲁任务 少女与高塔</code><br><img src="docs/screenshots/mission.png" width="300"></td>
-<td align="center"><b>主线任务列表</b>（剧情顺序/翻页）· <code>/帕鲁主线</code><br><img src="docs/screenshots/missionlist.png" width="300"></td>
+<td align="center"><b>任务攻略</b>（剧情/目标/坐标/奖励）· <code>/帕鲁任务 少女与高塔</code><br><img src="docs/screenshots/mission.webp" width="300"></td>
+<td align="center"><b>主线任务列表</b>（剧情顺序/翻页）· <code>/帕鲁主线</code><br><img src="docs/screenshots/missionlist.webp" width="300"></td>
 </tr>
 <tr>
-<td align="center"><b>物品分类菜单</b> · <code>/帕鲁物品</code><br><img src="docs/screenshots/itemcat.png" width="300"></td>
-<td align="center"><b>设施图鉴</b> · <code>/帕鲁设施 木箱</code><br><img src="docs/screenshots/facility.png" width="300"></td>
+<td align="center"><b>物品分类菜单</b> · <code>/帕鲁物品</code><br><img src="docs/screenshots/itemcat.webp" width="300"></td>
+<td align="center"><b>设施图鉴</b> · <code>/帕鲁设施 木箱</code><br><img src="docs/screenshots/facility.webp" width="300"></td>
 </tr>
 <tr>
-<td align="center"><b>在线玩家地图</b>（真实底图标点）· <code>/帕鲁地图</code><br><img src="docs/screenshots/map.png" width="300"></td>
-<td align="center"><b>在线统计</b>（7 日趋势）· <code>/帕鲁统计</code><br><img src="docs/screenshots/stats.png" width="300"></td>
+<td align="center"><b>在线玩家地图</b>（真实底图标点）· <code>/帕鲁地图</code><br><img src="docs/screenshots/map.webp" width="300"></td>
+<td align="center"><b>在线统计</b>（7 日趋势）· <code>/帕鲁统计</code><br><img src="docs/screenshots/stats.webp" width="300"></td>
 </tr>
 <tr>
-<td align="center"><b>背包明细</b> · <code>/帕鲁背包</code><br><img src="docs/screenshots/bag.png" width="300"></td>
-<td align="center"><b>指令帮助</b> · <code>/帕鲁帮助</code><br><img src="docs/screenshots/help.png" width="300"></td>
+<td align="center"><b>背包明细</b> · <code>/帕鲁背包</code><br><img src="docs/screenshots/bag.webp" width="300"></td>
+<td align="center"><b>指令帮助</b> · <code>/帕鲁帮助</code><br><img src="docs/screenshots/help.webp" width="300"></td>
 </tr>
 <tr>
-<td align="center" colspan="2"><b>部署自检</b>（管理员一键体检环境，装完先发这条）· <code>/帕鲁自检</code><br><img src="docs/screenshots/selfcheck.png" width="300"></td>
+<td align="center" colspan="2"><b>部署自检</b>（管理员一键体检环境，装完先发这条）· <code>/帕鲁自检</code><br><img src="docs/screenshots/selfcheck.webp" width="300"></td>
 </tr>
 </table>
 
