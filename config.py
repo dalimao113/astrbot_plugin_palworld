@@ -43,7 +43,7 @@ DEFAULTS: dict = {
     "notify_settings_change": False,
     "daily_reboot_time": "",
     "notify_server_update": True,
-    "update_check_hours": 6,
+    "update_check_hours": 1,
     # --- 备份 ---
     "backup_keep_max": 0,        # 修正：旧代码兜底误为 20，与 schema/hint(0=交给镜像) 不符
     "engine_backup_keep": 30,
@@ -117,6 +117,19 @@ def get_list(cfg, key: str) -> list:
 _TIME_RE = re.compile(r"^([01]?\d|2[0-3]):[0-5]\d$")          # HH:MM
 _QUIET_RE = re.compile(r"^([01]?\d|2[0-3])-([01]?\d|2[0-3])$")  # HH-HH
 _CONTAINER_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9_.-]*$")     # docker 容器名规则
+_CONTAINER_PATH_RE = re.compile(r"^/(?:[a-zA-Z0-9_.-]+/)*[a-zA-Z0-9_.-]+$")
+
+
+def is_safe_container_path(value) -> bool:
+    """容器内路径安全护栏：只接受标准绝对路径，不允许控制字符、空段或 . / .. 段。
+
+    Palworld 世界存档路径由固定 ASCII 目录和 32 位 GUID 构成，不需要 shell 元字符；
+    收紧字符集可避免该配置进入 ``/bin/sh -c`` 时形成命令注入。尾部 ``/`` 允许并忽略。
+    """
+    path = str(value or "").strip().rstrip("/")
+    if not path or not _CONTAINER_PATH_RE.fullmatch(path):
+        return False
+    return all(part not in (".", "..") for part in path.split("/")[1:])
 
 
 def validate_config(cfg) -> list[tuple[str, str]]:
@@ -154,9 +167,10 @@ def validate_config(cfg) -> list[tuple[str, str]]:
     if sock and not sock.startswith("/"):
         out.append(("警告", f"docker_sock「{sock}」应为绝对路径（以 / 开头）。"))
     save_dir = get_str(cfg, "save_dir_in_container")
-    if save_dir and not save_dir.startswith("/"):
-        out.append(("警告", f"save_dir_in_container「{save_dir}」应为容器内绝对路径（以 / 开头），"
-                            "留空可自动探测。"))
+    if save_dir and not is_safe_container_path(save_dir):
+        out.append(("警告", f"save_dir_in_container「{save_dir}」不是安全的容器内绝对路径，"
+                            "只能包含字母、数字、/、_、.、-，且不能含 . 或 .. 路径段；"
+                            "非法值会被忽略，留空可自动探测。"))
 
     # 时间格式
     for key in ("morning_report_time", "evening_report_time",

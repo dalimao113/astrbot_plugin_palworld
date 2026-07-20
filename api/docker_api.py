@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import io
 import os
+import shutil
 import tarfile
 import tempfile
 import time
@@ -50,7 +51,7 @@ async def container_stats(sock: str, container: str) -> Optional[dict]:
     try:
         conn = aiohttp.UnixConnector(path=sock)
         async with aiohttp.ClientSession(connector=conn) as s:
-            url = f"http://docker/containers/{container}/stats?stream=false"
+            url = f"http://docker/containers/{quote(str(container), safe='')}/stats?stream=false"
             async with s.get(url, timeout=aiohttp.ClientTimeout(total=5)) as r:
                 if r.status != 200:
                     return None
@@ -74,35 +75,63 @@ async def container_stats(sock: str, container: str) -> Optional[dict]:
         return None
 
 
+def _extract_data_archive(tf: tarfile.TarFile, destination: str) -> None:
+    """只提取普通文件和目录；先验证整包，避免异常 tar 被部分接受或写出目标目录。"""
+    base = os.path.realpath(destination)
+    checked = []
+    for member in tf.getmembers():
+        name = member.name
+        target = os.path.realpath(os.path.join(base, name))
+        path_parts = [part for part in name.split("/") if part not in ("", ".")]
+        try:
+            inside = os.path.commonpath((base, target)) == base
+        except ValueError:
+            inside = False
+        if not name or ".." in path_parts or not inside:
+            raise ValueError("Docker archive 包含越界路径，已拒绝解包")
+        if not (member.isfile() or member.isdir()):
+            raise ValueError("Docker archive 包含链接或特殊文件，已拒绝解包")
+        if target == base and not member.isdir():
+            raise ValueError("Docker archive 的根成员不是目录，已拒绝解包")
+        checked.append((member, target))
+
+    # 预检全部通过后才创建文件；不恢复 tar 权限/属主，临时目录保持进程自身的安全权限。
+    for member, target in checked:
+        if member.isdir():
+            os.makedirs(target, exist_ok=True)
+            continue
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        source = tf.extractfile(member)
+        if source is None:
+            raise ValueError("Docker archive 普通文件缺少内容，已拒绝解包")
+        with source, open(target, "wb") as output:
+            shutil.copyfileobj(source, output)
+
+
 async def pull_save_files(sock: str, container: str, save_dir: str) -> str:
     """[只读] 经 docker archive API 把 Level.sav + Players/ 拉到本地临时目录，返回目录路径。
 
-    安全：tar 解包用 filter='data'(Py3.12+)；旧版手动拒绝绝对路径/.. 穿越与 symlink/hardlink，
-    防止恶意存档写出临时目录之外。"""
+    安全：跨 Python 版本统一预检全部成员，只允许目标目录内的普通文件和目录；拒绝路径穿越、
+    symlink/hardlink、设备和 FIFO，异常时整批临时文件统一清理。"""
     tmp = tempfile.mkdtemp(prefix="palsave_")
-    conn = aiohttp.UnixConnector(path=sock)
-    async with aiohttp.ClientSession(connector=conn) as s:
-        for sub in (f"{save_dir}/Level.sav", f"{save_dir}/Players"):
-            url = f"http://docker/containers/{container}/archive?path={quote(sub)}"
-            async with s.get(url, timeout=aiohttp.ClientTimeout(total=30)) as r:
-                if r.status != 200:
-                    raise Exception(f"archive {sub} HTTP {r.status}")
-                data = await r.read()
-            with tarfile.open(fileobj=io.BytesIO(data)) as tf:
-                try:
-                    tf.extractall(tmp, filter="data")
-                except TypeError:        # Python<3.12 无 filter 参数，手动做等价的安全过滤
-                    base = os.path.realpath(tmp)
-                    for m in tf.getmembers():
-                        # 拒绝绝对路径 / .. 穿越：解析后必须仍在 tmp 内
-                        target = os.path.realpath(os.path.join(tmp, m.name))
-                        if not (target == base or target.startswith(base + os.sep)):
-                            continue
-                        # 拒绝链接类条目(symlink/hardlink 可指向外部)
-                        if m.issym() or m.islnk():
-                            continue
-                        tf.extract(m, tmp)
-    return tmp
+    completed = False
+    try:
+        conn = aiohttp.UnixConnector(path=sock)
+        async with aiohttp.ClientSession(connector=conn) as s:
+            for sub in (f"{save_dir}/Level.sav", f"{save_dir}/Players"):
+                url = (f"http://docker/containers/{quote(str(container), safe='')}/archive"
+                       f"?path={quote(sub, safe='')}")
+                async with s.get(url, timeout=aiohttp.ClientTimeout(total=30)) as r:
+                    if r.status != 200:
+                        raise Exception(f"archive {sub} HTTP {r.status}")
+                    data = await r.read()
+                with tarfile.open(fileobj=io.BytesIO(data)) as tf:
+                    _extract_data_archive(tf, tmp)
+        completed = True
+        return tmp
+    finally:
+        if not completed:
+            shutil.rmtree(tmp, ignore_errors=True)
 
 
 async def docker_exec(sock: str, container: str, cmd: list, timeout: int = 20) -> Tuple[int, str]:
@@ -110,7 +139,7 @@ async def docker_exec(sock: str, container: str, cmd: list, timeout: int = 20) -
     conn = aiohttp.UnixConnector(path=sock)
     async with aiohttp.ClientSession(connector=conn) as s:
         async with s.post(
-            f"http://docker/containers/{container}/exec",
+            f"http://docker/containers/{quote(str(container), safe='')}/exec",
             json={"AttachStdout": True, "AttachStderr": True, "Cmd": cmd},
             timeout=aiohttp.ClientTimeout(total=10),
         ) as r:
@@ -118,18 +147,23 @@ async def docker_exec(sock: str, container: str, cmd: list, timeout: int = 20) -
                 raise Exception(f"exec create HTTP {r.status}")
             eid = (await r.json())["Id"]
         async with s.post(
-            f"http://docker/exec/{eid}/start",
+            f"http://docker/exec/{quote(str(eid), safe='')}/start",
             json={"Detach": False, "Tty": False},
             timeout=aiohttp.ClientTimeout(total=timeout),
         ) as r:
+            if not 200 <= r.status < 300:
+                raise Exception(f"exec start HTTP {r.status} {(await r.text())[:80]}")
             out = demux_docker_stream(await r.read())
         # 读取失败不能默认成功：默认 -1（未知/失败），仅当成功读到 ExitCode 才采信。
         # ExitCode 为 None（进程仍在跑/缺字段）同样按失败处理，避免误报成功。
         code = -1
         try:
-            async with s.get(f"http://docker/exec/{eid}/json",
+            async with s.get(f"http://docker/exec/{quote(str(eid), safe='')}/json",
                              timeout=aiohttp.ClientTimeout(total=10)) as r:
-                ec = (await r.json()).get("ExitCode", None)
+                if r.status != 200:
+                    raise Exception(f"exec inspect HTTP {r.status}")
+                detail = await r.json()
+                ec = detail.get("ExitCode", None) if isinstance(detail, dict) else None
             code = -1 if ec is None else int(ec)
         except Exception:  # noqa: BLE001
             code = -1
@@ -142,7 +176,7 @@ async def container_action(sock: str, container: str, action: str, timeout: int 
     conn = aiohttp.UnixConnector(path=sock)
     async with aiohttp.ClientSession(connector=conn) as s:
         async with s.post(
-            f"http://docker/containers/{container}/{action}{q}",
+            f"http://docker/containers/{quote(str(container), safe='')}/{quote(str(action), safe='')}{q}",
             timeout=aiohttp.ClientTimeout(total=timeout),
         ) as r:
             if r.status not in (204, 304):
@@ -153,11 +187,15 @@ async def image_of(sock: str, container: str) -> str:
     """[只读] 取容器所用镜像名（用于起同镜像的一次性 helper 容器）。"""
     conn = aiohttp.UnixConnector(path=sock)
     async with aiohttp.ClientSession(connector=conn) as s:
-        async with s.get(f"http://docker/containers/{container}/json",
+        async with s.get(f"http://docker/containers/{quote(str(container), safe='')}/json",
                          timeout=aiohttp.ClientTimeout(total=10)) as r:
+            if r.status != 200:
+                raise RuntimeError(f"inspect image HTTP {r.status}")
             d = await r.json()
-    return (d.get("Config", {}) or {}).get("Image") \
-        or "thijsvanloef/palworld-server-docker:latest"
+    image = (d.get("Config", {}) or {}).get("Image") if isinstance(d, dict) else None
+    if not isinstance(image, str) or not image.strip():
+        raise RuntimeError("容器详情缺少 Config.Image，已中止 helper 操作")
+    return image.strip()
 
 
 async def inspect_container(sock: str, container: str) -> Optional[dict]:
@@ -165,11 +203,12 @@ async def inspect_container(sock: str, container: str) -> Optional[dict]:
     try:
         conn = aiohttp.UnixConnector(path=sock)
         async with aiohttp.ClientSession(connector=conn) as s:
-            async with s.get(f"http://docker/containers/{container}/json",
+            async with s.get(f"http://docker/containers/{quote(str(container), safe='')}/json",
                              timeout=aiohttp.ClientTimeout(total=5)) as r:
                 if r.status != 200:
                     return None
-                return await r.json()
+                detail = await r.json()
+                return detail if isinstance(detail, dict) else None
     except Exception:  # noqa: BLE001
         return None
 
@@ -181,9 +220,30 @@ async def list_containers(sock: str) -> list:
         async with aiohttp.ClientSession(connector=conn) as s:
             async with s.get("http://docker/containers/json",
                              timeout=aiohttp.ClientTimeout(total=5)) as r:
-                return await r.json() if r.status == 200 else []
+                if r.status != 200:
+                    return []
+                containers = await r.json()
+                if not isinstance(containers, list):
+                    return []
+                return [container for container in containers if isinstance(container, dict)]
     except Exception:  # noqa: BLE001
         return []
+
+
+async def _remove_helper_container(session: aiohttp.ClientSession, cid_q: str) -> None:
+    """尽力删除 helper 容器；失败重试一次，最终失败只告警而不覆盖主体操作结果。"""
+    last_error = "未知错误"
+    url = f"http://docker/containers/{cid_q}?force=1"
+    for _attempt in range(2):
+        try:
+            async with session.delete(url, timeout=aiohttp.ClientTimeout(total=20)) as r:
+                if 200 <= r.status < 300 or r.status == 404:
+                    return
+                detail = (await r.text()).replace("\r", " ").replace("\n", " ")[:120]
+                last_error = f"HTTP {r.status}" + (f": {detail}" if detail else "")
+        except Exception as e:  # noqa: BLE001
+            last_error = str(e).replace("\r", " ").replace("\n", " ")[:120] or type(e).__name__
+    logger.warning(f"{LOG_PREFIX} helper 容器 {cid_q[:12]} 清理失败（已重试）: {last_error}")
 
 
 async def run_helper(sock: str, image: str, src_container: str,
@@ -198,31 +258,30 @@ async def run_helper(sock: str, image: str, src_container: str,
             "HostConfig": {"VolumesFrom": [src_container],
                            "AutoRemove": False, "NetworkMode": "none"},
         }
-        async with s.post(f"http://docker/containers/create?name={name}", json=body,
+        async with s.post(f"http://docker/containers/create?name={quote(name, safe='')}", json=body,
                           timeout=aiohttp.ClientTimeout(total=20)) as r:
             if r.status not in (200, 201):
                 raise Exception(f"helper create HTTP {r.status} {(await r.text())[:120]}")
             cid = (await r.json())["Id"]
         try:
-            async with s.post(f"http://docker/containers/{cid}/start",
+            cid_q = quote(str(cid), safe="")
+            async with s.post(f"http://docker/containers/{cid_q}/start",
                               timeout=aiohttp.ClientTimeout(total=20)) as r:
                 if r.status not in (204, 304):
                     raise Exception(f"helper start HTTP {r.status} {(await r.text())[:120]}")
-            async with s.post(f"http://docker/containers/{cid}/wait",
+            async with s.post(f"http://docker/containers/{cid_q}/wait",
                               timeout=aiohttp.ClientTimeout(total=timeout)) as r:
-                code = (await r.json()).get("StatusCode", -1)
-            out = ""
-            try:
-                async with s.get(f"http://docker/containers/{cid}/logs?stdout=1&stderr=1",
-                                 timeout=aiohttp.ClientTimeout(total=15)) as r:
-                    out = demux_docker_stream(await r.read())
-            except Exception:  # noqa: BLE001
-                pass
-            return int(code), out
+                if not 200 <= r.status < 300:
+                    raise Exception(f"helper wait HTTP {r.status} {(await r.text())[:120]}")
+                wait_result = await r.json()
+                if not isinstance(wait_result, dict) or wait_result.get("StatusCode") is None:
+                    raise Exception("helper wait 响应缺少 StatusCode")
+                code = int(wait_result["StatusCode"])
+            async with s.get(f"http://docker/containers/{cid_q}/logs?stdout=1&stderr=1",
+                             timeout=aiohttp.ClientTimeout(total=15)) as r:
+                if not 200 <= r.status < 300:
+                    raise Exception(f"helper logs HTTP {r.status} {(await r.text())[:120]}")
+                out = demux_docker_stream(await r.read())
+            return code, out
         finally:
-            try:
-                async with s.delete(f"http://docker/containers/{cid}?force=1",
-                                    timeout=aiohttp.ClientTimeout(total=20)):
-                    pass
-            except Exception:  # noqa: BLE001
-                pass
+            await _remove_helper_container(s, cid_q)

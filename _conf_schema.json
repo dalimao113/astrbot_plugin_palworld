@@ -130,19 +130,19 @@
     "type": "string",
     "default": "",
     "description": "每日例行重启时间(HH:MM)",
-    "hint": "若帕鲁容器配了每日自动重启(镜像 AUTO_REBOOT_CRON)，在此填同一时间(如 05:00)。插件会提前 2 分钟发例行重启预告，并在重启前后静默掉线/FPS 误报。留空=关闭。"
+    "hint": "可手填与镜像一致的重启时间(如 05:00)；留空时会只读识别 Palworld 容器的标准每日 AUTO_REBOOT_CRON_EXPRESSION。插件约提前 5 分钟发 QQ 预告，并在重启前后静默掉线/FPS 误报；复杂 cron 或容器时区不同请手填。"
   },
   "notify_server_update": {
     "type": "bool",
     "default": true,
     "description": "检测服务端新版本并通知",
-    "hint": "后台定时查 Steam 是否有帕鲁服务端新版本，检测到就发游戏公告+QQ群通知(更新由镜像自带的每日自动更新执行，本项只负责提前通知)。"
+    "hint": "后台定时查 Steam 是否有帕鲁服务端新版本：检测到先通知 QQ 群，自动发送本次官方中文完整更新公告，并在镜像计划更新前约 5 分钟发游戏公告。实际更新/重启仍由镜像 AUTO_UPDATE/UPDATE_ON_BOOT 完成。"
   },
   "update_check_hours": {
     "type": "int",
-    "default": 6,
+    "default": 1,
     "description": "版本检测间隔(小时)",
-    "hint": "每隔多少小时查一次 Steam 新版本。默认 6 小时。"
+    "hint": "每隔多少小时查一次 Steam 新版本，最小 1 小时。默认 1 小时；临时检测失败会在 10 分钟后重试。"
   },
   "backup_keep_max": {
     "type": "int",
@@ -208,7 +208,7 @@
     "type": "string",
     "default": "",
     "description": "存档目录(帕鲁服容器内路径，留空自动探测)",
-    "hint": "/帕鲁背包·队伍 解析存档用。留空(推荐)时插件会自动在容器内 SaveGames/0/ 下找唯一的世界GUID目录，删档重开后也无需改。只有多世界并存或路径特殊时才手填完整路径(最后一段是32位世界GUID)。"
+    "hint": "/帕鲁背包·队伍 解析存档用。留空(推荐)时插件会自动在容器内 SaveGames/0/ 下找唯一的世界GUID目录，删档重开后也无需改。只有多世界并存或路径特殊时才手填完整绝对路径(最后一段是32位世界GUID；路径只能含字母、数字、/、_、.、-)。"
   },
   "save_cache_ttl": {
     "type": "int",

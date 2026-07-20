@@ -7,6 +7,8 @@ from __future__ import annotations
 # 常量
 # ----------------------------------------------------------------------
 LOG_PREFIX = "[帕鲁管家]"
+# Palworld 数据根目录；回档脚本只在其 Saved/SaveGames 下替换世界存档。
+PAL_DATA_DIR = "/palworld/Pal"
 # 删档重开时旧存档的备份目录(容器内)；/帕鲁恢复存档 从这里取最近一次备份还原
 RESET_BACKUP_DIR = "/palworld/Pal/Saved/manual_resets"
 # 镜像每天3点的备份(回档/份数上限对接这个)：/palworld/backups/palworld-save-2026-06-29_03-00-00.tar.gz

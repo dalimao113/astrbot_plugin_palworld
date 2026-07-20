@@ -30,10 +30,22 @@ class SaveService:
         self._neg_until: float = 0.0          # 负缓存窗口结束时间
         self._lock: Optional[asyncio.Lock] = None  # 惰性创建
         self._last_forced_save: float = 0.0   # 上次成功强制存盘时间(节流)
+        self._generation: int = 0             # 主动失效代次，阻止进行中的旧拉档回填缓存
 
     def invalidate(self):
-        """使存档缓存立即失效（存档/关服/重启/回档/重置等操作后旧档不可再复用）。"""
+        """使成功与失败缓存立即失效，外部状态变化后允许下一次查询立刻重试。"""
+        self._generation += 1
         self._cache = None
+        self._neg_until = 0.0
+
+    async def note_successful_save(self) -> None:
+        """记录外部已成功强存：失效旧结果，等写盘稳定，并避免下一次查询重复强存。"""
+        self.invalidate()
+        if self._lock is None:
+            self._lock = asyncio.Lock()
+        async with self._lock:
+            await asyncio.sleep(1.0)
+            self._last_forced_save = time.time()
 
     def cache_entry(self) -> Optional[tuple]:
         """返回当前缓存 (timestamp, data) 或 None，供后台预热判断是否临期。"""
@@ -70,7 +82,8 @@ class SaveService:
                 return self._cache[1]
             if now < self._neg_until:
                 return None
-            return await self._do_fetch(force_save, sock, now)
+            generation = self._generation
+            return await self._do_fetch(force_save, sock, now, generation)
 
     async def fetch_profiles(self, force_save: bool = True,
                              max_age: Optional[int] = None) -> Optional[dict]:
@@ -82,7 +95,8 @@ class SaveService:
         d = await self.fetch_save_data(force_save, max_age)
         return d.get("guilds") if d else None
 
-    async def _do_fetch(self, force_save: bool, sock: str, now: float) -> Optional[dict]:
+    async def _do_fetch(self, force_save: bool, sock: str, now: float,
+                        generation: int) -> Optional[dict]:
         p = self.plugin
         container = await p._resolve_container(sock)
         save_dir = await p._resolve_save_dir(sock, container)
@@ -92,9 +106,12 @@ class SaveService:
             min_gap = max(int(p.config.get("force_save_min_interval", 15)), 0)
             if now - self._last_forced_save >= min_gap:
                 try:
-                    await p._api_post("/v1/api/save", {})   # 先落盘，拿到最新数据
-                    await asyncio.sleep(1.0)                 # 给服务器写盘留点时间
-                    self._last_forced_save = time.time()
+                    ok, err = await p._api_post("/v1/api/save", {})   # 先落盘，拿到最新数据
+                    if ok:
+                        await asyncio.sleep(1.0)             # 给服务器写盘留点时间
+                        self._last_forced_save = time.time()
+                    else:
+                        logger.warning(f"{LOG_PREFIX} 强制存盘失败(仍尝试拉当前档): {err}")
                 except Exception as e:  # noqa: BLE001
                     logger.warning(f"{LOG_PREFIX} 强制存盘失败(仍尝试拉当前档): {e}")
         tmp = None
@@ -107,6 +124,11 @@ class SaveService:
         finally:
             if tmp:
                 shutil.rmtree(tmp, ignore_errors=True)
+        if generation != self._generation:
+            # 拉档期间发生了重启/恢复/回档/主动存档等外部状态变化；本次结果属于旧代次，
+            # 既不能回填缓存，也不能用失败结果重新建立负缓存。
+            logger.debug(f"{LOG_PREFIX} 拉档结果因缓存已主动失效而丢弃")
+            return None
         if data is not None:
             self._cache = (now, data)
             self._neg_until = 0   # 成功即清除负缓存窗口

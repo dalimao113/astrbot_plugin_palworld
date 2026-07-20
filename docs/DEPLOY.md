@@ -603,6 +603,10 @@ curl -fsSL https://raw.githubusercontent.com/dalimao113/astrbot_plugin_palworld/
 #### C. 游戏本体
 `.env` 里 `UPDATE_ON_BOOT=true` / `AUTO_UPDATE_ENABLED=true` 时，帕鲁容器重启就自动更到最新游戏版本，一般无需手动；也可在 1Panel「编排 → palworld → 重新部署」触发。
 
+插件默认每 1 小时检查一次 Steam 服务端 manifest，临时失败会在 10 分钟后重试。检测到新版本后会先通知 QQ，随后自动发送本次 Steam 官方简体中文完整更新公告；长文使用合并转发，部分群失败时只补发失败群。镜像更新倒计时窗口还会向游戏内发送中文公告；安装模板默认由 Palworld 镜像在每小时第 5 分钟检查更新，需要更新且有玩家在线时倒计时 5 分钟。实际更新与重启仍由镜像完成。`daily_reboot_time` 留空时，插件会只读识别同一时区下的标准每日 `AUTO_REBOOT_CRON_EXPRESSION`；更新计划还可识别 `分 * * * *` 形式的标准每小时 cron，复杂 cron 或时区不同不作猜测。
+
+上述自动更新通过容器内 SteamCMD 更新挂载到 `/palworld` 的游戏服务端文件，不会拉取新的 Docker 镜像。Docker 镜像只有在显式执行部署脚本的 `--update` 或手动拉取/重新部署时才会升级。
+
 > ⚠️ **普通重跑脚本（不带 `--update`）只体检配置 + 更新插件，不会自动升级镜像**——这是有意为之，避免 AstrBot 跨大版本意外破坏环境。想升级镜像时才显式用 `--update`。
 
 ---
@@ -685,10 +689,10 @@ CROSSPLAY_PLATFORMS=(Steam,Xbox,PS5,Mac)
 UPDATE_ON_BOOT=true
 # 公开服建议开，跟上客户端版本
 AUTO_UPDATE_ENABLED=true
-# 每天凌晨 5 点检查更新
-AUTO_UPDATE_CRON_EXPRESSION=0 5 * * *
+# 每小时第 5 分钟检查更新（避开每天 05:00 例行重启）
+AUTO_UPDATE_CRON_EXPRESSION=5 * * * *
 # 更新前提前几分钟通知
-AUTO_UPDATE_WARN_MINUTES=30
+AUTO_UPDATE_WARN_MINUTES=5
 
 # ════════ 自动重启 ════════
 # 是否定时自动重启

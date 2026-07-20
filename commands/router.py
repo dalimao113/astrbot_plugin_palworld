@@ -135,7 +135,8 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("喊", "_cmd_call", ("喊人", "call"), pass_args=True, description="在游戏里喊某玩家上线(加名字)", category="misc"),
 
     # ---------------- 二次确认 ----------------
-    CommandSpec("确认", "_cmd_confirm", description="确认执行上一步高危操作", category="admin"),
+    CommandSpec("确认", "_cmd_confirm", admin=True, log_denied=True,
+                description="确认执行上一步高危操作", category="admin"),
 
     # ---------------- 管理审计 / 自检 / 地图（白名单，各自内联鉴权，拒绝不写警告日志） ----------------
     CommandSpec("审计", "_cmd_audit", ("日志", "audit"), admin=True, description="查看管理操作审计日志(管理)", category="admin"),

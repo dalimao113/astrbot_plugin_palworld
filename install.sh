@@ -7,9 +7,10 @@
 #  已有环境则"体检 + 精准补配置"。
 #
 #  用法:
-#    curl -fsSL <raw>/install.sh | bash              # 真正执行 (默认)
-#    curl -fsSL <raw>/install.sh | bash -s -- --dry-run   # 演练, 只看不改
-#    DRY_RUN=1 bash install.sh                       # 同上, 用环境变量
+#    curl -fsSLo install.sh <raw>/install.sh         # 先下载，不直接管道执行
+#    bash -n install.sh                              # 检查脚本语法
+#    bash install.sh --dry-run                       # 演练，只看不改
+#    bash install.sh                                 # 确认后正式执行
 #
 #  设计原则(务必保持):
 #    1) dry-run: 只检测 + 打印将要做什么 + 显示 diff, 绝不写文件/不重建容器
@@ -37,12 +38,16 @@ PAL_COMPOSE="${PAL_DIR}/compose.yaml"
 PAL_ENV="${PAL_DIR}/.env"
 
 PLUGIN_REPO="https://github.com/dalimao113/astrbot_plugin_palworld.git"
-YQ_URL="https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64"
-# 国内加速备用(下载失败时依次尝试)
-YQ_MIRRORS=(
-  "https://ghproxy.net/https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64"
-  "https://mirror.ghproxy.com/https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64"
+# yq 固定到已发布的不可变版本，并用该版本官方 checksums 校验后再安装。
+# 可通过环境变量显式覆盖版本，但仍必须通过对应版本的官方 SHA-256 校验。
+YQ_VERSION="${YQ_VERSION:-v4.53.3}"
+YQ_INSTALL_PATH="${YQ_INSTALL_PATH:-/usr/local/bin/yq}"
+YQ_MIRROR_PREFIXES=(
+  ""
+  "https://ghproxy.net/"
+  "https://mirror.ghproxy.com/"
 )
+export PATH="/usr/local/bin:${PATH}"
 
 EXTERNAL_NET="${EXTERNAL_NET:-astrbot_default}"   # 所有容器共享的外部网络(可 env 覆盖)
 
@@ -62,11 +67,24 @@ PAL_SERVER_NAME=""
 PAL_PLAYERS=""
 ADMIN_QQ=""
 
-# 临时文件登记 + 退出清理: 中途失败(ERR/Ctrl-C/正常退出)都会清掉残渣, 不在 /tmp 留垃圾。
-# 用 _mktemp 代替 mktemp 创建临时文件即可自动登记; mktemp -d(临时目录)不要走这里。
-_TMP_FILES=()
-_mktemp() { local f; f="$(command mktemp "$@")"; _TMP_FILES+=("$f"); printf '%s' "$f"; }
-trap 'rm -f "${_TMP_FILES[@]:-}" 2>/dev/null || true' EXIT
+# 所有普通临时文件都放进同一个私有目录。_mktemp 常在 $(...) 子进程中调用，不能依赖
+# 子进程修改父进程数组；退出时清理整个私有目录才能保证 ERR/Ctrl-C/正常退出都不留残渣。
+_TMP_DIR="$(command mktemp -d "${TMPDIR:-/tmp}/palworld-install.XXXXXX")"
+_TARGET_TMP_FILES=()
+_mktemp() { command mktemp "${_TMP_DIR}/file.XXXXXX"; }
+_target_mktemp() {
+  TARGET_TMP="$(command mktemp "${1}.tmp.XXXXXX")"
+  _TARGET_TMP_FILES+=("$TARGET_TMP")
+}
+_cleanup_tmp() {
+  if [ "${#_TARGET_TMP_FILES[@]}" -gt 0 ]; then
+    rm -f -- "${_TARGET_TMP_FILES[@]}" 2>/dev/null || true
+  fi
+  if [ -n "${_TMP_DIR:-}" ]; then
+    rm -rf -- "$_TMP_DIR" 2>/dev/null || true
+  fi
+}
+trap _cleanup_tmp EXIT
 
 # ---------------------------------------------------------------------------
 # 日志 / 颜色
@@ -112,6 +130,27 @@ run_write() {
   fi
   log "执行: ${desc}"
   "$@"
+}
+
+# 把候选文件复制到目标同目录的临时文件，保留已有文件的权限/所有者后原子替换。
+# 新文件使用调用方给出的 mode。拒绝目标符号链接，避免 root 安装脚本被路径劫持。
+atomic_replace_file() {
+  local source="$1" target="$2" mode="${3:-600}" staged
+  if [ -L "$target" ]; then
+    err "拒绝覆盖符号链接: ${target}"
+    return 1
+  fi
+  mkdir -p "$(dirname "$target")"
+  _target_mktemp "$target"; staged="$TARGET_TMP"
+  cp -- "$source" "$staged"
+  if [ -e "$target" ]; then
+    chmod --reference="$target" "$staged"
+    chown --reference="$target" "$staged"
+  else
+    chmod "$mode" "$staged"
+  fi
+  mv -f -- "$staged" "$target"
+  rm -f -- "$source"
 }
 
 # 只读命令直接跑(检测用), 不需要包装
@@ -170,6 +209,11 @@ prompt_value() {
 # ---------------------------------------------------------------------------
 confirm_and_apply() {
   local target="$1" candidate="$2" note="$3"
+  if [ -L "$target" ]; then
+    err "拒绝覆盖符号链接目标: ${target}"
+    rm -f "$candidate"
+    return 1
+  fi
   if diff -q "$target" "$candidate" >/dev/null 2>&1; then
     ok "「${note}」无需改动 (已符合要求)"
     rm -f "$candidate"
@@ -192,7 +236,7 @@ confirm_and_apply() {
   if confirm "应用以上修改?"; then
     cp -a "$target" "${target}.bak.${TS}"
     ok "已备份原文件到 ${target}.bak.${TS}"
-    mv "$candidate" "$target"
+    atomic_replace_file "$candidate" "$target"
     ok "已应用修改。"
     return 0
   else
@@ -362,6 +406,8 @@ stage_precheck() {
 
   # 系统版本
   if [ -r /etc/os-release ]; then
+    # shellcheck source=/etc/os-release
+    # shellcheck disable=SC1091
     . /etc/os-release
     if [ "${ID:-}" = "ubuntu" ]; then
       ok "系统: ${PRETTY_NAME:-Ubuntu}"
@@ -386,14 +432,14 @@ stage_precheck() {
 stage_deps() {
   step "阶段 1 / 系统依赖"
   local need=()
-  for c in curl git jq openssl wget; do
+  for c in curl git jq openssl wget sha256sum; do
     command -v "$c" >/dev/null 2>&1 || need+=("$c")
   done
   # ca-certificates 没有独立命令, 用 dpkg 判断
   if ! dpkg -s ca-certificates >/dev/null 2>&1; then need+=("ca-certificates"); fi
 
   if [ "${#need[@]}" -eq 0 ]; then
-    ok "基础依赖齐全 (curl/git/jq/openssl/wget/ca-certificates)"
+    ok "基础依赖齐全 (curl/git/jq/openssl/wget/sha256sum/ca-certificates)"
   else
     warn "缺少: ${need[*]}"
     run_write "apt 安装缺失依赖" bash -c "apt-get update -y && apt-get install -y ${need[*]}"
@@ -403,30 +449,81 @@ stage_deps() {
   if command -v yq >/dev/null 2>&1 && yq --version 2>/dev/null | grep -qi mikefarah; then
     ok "yq 已安装: $(yq --version 2>/dev/null)"
   else
-    warn "未检测到 mikefarah/yq, 准备安装到 /usr/bin/yq"
+    warn "未检测到 mikefarah/yq, 准备安装到 ${YQ_INSTALL_PATH}"
     install_yq
   fi
 }
 
+release_sha256() {
+  # release_sha256 <asset> <checksums> <checksums_hashes_order>
+  local asset="$1" checksums="$2" order="$3" sha_col expected
+  sha_col="$(awk '$0 == "SHA-256" { print NR + 1; exit }' "$order")"
+  expected="$(awk -v f="$asset" -v c="$sha_col" '$1 == f { print $c; exit }' "$checksums")"
+  [[ "$sha_col" =~ ^[0-9]+$ && "$expected" =~ ^[0-9a-fA-F]{64}$ ]] || return 1
+  printf '%s' "$expected"
+}
+
 install_yq() {
+  local arch asset official_base checksums_url order_url
+  if ! [[ "$YQ_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    err "YQ_VERSION 格式无效: ${YQ_VERSION}（应为 vX.Y.Z）"
+    exit 1
+  fi
+  case "$(uname -m)" in
+    x86_64|amd64) arch="amd64" ;;
+    aarch64|arm64) arch="arm64" ;;
+    *)
+      err "当前 CPU 架构 $(uname -m) 暂无受支持的 yq 安装包（仅支持 amd64/arm64）。"
+      exit 1
+      ;;
+  esac
+  asset="yq_linux_${arch}"
+  official_base="https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}"
+  checksums_url="${official_base}/checksums"
+  order_url="${official_base}/checksums_hashes_order"
+
   if is_dry; then
-    run_write "下载并安装 yq 到 /usr/bin/yq" bash -c "wget ${YQ_URL} -O /usr/bin/yq && chmod +x /usr/bin/yq"
+    run_write "下载 ${YQ_VERSION}/${asset}、校验官方 SHA-256 并原子安装到 ${YQ_INSTALL_PATH}" true
     return 0
   fi
-  local urls=("$YQ_URL" "${YQ_MIRRORS[@]}") u
-  for u in "${urls[@]}"; do
-    log "尝试下载 yq: ${u}"
-    if wget -q --timeout=20 "$u" -O /usr/bin/yq 2>/dev/null || curl -fsSL -m 25 "$u" -o /usr/bin/yq 2>/dev/null; then
-      chmod +x /usr/bin/yq
-      if /usr/bin/yq --version >/dev/null 2>&1; then
-        ok "yq 安装成功: $(yq --version)"
-        return 0
+
+  local binary checksums order
+  binary="$(_mktemp)"; checksums="$(_mktemp)"; order="$(_mktemp)"
+  log "下载 yq ${YQ_VERSION} 官方校验清单"
+  if ! curl -fsSL -m 30 "$checksums_url" -o "$checksums" \
+      || ! curl -fsSL -m 30 "$order_url" -o "$order"; then
+    err "无法下载 yq 官方校验清单，拒绝安装未验证二进制。"
+    exit 1
+  fi
+
+  local prefix url expected actual
+  if ! expected="$(release_sha256 "$asset" "$checksums" "$order")"; then
+    err "yq 官方校验清单格式异常，找不到 ${asset} 的 SHA-256。"
+    exit 1
+  fi
+
+  for prefix in "${YQ_MIRROR_PREFIXES[@]}"; do
+    url="${prefix}${official_base}/${asset}"
+    log "尝试下载 yq: ${url}"
+    : > "$binary"
+    if wget -q --timeout=25 "$url" -O "$binary" 2>/dev/null \
+        || curl -fsSL -m 35 "$url" -o "$binary" 2>/dev/null; then
+      actual="$(sha256sum "$binary" | awk '{print $1}')"
+      if [ "${actual,,}" = "${expected,,}" ]; then
+        atomic_replace_file "$binary" "$YQ_INSTALL_PATH" 755
+        if "$YQ_INSTALL_PATH" --version 2>/dev/null | grep -qi 'mikefarah/yq'; then
+          ok "yq 安装成功且 SHA-256 校验通过: $($YQ_INSTALL_PATH --version)"
+          return 0
+        fi
+        err "yq 校验通过但版本检查失败，拒绝继续。"
+        exit 1
       fi
+      warn "下载文件 SHA-256 不匹配，拒绝安装并尝试下一个地址。"
+    else
+      warn "该地址下载失败，换下一个地址..."
     fi
-    warn "该地址失败, 换下一个镜像..."
   done
-  err "yq 下载失败(可能网络受限)。请手动执行下面一行再重跑脚本:"
-  err "  wget ${YQ_URL} -O /usr/bin/yq && chmod +x /usr/bin/yq"
+  err "yq 下载或校验失败，原有 yq（如有）未被覆盖。"
   exit 1
 }
 
@@ -441,11 +538,13 @@ stage_docker() {
   fi
   warn "未检测到 Docker(或缺 compose 插件)。"
   if is_dry; then
-    run_write "安装 Docker(官方脚本)" bash -c "curl -fsSL https://get.docker.com | sh"
+    run_write "下载完整 Docker 官方安装脚本到临时文件后执行" sh "<临时文件>" --mirror Aliyun
     return 0
   fi
-  log "使用 Docker 官方脚本安装(国内自动走镜像)..."
-  if curl -fsSL https://get.docker.com | sh -s -- --mirror Aliyun; then
+  local docker_installer; docker_installer="$(_mktemp)"
+  log "下载 Docker 官方安装脚本(下载完成后再执行，国内使用 Aliyun 镜像)..."
+  if curl -fsSL -m 60 https://get.docker.com -o "$docker_installer" \
+      && sh "$docker_installer" --mirror Aliyun; then
     run_write "启用并启动 docker" systemctl enable --now docker
     ok "Docker 安装完成: $(docker --version)"
   else
@@ -494,8 +593,8 @@ stage_astrbot() {
 # ---------------------------------------------------------------------------
 wait_for_astrbot_config() {
   if is_dry; then return 0; fi
-  local i
-  for i in $(seq 1 40); do
+  local attempt
+  for ((attempt = 0; attempt < 40; attempt++)); do
     if [ -f "$ASTRBOT_CMD_CONFIG" ]; then
       return 0
     fi
@@ -734,8 +833,7 @@ YAML
     rm -f "$tmpl"
     return 0
   fi
-  cp "$tmpl" "$ASTRBOT_COMPOSE"; rm -f "$tmpl"
-  chmod 644 "$ASTRBOT_COMPOSE"
+  atomic_replace_file "$tmpl" "$ASTRBOT_COMPOSE" 644
   ok "已生成 ${ASTRBOT_COMPOSE}"
   ensure_external_network
   compose_up "$ASTRBOT_COMPOSE"
@@ -780,6 +878,11 @@ healthcheck_palworld() {
   ensure_env_kv "$envc" EXIST_PLAYER_AFTER_LOGOUT True 1
 
   confirm_and_apply "$PAL_ENV" "$envc" "补齐帕鲁 .env 的 REST_API 开关/端口/管理密码" || true
+  # 候选修改可能被用户取消；后续预填插件配置必须重新读取实际落盘值，不能使用未生效的新密码。
+  PAL_ADMIN_PASSWORD="$(grep -E '^ADMIN_PASSWORD=' "$PAL_ENV" | head -1 | cut -d= -f2- || true)"
+  if [ -z "$PAL_ADMIN_PASSWORD" ]; then
+    warn "帕鲁 .env 的 ADMIN_PASSWORD 仍为空，后续将保留插件现有 admin_password，不写入空值。"
+  fi
 
   # ---- compose 体检 ----
   local f="$PAL_COMPOSE"
@@ -916,10 +1019,10 @@ CROSSPLAY_PLATFORMS=(Steam,Xbox,PS5,Mac)
 UPDATE_ON_BOOT=true
 # 公开服建议开，跟上客户端版本
 AUTO_UPDATE_ENABLED=true
-# 每天凌晨 5 点检查更新
-AUTO_UPDATE_CRON_EXPRESSION=0 5 * * *
+# 每小时第 5 分钟检查更新（避开每天 05:00 例行重启）
+AUTO_UPDATE_CRON_EXPRESSION=5 * * * *
 # 更新前提前几分钟通知
-AUTO_UPDATE_WARN_MINUTES=30
+AUTO_UPDATE_WARN_MINUTES=5
 
 # ════════ 自动重启 ════════
 # 是否定时自动重启
@@ -1127,8 +1230,8 @@ ENVEOF
     printf '%s\n' "${C_Y}  [演练] 将写出 ${PAL_ENV} (密码已隐藏):${C_RESET}"; sed 's/^ADMIN_PASSWORD=.*/ADMIN_PASSWORD=******/' "$et" | sed 's/^/    /'
     rm -f "$ct" "$et"; return 0
   fi
-  cp "$ct" "$PAL_COMPOSE"; cp "$et" "$PAL_ENV"; rm -f "$ct" "$et"
-  chmod 644 "$PAL_COMPOSE"   # .env 含密码, 保持 600 不动
+  atomic_replace_file "$ct" "$PAL_COMPOSE" 644
+  atomic_replace_file "$et" "$PAL_ENV" 600
   ok "已生成 ${PAL_COMPOSE} 和 ${PAL_ENV}"
   compose_up "$PAL_COMPOSE"
 }
@@ -1142,6 +1245,9 @@ stage_plugin() {
     ok "插件已存在 → git pull 更新"
     run_write "更新插件" git -C "$PLUGIN_DIR" pull --ff-only \
       || warn "插件 git pull 失败(可能本地改过插件文件), 已跳过更新; 可手动 git stash/reset 后重试或用 WebUI 更新。"
+  elif [ -d "$PLUGIN_DIR" ]; then
+    warn "插件目录已存在但不是 Git 安装，保留现有文件并跳过 clone。"
+    warn "后续更新请使用 AstrBot WebUI「插件管理 → 更新」，或确认目录可替换后手动重装。"
   else
     run_write "克隆插件到 ${PLUGIN_DIR}" git clone --depth 1 "$PLUGIN_REPO" "$PLUGIN_DIR"
   fi
@@ -1165,10 +1271,15 @@ prefill_plugin_config() {
   local cfgdir; cfgdir="$(dirname "$PLUGIN_CONFIG")"
   run_write "确保配置目录存在" mkdir -p "$cfgdir"
 
-  # 组装 jq 过滤器: api_base/docker_container/admin_password 总是写; admin_qq 仅在
-  # 本次提供了新值时才写(为空则保留配置里已有的 admin_qq，不覆盖)。其余键一律保留。
-  local jqf='.api_base=$ab | .docker_container=$dc | .admin_password=$pw'
+  # 组装 jq 过滤器: api_base/docker_container 总是写；密码仅在实际 .env 非空时写；
+  # admin_qq 仅在本次提供新值时写。其余键一律保留。
+  # jq 变量必须以原样字符串传给 jq。
+  # shellcheck disable=SC2016
+  local jqf='.api_base=$ab | .docker_container=$dc'
   local qq_json='[]'
+  if [ -n "$PAL_ADMIN_PASSWORD" ]; then
+    jqf="$jqf | .admin_password=\$pw"
+  fi
   if [ -n "$ADMIN_QQ" ]; then
     qq_json="$(printf '%s' "$ADMIN_QQ" | jq -R 'split(" ")|map(select(length>0))')"
     jqf="$jqf | .admin_qq=\$qq"
@@ -1178,7 +1289,11 @@ prefill_plugin_config() {
     printf '%s\n' "${C_Y}  [演练] 将预填插件配置 ${PLUGIN_CONFIG}:${C_RESET}"
     printf '%s\n' "${C_Y}    api_base=http://palworld-server:8212${C_RESET}"
     printf '%s\n' "${C_Y}    docker_container=palworld-server${C_RESET}"
-    printf '%s\n' "${C_Y}    admin_password=${PAL_ADMIN_PASSWORD:-<帕鲁密码>}${C_RESET}"
+    if [ -n "$PAL_ADMIN_PASSWORD" ]; then
+      printf '%s\n' "${C_Y}    admin_password=(将使用帕鲁 .env 的同一密码，已隐藏)${C_RESET}"
+    else
+      printf '%s\n' "${C_Y}    admin_password=(帕鲁 .env 为空，保留现有值)${C_RESET}"
+    fi
     if [ -n "$ADMIN_QQ" ]; then
       printf '%s\n' "${C_Y}    admin_qq=${qq_json}${C_RESET}"
     else
@@ -1195,6 +1310,11 @@ prefill_plugin_config() {
   else
     echo '{}' > "$base"
   fi
+  if ! jq empty "$base" 2>/dev/null; then
+    warn "插件配置不是合法 JSON，已保留原文件并跳过自动预填；请先在 WebUI 修复配置。"
+    rm -f "$base" "$new" "$cur"
+    return 0
+  fi
   # 用同一 jq 排版归一化现有内容, 便于与新内容做等值比较(避免仅排版差异误判为有改动)
   jq '.' "$base" > "$cur" 2>/dev/null || cp "$base" "$cur"
   jq \
@@ -1210,8 +1330,9 @@ prefill_plugin_config() {
   fi
   # 确有变化才备份并写入(避免每次运行都堆积 .bak 且不静默覆盖用户手改)
   [ -f "$PLUGIN_CONFIG" ] && cp -a "$PLUGIN_CONFIG" "${PLUGIN_CONFIG}.bak.${TS}"
-  mv "$new" "$PLUGIN_CONFIG"; rm -f "$base" "$cur"
-  ok "插件配置已预填(api_base/docker_container/admin_password/admin_qq), 其它键保留。"
+  atomic_replace_file "$new" "$PLUGIN_CONFIG" 600
+  rm -f "$base" "$cur"
+  ok "插件配置已预填(api_base/docker_container，并按可用值更新密码和管理员 QQ)，其它键保留。"
 }
 
 # ===========================================================================
@@ -1356,7 +1477,7 @@ main() {
       --dry-run) DRY_RUN=1 ;;
       --update) UPDATE_MODE=1 ;;
       -h|--help) usage; exit 0 ;;
-      *) warn "未知参数: $1 (忽略)";;
+      *) err "未知参数: $1"; usage; exit 2 ;;
     esac
     shift
   done
@@ -1381,4 +1502,6 @@ main() {
   ok "脚本结束。"
 }
 
-main "$@"
+if [ "${PALWORLD_INSTALL_SOURCE_ONLY:-0}" != "1" ]; then
+  main "$@"
+fi

@@ -19,6 +19,7 @@ import base64
 import json
 import os
 import re
+import shlex
 import time
 from datetime import datetime, timedelta
 from typing import Optional, Tuple, Any
@@ -37,6 +38,11 @@ import astrbot.api.message_components as Comp
 from .constants import *  # noqa: F401,F403  (LOG_PREFIX/ELEM_CN/CARD_WIDTH/RENDER_OPTIONS/SETTINGS_FIELDS 等)
 from .utils.text import _esc, clean_text, egg_to_cn  # noqa: F401
 from .utils import security as _security
+from .utils.steam_news import (
+    localized_announcement_url,
+    parse_localized_announcement_page,
+    split_long_text,
+)
 from .render.templates import (  # noqa: F401
     STYLES,
     TEMPLATE_KEYS,
@@ -61,7 +67,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.46.0",
+    "1.47.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -82,6 +88,7 @@ class PalworldPlugin(Star):
         self._state_path = self._data_dir / "state.json"
         self.state = self._load_state()
         self._lock = asyncio.Lock()
+        self._confirm_operation_lock = asyncio.Lock()  # 二次确认操作全局单飞，避免多管理员并发停服/改档
         self._client = None                            # aiocqhttp 客户端缓存
         self._save = SaveService(self)                 # 存档拉取/缓存/负缓存/强制存盘编排
         self._renderer = Renderer(self)                # 卡片渲染引擎
@@ -2202,7 +2209,8 @@ class PalworldPlugin(Star):
 
     def _configured_save_dir(self) -> str:
         # 留空=自动探测(见 _resolve_save_dir)。不再写死某台机器的世界 GUID，换机即用。
-        return str(self.config.get("save_dir_in_container", "") or "").strip()
+        configured = str(self.config.get("save_dir_in_container", "") or "").strip().rstrip("/")
+        return configured if _config.is_safe_container_path(configured) else ""
 
     def _save_games_base(self) -> str:
         """SaveGames/0 基目录：配置了完整存档路径就取其父目录，否则用默认基目录。
@@ -2218,17 +2226,21 @@ class PalworldPlugin(Star):
 
     async def _resolve_container(self, sock: str) -> str:
         """解析帕鲁服容器名：配置的容器存在即用；否则自动探测镜像/名字含 palworld 的
-        运行中容器。带进程级缓存。探测不到时回退配置值(默认 palworld-server)。"""
+        运行中容器。仅缓存 Docker 已确认的结果；探测不到时本次回退配置值
+        (默认 palworld-server)，后续调用仍会重试探测。"""
         configured = str(self.config.get("docker_container", "palworld-server")).strip() or "palworld-server"
         cached = getattr(self, "_resolved_container", None)
         if cached:
             return cached
         resolved = configured
+        verified = False
         if os.path.exists(sock):
             try:
                 # docker socket 读操作已封装到 api.docker_api（inspect/list）。
                 ok = await docker_api.inspect_container(sock, configured) is not None
-                if not ok:
+                if ok:
+                    verified = True
+                else:
                     conts = await docker_api.list_containers(sock)
                     # 打分择优：同机可能并存 palworld 周边容器(web 前后端/数据库)，
                     # 只认游戏服(镜像/名字含 palworld+server，且不含 web/db 关键字)。
@@ -2255,9 +2267,12 @@ class PalworldPlugin(Star):
                             best, best_sc = names[0], sc
                     if best:
                         resolved = best
+                        verified = True
             except Exception as e:  # noqa: BLE001
                 logger.debug(f"{LOG_PREFIX} 容器自动探测失败(回退配置值): {e}")
-        self._resolved_container = resolved
+        # 临时 socket/容器故障不能把未经确认的配置值固化到进程缓存，否则容器稍后上线后
+        # 仍会一直命中旧回退值，必须重载插件才能恢复自动探测。
+        self._resolved_container = resolved if verified else None
         if resolved != configured:
             logger.info(f"{LOG_PREFIX} 帕鲁服容器自动探测为：{resolved}")
         return resolved
@@ -2267,15 +2282,17 @@ class PalworldPlugin(Star):
         删档重开后 GUID 可能变化、且各机 GUID 不同，因此不写死；配置留空也能定位。带缓存。"""
         configured = self._configured_save_dir()
         cached = getattr(self, "_resolved_save_dir", None)
-        if cached:
+        if cached and _config.is_safe_container_path(cached):
             return cached
+        self._resolved_save_dir = None
         base = self._save_games_base()   # .../SaveGames/0
         dirs = []
         try:
-            script = (f'for d in "{base}"/*/; do '
+            script = (f"for d in {shlex.quote(base)}/*/; do "
                       f'[ -f "$d/Level.sav" ] && printf "%s\\n" "$d"; done')
             _, out = await self._docker_exec(sock, container, ["/bin/sh", "-c", script])
-            dirs = [ln.strip().rstrip("/") for ln in out.splitlines() if ln.strip()]
+            dirs = [path for ln in out.splitlines()
+                    if (path := ln.strip().rstrip("/")) and _config.is_safe_container_path(path)]
         except Exception as e:  # noqa: BLE001
             logger.debug(f"{LOG_PREFIX} 存档目录探测失败(回退配置值): {e}")
         # 优先级：配置值仍有效(稳态) > 唯一的 32 位 GUID 世界目录 > 探测到的第一个 > 配置值兜底
@@ -2461,7 +2478,7 @@ class PalworldPlugin(Star):
             gy = round((wx + 123888) / 459)
             region = (self._nearest_region(wx, wy) if mid == "main"
                       else ("世界树" if mid == "tree" else "区域待确认"))
-            pd = {"no": i, "name": p.get("name") or "玩家", "level": p.get("level", "?"),
+            pd = {"no": i, "name": _esc(p.get("name") or "玩家"), "level": _esc(p.get("level", "?")),
                   "region": region, "coord": f"{gx}, {gy}",
                   "left": round(left, 2) if left is not None else None,
                   "top": round(top, 2) if top is not None else None}
@@ -3217,6 +3234,7 @@ class PalworldPlugin(Star):
         st = pal.get("stats") or {}
         atk = max(st.get("melee_attack", 0), st.get("shot_attack", 0)) or ""
         defense = st.get("defense", "") or ""
+        base_hp = st.get("hp", "") or ""
         weakness = [w + "属性" for w in dict.fromkeys(weak)]
         skills = []
         for sk in (pal.get("active_skills") or []):
@@ -3234,8 +3252,10 @@ class PalworldPlugin(Star):
                 "difficulty": {"Normal": "普通", "Hard": "困难", "Extreme": "残酷"}.get(
                     b.get("difficulty", ""), b.get("difficulty", "")),
                 "weakness": weakness, "attack": str(atk) if atk else "", "defense": str(defense) if defense else "",
+                "base_hp": str(base_hp) if base_hp else "",
                 "rarity": pal.get("rarity", ""), "skills": skills,
                 "level": b.get("level", ""), "hp": b.get("hp", ""), "location": b.get("location", ""),
+                "coords": b.get("coords", ""),
                 "drops": [s for s in (self._fmt_drop(d) for d in (b.get("drops") or [])) if s],
                 "icon": self._pal_icon(b.get("dev", "")),
                 "tip": "；".join(tip_parts) + "。"}
@@ -3260,8 +3280,20 @@ class PalworldPlugin(Star):
         title = {"塔主": "🗼 高塔塔主", "突袭": "👹 突袭 Boss"}.get(category, "👹 Boss 一览")
         base = {"塔主": "/帕鲁塔主", "突袭": "/帕鲁突袭"}.get(category, "/帕鲁boss")
         chunk, psub, phint = self._page(pool, page, base)
+
+        def _brief(b: dict) -> str:
+            parts = [f"Lv.{b['level']}"] if b.get("level") else []
+            if b.get("hp"):
+                parts.append(f"HP {b['hp']}")
+            if b.get("location"):
+                loc = b["location"]
+                parts.append(f"{loc} {b['coords']}" if b.get("coords") else loc)
+            elif b.get("coords"):
+                parts.append(f"坐标 {b['coords']}")
+            return " · ".join(parts)
+
         rows = [{"tag": (b.get("element") or "—")[:2], "name": b.get("short") or b["name"],
-                 "brief": f"Lv.{b.get('level') or '?'} · HP {b.get('hp') or '?'}" + (f" · {b['location']}" if b.get("location") else "")}
+                 "brief": _brief(b)}
                 for b in chunk]
         return await self._img(event, self._t("missionlist"),
                                {"title": title, "subtitle": f"共 {len(pool)} 个" + (f" · {psub}" if psub else ""),
@@ -3812,6 +3844,13 @@ class PalworldPlugin(Star):
         return f"{m}分"
 
     @staticmethod
+    def _ping_value(ping) -> int:
+        try:
+            return round(float(ping)) if ping is not None else 0
+        except (TypeError, ValueError, OverflowError):
+            return 0
+
+    @staticmethod
     def _ping_color(ping) -> str:
         try:
             p = float(ping)
@@ -4028,19 +4067,19 @@ class PalworldPlugin(Star):
         for p in raw:
             since = online_state.get(str(p.get("userId")), {}).get("since")
             players.append({
-                "name": p.get("name", "未知"), "level": p.get("level", "?"),
-                "ping": round(float(p.get("ping", 0))) if p.get("ping") is not None else 0,
+                "name": _esc(p.get("name", "未知")), "level": _esc(p.get("level", "?")),
+                "ping": self._ping_value(p.get("ping")),
                 "ping_color": self._ping_color(p.get("ping")),
                 "dur": self._fmt_uptime(now - since) if since else "",
             })
         return await self._img(event, self._t("status"), {
             "online": True,
-            "servername": info.get("servername", "Palworld Server"),
-            "version": info.get("version", "—"),
-            "cur": m.get("currentplayernum", 0),
-            "maxn": m.get("maxplayernum", 0),
-            "fps": m.get("serverfps", "—"),
-            "days": m.get("days", "—"),
+            "servername": _esc(info.get("servername", "Palworld Server")),
+            "version": _esc(info.get("version", "—")),
+            "cur": _esc(m.get("currentplayernum", 0)),
+            "maxn": _esc(m.get("maxplayernum", 0)),
+            "fps": _esc(m.get("serverfps", "—")),
+            "days": _esc(m.get("days", "—")),
             "uptime": self._fmt_uptime(m.get("uptime")),
             "load": load,
             "players": players,
@@ -4054,9 +4093,9 @@ class PalworldPlugin(Star):
         players = []
         for p in raw:
             players.append({
-                "name": p.get("name", "未知"),
-                "level": p.get("level", "?"),
-                "ping": round(float(p.get("ping", 0))) if p.get("ping") is not None else 0,
+                "name": _esc(p.get("name", "未知")),
+                "level": _esc(p.get("level", "?")),
+                "ping": self._ping_value(p.get("ping")),
                 "ping_color": self._ping_color(p.get("ping")),
             })
         return await self._img(event, self._t("players"), {
@@ -4074,7 +4113,7 @@ class PalworldPlugin(Star):
                 val = s[key]
                 if isinstance(val, float):
                     val = round(val, 2)
-                items.append({"k": label, "v": f"{val}{suffix}"})
+                items.append({"k": label, "v": _esc(f"{val}{suffix}")})
         # 布尔开关：字段缺失时不显示，绝不把"API 未返回"误判成"关闭"
         for label, key in SETTINGS_BOOL:
             if key in s and s[key] is not None:
@@ -4083,7 +4122,7 @@ class PalworldPlugin(Star):
         server_version = ""
         ok_i, info, _ = await self._api_get("/v1/api/info")
         if ok_i and isinstance(info, dict):
-            server_version = str(info.get("version") or "")
+            server_version = _esc(info.get("version") or "")
         if not items and not server_version:
             return await self._msg_card(
                 event, "⚙️", "暂无可显示的设置",
@@ -5073,7 +5112,7 @@ class PalworldPlugin(Star):
             if u == uid:
                 rank = f"#{idx}"
                 break
-        return {"name": _esc(name), "online": is_on, "level": level,
+        return {"name": _esc(name), "online": is_on, "level": _esc(level),
                 "week_dur": self._fmt_uptime(int(week)), "total_dur": self._fmt_uptime(int(total)),
                 "rank": rank, "titles": self._titles_for(uid, str(qq))}
 
@@ -5115,8 +5154,8 @@ class PalworldPlugin(Star):
                 desc=f"已提交绑定到角色「{_esc(name)}」的申请。\n"
                      f"当前为「需管理员批准」模式，请管理员发 /帕鲁批准绑定 {qq} 通过。",
                 color="#F5A623")
-        self._do_bind(qq, uid, name)
         self.state.get("bind_pending", {}).pop(str(qq), None)   # 清掉可能的旧挂起
+        self._do_bind(qq, uid, name)   # 与清理挂起申请在同一次持久化中原子落库
         return await self._msg_card(event, "🔗", "绑定成功", desc=_esc(ok_desc), color="#30A46C")
 
     async def _cmd_bind_approve(self, event: AstrMessageEvent, args: list[str]):
@@ -5488,19 +5527,24 @@ class PalworldPlugin(Star):
                     "palbox_n": 0, "pal_total": 0, "dex_owned": 0, "dex_total": 0, "hurt_n": 0}
         party = [self._pal_view(p) for p in sp.get("party", [])]
         palbox = sp.get("palbox", [])
-        allpals = list(party) + palbox   # 队伍是已渲染视图，箱是原始；只用于计数/收集
-        # 图鉴收集度：拥有的不同种类数（按 char_id 去重）
+        collectible_indices = {
+            str(p.get("pal_index")) for p in (self._pals or [])
+            if p.get("pal_index") and p.get("is_collectible", True)
+        }
+        # 图鉴收集度：拥有的不同官方可收集种类数（按 pal_index 去重）
         owned_species = set()
         hurt_n = 0
         for p in palbox:
-            cid = str(p.get("char_id", "")).lower()
-            if cid in self._pal_by_dev:
-                owned_species.add(self._pal_by_dev[cid].get("pal_index"))
+            meta = self._resolve_owned_pal(str(p.get("char_id", "")))
+            idx = str((meta or {}).get("pal_index") or "")
+            if idx in collectible_indices:
+                owned_species.add(idx)
             if self._health_view(p.get("health", "")).get("hurt"):
                 hurt_n += 1
         for p in party:
-            if p.get("index"):
-                owned_species.add(p["index"])
+            idx = str(p.get("index") or "")
+            if idx in collectible_indices:
+                owned_species.add(idx)
             if p.get("health", {}).get("hurt"):
                 hurt_n += 1
         # 玩家面板真实数值：存档只存「当前HP」与「投点」，最大值由 基础 + 投点 算出
@@ -5520,7 +5564,8 @@ class PalworldPlugin(Star):
                 "bag_n": len(sp.get("inventory", [])),
                 "palbox_n": len(palbox), "pal_total": len(party) + len(palbox),
                 "dex_owned": len({x for x in owned_species if x}),
-                "dex_total": len(self._pals or []), "hurt_n": hurt_n}
+                "dex_total": getattr(self, "_dex_collectible", 0) or len(collectible_indices),
+                "hurt_n": hurt_n}
 
     def _inv_cells(self, sp: dict) -> list:
         """背包物品 -> 卡片格子(中文名+图标+数量)，按品类再按数量排序。"""
@@ -6144,7 +6189,7 @@ class PalworldPlugin(Star):
         for info in self.state.get("online", {}).values():
             if info.get("name") == name:
                 return await self._msg_card(event, "✅", f"{_esc(name)} 在线",
-                                            desc=f"角色「{_esc(name)}」当前在线（Lv.{info.get('level','?')}）。",
+                                            desc=f"角色「{_esc(name)}」当前在线（Lv.{_esc(info.get('level', '?'))}）。",
                                             color="#30A46C")
         return await self._msg_card(event, "🌙", f"{_esc(name)} 不在线",
                                     desc=f"角色「{_esc(name)}」当前不在服务器里。", color="#9a8a91")
@@ -6264,6 +6309,8 @@ class PalworldPlugin(Star):
 
     async def _cmd_save(self, event: AstrMessageEvent, args: list[str]):
         ok, err = await self._api_post("/v1/api/save", {})
+        if ok:
+            await self._save.note_successful_save()
         self._log_admin(event, "存档", "-", ok)
         if ok:
             return await self._msg_card(event, "💾", "存档成功",
@@ -6330,12 +6377,16 @@ class PalworldPlugin(Star):
             # 2. 起一次性容器：备份每个世界目录，再清空其内容（保留目录壳）
             script = (
                 "set -e; "
-                f'SG="{sg}"; BK="{bk}"; TS="{ts}"; '
+                f"SG={shlex.quote(sg)}; BK={shlex.quote(bk)}; TS={shlex.quote(ts)}; "
                 'mkdir -p "$BK"; n=0; '
                 'for d in "$SG"/*/; do '
                 '  d="${d%/}"; [ -f "$d/Level.sav" ] || continue; '
                 '  name=$(basename "$d"); '
-                '  tar czf "$BK/${name}_$TS.tar.gz" -C "$SG" "$name"; '
+                '  printf "%s\n" "$name" | grep -Eq "^[0-9A-Fa-f]{32}$" || continue; '
+                '  if find "$d" -type l -print -quit | grep -q .; then echo "UNSAFE=$name"; exit 7; fi; '
+                '  archive="$BK/${name}_$TS.tar.gz"; '
+                '  tar czf "$archive" -C "$SG" "$name"; '
+                '  tar tzf "$archive" >/dev/null; '
                 '  rm -rf "$d/Level.sav" "$d/LevelMeta.sav" "$d/Players" "$d/backup"; '
                 '  n=$((n+1)); '
                 'done; '
@@ -6345,14 +6396,15 @@ class PalworldPlugin(Star):
                 sock, image, container, ["/bin/sh", "-c", script], timeout=120)
             m = re.search(r"WIPED=(\d+)", out or "")
             wiped = int(m.group(1)) if m else 0
-            if code != 0:
+            if code != 0 or wiped <= 0:
                 # 清理失败：仍尝试把服务器拉起来，避免停在停机态
                 await self._docker_container_action(sock, container, "start", timeout=60)
                 self._save.invalidate()
                 self._resolved_save_dir = None
-                self._log_admin(event, "重置存档", f"清理失败 code={code}", False)
+                self._log_admin(event, "重置存档", f"清理失败 code={code}, wiped={wiped}", False)
                 return await self._fail_card(
-                    event, f"清理脚本退出码 {code}，已自动重启服务器。\n{(out or '')[:120]}")
+                    event, f"清理脚本未确认成功（退出码 {code}，WIPED={wiped}），"
+                           f"已自动重启服务器。\n{(out or '')[:120]}")
             # 3. 重新启动 → 服务器生成全新世界
             await self._docker_container_action(sock, container, "start", timeout=60)
             # 4. 失效缓存，下次查询会重新探测新世界目录
@@ -6394,7 +6446,7 @@ class PalworldPlugin(Star):
     async def _list_backups(self, sock: str, container: str) -> list:
         """列出镜像每天备份(/palworld/backups/*.tar.gz)：[{fname,pretty,size}] 按时间倒序(最新在前)。"""
         script = (
-            f'BD="{IMAGE_BACKUP_DIR}"; [ -d "$BD" ] || exit 0; '
+            f"BD={shlex.quote(IMAGE_BACKUP_DIR)}; [ -d \"$BD\" ] || exit 0; "
             'for f in "$BD"/palworld-save-*.tar.gz; do [ -f "$f" ] || continue; '
             '  sz=$(du -h "$f" 2>/dev/null | cut -f1); '
             '  printf "%s|%s\\n" "$(basename "$f")" "$sz"; done | sort -r'
@@ -6418,7 +6470,7 @@ class PalworldPlugin(Star):
         keep = int(self.config.get("backup_keep_max", 0) or 0)
         if keep > 0:
             script = (
-                f'BD="{IMAGE_BACKUP_DIR}"; KEEP={keep}; [ -d "$BD" ] || exit 0; '
+                f"BD={shlex.quote(IMAGE_BACKUP_DIR)}; KEEP={keep}; [ -d \"$BD\" ] || exit 0; "
                 'ls -1 "$BD"/palworld-save-*.tar.gz 2>/dev/null | sort | head -n -$KEEP | while read f; do rm -f "$f"; done; '
                 'echo "KEPT=$(ls -1 "$BD"/palworld-save-*.tar.gz 2>/dev/null | wc -l)"'
             )
@@ -6431,8 +6483,12 @@ class PalworldPlugin(Star):
         ekeep = int(self.config.get("engine_backup_keep", 30) or 0)
         if ekeep > 0:
             wd = await self._resolve_save_dir(sock, container)
+            if not wd:
+                logger.warning(f"{LOG_PREFIX} 引擎快照清理跳过：未定位到安全的世界存档目录")
+                return
+            backup_world = f"{wd}/{BACKUP_WORLD_SUBDIR}"
             script2 = (
-                f'BW="{wd}/{BACKUP_WORLD_SUBDIR}"; KEEP={ekeep}; [ -d "$BW" ] || exit 0; '
+                f"BW={shlex.quote(backup_world)}; KEEP={ekeep}; [ -d \"$BW\" ] || exit 0; "
                 'ls -1d "$BW"/*/ 2>/dev/null | sort | head -n -$KEEP | while read d; do rm -rf "$d"; done; '
                 'echo "KEPT=$(ls -1d "$BW"/*/ 2>/dev/null | wc -l)"'
             )
@@ -6462,11 +6518,11 @@ class PalworldPlugin(Star):
                   "补丁", "更新", "版本", "修复")
 
     async def _fetch_latest_patchnote(self):
-        """拉帕鲁官方更新公告(优先官方源+更新关键词)，返回 {title,text,url,img} 或 None。"""
+        """拉帕鲁官方更新公告，优先返回 Steam 官方简体中文完整正文。"""
         try:
             session = await self._get_session()
             url = ("https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/"
-                   "?appid=1623730&count=15&maxlength=2000")
+                   "?appid=1623730&count=15&maxlength=0")
             async with session.get(url, timeout=aiohttp.ClientTimeout(total=15)) as r:
                 if r.status != 200:
                     return None
@@ -6501,8 +6557,40 @@ class PalworldPlugin(Star):
         text = re.sub(r"\[/?[a-z]+[^\]]*\]", "", raw)        # 去 BBCode
         text = re.sub(r"<[^>]+>", "", text)                  # 去 HTML
         text = re.sub(r"\n{3,}", "\n\n", text).strip()
-        return {"title": it.get("title", ""), "text": text[:1800],
-                "url": it.get("url", ""), "img": img}
+        source_url = str(it.get("url", "") or "")
+        cn_url = localized_announcement_url(source_url)
+        if cn_url:
+            try:
+                async with session.get(
+                    cn_url,
+                    headers={
+                        "Accept-Language": "zh-CN,zh;q=0.9",
+                        "User-Agent": "Mozilla/5.0 (compatible; AstrBot Palworld Plugin)",
+                    },
+                    timeout=aiohttp.ClientTimeout(total=20),
+                ) as r:
+                    if r.status == 200:
+                        parsed = parse_localized_announcement_page(await r.text())
+                        if parsed:
+                            return {
+                                "title": parsed["title"],
+                                "text": parsed["text"],
+                                "url": cn_url,
+                                "img": img,
+                                "source": "official_cn",
+                            }
+                    logger.debug(f"{LOG_PREFIX} Steam 简体中文公告页不可用: HTTP {r.status}")
+            except Exception as e:  # noqa: BLE001
+                logger.debug(f"{LOG_PREFIX} 拉取 Steam 简体中文公告失败: {e}")
+
+        # 官方简中不可用时保留原有英文源，由命令层明确标注翻译/原文，不能冒充中文原文。
+        return {
+            "title": it.get("title", ""),
+            "text": text,
+            "url": source_url,
+            "img": img,
+            "source": "official_en",
+        }
 
     def _any_chat_provider(self):
         """拿一个可用于翻译的文本聊天 provider：优先当前对话 provider；
@@ -6545,35 +6633,155 @@ class PalworldPlugin(Star):
             logger.warning(f"{LOG_PREFIX} LLM 翻译失败: {e}")
             return ""
 
+    async def _format_patchnote_body(self, note: dict) -> str:
+        """生成命令与后台主动播报共用的更新公告正文。"""
+        if note.get("source") == "official_cn":
+            return (
+                f"🎮 帕鲁官方更新公告\n\n{note['title']}\n\n{note['text']}"
+                f"\n\n🔗 官方简体中文原文：{note['url']}"
+            )
+        cn = await self._translate_cn(note["title"], note["text"])
+        if cn:
+            return (
+                "🎮 帕鲁官方更新公告\n\n"
+                "该公告暂无可读取的官方简体中文正文，以下为中文翻译/摘要：\n\n"
+                f"{cn}\n\n🔗 官方英文原文：{note['url']}"
+            )
+        return (
+            "🎮 帕鲁官方更新公告\n\n"
+            "该公告暂无可读取的官方简体中文正文，且当前未配置可用的翻译模型。\n\n"
+            f"{note['title']}\n\n{note['text']}\n\n🔗 官方英文原文：{note['url']}"
+        )
+
+    async def _broadcast_update_patchnote(self, version: str, now: float) -> bool:
+        """向播报群主动发送本次更新公告；成功群单独记账，失败后只补发未成功群。"""
+        if self.state.get("update_patchnote_notified") == version:
+            return True
+        retry_after = float(self.state.get("update_patchnote_retry_after", 0) or 0)
+        if now < retry_after:
+            return False
+
+        if self.state.get("update_patchnote_version") != version:
+            self.state["update_patchnote_version"] = version
+            self.state["update_patchnote_groups"] = []
+        delivered = {
+            str(gid) for gid in (self.state.get("update_patchnote_groups") or [])
+            if str(gid).strip()
+        }
+        targets = list(dict.fromkeys(str(gid) for gid in self._broadcast_targets()))
+        pending = [gid for gid in targets if gid not in delivered]
+        if not targets:
+            self.state["update_patchnote_retry_after"] = now + 600
+            self._save_state()
+            logger.debug(f"{LOG_PREFIX} 更新公告暂无播报目标群，10 分钟后重试")
+            return False
+
+        note = await self._fetch_latest_patchnote()
+        if not note:
+            self.state["update_patchnote_retry_after"] = now + 600
+            self._save_state()
+            logger.warning(f"{LOG_PREFIX} 本次更新公告拉取失败，10 分钟后重试")
+            return False
+        body = await self._format_patchnote_body(note)
+
+        for gid in pending:
+            if await self._send_group_forward_text(gid, body, name="帕鲁官方更新公告"):
+                delivered.add(gid)
+                self.state["update_patchnote_groups"] = sorted(delivered)
+                self._save_state()
+
+        if all(gid in delivered for gid in targets):
+            self.state["update_patchnote_notified"] = version
+            self.state["update_patchnote_url"] = str(note.get("url", ""))
+            self.state.pop("update_patchnote_retry_after", None)
+            self._save_state()
+            return True
+
+        self.state["update_patchnote_retry_after"] = now + 600
+        self._save_state()
+        logger.warning(f"{LOG_PREFIX} 更新公告部分群发送失败，10 分钟后仅补发失败群")
+        return False
+
     async def _cmd_patchnotes(self, event: AstrMessageEvent):
-        """拉取帕鲁最新官方更新公告，LLM 译成中文，连同配图/原文链接发出。"""
+        """发送最新官方更新公告；官方简中正文完整输出，长内容折叠为合并转发。"""
         note = await self._fetch_latest_patchnote()
         if not note:
             return event.plain_result("📭 暂时没拉到帕鲁官方更新公告，稍后再试。")
-        cn = await self._translate_cn(note["title"], note["text"])
-        head = "🎮 帕鲁官方更新公告\n"
-        if cn:
-            body = head + cn + f"\n\n🔗 原文：{note['url']}"
-        else:   # 无 LLM/翻译失败 → 降级发原文摘要
-            body = head + f"{note['title']}\n\n{note['text'][:500]}…\n\n🔗 原文：{note['url']}"
+        body = await self._format_patchnote_body(note)
+
+        chunks = split_long_text(body)
+        try:
+            platform = str(event.get_platform_name() or "").lower()
+            is_group = bool(event.get_group_id())
+        except Exception:  # noqa: BLE001
+            platform, is_group = "", False
+        node_cls = getattr(Comp, "Node", None)
+        nodes_cls = getattr(Comp, "Nodes", None)
+        if is_group and platform in ("aiocqhttp", "onebot", "onebot_v11") and node_cls and nodes_cls:
+            try:
+                bot_id = str(event.get_self_id() or "0")
+            except Exception:  # noqa: BLE001
+                bot_id = "0"
+            nodes = [
+                node_cls(
+                    uin=bot_id,
+                    name="帕鲁官方更新公告",
+                    content=[Comp.Plain(chunk)],
+                )
+                for chunk in chunks
+            ]
+            return event.chain_result([nodes_cls(nodes=nodes)])
+
+        # 非 OneBot 平台交给 AstrBot 的长消息/转发阈值处理，正文仍不截断。
         chain = [Comp.Plain(body)]
         if note["img"]:
             chain.append(Comp.Image.fromURL(note["img"]))
         return event.chain_result(chain)
 
     async def _check_server_update(self) -> None:
-        """后台节流：检测帕鲁服务端 Steam 新版本，检测到就发游戏公告 + QQ 群通知。
-        实际更新交给镜像自带的每日自动更新(UPDATE_ON_BOOT/AUTO_UPDATE)，本方法只负责通知。"""
+        """后台节流：检测帕鲁服务端 Steam 新版本并通知 QQ 群。
+        游戏内倒计时公告在镜像计划维护前约 5 分钟发送；真正更新仍交给镜像自身完成。"""
         if not self.config.get("notify_server_update", True):
             return
         now = time.time()
-        interval = max(int(self.config.get("update_check_hours", 6) or 6), 1) * 3600
-        if now - self.state.get("update_checked", 0) < interval:
+        pending_patchnote = str(self.state.get("update_notified", "") or "")
+        if pending_patchnote and self.state.get("update_patchnote_notified") != pending_patchnote:
+            await self._broadcast_update_patchnote(pending_patchnote, now)
+        try:
+            check_hours = int(self.config.get("update_check_hours", 1) or 1)
+        except (TypeError, ValueError):
+            check_hours = 1
+        interval = max(check_hours, 1) * 3600
+
+        # 默认一小时检测时，与镜像更新倒计时前沿对齐。插件重载后仍会立即检查一次，
+        # 到下一个对齐分钟再校正相位，避免长期在镜像更新之后才发现新版本。
+        maintenance = {}
+        aligned_slot = None
+        if check_hours == 1:
+            maintenance = await self._maintenance_schedule()
+            update_hourly = maintenance.get("update_hourly")
+            if isinstance(update_hourly, int):
+                update_warn = min(max(int(maintenance.get("update_warn", 5) or 5), 1), 60)
+                check_minute = (update_hourly - update_warn) % 60
+                local_now = datetime.now()
+                if local_now.minute == check_minute:
+                    aligned_slot = local_now.strftime("%Y-%m-%dT%H")
+
+        retry_after = float(self.state.get("update_retry_after", 0) or 0)
+        if now < retry_after:
             return
-        self.state["update_checked"] = now
-        self._save_state()
+        retry_due = retry_after > 0
+        aligned_due = bool(aligned_slot and self.state.get("update_check_slot") != aligned_slot)
+        if not retry_due and not aligned_due and now - self.state.get("update_checked", 0) < interval:
+            return
+
+        def defer_retry() -> None:
+            self.state["update_retry_after"] = now + 600
+            self._save_state()
+
         sock = str(self.config.get("docker_sock", "/var/run/docker.sock"))
         if not os.path.exists(sock):
+            defer_retry()
             return
         # 1) 查 Steam 最新 manifest(第三方 api.steamcmd.net，快)
         latest = ""
@@ -6582,14 +6790,17 @@ class PalworldPlugin(Star):
             async with session.get("https://api.steamcmd.net/v1/info/2394010",
                                    timeout=aiohttp.ClientTimeout(total=15)) as r:
                 if r.status != 200:
+                    defer_retry()
                     return
                 d = await r.json()
             latest = (d.get("data", {}).get("2394010", {}).get("depots", {})
                       .get("2394012", {}).get("manifests", {}).get("public", {}).get("gid", ""))
         except Exception as e:  # noqa: BLE001
             logger.debug(f"{LOG_PREFIX} 查 Steam 版本失败: {e}")
+            defer_retry()
             return
         if not latest:
+            defer_retry()
             return
         # 2) 读当前已装 manifest(appmanifest 第 2 个 manifest 行)
         container = await self._resolve_container(sock) or str(self.config.get("docker_container", "palworld-server"))
@@ -6599,33 +6810,61 @@ class PalworldPlugin(Star):
             current = (out or "").strip().split("\n")[-1].strip()
         except Exception as e:  # noqa: BLE001
             logger.debug(f"{LOG_PREFIX} 读当前版本失败: {e}")
+            defer_retry()
             return
         if not current:
+            defer_retry()
             return
+        self.state["update_checked"] = now
+        if aligned_slot:
+            self.state["update_check_slot"] = aligned_slot
+        self.state.pop("update_retry_after", None)
         if latest == current:
-            self.state.pop("update_notified", None)   # 已是最新，清通知标记(下次新版本可再报)
+            # 已是最新，清除该版本的检测/维护公告标记，下次出现新 manifest 可重新通知。
+            self.state.pop("update_notified", None)
+            self.state.pop("update_game_warned", None)
             self._save_state()
             return
-        # 3) 有新版本，且该版本没通知过 -> 游戏公告 + QQ 群通知
+        # 3) 有新版本，且该版本没通知过 -> 先通知 QQ；游戏内公告留到维护前约 5 分钟。
         if self.state.get("update_notified") == latest:
+            self._save_state()
             return
+        previous = self.state.get("update_notified")
         self.state["update_notified"] = latest
+        if previous != latest:
+            self.state.pop("update_game_warned", None)
+            self.state["update_patchnote_version"] = latest
+            self.state["update_patchnote_groups"] = []
+            self.state.pop("update_patchnote_retry_after", None)
         self._save_state()
-        await self._api_post("/v1/api/announce",
-                             {"message": "New server version available. Auto-update at daily maintenance."})
-        rb = str(self.config.get("daily_reboot_time", "") or "05:00")
+        if not maintenance:
+            maintenance = await self._maintenance_schedule()
+        update_at = maintenance.get("update")
+        update_hourly = maintenance.get("update_hourly")
+        if isinstance(update_hourly, int) and isinstance(update_at, int):
+            update_desc = f"每小时的 {update_hourly:02d} 分（每日例行重启启动时也会检查）"
+        elif isinstance(update_hourly, int):
+            update_desc = f"每小时的 {update_hourly:02d} 分"
+        elif isinstance(update_at, int):
+            update_desc = f"每天 {update_at // 60:02d}:{update_at % 60:02d}"
+        else:
+            update_desc = "下一次镜像自动更新检查"
         await self._broadcast_text(
-            f"🔔 检测到帕鲁服务端有新版本\n将在每日维护时间（约 {rb}）自动更新并重启，"
-            "用时约几分钟，请提前下线保存进度～")
+            f"🔔 检测到帕鲁服务端有新版本\n将在{update_desc}自动更新并重启；"
+            "有玩家在线时会提前约 5 分钟发送游戏公告，请及时保存进度～")
+        await self._broadcast_update_patchnote(latest, now)
 
     async def _find_latest_backup(self, sock: str, container: str) -> Tuple[Optional[str], int]:
         """探测最近一次删档备份：返回 (时间戳, 该批 tar 个数)；无备份返回 (None, 0)。"""
         script = (
-            f'BK="{RESET_BACKUP_DIR}"; '
-            r'latest=$(ls -1 "$BK" 2>/dev/null | grep -E "_[0-9]{8}_[0-9]{6}\.tar\.gz$" '
-            r'| sed -E "s/.*_([0-9]{8}_[0-9]{6})\.tar\.gz$/\1/" | sort | tail -1); '
+            f"BK={shlex.quote(RESET_BACKUP_DIR)}; "
+            r'latest=$(ls -1 "$BK" 2>/dev/null '
+            r'| grep -E "^[0-9A-Fa-f]{32}_[0-9]{8}_[0-9]{6}\.tar\.gz$" '
+            r'| sed -E "s/^[0-9A-Fa-f]{32}_([0-9]{8}_[0-9]{6})\.tar\.gz$/\1/" '
+            r'| sort | tail -1); '
             'if [ -z "$latest" ]; then echo "TS= N=0"; '
-            'else n=$(ls -1 "$BK"/*_"$latest".tar.gz 2>/dev/null | wc -l); '
+            'else n=$(ls -1 "$BK" 2>/dev/null '
+            '| grep -Ec "^[0-9A-Fa-f]{32}_${latest}\\.tar\\.gz$"); '
             'echo "TS=$latest N=$n"; fi'
         )
         try:
@@ -6680,8 +6919,8 @@ class PalworldPlugin(Star):
         sock = str(self.config.get("docker_sock", "/var/run/docker.sock"))
         container = await self._resolve_container(sock) or str(self.config.get("docker_container", "palworld-server"))
         ts = str(pending.get("backup_ts", "")).strip()
-        if not ts:
-            return await self._fail_card(event, "未记录要恢复的备份时间戳，请重新发起。")
+        if not re.fullmatch(r"\d{8}_\d{6}", ts):
+            return await self._fail_card(event, "要恢复的备份时间戳异常，请重新发起。")
         sg = self._save_games_base()   # .../SaveGames/0(配置留空时用默认基目录)
         restored = 0
         try:
@@ -6694,15 +6933,35 @@ class PalworldPlugin(Star):
             await self._docker_container_action(sock, container, "stop", timeout=90)
             script = (
                 "set -e; "
-                f'SG="{sg}"; BK="{RESET_BACKUP_DIR}"; TS="{ts}"; '
+                f"SG={shlex.quote(sg)}; BK={shlex.quote(RESET_BACKUP_DIR)}; "
+                f"TS={shlex.quote(ts)}; "
                 # 护栏:SG 必须是足够深的绝对路径(至少 3 段),否则 "$SG"/*/ 可能误删顶层目录。
                 'case "$SG" in /*/*/*) ;; *) echo "BADSG"; exit 6;; esac; '
-                'ls "$BK"/*_"$TS".tar.gz >/dev/null 2>&1 || { echo "NOBACKUP"; exit 5; }; '
-                # 只清含 Level.sav 的真实世界目录(与删档一致),不碰其它目录;untar 会重建世界内容。
-                'for d in "$SG"/*/; do d="${d%/}"; [ -f "$d/Level.sav" ] && rm -rf "$d"; done; '
+                # 先完整预检本批 GUID 备份，再删除当前世界；任一 tar 损坏/越界/缺 Level.sav 都中止。
                 'n=0; '
                 'for f in "$BK"/*_"$TS".tar.gz; do '
-                '  [ -f "$f" ] || continue; '
+                '  [ -f "$f" ] || continue; bn=$(basename "$f"); root=${bn%%_*}; '
+                '  printf "%s\n" "$bn" | grep -Eq "^[0-9A-Fa-f]{32}_${TS}\\.tar\\.gz$" || continue; '
+                '  tar tzf "$f" >/dev/null 2>&1 || { echo "BADBACKUP=$bn"; exit 7; }; '
+                "  tar tzf \"$f\" | awk -v root=\"$root\" '"
+                "BEGIN { level=0 } "
+                "{ p=$0; sub(/^\\.\\//,\"\",p); n=split(p,a,\"/\"); "
+                "if (a[1] != root) exit 1; "
+                "for (i=1; i<=n; i++) if (a[i] == \".\" || a[i] == \"..\") exit 1; "
+                "if (p == root \"/Level.sav\") level=1 } "
+                "END { if (!level) exit 1 }' "
+                '    || { echo "BADPATH=$bn"; exit 7; }; '
+                '  n=$((n+1)); '
+                'done; '
+                '[ "$n" -gt 0 ] || { echo "NOBACKUP"; exit 5; }; '
+                # 只清含 Level.sav 的真实世界目录(与删档一致),不碰其它目录;untar 会重建世界内容。
+                'for d in "$SG"/*/; do d="${d%/}"; [ -f "$d/Level.sav" ] || continue; '
+                '  name=$(basename "$d"); printf "%s\n" "$name" '
+                '  | grep -Eq "^[0-9A-Fa-f]{32}$" && rm -rf "$d"; done; '
+                'n=0; '
+                'for f in "$BK"/*_"$TS".tar.gz; do '
+                '  [ -f "$f" ] || continue; bn=$(basename "$f"); '
+                '  printf "%s\n" "$bn" | grep -Eq "^[0-9A-Fa-f]{32}_${TS}\\.tar\\.gz$" || continue; '
                 '  tar xzf "$f" -C "$SG"; '
                 '  n=$((n+1)); '
                 'done; '
@@ -6799,27 +7058,45 @@ class PalworldPlugin(Star):
         if not fname or not re.fullmatch(r"palworld-save-[\d_\-]+\.tar\.gz", fname):
             return await self._fail_card(event, "备份文件名异常，请重新发起。")
         try:
-            self._enter_maint(300)
+            save_ok, save_err = await self._api_post("/v1/api/save", {})
+            if not save_ok:
+                self._log_admin(event, "回档", f"前置存档失败: {str(save_err)[:60]}", False)
+                return await self._fail_card(
+                    event, f"前置存档失败，回档已中止，服务器未停机。\n{save_err}")
             await self._api_post("/v1/api/announce",
                                  {"message": "Server is rolling back a backup. Shutting down..."})
-            await self._api_post("/v1/api/save", {})
+            self._enter_maint(300)
             await asyncio.sleep(1.0)
             image = await self._docker_image_of(sock, container)
             await self._docker_container_action(sock, container, "stop", timeout=90)
             now = datetime.now().strftime("%Y%m%d_%H%M%S")
             # 镜像 tar 内是 Saved/SaveGames/...，解包到 /palworld/Pal/ 覆盖存档(不动 Config)
+            backup_file = f"{IMAGE_BACKUP_DIR}/{fname}"
             script = (
                 "set -e; "
-                f'BD="{IMAGE_BACKUP_DIR}"; F="$BD/{fname}"; PAL=/palworld/Pal; '
-                f'BK="{RESET_BACKUP_DIR}"; STAMP="{now}"; '
+                f"BD={shlex.quote(IMAGE_BACKUP_DIR)}; F={shlex.quote(backup_file)}; "
+                f"PAL={shlex.quote(PAL_DATA_DIR)}; "
+                f"BK={shlex.quote(RESET_BACKUP_DIR)}; STAMP={shlex.quote(now)}; "
                 'if [ ! -f "$F" ]; then echo NOBACKUP; exit 5; fi; '
-                # 回档前把当前存档另存(可再回滚)
+                # 先验证源备份结构，再制作并验证当前世界安全备份；全部成功后才允许删除。
+                'tar tzf "$F" >/dev/null 2>&1 || { echo BADBACKUP; exit 7; }; '
+                "tar tzf \"$F\" | awk '"
+                "BEGIN { level=0 } "
+                "{ p=$0; sub(/^\\.\\//,\"\",p); n=split(p,a,\"/\"); "
+                "if (a[1] != \"Saved\" || a[2] != \"SaveGames\") exit 1; "
+                "for (i=1; i<=n; i++) if (a[i] == \".\" || a[i] == \"..\") exit 1; "
+                "if (p ~ /^Saved\\/SaveGames\\/.*\\/Level\\.sav$/) level=1 } "
+                "END { if (!level) exit 1 }' "
+                '  || { echo BADPATH; exit 7; }; '
                 'mkdir -p "$BK"; '
-                'tar czf "$BK/before_rollback_$STAMP.tar.gz" -C "$PAL" Saved/SaveGames 2>/dev/null || true; '
+                'safe="$BK/before_rollback_$STAMP.tar.gz"; '
+                'tar czf "$safe" -C "$PAL" Saved/SaveGames; '
+                'tar tzf "$safe" >/dev/null; '
                 # 清当前 SaveGames 再解包(只覆盖存档，不动 Config)
                 'rm -rf "$PAL/Saved/SaveGames"; '
                 'tar xzf "$F" -C "$PAL" Saved/SaveGames 2>/dev/null || tar xzf "$F" -C "$PAL"; '
-                '[ -d "$PAL/Saved/SaveGames" ] && echo ROLLED=1 || echo ROLLED=0'
+                'find "$PAL/Saved/SaveGames" -type f -name Level.sav -print -quit '
+                '| grep -q . && echo ROLLED=1 || { echo ROLLED=0; exit 8; }'
             )
             code, out = await self._docker_run_helper(
                 sock, image, container, ["/bin/sh", "-c", script], timeout=180)
@@ -6878,10 +7155,14 @@ class PalworldPlugin(Star):
         sock = str(self.config.get("docker_sock", "/var/run/docker.sock"))
         container = await self._resolve_container(sock) or str(self.config.get("docker_container", "palworld-server"))
         try:
-            self._enter_maint(180)    # 抑制重启期间的掉线/恢复误报
+            save_ok, save_err = await self._api_post("/v1/api/save", {})
+            if not save_ok:
+                self._log_admin(event, "重启服务器", f"前置存档失败: {str(save_err)[:60]}", False)
+                return await self._fail_card(
+                    event, f"前置存档失败，重启已中止，服务器未停机。\n{save_err}")
             await self._api_post("/v1/api/announce",
                                  {"message": "Server is restarting, back in ~1 min..."})
-            await self._api_post("/v1/api/save", {})
+            self._enter_maint(180)    # 抑制重启期间的掉线/恢复误报
             await asyncio.sleep(1.0)
             await self._docker_container_action(sock, container, "restart", timeout=120)
             self._save.invalidate()
@@ -6914,6 +7195,10 @@ class PalworldPlugin(Star):
 
     async def _cmd_confirm(self, event: AstrMessageEvent):
         sender = str(event.get_sender_id())
+        # 发起操作后到确认前管理员名单可能已变更；执行高危操作时必须重新鉴权。
+        if not self._is_admin(sender):
+            self._pending.pop(sender, None)
+            return await self._no_perm_card(event)
         pending = self._pending.pop(sender, None)
         if not pending:
             return await self._msg_card(event, "🤔", "没有待确认的操作",
@@ -6921,28 +7206,42 @@ class PalworldPlugin(Star):
         if time.time() - pending["ts"] > self._confirm_timeout():
             return await self._msg_card(event, "⌛", "确认已超时",
                                         desc="危险操作已自动作废，请重新发起。", color="#E5484D")
-        # 多步编排类操作（删档重开 / 恢复存档 / 重启）走专用执行器
-        if pending.get("kind") == "reset":
-            return await self._do_reset_save(event, pending)
-        if pending.get("kind") == "restore":
-            return await self._do_restore_save(event, pending)
-        if pending.get("kind") == "restart":
-            return await self._do_restart_server(event, pending)
-        if pending.get("kind") == "rollback":
-            return await self._do_rollback(event, pending)
-        ok, err = await self._api_post(pending["path"], pending["payload"])
-        self._log_admin(event, pending["action"], pending["desc"], ok)
-        if ok:
-            return await self._msg_card(event, "✅", f"{pending['action']} 已执行",
-                                        desc=_esc(pending["desc"]), color="#30A46C")
-        return await self._fail_card(event, err)
+        # _pending 按操作者隔离，不能阻止多个管理员同时确认停服/改档操作。
+        # 忙时直接取消本次确认，不排队执行可能已过期或失去上下文的危险操作。
+        operation_lock = getattr(self, "_confirm_operation_lock", None)
+        if operation_lock is None:  # 兼容绕过 __init__ 构造的测试桩
+            operation_lock = asyncio.Lock()
+            self._confirm_operation_lock = operation_lock
+        if operation_lock.locked():
+            self._log_admin(event, pending["action"], "拒绝执行：另一个高危操作正在进行", False)
+            return await self._msg_card(
+                event, "⏳", "已有高危操作正在执行",
+                desc="为避免停服、存档或容器操作互相干扰，本次确认已取消。请等待当前操作完成后重新发起。",
+                color="#F5A623",
+            )
+        async with operation_lock:
+            # 多步编排类操作（删档重开 / 恢复存档 / 重启）走专用执行器
+            if pending.get("kind") == "reset":
+                return await self._do_reset_save(event, pending)
+            if pending.get("kind") == "restore":
+                return await self._do_restore_save(event, pending)
+            if pending.get("kind") == "restart":
+                return await self._do_restart_server(event, pending)
+            if pending.get("kind") == "rollback":
+                return await self._do_rollback(event, pending)
+            ok, err = await self._api_post(pending["path"], pending["payload"])
+            self._log_admin(event, pending["action"], pending["desc"], ok)
+            if ok:
+                return await self._msg_card(event, "✅", f"{pending['action']} 已执行",
+                                            desc=_esc(pending["desc"]), color="#30A46C")
+            return await self._fail_card(event, err)
 
     # ------------------------------------------------------------------
     # 杂项
     # ------------------------------------------------------------------
     async def _fail_card(self, event, err: str):
         return await self._msg_card(event, "❌", "操作失败",
-                                    desc=f"服务器返回：{err}", color="#E5484D")
+                                    desc=f"服务器返回：{_esc(err)}", color="#E5484D")
 
     def _log_admin(self, event, action: str, detail: str, ok: bool):
         logger.info(
@@ -7021,7 +7320,7 @@ class PalworldPlugin(Star):
         ok, data, status = await self._api_get("/v1/api/info")
         if ok and isinstance(data, dict):
             add("✅", "REST API",
-                f"可达 · {data.get('servername', '服务器')} v{data.get('version', '—')}")
+                f"可达 · {_esc(data.get('servername', '服务器'))} v{_esc(data.get('version', '—'))}")
         elif status in (401, 403):
             add("❌", "REST API 认证", f"密码不正确(HTTP {status})",
                 "插件 admin_password 必须等于帕鲁容器的 ADMIN_PASSWORD 环境变量。")
@@ -7038,7 +7337,8 @@ class PalworldPlugin(Star):
             if save_dir:
                 try:
                     code, _ = await self._docker_exec(
-                        sock, container, ["/bin/sh", "-c", f'test -f "{save_dir}/Level.sav"'])
+                        sock, container,
+                        ["/bin/sh", "-c", f"test -f {shlex.quote(f'{save_dir}/Level.sav')}"])
                     has = (code == 0)
                 except Exception:  # noqa: BLE001
                     has = False
@@ -7152,12 +7452,22 @@ class PalworldPlugin(Star):
             logger.debug(f"{LOG_PREFIX} 获取 aiocqhttp 客户端失败: {e}")
         return self._client
 
-    async def _send_group_text(self, gid: str, text: str):
+    async def _send_group_text(self, gid: str, text: str, *, at_qqs=(), prefix: str = ""):
         cli = await self._get_client()
         if not cli:
             return
         try:
-            await cli.api.call_action("send_group_msg", group_id=int(gid), message=text)
+            # 始终使用结构化 OneBot 消息段：玩家昵称、REST 字段等不可信文本只进入 text 段，
+            # 不能让其中的 [CQ:...] 被适配器再次解析成 @、图片或其它动作。
+            message = []
+            if prefix:
+                message.append({"type": "text", "data": {"text": str(prefix)}})
+            for qq in at_qqs or ():
+                qq = str(qq).strip()
+                if qq.isdecimal():
+                    message.append({"type": "at", "data": {"qq": qq}})
+            message.append({"type": "text", "data": {"text": str(text)}})
+            await cli.api.call_action("send_group_msg", group_id=int(gid), message=message)
         except Exception as e:  # noqa: BLE001
             logger.warning(f"{LOG_PREFIX} 群 {gid} 文字播报失败: {e}")
 
@@ -7181,9 +7491,46 @@ class PalworldPlugin(Star):
         except Exception as e:  # noqa: BLE001
             logger.warning(f"{LOG_PREFIX} 群 {gid} 图片播报失败: {e}")
 
-    async def _broadcast_text(self, text: str):
+    async def _send_group_forward_text(self, gid: str, text: str, *, name: str) -> bool:
+        """通过 OneBot 主动发送合并转发长文本，供无事件对象的后台任务使用。"""
+        cli = await self._get_client()
+        if not cli:
+            return False
+        try:
+            bot_id = str(getattr(self, "_bot_self_id", "") or "")
+            if not bot_id:
+                try:
+                    login = await cli.api.call_action("get_login_info")
+                    bot_id = str((login or {}).get("user_id", "") or "0")
+                except Exception as e:  # noqa: BLE001
+                    logger.debug(f"{LOG_PREFIX} 获取机器人 QQ 失败，合并转发使用默认节点 ID: {e}")
+                    bot_id = "0"
+                self._bot_self_id = bot_id
+            nodes_cls = getattr(Comp, "Nodes", None)
+            node_cls = getattr(Comp, "Node", None)
+            if not nodes_cls or not node_cls:
+                logger.warning(f"{LOG_PREFIX} 当前 AstrBot 不支持合并转发组件")
+                return False
+            nodes = nodes_cls(nodes=[
+                node_cls(
+                    uin=bot_id,
+                    name=name,
+                    content=[Comp.Plain(chunk)],
+                )
+                for chunk in split_long_text(text)
+            ])
+            payload = await nodes.to_dict()
+            payload["group_id"] = int(gid)
+            await cli.api.call_action("send_group_forward_msg", **payload)
+            return True
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"{LOG_PREFIX} 群 {gid} 合并转发播报失败: {e}")
+            return False
+
+    async def _broadcast_text(self, text: str, *, at_qqs=(), prefix: str = ""):
+        at_qqs = tuple(at_qqs or ())
         for gid in self._broadcast_targets():
-            await self._send_group_text(gid, text)
+            await self._send_group_text(gid, text, at_qqs=at_qqs, prefix=prefix)
 
     async def _broadcast_card(self, tmpl: str, data: dict):
         url = await self._render(tmpl, data)   # html_render 默认 return_url=True
@@ -7325,8 +7672,8 @@ class PalworldPlugin(Star):
                 nm = cur[uid]["name"]
                 qqs = subs.get(nm)
                 if qqs:
-                    at = "".join(f"[CQ:at,qq={q}]" for q in qqs)
-                    await self._broadcast_text(f"{at} 你订阅的 🟢 {nm} 上线啦！")
+                    await self._broadcast_text(
+                        f" 你订阅的 🟢 {nm} 上线啦！", at_qqs=qqs)
 
         if (joins or lefts) and self._notify_join_left() and not self._in_quiet():
             lines = []
@@ -7358,6 +7705,119 @@ class PalworldPlugin(Star):
             return int(hh) * 60 + int(mm)
         except (ValueError, AttributeError):
             return None
+
+    @staticmethod
+    def _parse_daily_cron(expression: str):
+        """解析 ``分 时 * * *`` 形式的每日 cron，返回当天分钟数；其它表达式不猜测。"""
+        fields = str(expression or "").strip().split()
+        if len(fields) != 5 or fields[2:] != ["*", "*", "*"]:
+            return None
+        try:
+            minute, hour = int(fields[0]), int(fields[1])
+        except ValueError:
+            return None
+        if not (0 <= minute <= 59 and 0 <= hour <= 23):
+            return None
+        return hour * 60 + minute
+
+    @staticmethod
+    def _parse_hourly_cron(expression: str):
+        """解析 ``分 * * * *`` 形式的每小时 cron，返回小时内分钟；其它表达式不猜测。"""
+        fields = str(expression or "").strip().split()
+        if len(fields) != 5 or fields[1:] != ["*", "*", "*", "*"]:
+            return None
+        try:
+            minute = int(fields[0])
+        except ValueError:
+            return None
+        return minute if 0 <= minute <= 59 else None
+
+    async def _maintenance_schedule(self) -> dict:
+        """返回维护计划；插件显式配置优先，否则只读发现目标容器的标准 cron。
+
+        重启仅接受标准每日表达式；更新额外接受标准每小时表达式。复杂 cron 或时区不一致时
+        返回空计划，避免错误播报。
+        Docker 临时不可用的结果缓存 10 分钟，避免每次轮询反复 inspect。
+        """
+        configured = self._parse_hhmm(self.config.get("daily_reboot_time", ""))
+        if configured is not None:
+            return {
+                "reboot": configured,
+                "reboot_warn": 5,
+                "update": configured,
+                "update_hourly": None,
+                "update_warn": 5,
+            }
+
+        now = time.time()
+        cached_at = getattr(self, "_maintenance_schedule_cached_at", 0.0)
+        cached = getattr(self, "_maintenance_schedule_cache", None)
+        if isinstance(cached, dict) and now - cached_at < 600:
+            return dict(cached)
+
+        result = {
+            "reboot": None,
+            "reboot_warn": 5,
+            "update": None,
+            "update_hourly": None,
+            "update_warn": 5,
+        }
+        try:
+            sock = str(self.config.get("docker_sock", "/var/run/docker.sock"))
+            if os.path.exists(sock):
+                container = await self._resolve_container(sock)
+                detail = await docker_api.inspect_container(sock, container)
+                entries = ((detail or {}).get("Config", {}) or {}).get("Env", [])
+                env = {}
+                for entry in entries if isinstance(entries, list) else []:
+                    if isinstance(entry, str) and "=" in entry:
+                        key, value = entry.split("=", 1)
+                        env[key] = value
+                container_tz = str(env.get("TZ", "") or "").strip()
+                local_tz = str(os.environ.get("TZ", "") or "").strip()
+                if container_tz and local_tz and container_tz != local_tz:
+                    logger.warning(
+                        f"{LOG_PREFIX} Palworld 容器时区 {container_tz} 与插件时区 {local_tz} 不一致，"
+                        "已跳过自动识别维护时间，请显式配置 daily_reboot_time")
+                else:
+                    reboot_enabled = str(env.get("AUTO_REBOOT_ENABLED", "")).lower() in ("1", "true", "yes", "on")
+                    update_enabled = str(env.get("AUTO_UPDATE_ENABLED", "")).lower() in ("1", "true", "yes", "on")
+                    update_on_boot = str(env.get("UPDATE_ON_BOOT", "")).lower() in ("1", "true", "yes", "on")
+                    if reboot_enabled:
+                        result["reboot"] = self._parse_daily_cron(env.get("AUTO_REBOOT_CRON_EXPRESSION", ""))
+                        try:
+                            warn = int(env.get("AUTO_REBOOT_WARN_MINUTES", 5))
+                        except (TypeError, ValueError):
+                            warn = 5
+                        result["reboot_warn"] = min(max(warn, 1), 60)
+                    if update_enabled:
+                        update_cron = env.get("AUTO_UPDATE_CRON_EXPRESSION", "")
+                        result["update"] = self._parse_daily_cron(update_cron)
+                        result["update_hourly"] = self._parse_hourly_cron(update_cron)
+                        try:
+                            warn = int(env.get("AUTO_UPDATE_WARN_MINUTES", 5))
+                        except (TypeError, ValueError):
+                            warn = 5
+                        result["update_warn"] = min(max(warn, 1), 60)
+                    if result["update"] is None and update_on_boot:
+                        result["update"] = result["reboot"]
+        except Exception as e:  # noqa: BLE001
+            logger.debug(f"{LOG_PREFIX} 自动识别容器维护时间失败: {e}")
+
+        self._maintenance_schedule_cache = dict(result)
+        self._maintenance_schedule_cached_at = now
+        if result["reboot"] is not None and not getattr(self, "_maintenance_schedule_logged", False):
+            minute = result["reboot"]
+            logger.info(
+                f"{LOG_PREFIX} 已从 Palworld 容器识别每日重启时间 "
+                f"{minute // 60:02d}:{minute % 60:02d}（提前 {result['reboot_warn']} 分钟播报）")
+            self._maintenance_schedule_logged = True
+        if result["update_hourly"] is not None and not getattr(self, "_hourly_update_schedule_logged", False):
+            logger.info(
+                f"{LOG_PREFIX} 已从 Palworld 容器识别每小时更新检查时间 "
+                f"{result['update_hourly']:02d} 分（更新时提前 {result['update_warn']} 分钟播报）")
+            self._hourly_update_schedule_logged = True
+        return dict(result)
 
     def _today_top(self, top: int = 3) -> list[dict]:
         """今日在线时长排行(今日肝帝)。"""
@@ -7395,16 +7855,64 @@ class PalworldPlugin(Star):
                 return False
             return m <= cur_min < m + 60   # 命中后 1 小时窗口内触发一次
 
-        # 每日例行重启(帕鲁镜像 AUTO_REBOOT_CRON 等)感知：到点前 2 分钟发预告 +
-        # 进维护静默，避免重启前低帧的 FPS 误报与重启瞬断的掉线/恢复误报。
-        rb = self._parse_hhmm(self.config.get("daily_reboot_time", ""))
-        if rb is not None and self.state.get("last_reboot_notice") != today:
-            if max(rb - 2, 0) <= cur_min < rb + 1:   # 预告窗口：重启前 2 分钟内
-                self.state["last_reboot_notice"] = today
+        # 每日例行重启/更新感知：配置留空时从 Palworld 容器标准 cron 自动识别。
+        # 更新版本已被检测到时，维护前约 5 分钟同时发游戏公告和 QQ；否则只发例行重启 QQ 预告。
+        maintenance = await self._maintenance_schedule()
+
+        def minutes_until(target):
+            if not isinstance(target, int):
+                return None
+            delta = (target - cur_min) % (24 * 60)
+            return delta or None   # 已到计划分钟时不再补发“还有 N 分钟”的过期预告
+
+        def schedule_day(target):
+            return (now + timedelta(days=1 if target <= cur_min else 0)).strftime("%Y-%m-%d")
+
+        update_version = self.state.get("update_notified")
+        update_at = maintenance.get("update")
+        update_hourly = maintenance.get("update_hourly")
+        update_warn = min(max(int(maintenance.get("update_warn", 5) or 5), 1), 60)
+        update_left = None
+        notice_key = None
+        if isinstance(update_hourly, int):
+            elapsed = (now.minute - update_hourly) % 60
+            if elapsed < update_warn:
+                update_left = max(update_warn - elapsed, 1)
+                window_start = now - timedelta(minutes=elapsed)
+                notice_key = f"{update_version}:{window_start.strftime('%Y-%m-%dT%H')}"
+        if update_left is None:
+            daily_left = minutes_until(update_at)
+            if daily_left is not None and daily_left <= update_warn:
+                update_left = daily_left
+                notice_key = f"{update_version}:{schedule_day(update_at)}"
+        update_notice_sent = False
+        if update_version and update_left is not None and notice_key:
+            if self.state.get("update_game_warned") != notice_key:
+                message = f"检测到服务器更新，约 {update_left} 分钟后将重启更新，请及时保存并下线。"
+                ok, err = await self._api_post("/v1/api/announce", {"message": message})
+                if ok:
+                    self.state["update_game_warned"] = notice_key
+                    if update_hourly is None and update_at == maintenance.get("reboot"):
+                        self.state["last_reboot_notice"] = schedule_day(update_at)
+                    self._save_state()
+                    self._enter_maint((update_left + 5) * 60)
+                    await self._broadcast_text(f"🔔 {message}")
+                    update_notice_sent = True
+                else:
+                    logger.warning(f"{LOG_PREFIX} 更新维护前游戏公告发送失败（下次轮询重试）: {err}")
+
+        rb = maintenance.get("reboot")
+        reboot_left = minutes_until(rb)
+        if not update_notice_sent and rb is not None and reboot_left is not None:
+            notice_day = schedule_day(rb)
+            warn_minutes = int(maintenance.get("reboot_warn", 5) or 5)
+            if reboot_left <= warn_minutes and self.state.get("last_reboot_notice") != notice_day:
+                self.state["last_reboot_notice"] = notice_day
                 self._save_state()
-                self._enter_maint(360)   # 静默覆盖重启全程(预告→重启→恢复，约 6 分钟)
+                self._enter_maint((reboot_left + 5) * 60)
                 await self._broadcast_text(
-                    "🔄 服务器将进行每日例行重启更新，预计 1 分钟左右完成，请稍候并注意保存进度～")
+                    f"🔄 服务器计划在约 {reboot_left} 分钟后进行每日例行重启更新，"
+                    "请注意保存进度；维护通常约 1 分钟完成。")
 
         if due(self.config.get("morning_report_time", "09:00"), "last_morning"):
             self.state["last_morning"] = today
@@ -7439,17 +7947,17 @@ class PalworldPlugin(Star):
                         else "今天辛苦啦，来看看今日战报～",
             "online": okm,
             "cur": cur,
-            "maxn": m.get("maxplayernum", self.state.get("maxn") or "—"),
-            "fps": m.get("serverfps", "—"),
-            "days": m.get("days", "—"),
+            "maxn": _esc(m.get("maxplayernum", self.state.get("maxn") or "—")),
+            "fps": _esc(m.get("serverfps", "—")),
+            "days": _esc(m.get("days", "—")),
             "today_peak": max(td.get("peak", 0), cur),
             "today_avg": round(td.get("sum", 0) / td["n"], 1) if td.get("n") else cur,
             "yday_peak": yd.get("peak", "—") if yd else "—",
             "show_yday": kind == "morning",
             "record": self.state.get("record_peak", max(td.get("peak", 0), cur)),
-            "week_top": [{"name": r["name"], "dur": self._fmt_uptime(r["sec"])}
+            "week_top": [{"name": _esc(r["name"]), "dur": self._fmt_uptime(r["sec"])}
                          for r in self._rank_list(3)],
-            "today_top": [{"name": r["name"], "dur": self._fmt_uptime(r["sec"])}
+            "today_top": [{"name": _esc(r["name"]), "dur": self._fmt_uptime(r["sec"])}
                           for r in self._today_top(3)],
         }
         await self._broadcast_card(self._t("daily"), data)
@@ -7462,7 +7970,7 @@ class PalworldPlugin(Star):
         medals = {1: "🥇", 2: "🥈", 3: "🥉"}
         online = set(self.state.get("online", {}))
         rows = [{
-            "name": r["name"], "online": r["uid"] in online,
+            "name": _esc(r["name"]), "online": r["uid"] in online,
             "dur": self._fmt_uptime(r["sec"]),
             "pct": round(r["sec"] / maxsec * 100) if maxsec else 0,
             "medal": medals.get(i, str(i)),
@@ -7477,9 +7985,10 @@ class PalworldPlugin(Star):
             if b.get("userId") == champ["uid"] or b.get("name") == champ["name"]:
                 champ_qq = qq
                 break
-        at = f"[CQ:at,qq={champ_qq}] " if champ_qq else ""
         await self._broadcast_text(
-            f"🎉 {at}恭喜「{champ['name']}」荣膺上周肝帝！在线 {self._fmt_uptime(champ['sec'])}，太肝了！")
+            f"{' ' if champ_qq else ''}恭喜「{champ['name']}」荣膺上周肝帝！"
+            f"在线 {self._fmt_uptime(champ['sec'])}，太肝了！",
+            at_qqs=([champ_qq] if champ_qq else ()), prefix="🎉 ")
         # 归档历史 + 清理上周 archive + 归零仍持有上周计时的玩家
         self.state.setdefault("history", {})[last_wk] = [{"name": r["name"], "sec": r["sec"]} for r in board]
         self.state.get("week_archive", {}).pop(last_wk, None)
