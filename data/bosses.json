@@ -182,6 +182,21 @@
   "coords": "-1294,-1669"
  },
  {
+  "name": "苍天的盟约 盟主 苍璃 & 霄龙",
+  "category": "塔主",
+  "dev": "BlueSkyDragon",
+  "pal": "霄龙",
+  "element": "龙/水",
+  "location": "盟约之塔",
+  "difficulty": "Normal",
+  "level": "",
+  "hp": "",
+  "drops": [],
+  "short": "苍璃（霄龙）",
+  "human": "苍璃",
+  "coords": "-284,-1467"
+ },
+ {
   "name": "贝菈诺娃",
   "category": "突袭",
   "dev": "NightLady",

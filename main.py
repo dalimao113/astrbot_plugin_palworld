@@ -67,7 +67,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.47.0",
+    "1.48.0",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -206,10 +206,10 @@ class PalworldPlugin(Star):
         return self._bg.get("default", "")
 
     # ------------------------------------------------------------------
-    # 卡片风格(皮肤)：fantasy 奇幻玻璃 / pixel 像素羊皮纸
+    # 卡片风格(皮肤)：fantasy 奇幻玻璃 / pixel 像素羊皮纸 / ingame 游戏原生
     # ------------------------------------------------------------------
     def _style(self) -> str:
-        # 卡片风格由 WebUI 配置 card_style 控制(fantasy/pixel)
+        # 卡片风格由 WebUI 配置 card_style 控制(fantasy/pixel/ingame)
         st = self.config.get("card_style", "fantasy")
         return st if st in STYLES else "fantasy"
 
@@ -228,6 +228,7 @@ class PalworldPlugin(Star):
 
     def _load_paldex(self):
         self._pals: list = []
+        self._pal_boss_badges_by_dev = None   # 依赖 pal_spawns/bosses；重载数据时必须重建
         self._pal_by_name: dict = {}     # 中文名 -> pal
         self._pal_by_dev: dict = {}      # 存档 char_id(小写) -> pal
         self._pal_idx: dict = {}         # 归一化图鉴号 -> pal
@@ -236,6 +237,8 @@ class PalworldPlugin(Star):
         self._breed_rev: dict = {}       # 子代号 -> [(亲A号,亲B号), ...]  (反向配种用)
         self._breed_meta: dict = {}      # 配种数据版本/来源元信息(game_version/generated_at/source)
         self._drop_index: dict = {}      # 物品中文名 -> [{pal,index,dev,rate,min,max}] (掉落反查)
+        self._resource_nodes: dict = {}  # item_id -> 地图资源点/刷新条件（/帕鲁获取、/帕鲁矿点）
+        self._resource_meta: dict = {}
         base = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
         try:
             with open(os.path.join(base, "paldex.json"), encoding="utf-8") as _f:
@@ -282,6 +285,18 @@ class PalworldPlugin(Star):
                     self._breed_rev.setdefault(c, []).append((a, b))
         except Exception as e:  # noqa: BLE001
             logger.warning(f"{LOG_PREFIX} 配种表 data/breeding.json 加载失败: {e}")
+        try:
+            with open(os.path.join(base, "resource_nodes.json"), encoding="utf-8") as _f:
+                resource_data = json.loads(_f.read())
+            resources = resource_data.get("resources") if isinstance(resource_data, dict) else None
+            if not isinstance(resources, list):
+                raise ValueError("resources 不是数组")
+            self._resource_meta = resource_data.get("_meta") or {}
+            self._resource_nodes = {row["item_id"]: row for row in resources if row.get("item_id")}
+        except FileNotFoundError:
+            pass
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"{LOG_PREFIX} 资源点数据 data/resource_nodes.json 加载失败: {e}")
         # 物品图鉴数据
         self._items: list = []
         self._item_by_name: dict = {}   # 中文名 -> 主体物品(同名优先无品阶/NPC 后缀的本体)
@@ -457,6 +472,22 @@ class PalworldPlugin(Star):
                 self._bosses = json.loads(_f.read())
         except Exception:  # noqa: BLE001
             pass
+        # 玩家探索/收集进度总量。来源与稳定 ID 见 data/progress_catalog.json；
+        # 存档只有累计数的类别会按当前 build 总量封顶，避免旧版本残留标记显示为超额完成。
+        self._progress_catalog: dict = {}
+        try:
+            with open(os.path.join(base, "progress_catalog.json"), encoding="utf-8") as _f:
+                catalog = json.loads(_f.read())
+            categories = catalog.get("categories") if isinstance(catalog, dict) else None
+            required = {"paldeck", "fasttravel", "towers", "story_bosses", "field_bosses",
+                        "dungeons", "relics", "areas"}
+            if not isinstance(categories, dict) or not required.issubset(categories) or not all(
+                    isinstance(value, dict) and isinstance(value.get("total"), int) and value["total"] > 0
+                    for value in categories.values()):
+                raise ValueError("categories 结构或 total 非法")
+            self._progress_catalog = catalog
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"{LOG_PREFIX} 进度总量 data/progress_catalog.json 加载失败，将使用内置安全口径: {e}")
         # 主动技能 [{name,element,power,cooldown,effect,desc,is_fruit}]（/帕鲁技能）
         self._skills: list = []
         self._skill_full: dict = {}
@@ -1048,7 +1079,7 @@ class PalworldPlugin(Star):
             "description": desc,   # 详情:统一清洗,不截断
             "materials": mats, "benches": rec.get("bench", []),
             "price": price, "sphere": sphere, "weight": wt,
-            "related": ([f"/帕鲁材料路线 {it['name']}", f"/帕鲁用途 {it['name']}"]
+            "related": ([f"/帕鲁获取 {it['name']}", f"/帕鲁材料路线 {it['name']}", f"/帕鲁用途 {it['name']}"]
                         + ([f"/帕鲁哪里买 {it['name']}"] if price else [])),
             "icon": self._item_icon(it.get("item_id"))})
 
@@ -1436,6 +1467,232 @@ class PalworldPlugin(Star):
                      else f"发「/帕鲁哪里掉 {nxt}」翻页")
         return await self._img(event, self._t("droplist"),
                                {"sub": sub, "rows": rows, "pager": pager})
+
+    # ------------------------------------------------------------------
+    # 物品完整获取来源 / 资源矿点地图
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _drop_qty(row: dict) -> str:
+        mn, mx = row.get("min"), row.get("max")
+        return f"{mn}-{mx}" if mn and mx and mn != mx else (str(mx or mn) if (mx or mn) else "")
+
+    def _resource_catalog(self, *, ore_only: bool = False) -> list[dict]:
+        rows = []
+        for item_id, resource in self._resource_nodes.items():
+            if ore_only and resource.get("kind") != "ore":
+                continue
+            item = self._item_by_id.get(item_id) or {}
+            rows.append({
+                "name": _esc(item.get("name") or resource.get("name") or item_id),
+                "item_id": item_id,
+                "icon": self._item_icon(item_id),
+                "kind": "夜间拾取" if resource.get("kind") == "pickup" else "矿石",
+                "condition": _esc(resource.get("condition") or ""),
+                "points": int(resource.get("point_count") or 0),
+                "maps": " / ".join("主大陆" if mid == "main" else "世界树"
+                                   for mid in resource.get("maps", {})),
+            })
+        rows.sort(key=lambda row: (row["kind"] != "夜间拾取", row["name"]))
+        return rows
+
+    def _resource_map_panels(self, resource: dict) -> list[dict]:
+        """资源点原始世界坐标 -> 对应游戏地图百分比；按数据里的 map_id 选独立坐标系。"""
+        if not resource or not self._load_map():
+            return []
+        registry = {mid: (label, img, mu, mv) for mid, label, img, mu, mv in self._MAP_REGISTRY}
+        panels = []
+        for map_id, raw_points in (resource.get("maps") or {}).items():
+            setting = registry.get(map_id)
+            if not setting:
+                continue
+            label, image_attr, mu_attr, mv_attr = setting
+            image = getattr(self, image_attr, None)
+            mu, mv = getattr(self, mu_attr, None), getattr(self, mv_attr, None)
+            if not image or not mu or not mv:
+                continue
+            points, region_counts = [], {}
+            for point in raw_points:
+                try:
+                    wx, wy = float(point[0]), float(point[1])
+                except (IndexError, TypeError, ValueError):
+                    continue
+                left = (mu[0] * wx + mu[1] * wy + mu[2]) * 100.0
+                top = (mv[0] * wx + mv[1] * wy + mv[2]) * 100.0
+                if not (-3 <= left <= 103 and -3 <= top <= 103):
+                    continue
+                region = self._nearest_region(wx, wy) if map_id == "main" else "世界树"
+                region_counts[region] = region_counts.get(region, 0) + 1
+                points.append({"left": round(left, 3), "top": round(top, 3)})
+            regions = sorted(region_counts.items(), key=lambda row: (-row[1], row[0]))[:8]
+            panels.append({"map_id": map_id, "label": label, "mapimg": image, "points": points,
+                           "regions": [{"name": _esc(name), "count": count} for name, count in regions]})
+        return panels
+
+    def _acquisition_data(self, item: dict) -> dict:
+        item_id, name = item.get("item_id", ""), item.get("name", "")
+        resource = self._resource_nodes.get(item_id) or {}
+
+        drops = []
+        for row in sorted(self._drop_index.get(name, []), key=lambda value: -(value.get("rate") or 0)):
+            drops.append({"name": _esc(row["pal"]), "index": _esc(row.get("index") or ""),
+                          "icon": self._pal_icon(row.get("dev") or ""),
+                          "qty": self._drop_qty(row), "rate": row.get("rate") or 0})
+
+        ranch = []
+        for row in self._ranch_index():
+            if any(product.get("name") == name for product in row.get("products", [])):
+                ranch.append({"name": _esc(row["pal"]), "icon": row.get("icon") or ""})
+
+        facilities = []
+        for building in self._buildings:
+            description = clean_text(building.get("description") or "")
+            if name and name in description and ("生产" in description or "生成" in description):
+                facilities.append({"name": _esc(building["name"]), "description": _esc(description),
+                                   "icon": self._sub_icon("buildings", building.get("id") or "")})
+
+        shops = [{"name": _esc(row["shop"]), "price": row.get("price"),
+                  "currency": _esc(row.get("currency") or ""), "stock": self._stock_label(row.get("stock"))}
+                 for row in self._item_shops.get(name, [])]
+
+        recipe = self._recipes.get(item_id) or {}
+        craft = None
+        if recipe:
+            materials = []
+            for material in recipe.get("mats", []):
+                meta = self._item_by_name.get(material.get("name")) or {}
+                materials.append({"name": _esc(material.get("name") or ""), "count": material.get("count"),
+                                  "icon": self._item_icon(meta.get("item_id") or "")})
+            craft = {"materials": materials, "benches": [_esc(value) for value in recipe.get("bench", [])]}
+
+        fishing = [{"qty": _esc(row.get("qty") or ""), "rate": _esc(row.get("rate") or "")}
+                   for row in (self._fishing or {}).get("catch", []) if row.get("name") == name]
+        maps = self._resource_map_panels(resource)
+        source_count = sum(bool(value) for value in (maps, drops, ranch, facilities, shops, craft, fishing))
+        return {
+            "name": _esc(name), "item_id": item_id, "type": self._item_type_cn(item.get("type")),
+            "description": _esc(clean_text(item.get("description") or "")), "icon": self._item_icon(item_id),
+            "resource": resource, "maps": maps, "drops": drops[:24], "drop_total": len(drops),
+            "ranch": ranch, "facilities": facilities, "shops": shops, "craft": craft, "fishing": fishing,
+            "source_count": source_count,
+            "build_id": _esc(self._resource_meta.get("steam_build_id") or ""),
+        }
+
+    async def _resource_catalog_card(self, event: AstrMessageEvent, *, ore_only: bool = False):
+        rows = self._resource_catalog(ore_only=ore_only)
+        title = "矿石地点地图" if ore_only else "特殊采集物 / 矿石"
+        return await self._img(event, self._t("acquire_list"), {
+            "title": title, "rows": rows, "ore_only": ore_only,
+            "build_id": _esc(self._resource_meta.get("steam_build_id") or ""),
+        })
+
+    async def _cmd_obtain(self, event: AstrMessageEvent, args: list[str]):
+        if not self._items:
+            return await self._msg_card(event, "🎒", "物品数据未加载", desc="data/items.json 缺失。", color="#E5484D")
+        query, page = self._parse_page_args(args)
+        if not query:
+            return await self._resource_catalog_card(event)
+        item = self._find_item(query)
+        matches = [entry for entry in self._ordered_items() if query in entry["name"]]
+        if not item:
+            return await self._msg_card(event, "🔍", "查无此物品",
+                                        desc=f"没有名字含「{_esc(query)}」的物品。\n可发「/帕鲁获取」看特殊采集物目录。",
+                                        color="#F5A623")
+        if query not in self._item_by_name and len(matches) > 1:
+            return await self._render_grid(event, "选择要查的物品", "🎒", matches, page, "/帕鲁获取", query)
+        return await self._img(event, self._t("acquire"), self._acquisition_data(item), width=MAP_WIDTH, dsf=1.6)
+
+    async def _cmd_oremap(self, event: AstrMessageEvent, args: list[str]):
+        query, _page = self._parse_page_args(args)
+        if not query:
+            return await self._resource_catalog_card(event, ore_only=True)
+        item = self._find_item(query)
+        if not item or item.get("item_id") not in self._resource_nodes:
+            names = "、".join(row["name"] for row in self._resource_catalog(ore_only=False))
+            return await self._msg_card(event, "🗺️", f"没有「{_esc(query)}」的资源点地图",
+                                        desc=f"当前已从游戏关卡提取：{names}。\n其它物品可用 /帕鲁获取 <物品> 查来源。",
+                                        color="#F5A623")
+        return await self._img(event, self._t("acquire"), self._acquisition_data(item), width=MAP_WIDTH, dsf=1.6)
+
+    # ------------------------------------------------------------------
+    # 帕鲁解剖 / 解体：普通可收集物种按 DT_PalDropItem 标准掉落表正反查。
+    # ------------------------------------------------------------------
+    def _butcher_pals(self) -> list[dict]:
+        return [pal for pal in self._pals
+                if pal.get("is_collectible", True) and (pal.get("item_drops") or [])]
+
+    def _butcher_tools(self) -> list[dict]:
+        knife = self._tech_by_name.get("切肉刀") or {}
+        conveyor = self._building_by_name.get("帕鲁解体传送带") or {}
+        return [
+            {"name": "切肉刀", "detail": "Lv.12 科技；召唤帕鲁后执行肢解",
+             "icon": self._item_icon("MeatCutterKnife") or self._sub_icon("tech", knife.get("id") or "")},
+            {"name": "帕鲁解体传送带", "detail": "Lv.56 科技；批量自动解体",
+             "icon": self._sub_icon("buildings", conveyor.get("id") or "DismantlingConveyor")},
+        ]
+
+    async def _cmd_butcher(self, event: AstrMessageEvent, args: list[str]):
+        if not self._pals:
+            return await self._msg_card(event, "🔪", "图鉴数据未加载", desc="data/paldex.json 缺失。", color="#E5484D")
+        query, page = self._parse_page_args(args)
+        pool = self._butcher_pals()
+        per = 18
+        if not query:
+            pages = max(1, (len(pool) + per - 1) // per)
+            page = min(max(1, page), pages)
+            chunk = pool[(page - 1) * per:page * per]
+            rows = [{"name": _esc(p["pal_name"]), "index": _esc(p.get("pal_index") or ""),
+                     "icon": self._pal_icon(p.get("pal_dev_name") or ""),
+                     "count": len(p.get("item_drops") or [])} for p in chunk]
+            pager = f"/帕鲁解剖 {page + 1 if page < pages else 1}" if pages > 1 else ""
+            return await self._img(event, self._t("butcher"), {
+                "mode": "catalog", "title": "帕鲁解剖查询", "subtitle": f"{len(pool)} 个可收集物种 · 第 {page}/{pages} 页",
+                "rows": rows, "tools": self._butcher_tools(), "pager": pager})
+
+        pal = None
+        if query in self._pal_by_name or self._norm_idx(query).upper() in self._pal_idx:
+            pal = self._find_pal(query)
+        else:
+            candidates = [value for value in pool if query in value.get("pal_name", "")]
+            if len(candidates) == 1:
+                pal = candidates[0]
+        if pal and pal.get("is_collectible", True) and pal.get("item_drops"):
+            rows = []
+            for drop in pal.get("item_drops") or []:
+                mn, mx = drop.get("min_drop"), drop.get("max_drop")
+                qty = f"{mn}-{mx}" if mn and mx and mn != mx else str(mx or mn or "")
+                rows.append({"name": _esc(drop.get("item_name") or ""), "qty": qty,
+                             "rate": drop.get("drop_rate") or 0,
+                             "icon": self._item_icon(drop.get("item_id") or "")})
+            return await self._img(event, self._t("butcher"), {
+                "mode": "pal", "title": _esc(pal["pal_name"]), "index": _esc(pal.get("pal_index") or ""),
+                "hero_icon": self._pal_icon(pal.get("pal_dev_name") or ""), "rows": rows,
+                "subtitle": f"标准解体掉落 · {len(rows)} 种物品", "tools": self._butcher_tools(), "pager": ""})
+
+        item = self._find_item(query)
+        if item:
+            matches = []
+            for candidate in pool:
+                for drop in candidate.get("item_drops") or []:
+                    if drop.get("item_name") != item.get("name"):
+                        continue
+                    mn, mx = drop.get("min_drop"), drop.get("max_drop")
+                    matches.append({"name": _esc(candidate["pal_name"]), "index": _esc(candidate.get("pal_index") or ""),
+                                    "icon": self._pal_icon(candidate.get("pal_dev_name") or ""),
+                                    "qty": f"{mn}-{mx}" if mn and mx and mn != mx else str(mx or mn or ""),
+                                    "rate": drop.get("drop_rate") or 0})
+            if matches:
+                pages = max(1, (len(matches) + per - 1) // per)
+                page = min(max(1, page), pages)
+                rows = matches[(page - 1) * per:page * per]
+                pager = f"/帕鲁解剖 {item['name']} {page + 1 if page < pages else 1}" if pages > 1 else ""
+                return await self._img(event, self._t("butcher"), {
+                    "mode": "item", "title": _esc(item["name"]), "hero_icon": self._item_icon(item.get("item_id") or ""),
+                    "subtitle": f"可通过解体 {len(matches)} 种帕鲁获得 · 第 {page}/{pages} 页",
+                    "rows": rows, "tools": self._butcher_tools(), "pager": pager})
+
+        return await self._msg_card(event, "🔍", "没有可查询的解剖结果",
+                                    desc=f"未找到「{_esc(query)}」对应的可收集帕鲁或标准解体掉落。\n"
+                                         "用法：/帕鲁解剖 <帕鲁名或物品名>", color="#F5A623")
 
     # ------------------------------------------------------------------
     # 配种路线规划（/帕鲁怎么配 <目标>）：从玩家现有帕鲁出发的最短多步配种链
@@ -2391,7 +2648,7 @@ class PalworldPlugin(Star):
             self._ft_points = _load_pts("map_ft_points.json")
             self._relic_points = _load_pts("map_relics.json")
             self._dungeon_points = _load_pts("map_dungeons.json")
-            # 地图底图优先级：4096² 高清 hd.jpg > 2048² png > 1280 压缩图
+            # 地图底图优先级：8192² 高清 hd.jpg > 8192² png > 1280 压缩图
             hd = os.path.join(base, "worldmap_hd.jpg")
             png = os.path.join(base, "worldmap.png")
             if os.path.exists(hd):
@@ -3888,7 +4145,7 @@ class PalworldPlugin(Star):
                 return alias, (([rest] + list(args)) if rest else list(args))
         return sub, args
 
-    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种榜|配种排行榜|配种排行|能配榜|breedrank|我可以配工种|我能配工种|我配工种|我可以配|mybreedwork|配工种|配工作帕鲁|按工种配|工种配种|worksuitbreed|配出谁|能配出谁|能配谁|当亲代|作为亲代|正向配种|breedout|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|材料路线|材料|配方展开|总材料|matroute|种属|分类图鉴|种族分类|genus|科技树|科技路线|解锁路线|techtree|牧场产出|牧场|放牧|家畜牧场|ranch|材料用途|用途|能做什么|matuse|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条查|查词条|词条帕鲁|谁带词条|passfind|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|养成|培养|养成进度|养成路线|growth|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我的战力|个人战力|我的最强帕鲁|我的帕鲁战力|mypower|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点体检|基地体检|据点健康|基地健康|basehealth|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图收集|地图地标|收集地图|地标|poimap|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
+    @filter.regex(r"^\s*/?帕鲁(?:\s|$|状态|在线|玩家|设置|统计|热力图|在线热力|热力|热度|heatmap|图鉴编号|编号查询|编号|palid|战力榜|战力排行|战力|最强帕鲁|power|闪光墙|闪光帕鲁|闪光|幸运帕鲁|shiny|lucky|头目墙|alpha墙|alpha|头目收集|排行|肝帝榜|榜|图鉴榜|图鉴排行|收集榜|图鉴收集|dexrank|资产榜|身价榜|财富榜|土豪榜|wealth|公会战力|工会战力|guildpower|更新公告|更新内容|更新日志|补丁说明|patchnotes|更新资讯|1\.0总览|1\.0导览|1\.0内容|1\.0|版本|v10|图鉴|反配种|反向配种|反向|反查|反配|怎么配出|怎么配|如何配|配种路线|配种链|breedroute|配种榜|配种排行榜|配种排行|能配榜|breedrank|我可以配工种|我能配工种|我配工种|我可以配|mybreedwork|配工种|配工作帕鲁|按工种配|工种配种|worksuitbreed|配出谁|能配出谁|能配谁|当亲代|作为亲代|正向配种|breedout|配种|继承|词条继承|继承计算|词条遗传|遗传|继承率|inherit|哪里掉|哪里爆|掉落|爆什么|掉什么|爆率|drop|获取方式|怎么获得|特殊物品|获取|来源|矿石地图|矿石地点|矿点图|矿点|矿脉|解剖查询|解剖|解体|肢解|竞技场|竞技|斗技场|arena|物品|道具|设施|建筑|科技|技术|研究所|研究|实验室|lab|材料路线|材料|配方展开|总材料|matroute|种属|分类图鉴|种族分类|genus|科技树|科技路线|解锁路线|techtree|牧场产出|牧场|放牧|家畜牧场|ranch|材料用途|用途|能做什么|matuse|属性克制|克制图|克制|属性|element|栖息区域|栖息地|栖息|分布|habitat|推荐词条|推荐|词条查|查词条|词条帕鲁|谁带词条|passfind|词条|passive|植入体|改造|implant|任务攻略|任务|主线任务|主线|支线任务|支线|quest|mission|塔主|高塔|tower|突袭boss|突袭|raid|世界树boss|世界树|最终boss|worldtree|养成|培养|养成进度|养成路线|growth|觉醒|帕鲁觉醒|觉醒系统|awakening|突变配种|突变系统|突变|特殊蛋糕|mutation|boss|BOSS|头目|首领|商人|商店|merchant|shop|哪里买|哪买|在哪买|哪里有卖|技能|主动技能|技能果实|skill|钓鱼|fishing|钓|工作适性|工作|适性|work|坐骑|骑乘|mount|对比|比较|compare|vs|料理|食物|做菜|cuisine|武器|weapon|帮助|菜单|绑定|我的战力|个人战力|我的最强帕鲁|我的帕鲁战力|mypower|小队进度|小队勾选|小队重置|小队|勾选|squad|我|档案|背包|物品栏|队伍|出战|帕鲁箱|箱子|箱|仓库|可孵化|可配种|可配|能配出|孵化|hatchable|查帕鲁|据点体检|基地体检|据点健康|基地健康|basehealth|据点|基地|据点帕鲁|基地帕鲁|工作帕鲁|basecamp|base|症状|伤病|治疗|怎么治|cure|symptom|公会榜|公会肝帝榜|公会帕鲁箱|公会帕鲁|公会终端|工会帕鲁|公会|工会|guild|订阅|退订|取消订阅|找人|查人|喊话|喊人|喊|审计|日志|自检|诊断|健康检查|自检诊断|体检|selfcheck|healthcheck|地图收集|地图地标|收集地图|地标|poimap|地图|map|公告|踢|封|解封|解绑|unbind|批准绑定|批准|approvebind|拒绝绑定|拒绝|rejectbind|重置存档|删档重开|删档|重开|重置世界|resetworld|reset|恢复存档|还原存档|恢复|还原|回档|回滚|rollback|备份列表|备份管理|备份|backups|backup|restore|重启服务器|重启服务|重启|restart|reboot|存档|关服|确认)")
     async def palworld(self, event: AstrMessageEvent):
         raw = (event.message_str or "").strip()
         # 去掉可选的「/」前缀和指令词「帕鲁」，剩余既可能是「在线」也可能是「在线 参数」
@@ -4512,6 +4769,108 @@ class PalworldPlugin(Star):
     # ------------------------------------------------------------------
     _POWER_REF_LV = 50   # 帕鲁战力榜基准等级(满级战力，无天赋/浓缩)
 
+    # 物种表 DT_PalMonsterParameter 的 IsBoss/IsTowerBoss 只覆盖少数固有 Boss，不能代表
+    # 游戏里的全部头目遭遇。以下优先级还会合并：
+    # - bosses.json：塔主、祭坛突袭、掠夺者及已核实野外 Boss；
+    # - pal_spawns.json：DT_PalSpawnerPlacement × DT_PalWildSpawner 的 BOSS_ 刷新组；
+    # - 主线/世界树 Blueprint：Main_DefeatWorldTreeMiddleBoss、Main_DefeatWorldTreeDragon、
+    #   Main_DefeatKingWhale 及 EPalBossType::KingWhaleBoss。
+    # “地牢头目池”是遭遇类型，不表示该物种只能作为 Boss，避免把普通物种错标成专属 Boss。
+    _PAL_BOSS_BADGE_ORDER = (
+        ("worldtree_final", "世界树最终Boss"),
+        ("worldtree", "世界树Boss"),
+        ("story", "主线Boss"),
+        ("tower", "塔主"),
+        ("raid", "突袭Boss"),
+        ("predator", "掠夺者"),
+        ("field", "野外头目"),
+        ("prison", "关押头目"),
+        ("boss", "固有头目"),
+        ("dungeon", "地牢头目池"),
+    )
+    _WORLD_TREE_BOSS_KINDS = {
+        "mothman": "worldtree",
+        "flowerprince": "worldtree",
+        "worldtreedragon": "worldtree_final",
+    }
+    _STORY_BOSS_KINDS = {"kingwhale": "story"}
+
+    def _pal_boss_badge_index(self) -> dict[str, list[dict[str, str]]]:
+        """按稳定 dev ID 汇总游戏中的 Boss/头目遭遇标签，并按展示优先级排序。"""
+        cached = getattr(self, "_pal_boss_badges_by_dev", None)
+        if cached is not None:
+            return cached
+
+        kinds_by_dev: dict[str, set[str]] = {}
+
+        def add(dev: object, kind: str) -> None:
+            key = str(dev or "").strip().lower()
+            if key:
+                kinds_by_dev.setdefault(key, set()).add(kind)
+
+        for dev, kind in self._WORLD_TREE_BOSS_KINDS.items():
+            add(dev, kind)
+        for dev, kind in self._STORY_BOSS_KINDS.items():
+            add(dev, kind)
+
+        # bosses.json 的 category 仍把多种 Boss 放在“突袭”页，具体类型需结合 location 判定。
+        for row in getattr(self, "_bosses", []) or []:
+            dev = row.get("dev")
+            category = str(row.get("category") or "")
+            location = str(row.get("location") or "")
+            if category == "塔主":
+                add(dev, "tower")
+            elif "祭坛" in location:
+                add(dev, "raid")
+            elif "掠夺者" in location:
+                add(dev, "predator")
+            elif "野外头目" in location:
+                add(dev, "field")
+            elif category == "突袭":
+                add(dev, "boss")
+
+        spot_kind_map = {"fboss": "field", "prison": "prison", "dboss": "dungeon"}
+        for dev, entry in (getattr(self, "_pal_spawns", {}) or {}).items():
+            if dev == "_meta" or not isinstance(entry, dict):
+                continue
+            for spot in entry.get("spots") or []:
+                if not isinstance(spot, list) or len(spot) < 3:
+                    continue
+                kind = spot_kind_map.get(str(spot[2]))
+                if kind:
+                    add(dev, kind)
+
+        # 物种表字段仅作兜底；有更精确来源时不再重复显示笼统的“Boss”。
+        precise = {
+            kind for kind, _label in self._PAL_BOSS_BADGE_ORDER
+            if kind not in {"boss", "dungeon"}
+        }
+        for pal in getattr(self, "_pals", []) or []:
+            dev = str(pal.get("pal_dev_name") or "")
+            key = dev.lower()
+            if pal.get("is_tower_boss"):
+                add(dev, "tower")
+            known = kinds_by_dev.get(key, set())
+            if (pal.get("is_boss") or pal.get("is_boss_only") or pal.get("is_story_only")) and not (known & precise):
+                add(dev, "boss")
+
+        result: dict[str, list[dict[str, str]]] = {}
+        for pal in getattr(self, "_pals", []) or []:
+            dev = str(pal.get("pal_dev_name") or "").lower()
+            kinds = kinds_by_dev.get(dev, set())
+            result[dev] = [
+                {"kind": kind, "label": label}
+                for kind, label in self._PAL_BOSS_BADGE_ORDER
+                if kind in kinds
+            ]
+        self._pal_boss_badges_by_dev = result
+        return result
+
+    def _pal_boss_badges(self, pal: dict) -> list[dict[str, str]]:
+        """返回单个物种的全部 Boss/头目遭遇标签；首项用于榜单主标签。"""
+        dev = str(pal.get("pal_dev_name") or "").lower()
+        return self._pal_boss_badge_index().get(dev, [])
+
     def _species_power(self, p: dict) -> int:
         """帕鲁战力等级：以满级 Lv50、无天赋/浓缩为基准，用游戏公式算 HP/攻/防综合(仅横向对比)。"""
         st = p.get("stats") or {}
@@ -4549,9 +4908,11 @@ class PalworldPlugin(Star):
             bdf = int(st.get("defense", 0) or 0)
             hp50, atk50, def50 = self._combat_stats(bhp, max(bme, bsh), bdf, self._POWER_REF_LV)
             mx = max(hp50, atk50, def50, 1)
+            boss_badges = self._pal_boss_badges(p)
             data = {
                 "name": _esc(p.get("pal_name", "?")), "icon": self._pal_icon(p.get("pal_dev_name", "")),
                 "elements": p.get("elements", []), "rarity": int(p.get("rarity", 0) or 0),
+                "boss_badges": boss_badges,
                 "power": pw, "rank": rank, "total": len(ranked), "reflv": self._POWER_REF_LV,
                 "partner": _esc(p.get("partner_skill_title", "") or ""),
                 "base": {"hp": bhp, "melee": bme, "shot": bsh, "df": bdf},
@@ -4571,12 +4932,13 @@ class PalworldPlugin(Star):
         for off, (pw, p) in enumerate(chunk):
             i = (page - 1) * per + off + 1
             els = p.get("elements", []) or []
+            boss_badges = self._pal_boss_badges(p)
             rows.append({
                 "rank": i, "name": _esc(p.get("pal_name", "?")),
                 "icon": self._pal_icon(p.get("pal_dev_name", "")),
                 "element": (els[0].replace("属性", "") if els else "—"),
                 "rarity": int(p.get("rarity", 0) or 0),
-                "boss": ("tower" if p.get("is_tower_boss") else ("boss" if p.get("is_boss") else "")),
+                "boss_badge": boss_badges[0] if boss_badges else None,
                 "power": pw, "pct": int(pw / (mxp or 1) * 100),
                 "medal": ["🥇", "🥈", "🥉"][i - 1] if i <= 3 else str(i)})
         sub = f"已知帕鲁战力排行 · 第 {page}/{total_pages} 页 · 共 {len(ranked)} 只"
@@ -4869,6 +5231,53 @@ class PalworldPlugin(Star):
     def _norm_uid(u) -> str:
         return str(u or "").replace("-", "").upper()
 
+    _PROGRESS_DEFAULTS = {
+        "paldeck": {"label": "图鉴", "total": 287},
+        "fasttravel": {"label": "传送点", "total": 152},
+        "towers": {
+            "label": "高塔", "total": 8,
+            "ids": ["GrassBoss", "ForestBoss", "ElectricBoss", "DesertBoss", "SnowBoss",
+                    "SakurajimaBoss", "VikingBoss", "SorajimaBoss"],
+        },
+        "story_bosses": {
+            "label": "剧情Boss", "total": 5,
+            "ids": ["KingWhaleBoss", "WorldTreeMiddleBoss1", "WorldTreeMiddleBoss2",
+                    "WorldTreeMiddleBoss3", "WorldTreeBoss"],
+        },
+        "field_bosses": {"label": "头目", "total": 125},
+        "dungeons": {"label": "地牢入口", "total": 170},
+        "relics": {"label": "遗物", "total": 155},
+        "areas": {"label": "区域", "total": 123},
+    }
+
+    def _progress_categories(self) -> dict:
+        loaded = (getattr(self, "_progress_catalog", {}) or {}).get("categories") or {}
+        return {key: loaded.get(key) or fallback for key, fallback in self._PROGRESS_DEFAULTS.items()}
+
+    @staticmethod
+    def _progress_stat(category: dict, progress: dict, count_key: str,
+                       ids_key: str = "", raw_ids: Optional[list] = None) -> dict:
+        """生成统一的 当前/总数/还差；有稳定 ID 时用交集排除旧版本残留。"""
+        total = max(0, int(category.get("total") or 0))
+        valid_ids = {str(value).casefold() for value in (category.get("ids") or []) if value}
+        ids = raw_ids if raw_ids is not None else progress.get(ids_key) if ids_key else None
+        if ids is not None and valid_ids:
+            current = len({str(value).casefold() for value in ids if value} & valid_ids)
+        else:
+            try:
+                current = int(progress.get(count_key) or 0)
+            except (TypeError, ValueError):
+                current = 0
+        current = min(max(0, current), total)
+        return {
+            "key": count_key,
+            "label": str(category.get("label") or count_key),
+            "current": current,
+            "total": total,
+            "missing": max(0, total - current),
+            "complete": bool(total and current >= total),
+        }
+
     def _squad_roster_qq(self, gid: str) -> list:
         """本群小队名单:已绑定 且 在本群用过指令的 QQ;群成员记录为空时回退到全部已绑定(私人小队)。"""
         bindings = self.state.get("bindings", {}) or {}
@@ -4901,15 +5310,35 @@ class PalworldPlugin(Star):
                     continue
                 m = self._mission_by_id.get(qid)
                 nexts.append(m["name"] if m else qid)
+            cats = self._progress_categories()
+            tower_flags = pr.get("tower_bosses") or []
+            stats = [
+                self._progress_stat(cats["paldeck"], pr, "paldeck", "paldeck_ids"),
+                self._progress_stat(cats["fasttravel"], pr, "fasttravel", "fasttravel_ids"),
+                self._progress_stat(cats["towers"], pr, "towers", raw_ids=tower_flags),
+                self._progress_stat(cats["story_bosses"], pr, "story_bosses", raw_ids=tower_flags),
+                self._progress_stat(cats["field_bosses"], pr, "field_bosses", "field_boss_ids"),
+                self._progress_stat(cats["relics"], pr, "relics", "relic_ids"),
+                self._progress_stat(cats["areas"], pr, "areas_found", "area_ids"),
+            ]
+            stat_by_key = {stat["key"]: stat for stat in stats}
+            dungeon_normal = max(0, int(pr.get("dungeon_normal") or 0))
+            dungeon_fixed = max(0, int(pr.get("dungeon_fixed") or 0))
             members.append({
                 "name": _esc(b.get("name", "玩家")),
-                "paldeck": pr.get("paldeck", 0),
-                "fasttravel": pr.get("fasttravel", 0),
-                "towers": len(pr.get("tower_bosses", [])),
-                "field_bosses": pr.get("field_bosses", 0),
-                "dungeon": pr.get("dungeon_normal", 0) + pr.get("dungeon_fixed", 0),
-                "relics": pr.get("relics", 0),
-                "areas": pr.get("areas_found", 0),
+                "stats": stats,
+                # 保留扁平字段供排序及旧模板/第三方主题兼容；数值已按当前 build 口径修正。
+                "paldeck": stat_by_key["paldeck"]["current"],
+                "fasttravel": stat_by_key["fasttravel"]["current"],
+                "towers": stat_by_key["towers"]["current"],
+                "story_bosses": stat_by_key["story_bosses"]["current"],
+                "field_bosses": stat_by_key["field_bosses"]["current"],
+                "dungeon": dungeon_normal + dungeon_fixed,
+                "dungeon_normal": dungeon_normal,
+                "dungeon_fixed": dungeon_fixed,
+                "dungeon_entrances": cats["dungeons"]["total"],
+                "relics": stat_by_key["relics"]["current"],
+                "areas": stat_by_key["areas_found"]["current"],
                 "next": nexts[:3],
             })
         members.sort(key=lambda m: (-m["towers"], -m["paldeck"]))
@@ -4919,10 +5348,11 @@ class PalworldPlugin(Star):
         for item, whos in (squad.get("checklist") or {}).items():
             names = [self.state.get("bindings", {}).get(q, {}).get("name") or f"QQ{q}" for q in whos]
             checklist.append({"item": _esc(item), "done_by": [_esc(n) for n in names], "count": len(whos)})
-        dex_total = getattr(self, "_dex_collectible", 287) or 287
+        dex_total = self._progress_categories()["paldeck"]["total"]
         return {"members": members, "count": len(members),
                 "dex_total": dex_total, "checklist": checklist,
-                "hint": "存档自动同步:图鉴/传送点/塔主/野外boss/地牢/遗物/区域/当前任务;手动目标用 /帕鲁小队勾选 <目标>"}
+                "hint": "总量来自 Palworld 1.0 build 24181105 游戏数据。地牢存档只保存普通/固定累计次数，"
+                        "不保存逐入口完成集合，因此不虚构还差入口数；手动目标用 /帕鲁小队勾选 <目标>。"}
 
     async def _cmd_squad(self, event: AstrMessageEvent):
         gid = str(event.get_group_id() or "")
@@ -6745,8 +7175,18 @@ class PalworldPlugin(Star):
             return
         now = time.time()
         pending_patchnote = str(self.state.get("update_notified", "") or "")
-        if pending_patchnote and self.state.get("update_patchnote_notified") != pending_patchnote:
-            await self._broadcast_update_patchnote(pending_patchnote, now)
+        try:
+            patchnote_retry_after = float(self.state.get("update_patchnote_retry_after", 0) or 0)
+        except (TypeError, ValueError):
+            patchnote_retry_after = 0
+        # 公告补发到期时也强制重新核验 depot，不能直接信任旧版本遗留的 confirmed 状态。
+        # 这样即使历史误判已写入 state.json，也会先发现本地/远端其实一致并清除旧标记。
+        pending_patchnote_due = bool(
+            pending_patchnote
+            and self.state.get("update_confirmed") == pending_patchnote
+            and self.state.get("update_patchnote_notified") != pending_patchnote
+            and now >= patchnote_retry_after
+        )
         try:
             check_hours = int(self.config.get("update_check_hours", 1) or 1)
         except (TypeError, ValueError):
@@ -6772,7 +7212,12 @@ class PalworldPlugin(Star):
             return
         retry_due = retry_after > 0
         aligned_due = bool(aligned_slot and self.state.get("update_check_slot") != aligned_slot)
-        if not retry_due and not aligned_due and now - self.state.get("update_checked", 0) < interval:
+        if (
+            not retry_due
+            and not aligned_due
+            and not pending_patchnote_due
+            and now - self.state.get("update_checked", 0) < interval
+        ):
             return
 
         def defer_retry() -> None:
@@ -6793,8 +7238,11 @@ class PalworldPlugin(Star):
                     defer_retry()
                     return
                 d = await r.json()
-            latest = (d.get("data", {}).get("2394010", {}).get("depots", {})
-                      .get("2394012", {}).get("manifests", {}).get("public", {}).get("gid", ""))
+            latest = str(
+                d.get("data", {}).get("2394010", {}).get("depots", {})
+                .get("2394012", {}).get("manifests", {}).get("public", {}).get("gid", "")
+                or ""
+            ).strip()
         except Exception as e:  # noqa: BLE001
             logger.debug(f"{LOG_PREFIX} 查 Steam 版本失败: {e}")
             defer_retry()
@@ -6802,11 +7250,18 @@ class PalworldPlugin(Star):
         if not latest:
             defer_retry()
             return
-        # 2) 读当前已装 manifest(appmanifest 第 2 个 manifest 行)
+        # 2) 精确读取服务端 depot 2394012 的 manifest。
+        # 不能按“第几个 manifest”取值：UPDATE_ON_BOOT 会在每日重启时删除并重建 appmanifest，
+        # 重建过程中的 depot 顺序/完整性不稳定，曾把公共运行库 depot 误当成服务端版本。
         container = await self._resolve_container(sock) or str(self.config.get("docker_container", "palworld-server"))
         try:
             _, out = await self._docker_exec(sock, container, ["/bin/sh", "-c",
-                r"awk '/manifest/{c++} c==2{print $2;exit}' /palworld/steamapps/appmanifest_2394010.acf | tr -d '\"'"])
+                r"""awk '
+$1 == "\"InstalledDepots\"" { installed = 1; next }
+installed && $1 == "\"2394012\"" { depot = 1; next }
+depot && $1 == "\"manifest\"" { gsub(/\"/, "", $2); print $2; exit }
+depot && $1 == "}" { exit }
+' /palworld/steamapps/appmanifest_2394010.acf"""])
             current = (out or "").strip().split("\n")[-1].strip()
         except Exception as e:  # noqa: BLE001
             logger.debug(f"{LOG_PREFIX} 读当前版本失败: {e}")
@@ -6820,14 +7275,66 @@ class PalworldPlugin(Star):
             self.state["update_check_slot"] = aligned_slot
         self.state.pop("update_retry_after", None)
         if latest == current:
-            # 已是最新，清除该版本的检测/维护公告标记，下次出现新 manifest 可重新通知。
+            # 已是最新，清除候选和该版本的检测/维护公告标记。
+            # 公告必须放在版本核验之后，避免重启完成后仍补发已经过期的待播报公告。
+            had_candidate = bool(self.state.get("update_candidate"))
+            self.state.pop("update_candidate", None)
+            self.state.pop("update_candidate_current", None)
+            self.state.pop("update_candidate_since", None)
             self.state.pop("update_notified", None)
+            self.state.pop("update_confirmed", None)
             self.state.pop("update_game_warned", None)
+            self.state.pop("update_patchnote_version", None)
+            self.state.pop("update_patchnote_groups", None)
+            self.state.pop("update_patchnote_retry_after", None)
+            self.state.pop("update_patchnote_notified", None)
+            self.state.pop("update_patchnote_url", None)
+            self._save_state()
+            if had_candidate:
+                logger.info(f"{LOG_PREFIX} 服务端版本复核后已一致，取消更新候选 {latest}")
+            return
+
+        # 3) 差异至少稳定 60 秒才认定为新版本。每日重启的 appmanifest 重建通常不足 1 分钟；
+        # 单次临时值只进入候选，不得触发 QQ、官方更新公告或游戏内倒计时。
+        candidate_matches = (
+            self.state.get("update_candidate") == latest
+            and self.state.get("update_candidate_current") == current
+        )
+        try:
+            candidate_since = float(self.state.get("update_candidate_since", 0) or 0)
+        except (TypeError, ValueError):
+            candidate_since = 0
+        if not candidate_matches:
+            # 旧版本代码留下的未确认状态不再直接播报，先按新规则重新复核。
+            if self.state.get("update_confirmed") != latest:
+                self.state.pop("update_notified", None)
+                self.state.pop("update_confirmed", None)
+                self.state.pop("update_game_warned", None)
+            self.state["update_candidate"] = latest
+            self.state["update_candidate_current"] = current
+            self.state["update_candidate_since"] = now
+            self.state["update_retry_after"] = now + 60
+            self._save_state()
+            logger.info(
+                f"{LOG_PREFIX} 检测到版本差异，60 秒后复核：远端={latest}，本地={current}"
+            )
+            return
+        if now < candidate_since + 60:
+            self.state["update_retry_after"] = candidate_since + 60
             self._save_state()
             return
-        # 3) 有新版本，且该版本没通知过 -> 先通知 QQ；游戏内公告留到维护前约 5 分钟。
+
+        self.state.pop("update_candidate", None)
+        self.state.pop("update_candidate_current", None)
+        self.state.pop("update_candidate_since", None)
+        self.state.pop("update_retry_after", None)
+        self.state["update_confirmed"] = latest
+
+        # 4) 已确认有新版本，且该版本没通知过 -> 先通知 QQ；游戏内公告留到维护前约 5 分钟。
         if self.state.get("update_notified") == latest:
             self._save_state()
+            if self.state.get("update_patchnote_notified") != latest:
+                await self._broadcast_update_patchnote(latest, now)
             return
         previous = self.state.get("update_notified")
         self.state["update_notified"] = latest
@@ -7869,17 +8376,19 @@ class PalworldPlugin(Star):
             return (now + timedelta(days=1 if target <= cur_min else 0)).strftime("%Y-%m-%d")
 
         update_version = self.state.get("update_notified")
+        if self.state.get("update_confirmed") != update_version:
+            update_version = None
         update_at = maintenance.get("update")
         update_hourly = maintenance.get("update_hourly")
         update_warn = min(max(int(maintenance.get("update_warn", 5) or 5), 1), 60)
         update_left = None
         notice_key = None
         if isinstance(update_hourly, int):
-            elapsed = (now.minute - update_hourly) % 60
-            if elapsed < update_warn:
-                update_left = max(update_warn - elapsed, 1)
-                window_start = now - timedelta(minutes=elapsed)
-                notice_key = f"{update_version}:{window_start.strftime('%Y-%m-%dT%H')}"
+            hourly_left = (update_hourly - now.minute) % 60
+            if 0 < hourly_left <= update_warn:
+                update_left = hourly_left
+                update_at_time = now + timedelta(minutes=hourly_left)
+                notice_key = f"{update_version}:{update_at_time.strftime('%Y-%m-%dT%H')}"
         if update_left is None:
             daily_left = minutes_until(update_at)
             if daily_left is not None and daily_left <= update_warn:

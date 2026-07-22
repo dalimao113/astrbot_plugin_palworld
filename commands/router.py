@@ -6,7 +6,7 @@
 
 ⚠️ 行为不变约束（重构第一阶段）：
 - 触发正则 `@filter.regex(...)` **不**从本表自动生成。正则只枚举“可无空格粘连触发”
-  的子集（247 项）；本表含全部别名（含 status/no/me/vs/box 等英文/短别名，共 292 项）。
+  的兼容子集；本表还含 status/no/me/vs/box 等英文或短别名。
   若用全表重建正则，会让 `帕鲁status`、`帕鲁note`(→编号 no) 等新触发，属行为变更且易误触发。
   故正则保持字面量。见 main.py 中 `palworld` 处理器上方注释。
 - 冷却语义：原 `_pass_cooldown` 恒 True（等于不限流），此处仅忠实保留“是否调用冷却门”。
@@ -69,7 +69,7 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("主线", "_cmd_mainquest", ("主线任务", "mainquest"), cooldown=True, pass_args=True, description="主线任务流程与攻略", category="paldex"),
     CommandSpec("支线", "_cmd_subquest", ("支线任务", "subquest"), cooldown=True, pass_args=True, description="支线任务流程与攻略", category="paldex"),
     CommandSpec("任务", "_cmd_mission", ("任务攻略", "quest", "mission"), cooldown=True, pass_args=True, description="按名字查任务目标与攻略(加任务名)", category="paldex"),
-    CommandSpec("塔主", "_cmd_boss", ("高塔", "tower"), cooldown=True, pass_args=True, extra=("塔主",), description="五大高塔塔主打法与推荐配队(加名字)", category="paldex"),
+    CommandSpec("塔主", "_cmd_boss", ("高塔", "tower"), cooldown=True, pass_args=True, extra=("塔主",), description="八大高塔塔主打法与推荐配队(加名字)", category="paldex"),
     CommandSpec("突袭", "_cmd_boss", ("突袭boss", "raid"), cooldown=True, pass_args=True, extra=("突袭",), description="突袭(Raid)BOSS打法与掉落(加名字)", category="paldex"),
     CommandSpec("竞技场", "_cmd_arena", ("竞技", "斗技场", "arena"), cooldown=True, pass_args=True, description="PVP竞技场规则与奖励", category="paldex"),
     CommandSpec("boss", "_cmd_boss", ("BOSS", "头目", "首领"), cooldown=True, pass_args=True, extra=("",), description="各类BOSS(头目/塔主/突袭)攻略入口", category="paldex"),
@@ -96,6 +96,9 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("我可以配工种", "_cmd_my_breed_worksuit", ("我能配工种", "我配工种", "我可以配", "mybreedwork"), cooldown=True, pass_args=True, description="用你现有帕鲁规划配出某工种帕鲁(加工作)", category="player"),
     CommandSpec("继承", "_cmd_inherit", ("词条继承", "继承计算", "词条遗传", "遗传", "继承率", "inherit"), cooldown=True, pass_args=True, description="配种时词条(被动)遗传概率说明", category="paldex"),
     CommandSpec("哪里掉", "_cmd_drop", ("哪里爆", "掉落", "爆什么", "掉什么", "爆率", "drop"), cooldown=True, pass_args=True, description="某帕鲁/BOSS掉落什么及爆率(加名字)", category="paldex"),
+    CommandSpec("获取", "_cmd_obtain", ("来源", "怎么获得", "获取方式", "特殊物品"), cooldown=True, pass_args=True, description="汇总物品的采集地图/掉落/制作/商店等全部来源", category="paldex"),
+    CommandSpec("矿点", "_cmd_oremap", ("矿石地图", "矿点图", "矿脉", "矿石地点"), cooldown=True, pass_args=True, description="把矿石和特殊采集物的真实点位标到游戏地图", category="paldex"),
+    CommandSpec("解剖", "_cmd_butcher", ("解体", "肢解", "解剖查询"), cooldown=True, pass_args=True, description="按帕鲁或物品反查解剖掉落", category="paldex"),
     CommandSpec("物品", "_cmd_item", ("道具", "item"), cooldown=True, pass_args=True, description="物品图鉴:用途/获取/合成(加物品名)", category="paldex"),
     CommandSpec("设施", "_cmd_facility", ("建筑", "facility", "building"), cooldown=True, pass_args=True, description="据点设施:功能/材料/解锁科技(加名字)", category="paldex"),
     CommandSpec("科技", "_cmd_tech", ("技术", "tech"), cooldown=True, pass_args=True, description="科技图鉴:解锁物/所需点数(加名字)", category="paldex"),
@@ -111,7 +114,7 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("绑定", "_cmd_bind", ("bind",), pass_args=True, description="绑定你的游戏角色,才能查个人数据", category="player"),
     CommandSpec("我的战力", "_cmd_my_power", ("个人战力", "我的最强帕鲁", "我的帕鲁战力", "mypower"), cooldown=True, pass_args=True, description="你捕获的全部帕鲁按战力排名", category="player"),
     CommandSpec("养成", "_cmd_growth", ("培养", "养成进度", "养成路线", "growth"), cooldown=True, pass_args=True, description="你某只帕鲁的浓缩/魂/觉醒/词条差距(加名字)", category="player"),
-    CommandSpec("小队进度", "_cmd_squad", ("小队", "squad", "team_progress"), cooldown=True, description="群内小队的探索/图鉴/塔主进度汇总", category="player"),
+    CommandSpec("小队进度", "_cmd_squad", ("小队", "squad", "team_progress"), cooldown=True, description="群内小队探索/收集的当前、总量与剩余进度", category="player"),
     CommandSpec("据点体检", "_cmd_basecamp_health", ("基地体检", "据点健康", "基地健康", "basehealth"), cooldown=True, pass_args=True, description="据点工人/适性缺口/伤病汇总(可加据点号)", category="player"),
     CommandSpec("小队勾选", "_cmd_squad_check", ("勾选", "squadcheck"), pass_args=True, description="手动勾选/记录一个小队探索目标", category="player"),
     CommandSpec("小队重置", "_cmd_squad_reset", ("squadreset",), admin=True, pass_args=True, log_denied=True, description="清空本群小队手动勾选清单(管理)", category="admin"),

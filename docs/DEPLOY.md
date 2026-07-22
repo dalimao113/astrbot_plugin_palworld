@@ -362,8 +362,9 @@ services:
       - "6185:6185"              # 管理网页后台
     volumes:
       - ./astrbot/data:/AstrBot/data
-      # ★ 只读挂载 docker socket：本插件靠它读帕鲁容器存档 + 状态卡的 CPU/内存监控。
-      #   不挂这一行，状态卡就不显示服务器负载、存档类指令也用不了。:ro=只读更安全。
+      # ★ 挂载 docker socket：本插件靠它读帕鲁容器存档 + 状态卡的 CPU/内存监控。
+      #   不挂这一行，状态卡就不显示服务器负载、存档类指令也用不了。
+      #   注意 :ro 只限制 socket 文件节点，不限制 Docker API 写操作，仍近似宿主 root 权限。
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - default
@@ -374,7 +375,7 @@ networks:
     external: true
 ```
 
-> **为什么要挂 docker.sock**：本插件用它从帕鲁容器里拉存档（`/帕鲁我`、背包、队伍、帕鲁箱、据点、公会等功能）和读容器 CPU/内存。不挂也能用基础功能，但这些会自动关闭。`:ro` 表示只读，降低风险。
+> **为什么要挂 docker.sock**：本插件用它从帕鲁容器里拉存档（`/帕鲁我`、背包、队伍、帕鲁箱、据点、公会等功能）和读容器 CPU/内存。不挂也能用基础功能，但这些会自动关闭。示例中的 `:ro` 仅让 socket 文件节点只读，**不会限制 Docker API 的 stop / exec / create 等写操作**；挂载后仍近似赋予 AstrBot 宿主机 root 权限，只应在可信环境启用。
 >
 > 启动后，机器人相关文件就在 `/opt/1panel/docker/compose/astrbot/` 下：插件目录是 `astrbot/data/plugins/`（第 7 章把插件放这里；存档解析依赖 `palwork/` 已随插件自带，无需单独处理）。
 
@@ -515,6 +516,7 @@ AstrBot 后台（6185）→「插件管理」→ 找到 `astrbot_plugin_palworld
 | `api_base` | 默认 `http://palworld-server:8212`（用**容器名**不是 IP）；容器名没改就不用动 | 默认即可 |
 | `docker_container` | 帕鲁容器名；**留空/填错会自动探测** | 一般不用填 |
 | `save_dir_in_container` | 世界存档目录；**留空自动探测**（第 4.4 步记的 GUID 现在也不用手填了）| 一般不用填 |
+| `card_style` | `fantasy`（奇幻玻璃）/ `pixel`（像素羊皮纸）/ `ingame`（游戏原生）| 按喜好选择 |
 
 其余保持默认即可。保存后回「插件管理」点**重载插件**。
 
@@ -534,6 +536,9 @@ AstrBot 后台（6185）→「插件管理」→ 找到 `astrbot_plugin_palworld
 | `/帕鲁状态` | 出服务器状态卡（在线人数 / FPS / 负载…）|
 | `/帕鲁图鉴 棉悠悠` | 出帕鲁图鉴卡（不依赖存档 / REST）|
 | `/帕鲁竞技场` | 出竞技场段位/对手卡（纯数据，不依赖存档）|
+| `/帕鲁获取 夜星砂` | 出完整来源卡，能看到夜间拾取、帕鲁掉落等来源 |
+| `/帕鲁矿点 帕鲁树晶矿` | 出世界树独立地图矿点卡，确认点位落在岛屿图内 |
+| `/帕鲁解剖 棉悠悠` | 出普通物种标准解体掉落与风险提示 |
 | `/帕鲁绑定 <你的游戏角色名>` | 绑定成功卡（建议你在线时绑）|
 | `/帕鲁我` | 出个人档案卡（含存档真实数据）→ 说明 docker.sock + palwork + save_dir 都对了 |
 | `/帕鲁队伍`、`/帕鲁箱`、`/帕鲁据点`、`/帕鲁公会` | 出对应存档卡 |
@@ -603,7 +608,7 @@ curl -fsSL https://raw.githubusercontent.com/dalimao113/astrbot_plugin_palworld/
 #### C. 游戏本体
 `.env` 里 `UPDATE_ON_BOOT=true` / `AUTO_UPDATE_ENABLED=true` 时，帕鲁容器重启就自动更到最新游戏版本，一般无需手动；也可在 1Panel「编排 → palworld → 重新部署」触发。
 
-插件默认每 1 小时检查一次 Steam 服务端 manifest，临时失败会在 10 分钟后重试。检测到新版本后会先通知 QQ，随后自动发送本次 Steam 官方简体中文完整更新公告；长文使用合并转发，部分群失败时只补发失败群。镜像更新倒计时窗口还会向游戏内发送中文公告；安装模板默认由 Palworld 镜像在每小时第 5 分钟检查更新，需要更新且有玩家在线时倒计时 5 分钟。实际更新与重启仍由镜像完成。`daily_reboot_time` 留空时，插件会只读识别同一时区下的标准每日 `AUTO_REBOOT_CRON_EXPRESSION`；更新计划还可识别 `分 * * * *` 形式的标准每小时 cron，复杂 cron 或时区不同不作猜测。
+插件默认每 1 小时精确比较 Steam 服务端 depot `2394012` 的远端与本地 manifest，临时失败会在 10 分钟后重试。首次发现差异只记为候选，60 秒后再次读取仍一致才确认新版本，避免 `UPDATE_ON_BOOT` 每日重启重建 `appmanifest` 时误报。确认后才通知 QQ 并发送本次 Steam 官方简体中文完整公告；长文使用合并转发，部分群失败时只补发失败群。安装模板默认由 Palworld 镜像在每小时第 5 分钟检查更新，需要更新且有玩家在线时只在计划分钟之前倒计时 5 分钟，到点后不补发过期公告。实际更新与重启仍由镜像完成。`daily_reboot_time` 留空时，插件会只读识别同一时区下的标准每日 `AUTO_REBOOT_CRON_EXPRESSION`；更新计划还可识别 `分 * * * *` 形式的标准每小时 cron，复杂 cron 或时区不同不作猜测。
 
 上述自动更新通过容器内 SteamCMD 更新挂载到 `/palworld` 的游戏服务端文件，不会拉取新的 Docker 镜像。Docker 镜像只有在显式执行部署脚本的 `--update` 或手动拉取/重新部署时才会升级。
 
@@ -927,4 +932,4 @@ SERVER_REPLICATE_PAWN_CULL_DISTANCE=15000.000000
 - **1Panel 面板本身**：用随机端口 + 安全入口，面板登录密码设强一些；有条件只对自己 IP 开放面板端口。
 - AstrBot 后台（6185）和 NapCat（6099）尽量只对自己的 IP 开放，配置完 NapCat 可以不再暴露 6099。
 - 插件配置里的 `admin_qq` 只填可信管理员——管理类指令（踢人 / 封禁 / 关服 / 查他人存档）只有白名单 QQ 能用。
-- docker.sock 用 `:ro` 只读挂载，降低风险。
+- 只有确实需要容器负载、存档解析和运维指令时才挂载 docker.sock；`:ro` **不是 Docker API 安全边界**，挂载后仍近似宿主 root 权限。

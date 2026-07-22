@@ -39,7 +39,7 @@ _MISSING_SVG = (
 class AssetResolver:
     """按语义键 + 皮肤解析图标。一个 base_dir(插件根目录)一个实例。"""
 
-    # 插件扩展 SVG 的临时描边色(游戏无此概念,配色待截图校准前用中性暖线)。
+    # 插件扩展 SVG 的统一描边色(游戏无此概念，使用中性暖色与游戏原生面板区分)。
     # <img> 无法继承 currentColor,故内嵌时替换成具体色。
     PLUGIN_INK = "#d8c9a0"
 

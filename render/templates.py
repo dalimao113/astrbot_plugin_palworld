@@ -593,11 +593,10 @@ _PF = '<footer class="footer">[ {{ now }} · <span>大狸猫 · 帕鲁服务器�
 
 
 # ====================================================================
-# ingame 游戏原生主题 · 通用 UI 组件系统(阶段C)
+# ingame 游戏原生主题 · 通用 UI 组件系统
 # 用真实游戏 UI 纹理(data/ingame/parts/,经 {{ parts.* }} 由渲染层注入 base64)
-# 拼装 border-image 九宫格组件;图标经 asset() 走 manifest。
-# ⚠️ 配色/间距/slice 为**临时值**,标 PROVISIONAL,待游戏截图校准(见 INGAME_UI_REFERENCE.md)。
-# 不改 fantasy/pixel。三套主题模板键仍一致(ingame 卡逐步接入,当前重点卡先用)。
+# 拼装 border-image 九宫格组件；图标经 asset manifest 解析。
+# 不改 fantasy/pixel；三套主题模板键集合保持一致。
 # ====================================================================
 _INGAME_CSS = """
   /* ---- 冷调「古代科技终端」配色。面板色阶采自游戏 UI 蓝灰(button #484860 推导)---- */
@@ -967,10 +966,10 @@ _INGAME_CSS = """
 """
 _IH = """<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>""" + _INGAME_CSS
 _IF = ('<footer class="ig-foot">◈ {{ now }} · '
-       '<b>大狸猫 · 帕鲁服务器管家</b> · <span style="opacity:.7">ingame 主题(开发中)</span></footer>')
+       '<b>大狸猫 · 帕鲁服务器管家</b> · <span style="opacity:.7">游戏原生主题</span></footer>')
 
 
-# ---- ingame 版帕鲁详情(阶段D 第一张真卡)。变量契约与 PALDEX_TMPL 完全一致 + 注入 icons 图标映射 ----
+# ---- ingame 版帕鲁详情。变量契约与 PALDEX_TMPL 完全一致 + 注入 icons 图标映射 ----
 PALDEX_ING = _IH + """</style></head><body><div class="page">
   <div class="ig-head">
     {% if icon %}<div class="ig-portrait"><img src="{{ icon }}"></div>{% endif %}
@@ -1025,7 +1024,7 @@ PALDEX_ING = _IH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
-# ---- ingame 版被动词条列表(阶段D)。变量契约与 PASSLIST_TMPL 一致 + 用游戏原生等级箭头 PNG ----
+# ---- ingame 版被动词条列表。变量契约与 PASSLIST_TMPL 一致 + 用游戏原生等级箭头 PNG ----
 PASSLIST_ING = _IH + """</style></head><body><div class="page">
   <div class="ig-head">
     <div style="flex:1;min-width:0">
@@ -1538,29 +1537,40 @@ POWER_ING = _IH + """</style></head><body><div class="page">
 
 
 # ---- ingame 版帕鲁战力榜。变量契约与 PALPOWER_TMPL 一致 ----
-PALPOWER_ING = _IH + """</style></head><body><div class="page">
+_PALPOWER_ING_BADGE_CSS = """
+  .pbtag{display:inline-flex;align-items:center;gap:3px;flex:none;padding:2px 6px;border:1px solid transparent;
+    border-radius:3px;font-size:9.5px;font-weight:800;line-height:1.2;color:#fff;white-space:nowrap}
+  .pbtag img{width:11px;height:11px;object-fit:contain}
+  .pbtag.worldtree,.pbtag.worldtree_final{background:#245f48;border-color:#6fc59c}
+  .pbtag.story{background:#624182;border-color:#b291d2}.pbtag.tower{background:#a63b2d;border-color:#ef8b73}
+  .pbtag.raid{background:#753b81;border-color:#cc8ed2}.pbtag.predator{background:#6f2929;border-color:#d4776e}
+  .pbtag.field{background:#9b651a;border-color:#e8ba58}.pbtag.prison{background:#8a4d20;border-color:#d99155}
+  .pbtag.boss{background:#80651e;border-color:#d8bc68}.pbtag.dungeon{background:#345a78;border-color:#79a8c8}
+"""
+
+PALPOWER_ING = _IH + _PALPOWER_ING_BADGE_CSS + """</style></head><body><div class="page">
   <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">帕鲁战力榜</div><div class="ig-sub">{{ sub }}</div></div></div>
   <div class="ig-panel">
     {% for r in rows %}
     <div class="ig-rankrow{% if r.rank <= 3 %} top{% endif %}">
       <div class="mdl">{{ r.medal }}</div>
       {% if r.icon %}<img class="pic" src="{{ r.icon }}">{% elif r.is_human %}<span class="pic" style="display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--pal-sub)">人</span>{% endif %}
-      <div style="flex:1;min-width:0"><div class="rn">{{ r.name }}{% if r.boss=='tower' %}<img class="inl" src="{{ icons.pal.alpha }}">{% elif r.boss=='boss' %}<img class="inl" src="{{ icons.pal.alpha }}">{% endif %}</div><div class="rs">{{ r.element }} · 稀有度 {{ r.rarity }}</div></div>
+      <div style="flex:1;min-width:0"><div class="rn" style="display:flex;align-items:center;gap:5px"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.name }}</span>{% if r.boss_badge %}<span class="pbtag {{ r.boss_badge.kind }}">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}">{% endif %}{{ r.boss_badge.label }}</span>{% endif %}</div><div class="rs">{{ r.element }} · 稀有度 {{ r.rarity }}</div></div>
       <div style="text-align:right;flex:none"><div class="rv">{{ r.power }}</div><div class="ig-track" style="width:56px;margin-top:4px"><div class="ig-fill" style="width:{{ r.pct }}%"></div></div></div>
     </div>
     {% endfor %}
-    <div style="margin-top:9px;text-align:center;font-size:11px;color:var(--pal-dim)">第 {{ page }}/{{ total_pages }} 页 · 「/帕鲁战力榜 帕鲁名」查详情</div>
+    <div style="margin-top:9px;text-align:center;font-size:11px;color:var(--pal-dim);line-height:1.6">第 {{ page }}/{{ total_pages }} 页 · 「/帕鲁战力榜 帕鲁名」查详情<br>标签来自游戏实际遭遇；“地牢头目池”表示可能作为地牢终点头目</div>
   </div>
   """ + _IF + """
 </div></body></html>"""
 
 
 # ---- ingame 版单帕鲁战力详情。变量契约与 PALPOWERDETAIL_TMPL 一致 ----
-PALPOWERDETAIL_ING = _IH + """</style></head><body><div class="page">
+PALPOWERDETAIL_ING = _IH + _PALPOWER_ING_BADGE_CSS + """</style></head><body><div class="page">
   <div class="ig-head">
     {% if icon %}<div class="ig-portrait"><img src="{{ icon }}"></div>{% endif %}
     <div style="flex:1;min-width:0"><div class="ig-title">{{ name }} · 战力</div>
-      <div class="ig-sub"><span class="ig-pill">#{{ rank }} / {{ total }}</span>{% for e in elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}<span class="ig-pill">稀有度 {{ rarity }}</span></div></div>
+      <div class="ig-sub"><span class="ig-pill">#{{ rank }} / {{ total }}</span>{% for b in boss_badges %}<span class="pbtag {{ b.kind }}">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}">{% endif %}{{ b.label }}</span>{% endfor %}{% for e in elements %}<span class="ig-badge">{% if icons.element[e] %}<img src="{{ icons.element[e] }}">{% endif %}{{ e }}</span>{% endfor %}<span class="ig-pill">稀有度 {{ rarity }}</span></div></div>
     <div style="text-align:right;flex:none"><div style="font-size:30px;font-weight:800;color:var(--pal-gold);line-height:1">{{ power }}</div><div style="font-size:11px;color:var(--pal-sub)">种族战力</div></div>
   </div>
   <div class="ig-panel">
@@ -3240,7 +3250,18 @@ POWER_TMPL = _HEAD + """</style></head><body><div class="page">
 
 
 # 帕鲁战力等级排行（全图鉴种族战力，/帕鲁战力榜，翻页）
-PALPOWER_TMPL = _HEAD + """</style></head><body><div class="page">
+_PALPOWER_BADGE_CSS = """
+  .pbtag{display:inline-flex;align-items:center;gap:3px;flex:none;padding:2px 6px;border-radius:5px;
+    font-size:10px;font-weight:800;line-height:1.2;color:#fff;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.28)}
+  .pbtag img{width:11px;height:11px;object-fit:contain}
+  .pbtag.worldtree,.pbtag.worldtree_final{background:linear-gradient(135deg,#287a56,#17513d)}
+  .pbtag.story{background:linear-gradient(135deg,#8d5fb3,#593778)}.pbtag.tower{background:linear-gradient(135deg,#c0392b,#812419)}
+  .pbtag.raid{background:linear-gradient(135deg,#9b59b6,#62336f)}.pbtag.predator{background:linear-gradient(135deg,#9f3333,#5e1f1f)}
+  .pbtag.field{background:linear-gradient(135deg,#d68910,#965807)}.pbtag.prison{background:linear-gradient(135deg,#bf6b2c,#78411c)}
+  .pbtag.boss{background:linear-gradient(135deg,#b08b26,#705719)}.pbtag.dungeon{background:linear-gradient(135deg,#4779a5,#2d4b6b)}
+"""
+
+PALPOWER_TMPL = _HEAD + _PALPOWER_BADGE_CSS + """</style></head><body><div class="page">
   <div class="head"><div>
     <div class="title">⚔️ 帕鲁战力榜</div>
     <div class="subtitle">{{ sub }}</div>
@@ -3251,7 +3272,7 @@ PALPOWER_TMPL = _HEAD + """</style></head><body><div class="page">
       <div style="width:30px;flex-shrink:0;text-align:center;font-size:17px;font-weight:900;color:#e8c466">{{ r.medal }}</div>
       {% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;flex-shrink:0">{% elif r.is_human %}<span style="font-size:24px">🧑</span>{% else %}<span style="font-size:24px">🐾</span>{% endif %}
       <div style="flex:1;min-width:0">
-        <div style="font-size:15px;font-weight:700;color:#f3ecd2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.boss=='tower' %} <span style="font-size:10.5px;background:#c0392b;color:#fff;padding:1px 6px;border-radius:5px;font-weight:800">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}🗼{% endif %}塔主</span>{% elif r.boss=='boss' %} <span style="font-size:10.5px;background:#d68910;color:#fff;padding:1px 6px;border-radius:5px;font-weight:800">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}👑{% endif %}头目</span>{% endif %}</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:15px;font-weight:700;color:#f3ecd2"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.name }}</span>{% if r.boss_badge %}<span class="pbtag {{ r.boss_badge.kind }}">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}">{% endif %}{{ r.boss_badge.label }}</span>{% endif %}</div>
         <div style="font-size:12px;color:#9c8fc0">{{ r.element }} · 稀有度 {{ r.rarity }}</div>
       </div>
       <div style="flex-shrink:0;text-align:right;min-width:62px">
@@ -3260,14 +3281,14 @@ PALPOWER_TMPL = _HEAD + """</style></head><body><div class="page">
       </div>
     </div>
     {% endfor %}
-    <div style="margin-top:11px;text-align:center;font-size:11.5px;color:#9c8fc0">第 {{ page }}/{{ total_pages }} 页 · 发「/帕鲁战力榜 页码」翻页 · 「/帕鲁战力榜 帕鲁名」查详情</div>
+    <div style="margin-top:11px;text-align:center;font-size:11.5px;color:#9c8fc0;line-height:1.65">第 {{ page }}/{{ total_pages }} 页 · 发「/帕鲁战力榜 页码」翻页 · 「/帕鲁战力榜 帕鲁名」查详情<br>标签来自游戏实际遭遇；“地牢头目池”表示可能作为地牢终点头目</div>
   </div>
   """ + _FOOT + """
 </div></body></html>"""
 
 
 # 单帕鲁战力详情（/帕鲁战力榜 帕鲁名）
-PALPOWERDETAIL_TMPL = _HEAD + """</style></head><body><div class="page">
+PALPOWERDETAIL_TMPL = _HEAD + _PALPOWER_BADGE_CSS + """</style></head><body><div class="page">
   <div class="head"><div>
     <div class="title">⚔️ {{ name }} · 战力详情</div>
     <div class="subtitle">战力排名 #{{ rank }} / {{ total }} · Lv{{ reflv }} 满级属性</div>
@@ -3277,7 +3298,7 @@ PALPOWERDETAIL_TMPL = _HEAD + """</style></head><body><div class="page">
       {% if icon %}<img src="{{ icon }}" style="width:76px;height:76px;object-fit:contain;flex-shrink:0">{% else %}<span style="font-size:40px">🐾</span>{% endif %}
       <div style="flex:1;min-width:0">
         <div style="font-size:22px;font-weight:800;color:#f3ecd2">{{ name }}</div>
-        <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">{% for e in elements %}<span class="pill soft" style="font-size:12px">{{ e }}</span>{% endfor %}<span class="pill soft" style="font-size:12px">稀有度 {{ rarity }}</span></div>
+        <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">{% for b in boss_badges %}<span class="pbtag {{ b.kind }}">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}">{% endif %}{{ b.label }}</span>{% endfor %}{% for e in elements %}<span class="pill soft" style="font-size:12px">{{ e }}</span>{% endfor %}<span class="pill soft" style="font-size:12px">稀有度 {{ rarity }}</span></div>
       </div>
       <div style="text-align:right;flex-shrink:0">
         <div style="font-size:34px;font-weight:900;color:#e8c466;line-height:1">{{ power }}</div>
@@ -4873,7 +4894,16 @@ MUTATION_TMPL = _HEAD + """</style></head><body><div class="page">
 # lab_*/passdex/passlist/awakening/mutation/skillfruit/implant/worldtree/v10)。
 # 补齐后三套主题模板键集合一致(见 test_theme_keys)。变量契约与 fantasy 完全一致。
 # ====================================================================
-PALPOWER_PIX = _PH + """</style></head><body><div class="page">
+_PALPOWER_PIX_BADGE_CSS = """
+  .pbtag{display:inline-flex;align-items:center;gap:3px;flex:none;padding:2px 5px;border:1px solid #5a3a1e;
+    border-radius:2px;font-size:10px;line-height:1.2;color:#fff;white-space:nowrap;box-shadow:1px 1px 0 rgba(56,34,7,.45)}
+  .pbtag img{width:11px;height:11px;object-fit:contain;image-rendering:pixelated}
+  .pbtag.worldtree,.pbtag.worldtree_final{background:#2e704f}.pbtag.story{background:#6b4788}.pbtag.tower{background:#9f3529}
+  .pbtag.raid{background:#7c4388}.pbtag.predator{background:#792b2b}.pbtag.field{background:#a66a12}
+  .pbtag.prison{background:#8a4d20}.pbtag.boss{background:#80651e}.pbtag.dungeon{background:#3f6684}
+"""
+
+PALPOWER_PIX = _PH + _PALPOWER_PIX_BADGE_CSS + """</style></head><body><div class="page">
   <div class="head"><div>
     <div class="title">⚔️ 帕鲁战力榜</div>
     <div class="subtitle">{{ sub }}</div>
@@ -4884,7 +4914,7 @@ PALPOWER_PIX = _PH + """</style></head><body><div class="page">
       <div style="width:28px;flex-shrink:0;text-align:center;font-size:16px;color:#7a1f1f">{{ r.medal }}</div>
       {% if r.icon %}<img src="{{ r.icon }}" style="width:38px;height:38px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% elif r.is_human %}<span style="font-size:22px">🧑</span>{% else %}<span style="font-size:22px">🐾</span>{% endif %}
       <div style="flex:1;min-width:0">
-        <div style="font-size:15px;color:#382207;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}{% if r.boss=='tower' %} <span class="pill red" style="font-size:10.5px">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}🗼{% endif %}塔主</span>{% elif r.boss=='boss' %} <span class="pill" style="font-size:10.5px">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}" style="width:12px;height:12px;object-fit:contain;vertical-align:-2px;margin-right:2px">{% else %}👑{% endif %}头目</span>{% endif %}</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:15px;color:#382207"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.name }}</span>{% if r.boss_badge %}<span class="pbtag {{ r.boss_badge.kind }}">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}">{% endif %}{{ r.boss_badge.label }}</span>{% endif %}</div>
         <div style="font-size:12px;color:#7a5a1a">{{ r.element }} · 稀有度 {{ r.rarity }}</div>
       </div>
       <div style="flex-shrink:0;text-align:right;min-width:58px">
@@ -4893,12 +4923,12 @@ PALPOWER_PIX = _PH + """</style></head><body><div class="page">
       </div>
     </div>
     {% endfor %}
-    <div style="margin-top:11px;text-align:center;font-size:11.5px;color:#7a5a1a">第 {{ page }}/{{ total_pages }} 页 · 发「/帕鲁战力榜 页码」翻页 · 「/帕鲁战力榜 帕鲁名」查详情</div>
+    <div style="margin-top:11px;text-align:center;font-size:11.5px;color:#7a5a1a;line-height:1.65">第 {{ page }}/{{ total_pages }} 页 · 发「/帕鲁战力榜 页码」翻页 · 「/帕鲁战力榜 帕鲁名」查详情<br>标签来自游戏实际遭遇；“地牢头目池”表示可能作为地牢终点头目</div>
   </div>
   """ + _PF + """
 </div></body></html>"""
 
-PALPOWERDETAIL_PIX = _PH + """</style></head><body><div class="page">
+PALPOWERDETAIL_PIX = _PH + _PALPOWER_PIX_BADGE_CSS + """</style></head><body><div class="page">
   <div class="head"><div>
     <div class="title">⚔️ {{ name }} · 战力详情</div>
     <div class="subtitle">战力排名 #{{ rank }} / {{ total }} · Lv{{ reflv }} 满级属性</div>
@@ -4908,7 +4938,7 @@ PALPOWERDETAIL_PIX = _PH + """</style></head><body><div class="page">
       {% if icon %}<img src="{{ icon }}" style="width:70px;height:70px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% else %}<span style="font-size:38px">🐾</span>{% endif %}
       <div style="flex:1;min-width:0">
         <div style="font-size:20px;color:#46200a">{{ name }}</div>
-        <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">{% for e in elements %}<span class="pill" style="font-size:12px">{{ e }}</span>{% endfor %}<span class="pill" style="font-size:12px">稀有度 {{ rarity }}</span></div>
+        <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">{% for b in boss_badges %}<span class="pbtag {{ b.kind }}">{% if icons.pal.alpha %}<img src="{{ icons.pal.alpha }}">{% endif %}{{ b.label }}</span>{% endfor %}{% for e in elements %}<span class="pill" style="font-size:12px">{{ e }}</span>{% endfor %}<span class="pill" style="font-size:12px">稀有度 {{ rarity }}</span></div>
       </div>
       <div style="text-align:right;flex-shrink:0">
         <div class="num-big" style="font-size:32px">{{ power }}</div>
@@ -5197,9 +5227,7 @@ MUTATION_PIX = _PH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
-# ---------------- 小队进度(首选1)。变量:members[{name,paldeck,fasttravel,towers,field_bosses,dungeon,relics,areas,next[]}] + dex_total + checklist[{item,done_by[],count}] + hint ----------------
-_SQUAD_STATS = ("图鉴 {{ m.paldeck }}/{{ dex_total }}", "传送点 {{ m.fasttravel }}", "塔主 {{ m.towers }}",
-                "野外boss {{ m.field_bosses }}", "地牢 {{ m.dungeon }}", "遗物 {{ m.relics }}", "区域 {{ m.areas }}")
+# ---------------- 小队进度(首选1)。变量:members[{name,stats[{label,current,total,missing,complete}],dungeon_*,next[]}] + checklist[{item,done_by[],count}] + hint ----------------
 
 SQUAD_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div>
@@ -5211,14 +5239,9 @@ SQUAD_TMPL = _HEAD + """</style></head><body><div class="page">
     <div style="padding:11px 13px;margin-bottom:9px;border-radius:13px;background:rgba(12,8,38,.42);border:1px solid rgba(232,198,106,.18)">
       <div style="font-size:16px;font-weight:800;color:#f3ecd2">{{ m.name }}</div>
       <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">
-        <span class="pill soft" style="font-size:11.5px">图鉴 {{ m.paldeck }}/{{ dex_total }}</span>
-        <span class="pill soft" style="font-size:11.5px">传送点 {{ m.fasttravel }}</span>
-        <span class="pill soft" style="font-size:11.5px">塔主 {{ m.towers }}</span>
-        <span class="pill soft" style="font-size:11.5px">野外Boss {{ m.field_bosses }}</span>
-        <span class="pill soft" style="font-size:11.5px">地牢 {{ m.dungeon }}</span>
-        <span class="pill soft" style="font-size:11.5px">遗物 {{ m.relics }}</span>
-        <span class="pill soft" style="font-size:11.5px">区域 {{ m.areas }}</span>
+        {% for s in m.stats %}<span class="pill soft" style="font-size:11.5px;{% if s.complete %}color:#9effb6{% endif %}">{{ s.label }} {{ s.current }}/{{ s.total }}{% if s.complete %} · 已完成{% else %} · 还差 {{ s.missing }}{% endif %}</span>{% endfor %}
       </div>
+      <div style="font-size:11.5px;color:#b9a9d6;margin-top:6px">🚪 地牢累计 {{ m.dungeon }} 次（普通 {{ m.dungeon_normal }} · 固定 {{ m.dungeon_fixed }}）· 当前地图收录 {{ m.dungeon_entrances }} 个入口</div>
       {% if m.next %}<div style="font-size:12.5px;color:#9effb6;margin-top:6px">🎯 下一步：{{ m.next|join('、') }}</div>{% endif %}
     </div>
     {% endfor %}
@@ -5241,14 +5264,9 @@ SQUAD_PIX = _PH + """</style></head><body><div class="page">
     <div style="padding:10px 11px;margin-bottom:8px;border:2px solid #6b4a24;background:rgba(221,198,149,.4)">
       <div style="font-size:15px;font-weight:700;color:#2c1a0a">{{ m.name }}</div>
       <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:5px">
-        <span class="pill" style="font-size:11px">图鉴 {{ m.paldeck }}/{{ dex_total }}</span>
-        <span class="pill" style="font-size:11px">传送点 {{ m.fasttravel }}</span>
-        <span class="pill" style="font-size:11px">塔主 {{ m.towers }}</span>
-        <span class="pill" style="font-size:11px">野外Boss {{ m.field_bosses }}</span>
-        <span class="pill" style="font-size:11px">地牢 {{ m.dungeon }}</span>
-        <span class="pill" style="font-size:11px">遗物 {{ m.relics }}</span>
-        <span class="pill" style="font-size:11px">区域 {{ m.areas }}</span>
+        {% for s in m.stats %}<span class="pill" style="font-size:11px;{% if s.complete %}color:#1d7a36{% endif %}">{{ s.label }} {{ s.current }}/{{ s.total }}{% if s.complete %} · 已完成{% else %} · 还差 {{ s.missing }}{% endif %}</span>{% endfor %}
       </div>
+      <div style="font-size:11px;color:#574012;margin-top:5px">地牢累计 {{ m.dungeon }} 次（普通 {{ m.dungeon_normal }} · 固定 {{ m.dungeon_fixed }}）· 当前地图 {{ m.dungeon_entrances }} 个入口</div>
       {% if m.next %}<div style="font-size:12px;color:#1d7a36;margin-top:5px">下一步：{{ m.next|join('、') }}</div>{% endif %}
     </div>
     {% endfor %}
@@ -5264,10 +5282,9 @@ SQUAD_ING = _IH + """</style></head><body><div class="page">
   {% for m in members %}
   <div class="ig-panel hi"><div style="font-size:16px;font-weight:800;color:var(--pal-text)">{{ m.name }}</div>
     <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">
-      <span class="ig-pill">图鉴 {{ m.paldeck }}/{{ dex_total }}</span><span class="ig-pill">传送点 {{ m.fasttravel }}</span>
-      <span class="ig-pill">塔主 {{ m.towers }}</span><span class="ig-pill">野外Boss {{ m.field_bosses }}</span>
-      <span class="ig-pill">地牢 {{ m.dungeon }}</span><span class="ig-pill">遗物 {{ m.relics }}</span><span class="ig-pill">区域 {{ m.areas }}</span>
+      {% for s in m.stats %}<span class="ig-pill"{% if s.complete %} style="color:var(--pal-good)"{% endif %}>{{ s.label }} {{ s.current }}/{{ s.total }}{% if s.complete %} · 已完成{% else %} · 还差 {{ s.missing }}{% endif %}</span>{% endfor %}
     </div>
+    <div style="font-size:11.5px;color:var(--pal-sub);margin-top:6px">地牢累计 {{ m.dungeon }} 次（普通 {{ m.dungeon_normal }} · 固定 {{ m.dungeon_fixed }}）· 当前地图 {{ m.dungeon_entrances }} 个入口</div>
     {% if m.next %}<div style="font-size:12.5px;color:var(--pal-good);margin-top:6px">下一步：{{ m.next|join('、') }}</div>{% endif %}
   </div>
   {% endfor %}
@@ -5965,6 +5982,134 @@ WORKCOMBO_ING = _IH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
+# ---- 物品完整获取来源 / 资源矿点地图 ----
+ACQUIRE_LIST_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div><div class="title">🗺️ {{ title }}</div>
+    <div class="subtitle">游戏关卡可定位地表坐标 · 选择物品查看高清地图与全部获取来源{% if build_id %} · build {{ build_id }}{% endif %}</div></div></div>
+  <div class="glass">""" + _GEMS + """
+    {% for r in rows %}<div class="row" style="padding:10px 12px;gap:11px;align-items:center">
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:48px;height:48px;object-fit:contain;flex-shrink:0">{% endif %}
+      <div style="flex:1;min-width:0"><div style="font-size:16px;font-weight:850;color:#f3ecd2">{{ r.name }}</div>
+        <div style="font-size:12px;color:#b5a8ca;margin-top:3px">{{ r.kind }} · {{ r.maps }} · {{ r.condition }}</div></div>
+      <div style="text-align:right;flex-shrink:0"><div style="font-size:21px;font-weight:900;color:#e8c466">{{ r.points }}</div><div style="font-size:11px;color:#9c8fc0">个可定位地表点</div></div>
+    </div>{% endfor %}
+    <div style="margin-top:12px;padding:10px 12px;border-radius:12px;background:rgba(80,62,120,.25);color:#d8cdf0;font-size:13px">发「/帕鲁{% if ore_only %}矿点{% else %}获取{% endif %} &lt;物品名&gt;」，例如「/帕鲁获取 夜星砂」。</div>
+  </div>""" + _FOOT + """
+</div></body></html>"""
+
+ACQUIRE_LIST_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div><div class="title">▣ {{ title }}</div>
+    <div class="subtitle">游戏关卡可定位地表坐标 · 物品图标与地图实景{% if build_id %} · BUILD {{ build_id }}{% endif %}</div></div></div>
+  <div class="frame">
+    {% for r in rows %}<div class="row" style="padding:8px 10px;gap:9px;align-items:center">
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:44px;height:44px;object-fit:contain;image-rendering:pixelated;flex-shrink:0">{% endif %}
+      <div style="flex:1;min-width:0"><div style="font-size:15px;color:#46200a">{{ r.name }}</div><div style="font-size:12px;color:#523f10;margin-top:2px">{{ r.kind }}｜{{ r.maps }}｜{{ r.condition }}</div></div>
+      <div style="text-align:right;flex-shrink:0;color:#7a1f1f"><b style="font-size:19px">{{ r.points }}</b><div style="font-size:10px">地表点</div></div>
+    </div>{% endfor %}
+    <div style="margin-top:10px;border:2px solid #6a4524;background:#ead79d;padding:8px 10px;font-size:12px;color:#46200a">输入：/帕鲁{% if ore_only %}矿点{% else %}获取{% endif %} &lt;物品名&gt;</div>
+  </div>""" + _PF + """
+</div></body></html>"""
+
+ACQUIRE_LIST_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="flex:1;min-width:0"><div class="ig-title">{{ title }}</div>
+    <div class="ig-sub">游戏关卡可定位地表坐标 · 查看资源地图与完整来源{% if build_id %} · BUILD {{ build_id }}{% endif %}</div></div></div>
+  <div class="ig-panel">
+    {% for r in rows %}<div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-bottom:1px solid rgba(240,207,122,.12)">
+      {% if r.icon %}<img src="{{ r.icon }}" style="width:46px;height:46px;object-fit:contain;flex-shrink:0">{% endif %}
+      <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:800;color:var(--pal-text)">{{ r.name }}</div><div style="font-size:12px;color:var(--pal-sub);margin-top:2px">{{ r.kind }} · {{ r.maps }} · {{ r.condition }}</div></div>
+      <div style="text-align:right;flex-shrink:0"><div style="font-size:20px;font-weight:900;color:var(--pal-gold)">{{ r.points }}</div><div style="font-size:10px;color:var(--pal-dim)">地表点</div></div>
+    </div>{% endfor %}
+    <div style="margin-top:10px;color:var(--pal-sub);font-size:12px">输入 /帕鲁{% if ore_only %}矿点{% else %}获取{% endif %} &lt;物品名&gt; 查看详情</div>
+  </div>""" + _IF + """
+</div></body></html>"""
+
+
+ACQUIRE_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:14px">
+    {% if icon %}<img src="{{ icon }}" style="width:70px;height:70px;object-fit:contain;filter:drop-shadow(0 3px 8px #000)">{% endif %}
+    <div><div class="title">{{ name }}</div><div class="subtitle">{{ type }} · {{ source_count }} 类已核实来源{% if build_id %} · build {{ build_id }}{% endif %}</div></div>
+  </div></div>
+  <div class="glass">""" + _GEMS + """
+    {% if description %}<div style="font-size:14px;line-height:1.75;color:#ddd3ea;margin-bottom:12px">{{ description }}</div>{% endif %}
+    {% if resource %}<div style="padding:10px 12px;border:1px solid rgba(232,198,106,.3);border-radius:12px;background:rgba(232,198,106,.08);margin-bottom:12px">
+      <b style="color:#e8c466">🧭 地图采集</b><span style="color:#d8cdf0"> · {{ resource.condition }} · {{ resource.point_count }} 个可定位地表点{% if resource.node_yield %} · 单点表内产量 {{ resource.node_yield }}{% endif %}{% if resource.respawn_minutes %} · 基础刷新 {{ resource.respawn_minutes }} 分钟{% endif %}</span>
+    </div>{% endif %}
+    {% for m in maps %}<div style="margin:12px 0 16px"><div style="display:flex;justify-content:space-between;margin-bottom:7px"><b style="color:#f3ecd2">{{ m.label }}资源分布</b><span style="color:#9c8fc0">{{ m.points|length }} 点</span></div>
+      <div style="position:relative;width:100%;overflow:hidden;border:2px solid rgba(232,198,106,.42);border-radius:12px;line-height:0"><img src="{{ m.mapimg }}" style="width:100%;display:block">
+        {% for p in m.points %}<i style="position:absolute;left:{{ p.left }}%;top:{{ p.top }}%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#ffd83d;border:1px solid #4c2600;box-shadow:0 0 4px #fff"></i>{% endfor %}
+      </div>{% if m.regions %}<div style="margin-top:7px;color:#b5a8ca;font-size:11px">密集区域：{% for r in m.regions %}{{ r.name }} {{ r.count }}{% if not loop.last %} · {% endif %}{% endfor %}</div>{% endif %}
+    </div>{% endfor %}
+    {% if drops %}<div style="font-size:15px;font-weight:850;color:#e8c466;margin:13px 0 7px">🐾 帕鲁掉落{% if drop_total > drops|length %}（显示 {{ drops|length }}/{{ drop_total }}）{% endif %}</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px">{% for r in drops %}<div class="row" style="padding:7px 9px;gap:8px">{% if r.icon %}<img src="{{ r.icon }}" style="width:38px;height:38px;object-fit:contain">{% endif %}<div style="flex:1"><b>{{ r.name }}</b><div style="font-size:11px;color:#9c8fc0">No.{{ r.index }}</div></div><span class="pill gold">×{{ r.qty }} · {{ r.rate }}%</span></div>{% endfor %}</div>{% endif %}
+    {% if facilities %}<div style="font-size:15px;font-weight:850;color:#e8c466;margin:13px 0 7px">🏭 据点生产</div>{% for r in facilities %}<div class="row" style="padding:8px 10px">{% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain;margin-right:9px">{% endif %}<div><b>{{ r.name }}</b><div style="font-size:11px;color:#9c8fc0">{{ r.description }}</div></div></div>{% endfor %}{% endif %}
+    {% if craft %}<div style="font-size:15px;font-weight:850;color:#e8c466;margin:13px 0 7px">🔨 制作配方</div><div class="row" style="padding:9px 10px;flex-wrap:wrap">{% for r in craft.materials %}<span style="display:flex;align-items:center;gap:4px;margin-right:12px">{% if r.icon %}<img src="{{ r.icon }}" style="width:28px;height:28px;object-fit:contain">{% endif %}{{ r.name }} ×{{ r.count }}</span>{% endfor %}<small style="width:100%;color:#9c8fc0;margin-top:5px">制作台：{{ craft.benches|join('、') }}</small></div>{% endif %}
+    {% if ranch %}<div style="font-size:15px;font-weight:850;color:#e8c466;margin:13px 0 7px">🐑 牧场产出</div><div class="row">{% for r in ranch %}<span style="display:flex;align-items:center;gap:5px;margin-right:12px">{% if r.icon %}<img src="{{ r.icon }}" style="width:32px;height:32px;object-fit:contain">{% endif %}{{ r.name }}</span>{% endfor %}</div>{% endif %}
+    {% if shops %}<div style="font-size:15px;font-weight:850;color:#e8c466;margin:13px 0 7px">🛒 商店</div>{% for r in shops %}<div class="row"><b>{{ r.name }}</b><span style="margin-left:auto">{{ r.price }} {{ r.currency }} {{ r.stock }}</span></div>{% endfor %}{% endif %}
+    {% if fishing %}<div style="font-size:15px;font-weight:850;color:#e8c466;margin:13px 0 7px">🎣 钓鱼</div>{% for r in fishing %}<div class="row"><span>数量 {{ r.qty }}</span><b style="margin-left:auto">{{ r.rate }}</b></div>{% endfor %}{% endif %}
+    {% if source_count == 0 %}<div style="padding:14px;color:#c8b9d8">当前静态游戏数据未收录可核实来源；不以猜测补全。</div>{% endif %}
+  </div>""" + _FOOT + """
+</div></body></html>"""
+
+ACQUIRE_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:12px">{% if icon %}<img src="{{ icon }}" style="width:62px;height:62px;object-fit:contain;image-rendering:pixelated">{% endif %}<div><div class="title">{{ name }}</div><div class="subtitle">{{ type }}｜{{ source_count }} 类来源{% if build_id %}｜BUILD {{ build_id }}{% endif %}</div></div></div></div>
+  <div class="frame">{% if description %}<div style="font-size:13px;line-height:1.65;color:#46200a;margin-bottom:10px">{{ description }}</div>{% endif %}
+    {% if resource %}<div style="border:2px solid #6a4524;background:#ead79d;padding:8px 10px;margin-bottom:10px;color:#46200a"><b>地图采集</b>｜{{ resource.condition }}｜{{ resource.point_count }} 个可定位地表点{% if resource.node_yield %}｜单点表内产量 {{ resource.node_yield }}{% endif %}{% if resource.respawn_minutes %}｜刷新 {{ resource.respawn_minutes }} 分钟{% endif %}</div>{% endif %}
+    {% for m in maps %}<div style="margin:10px 0 14px"><div style="display:flex;justify-content:space-between;color:#46200a;margin-bottom:5px"><b>{{ m.label }}资源分布</b><span>{{ m.points|length }} 点</span></div><div style="position:relative;line-height:0;border:3px solid #4b2d15"><img src="{{ m.mapimg }}" style="width:100%;display:block;image-rendering:auto">{% for p in m.points %}<i style="position:absolute;left:{{ p.left }}%;top:{{ p.top }}%;width:5px;height:5px;margin:-2.5px;background:#fff100;border:1px solid #301600"></i>{% endfor %}</div>{% if m.regions %}<div style="font-size:10px;color:#523f10;margin-top:5px">密集：{% for r in m.regions %}{{ r.name }} {{ r.count }}{% if not loop.last %} / {% endif %}{% endfor %}</div>{% endif %}</div>{% endfor %}
+    {% if drops %}<h3 style="font-size:14px;color:#7a1f1f;margin:11px 0 5px">帕鲁掉落{% if drop_total > drops|length %} {{ drops|length }}/{{ drop_total }}{% endif %}</h3>{% for r in drops %}<div class="row" style="padding:6px 8px">{% if r.icon %}<img src="{{ r.icon }}" style="width:34px;height:34px;object-fit:contain;image-rendering:pixelated;margin-right:7px">{% endif %}<b>{{ r.name }}</b><small style="margin-left:5px">#{{ r.index }}</small><span style="margin-left:auto">×{{ r.qty }}｜{{ r.rate }}%</span></div>{% endfor %}{% endif %}
+    {% if facilities %}<h3 style="font-size:14px;color:#7a1f1f">据点生产</h3>{% for r in facilities %}<div class="row">{% if r.icon %}<img src="{{ r.icon }}" style="width:38px;height:38px;object-fit:contain;image-rendering:pixelated;margin-right:7px">{% endif %}<div><b>{{ r.name }}</b><small style="display:block">{{ r.description }}</small></div></div>{% endfor %}{% endif %}
+    {% if craft %}<h3 style="font-size:14px;color:#7a1f1f">制作配方</h3><div class="row" style="flex-wrap:wrap">{% for r in craft.materials %}<span style="margin-right:10px">{{ r.name }}×{{ r.count }}</span>{% endfor %}<small style="width:100%">{{ craft.benches|join('、') }}</small></div>{% endif %}
+    {% if ranch %}<h3 style="font-size:14px;color:#7a1f1f">牧场产出</h3><div class="row">{% for r in ranch %}{{ r.name }}{% if not loop.last %}、{% endif %}{% endfor %}</div>{% endif %}
+    {% if shops %}<h3 style="font-size:14px;color:#7a1f1f">商店</h3>{% for r in shops %}<div class="row"><b>{{ r.name }}</b><span style="margin-left:auto">{{ r.price }} {{ r.currency }} {{ r.stock }}</span></div>{% endfor %}{% endif %}
+    {% if fishing %}<h3 style="font-size:14px;color:#7a1f1f">钓鱼</h3>{% for r in fishing %}<div class="row">数量 {{ r.qty }}<b style="margin-left:auto">{{ r.rate }}</b></div>{% endfor %}{% endif %}
+    {% if source_count == 0 %}<div class="row">当前静态游戏数据没有可核实来源。</div>{% endif %}
+  </div>""" + _PF + """
+</div></body></html>"""
+
+ACQUIRE_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="display:flex;align-items:center;gap:13px">{% if icon %}<img src="{{ icon }}" style="width:66px;height:66px;object-fit:contain">{% endif %}<div><div class="ig-title">{{ name }}</div><div class="ig-sub">{{ type }} · {{ source_count }} 类已核实来源{% if build_id %} · BUILD {{ build_id }}{% endif %}</div></div></div></div>
+  <div class="ig-panel">{% if description %}<div style="font-size:13.5px;line-height:1.7;color:var(--pal-sub);margin-bottom:11px">{{ description }}</div>{% endif %}
+    {% if resource %}<div style="border:1px solid rgba(240,207,122,.35);border-radius:8px;background:rgba(240,207,122,.08);padding:9px 11px;margin-bottom:11px;color:var(--pal-text)"><b style="color:var(--pal-gold)">地图采集</b> · {{ resource.condition }} · {{ resource.point_count }} 个可定位地表点{% if resource.node_yield %} · 单点表内产量 {{ resource.node_yield }}{% endif %}{% if resource.respawn_minutes %} · 基础刷新 {{ resource.respawn_minutes }} 分钟{% endif %}</div>{% endif %}
+    {% for m in maps %}<div style="margin:11px 0 15px"><div style="display:flex;justify-content:space-between;color:var(--pal-text);margin-bottom:6px"><b>{{ m.label }}资源分布</b><span style="color:var(--pal-sub)">{{ m.points|length }} 点</span></div><div style="position:relative;line-height:0;border:1px solid rgba(240,207,122,.5);border-radius:8px;overflow:hidden"><img src="{{ m.mapimg }}" style="width:100%;display:block">{% for p in m.points %}<i style="position:absolute;left:{{ p.left }}%;top:{{ p.top }}%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#ffdf3d;border:1px solid #241608;box-shadow:0 0 3px #fff"></i>{% endfor %}</div>{% if m.regions %}<div style="font-size:10.5px;color:var(--pal-dim);margin-top:5px">密集区域：{% for r in m.regions %}{{ r.name }} {{ r.count }}{% if not loop.last %} · {% endif %}{% endfor %}</div>{% endif %}</div>{% endfor %}
+    {% if drops %}<div style="font-size:14px;font-weight:800;color:var(--pal-gold);margin:12px 0 5px">帕鲁掉落{% if drop_total > drops|length %} · {{ drops|length }}/{{ drop_total }}{% endif %}</div>{% for r in drops %}<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-bottom:1px solid rgba(240,207,122,.1)">{% if r.icon %}<img src="{{ r.icon }}" style="width:36px;height:36px;object-fit:contain">{% endif %}<div style="flex:1"><b style="color:var(--pal-text)">{{ r.name }}</b><small style="color:var(--pal-dim);margin-left:5px">No.{{ r.index }}</small></div><span class="ig-badge">×{{ r.qty }} · {{ r.rate }}%</span></div>{% endfor %}{% endif %}
+    {% if facilities %}<div style="font-size:14px;font-weight:800;color:var(--pal-gold);margin:12px 0 5px">据点生产</div>{% for r in facilities %}<div style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-bottom:1px solid rgba(240,207,122,.1)">{% if r.icon %}<img src="{{ r.icon }}" style="width:40px;height:40px;object-fit:contain">{% endif %}<div><b style="color:var(--pal-text)">{{ r.name }}</b><small style="display:block;color:var(--pal-sub)">{{ r.description }}</small></div></div>{% endfor %}{% endif %}
+    {% if craft %}<div style="font-size:14px;font-weight:800;color:var(--pal-gold);margin:12px 0 5px">制作配方</div><div style="padding:8px;color:var(--pal-text)">{% for r in craft.materials %}<span style="margin-right:11px">{{ r.name }} ×{{ r.count }}</span>{% endfor %}<small style="display:block;color:var(--pal-sub);margin-top:4px">{{ craft.benches|join('、') }}</small></div>{% endif %}
+    {% if ranch %}<div style="font-size:14px;font-weight:800;color:var(--pal-gold);margin:12px 0 5px">牧场产出</div><div style="padding:8px;color:var(--pal-text)">{% for r in ranch %}{{ r.name }}{% if not loop.last %}、{% endif %}{% endfor %}</div>{% endif %}
+    {% if shops %}<div style="font-size:14px;font-weight:800;color:var(--pal-gold);margin:12px 0 5px">商店</div>{% for r in shops %}<div style="display:flex;padding:7px 8px;color:var(--pal-text)"><b>{{ r.name }}</b><span style="margin-left:auto">{{ r.price }} {{ r.currency }} {{ r.stock }}</span></div>{% endfor %}{% endif %}
+    {% if fishing %}<div style="font-size:14px;font-weight:800;color:var(--pal-gold);margin:12px 0 5px">钓鱼</div>{% for r in fishing %}<div style="display:flex;padding:7px 8px;color:var(--pal-text)">数量 {{ r.qty }}<b style="margin-left:auto">{{ r.rate }}</b></div>{% endfor %}{% endif %}
+    {% if source_count == 0 %}<div style="padding:12px;color:var(--pal-sub)">当前静态游戏数据没有可核实来源。</div>{% endif %}
+  </div>""" + _IF + """
+</div></body></html>"""
+
+
+# ---- 帕鲁解剖 / 解体正反查 ----
+BUTCHER_TMPL = _HEAD + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:13px">{% if hero_icon %}<img src="{{ hero_icon }}" style="width:68px;height:68px;object-fit:contain">{% endif %}<div><div class="title">🔪 {{ title }}</div><div class="subtitle">{{ subtitle }}{% if index %} · No.{{ index }}{% endif %}</div></div></div></div>
+  <div class="glass">""" + _GEMS + """
+    {% if mode == 'catalog' %}<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px">{% for r in rows %}<div class="row" style="padding:7px 9px;gap:8px">{% if r.icon %}<img src="{{ r.icon }}" style="width:40px;height:40px;object-fit:contain">{% endif %}<div style="flex:1"><b>{{ r.name }}</b><div style="font-size:11px;color:#9c8fc0">No.{{ r.index }}</div></div><span class="pill soft">{{ r.count }} 种</span></div>{% endfor %}</div>
+    {% else %}{% for r in rows %}<div class="row" style="padding:8px 10px;gap:9px">{% if r.icon %}<img src="{{ r.icon }}" style="width:44px;height:44px;object-fit:contain">{% endif %}<div style="flex:1"><b style="font-size:15px">{{ r.name }}</b>{% if r.index %}<div style="font-size:11px;color:#9c8fc0">No.{{ r.index }}</div>{% endif %}</div><span class="pill gold">×{{ r.qty }} · {{ r.rate }}%</span></div>{% endfor %}{% endif %}
+    <div style="font-size:15px;font-weight:850;color:#e8c466;margin:14px 0 7px">解体方式</div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px">{% for t in tools %}<div class="row" style="padding:8px 9px">{% if t.icon %}<img src="{{ t.icon }}" style="width:42px;height:42px;object-fit:contain;margin-right:8px">{% endif %}<div><b>{{ t.name }}</b><div style="font-size:11px;color:#9c8fc0">{{ t.detail }}</div></div></div>{% endfor %}</div>
+    <div style="margin-top:11px;padding:9px 11px;border-radius:10px;background:rgba(220,58,58,.12);border:1px solid rgba(255,100,100,.28);color:#efc8c8;font-size:12px">⚠ 解体后帕鲁永久消失。这里展示普通物种的标准掉落表；具体头目个体的额外稀有奖励按遭遇单独判定。</div>
+    {% if pager %}<div style="text-align:center;color:#d8cdf0;font-size:12px;margin-top:10px">下一页：{{ pager }}</div>{% endif %}
+  </div>""" + _FOOT + """
+</div></body></html>"""
+
+BUTCHER_PIX = _PH + """</style></head><body><div class="page">
+  <div class="head"><div style="display:flex;align-items:center;gap:11px">{% if hero_icon %}<img src="{{ hero_icon }}" style="width:60px;height:60px;object-fit:contain;image-rendering:pixelated">{% endif %}<div><div class="title">✂ {{ title }}</div><div class="subtitle">{{ subtitle }}{% if index %}｜No.{{ index }}{% endif %}</div></div></div></div>
+  <div class="frame">{% for r in rows %}<div class="row" style="padding:7px 9px;gap:8px">{% if r.icon %}<img src="{{ r.icon }}" style="width:39px;height:39px;object-fit:contain;image-rendering:pixelated">{% endif %}<div style="flex:1"><b>{{ r.name }}</b>{% if r.index %}<small style="display:block">#{{ r.index }}</small>{% endif %}</div>{% if mode == 'catalog' %}<span>{{ r.count }} 种</span>{% else %}<span>×{{ r.qty }}｜{{ r.rate }}%</span>{% endif %}</div>{% endfor %}
+    <h3 style="font-size:14px;color:#7a1f1f;margin:12px 0 5px">解体方式</h3>{% for t in tools %}<div class="row">{% if t.icon %}<img src="{{ t.icon }}" style="width:38px;height:38px;object-fit:contain;image-rendering:pixelated;margin-right:7px">{% endif %}<div><b>{{ t.name }}</b><small style="display:block">{{ t.detail }}</small></div></div>{% endfor %}
+    <div style="margin-top:9px;border:2px solid #7a1f1f;background:#f0c9a1;padding:8px;font-size:11px;color:#5d1717">注意：解体后帕鲁永久消失。显示的是普通物种标准掉落；头目个体额外奖励按遭遇判定。</div>{% if pager %}<div style="text-align:center;font-size:11px;margin-top:8px">{{ pager }}</div>{% endif %}
+  </div>""" + _PF + """
+</div></body></html>"""
+
+BUTCHER_ING = _IH + """</style></head><body><div class="page">
+  <div class="ig-head"><div style="display:flex;align-items:center;gap:12px">{% if hero_icon %}<img src="{{ hero_icon }}" style="width:64px;height:64px;object-fit:contain">{% endif %}<div><div class="ig-title">{{ title }}</div><div class="ig-sub">{{ subtitle }}{% if index %} · No.{{ index }}{% endif %}</div></div></div></div>
+  <div class="ig-panel">{% for r in rows %}<div style="display:flex;align-items:center;gap:9px;padding:7px 9px;border-bottom:1px solid rgba(240,207,122,.1)">{% if r.icon %}<img src="{{ r.icon }}" style="width:42px;height:42px;object-fit:contain">{% endif %}<div style="flex:1"><b style="color:var(--pal-text)">{{ r.name }}</b>{% if r.index %}<small style="display:block;color:var(--pal-dim)">No.{{ r.index }}</small>{% endif %}</div>{% if mode == 'catalog' %}<span class="ig-badge">{{ r.count }} 种</span>{% else %}<span class="ig-badge">×{{ r.qty }} · {{ r.rate }}%</span>{% endif %}</div>{% endfor %}
+    <div style="font-size:14px;font-weight:800;color:var(--pal-gold);margin:12px 0 5px">解体方式</div>{% for t in tools %}<div style="display:flex;align-items:center;gap:8px;padding:7px 9px;border-bottom:1px solid rgba(240,207,122,.1)">{% if t.icon %}<img src="{{ t.icon }}" style="width:40px;height:40px;object-fit:contain">{% endif %}<div><b style="color:var(--pal-text)">{{ t.name }}</b><small style="display:block;color:var(--pal-sub)">{{ t.detail }}</small></div></div>{% endfor %}
+    <div style="margin-top:10px;border:1px solid rgba(231,91,91,.45);border-radius:8px;background:rgba(190,45,45,.12);padding:8px 10px;color:#efb8b8;font-size:11.5px">解体后帕鲁永久消失。此处为普通物种标准掉落；头目个体的额外稀有奖励按遭遇单独判定。</div>{% if pager %}<div style="text-align:center;color:var(--pal-dim);font-size:11px;margin-top:8px">{{ pager }}</div>{% endif %}
+  </div>""" + _IF + """
+</div></body></html>"""
+
+
 STYLES = {
     "fantasy": {"status": STATUS_TMPL, "players": PLAYERS_TMPL, "settings": SETTINGS_TMPL,
                 "help": HELP_TMPL, "message": MSG_TMPL, "stats": STATS_TMPL, "rank": RANK_TMPL,
@@ -5978,6 +6123,7 @@ STYLES = {
                 "lab_overview": LAB_OVERVIEW_TMPL, "lab_list": LAB_LIST_TMPL, "lab_detail": LAB_DETAIL_TMPL,
                 "bag": BAG_TMPL, "team": TEAM_TMPL, "palbox": PALBOX_TMPL, "guild": GUILD_TMPL,
                 "basecamp": BASECAMP_TMPL, "squad": SQUAD_TMPL, "basehealth": BASEHEALTH_TMPL, "growth": GROWTH_TMPL, "matroute": MATROUTE_TMPL, "techtree": TECHTREE_TMPL, "ranch": RANCH_TMPL, "matuse": MATUSE_TMPL, "poimap": POIMAP_TMPL, "passfind": PASSFIND_TMPL,
+                "acquire_list": ACQUIRE_LIST_TMPL, "acquire": ACQUIRE_TMPL, "butcher": BUTCHER_TMPL,
                 "element": ELEMENT_TMPL, "habitat": HABITAT_TMPL, "passrec": PASSREC_TMPL,
                 "passdex": PASSDEX_TMPL, "passlist": PASSLIST_TMPL,
                 "awakening": AWAKENING_TMPL, "mutation": MUTATION_TMPL,
@@ -5997,6 +6143,7 @@ STYLES = {
               "lab_overview": LAB_OVERVIEW_PIX, "lab_list": LAB_LIST_PIX, "lab_detail": LAB_DETAIL_PIX,
               "bag": BAG_PIX, "team": TEAM_PIX, "palbox": PALBOX_PIX, "guild": GUILD_PIX,
               "basecamp": BASECAMP_PIX, "squad": SQUAD_PIX, "basehealth": BASEHEALTH_PIX, "growth": GROWTH_PIX, "matroute": MATROUTE_PIX, "techtree": TECHTREE_PIX, "ranch": RANCH_PIX, "matuse": MATUSE_PIX, "poimap": POIMAP_PIX, "passfind": PASSFIND_PIX,
+              "acquire_list": ACQUIRE_LIST_PIX, "acquire": ACQUIRE_PIX, "butcher": BUTCHER_PIX,
               "element": ELEMENT_PIX, "habitat": HABITAT_PIX, "passrec": PASSREC_PIX,
               "passdex": PASSDEX_PIX, "passlist": PASSLIST_PIX,
               "awakening": AWAKENING_PIX, "mutation": MUTATION_PIX,
@@ -6007,7 +6154,7 @@ STYLES = {
               "hatch": HATCH_PIX, "inherit": INHERIT_PIX,
               "arena": ARENA_PIX, "arena_tier": ARENA_TIER_PIX},
 }
-# ingame 游戏原生主题(独立第三套)。**已全量落地**:68 个模板键全部为 ingame 专属模板,
+# ingame 游戏原生主题(独立第三套)。**已全量落地**:71 个模板键全部为 ingame 专属模板，
 # 0 键回退 fantasy(下方逐键覆盖,tests/test_theme.py 校验三主题键集合一致)。
 # 这里先 dict(fantasy) 只是取一份键骨架,紧接着被逐键覆盖为 ingame 专属串。
 STYLES["ingame"] = dict(STYLES["fantasy"])
@@ -6020,7 +6167,10 @@ STYLES["ingame"]["ranch"] = RANCH_ING
 STYLES["ingame"]["matuse"] = MATUSE_ING
 STYLES["ingame"]["poimap"] = POIMAP_ING
 STYLES["ingame"]["passfind"] = PASSFIND_ING
-# 阶段D:已改造为 ingame 专属布局的卡(其余仍临时回退 fantasy,见 INGAME_ICON_COVERAGE.md)
+STYLES["ingame"]["acquire_list"] = ACQUIRE_LIST_ING
+STYLES["ingame"]["acquire"] = ACQUIRE_ING
+STYLES["ingame"]["butcher"] = BUTCHER_ING
+# 以下逐键覆盖为 ingame 专属布局。
 STYLES["ingame"]["paldex"] = PALDEX_ING
 STYLES["ingame"]["passlist"] = PASSLIST_ING
 STYLES["ingame"]["passdex"] = PASSDEX_ING
@@ -6085,7 +6235,7 @@ STYLE_ALIAS = {"奇幻": "fantasy", "玻璃": "fantasy", "fantasy": "fantasy", "
                "像素": "pixel", "羊皮纸": "pixel", "复古": "pixel", "pixel": "pixel",
                "游戏": "ingame", "原生": "ingame", "游戏原生": "ingame", "ingame": "ingame"}
 
-# 模板字符串 -> 卡名(两套风格都映射，供 _bg_for 查专属背景图)
+# 模板字符串 -> 卡名(三套主题都映射，供 _bg_for 查专属背景图)
 TEMPLATE_KEYS = {}
 for _st in STYLES.values():
     for _k, _t in _st.items():

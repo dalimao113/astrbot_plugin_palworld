@@ -1,7 +1,7 @@
 # data/ingame/icons — 游戏原生 UI 图标
 
-这些 PNG 是从《幻兽帕鲁》1.0 **客户端 pak 提取的真实游戏图标**(透明底),
-供 ingame 主题使用。**不是 AI 生成、不是 Emoji 截图**。
+这些 PNG 是从《幻兽帕鲁》1.0 **客户端 pak 提取的真实游戏图标**(透明底)。
+属性、工作适性、货币等游戏语义图标由 fantasy / pixel / ingame 三主题共享；游戏 UI 面板与槽位纹理仍只供 ingame 主题使用。**不是 AI 生成、不是 Emoji 截图**。
 
 - 来源:`Pal-Windows.pak` → texexport(CUE4Parse) 解码 UTexture2D。
 - 复现:`python tools/game_data/extract_ingame_icons.py`(参数见脚本头)。

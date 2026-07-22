@@ -468,7 +468,7 @@
     }
   },
   "component": {
-    "_note": "游戏原生 UI 组件纹理(白色遮罩可 CSS 重着色),供阶段C border-image/background 拼装。详见 data/ingame/parts/README.md。",
+    "_note": "游戏原生 UI 组件纹理(白色遮罩可 CSS 重着色)，供 ingame 主题通过 border-image/background 拼装。详见 data/ingame/parts/README.md。",
     "panel_glow_h": {
       "ingame": "parts/panel_glow_h.png",
       "role": "面板柔光条(横)",
@@ -586,7 +586,7 @@
     }
   },
   "plugin_ext": {
-    "_note": "游戏无此语义，用统一插件扩展线性 SVG，明确标为插件 UI，严禁套游戏图标。SVG 待阶段C实现。",
+    "_note": "游戏无此语义，使用已落地的统一插件扩展线性 SVG，明确标为插件 UI，严禁套用游戏图标。",
     "server.online": {
       "ingame": null,
       "fallback": "🟢",

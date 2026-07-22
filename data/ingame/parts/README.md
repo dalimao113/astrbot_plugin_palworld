@@ -1,11 +1,11 @@
 # data/ingame/parts — 游戏原生 UI 组件纹理
 
 从《幻兽帕鲁》1.0 客户端 pak 提取的**真实 UI 面板/边框/槽/标签/按钮/进度条纹理**,
-供 ingame 主题的通用组件(阶段C)用 `border-image` 九宫格 / `background` 拼装,
+供 ingame 主题的通用组件用 `border-image` 九宫格 / `background` 拼装,
 **不是**截图、**不是** AI 生成。复现见 `tools/game_data/extract_ingame_icons.py`。
 
 > 多数为**白色/单色遮罩**,游戏内由材质着色 → CSS 里用 `filter`/半透明叠色重着为主题色,
-> 描边/主色待游戏截图校准(与插件扩展 SVG 的 `PLUGIN_INK` 同批校准)。
+> 多数纹理以遮罩方式由 CSS 着色；具体使用位置与切片值以 `render/templates.py` 当前样式为准。
 
 | 文件 | 尺寸 | 游戏来源 | 角色 | 用法建议 |
 |---|---|---|---|---|
@@ -33,5 +33,5 @@
 | **bar_hp** | 250×20 | T_gauge_HP_base | **HP/进度条底** | `border-image` 横向 — GameStatBar |
 | bar_frame | 20×20 | Common/T_prt_common_gauge_frame | 进度条外框 | `border-image` slice≈6 |
 
-**招牌组件**:`node_gold`(金色八角框)+ `slot_item`(切角槽)+ `bar_hp` 是最能体现帕鲁 UI 观感的三件,阶段C 优先用。
-`slice` 值为**初估**,阶段C 建 CSS 时对照渲染微调。
+**招牌组件**:`node_gold`(金色八角框)+ `slot_item`(切角槽)+ `bar_hp` 是最能体现帕鲁 UI 观感的三件，已用于游戏原生主题的节点、物品槽和状态组件。
+表中的 `slice` 为素材参考值；运行时最终值以模板 CSS 为准。

@@ -145,7 +145,6 @@ def load_sav(path: str, full: bool = False) -> dict:
     return g.dump()
 
 if __name__ == '__main__':
-    import sys, json
     j = load_sav('/tmp/palsave/Level.sav')
     wsd = j['properties']['worldSaveData']['value']
     print('worldSaveData keys:', list(wsd.keys()))
@@ -458,6 +457,7 @@ def extract_player_progress(sav_path):
     - relics         已获遗物数(RelicObtainForInstanceFlag)
     - areas_found    已发现区域数(FindAreaFlagMap)
     - active_quests  **当前进行中**的任务 id 列表(OrderedQuestArray_FullRelease;完成的会移除,故只反映"下一步")
+    同时返回上述集合对应的 ``*_ids``，供当前游戏数据目录做稳定 ID 交集，排除旧版本残留标记。
     """
     try:
         j = load_sav(sav_path, full=True)
@@ -469,26 +469,34 @@ def extract_player_progress(sav_path):
     def _list(k):
         return (rd.get(k, {}) or {}).get('value') or []
 
+    def _true_keys(k):
+        return [str(kv.get('key', '')) for kv in _list(k)
+                if isinstance(kv, dict) and kv.get('value') and kv.get('key') is not None]
+
     def _count_true(k):
-        return sum(1 for kv in _list(k) if isinstance(kv, dict) and kv.get('value'))
+        return len(_true_keys(k))
 
     def _scalar(k):
         v = (rd.get(k, {}) or {}).get('value')
         return v if isinstance(v, int) else 0
 
-    tower = [str(kv.get('key', '')).replace('BOSS_BATTLE_NAME_', '')
-             for kv in _list('TowerBossDefeatFlag') if isinstance(kv, dict) and kv.get('value')]
+    tower = [key.replace('BOSS_BATTLE_NAME_', '') for key in _true_keys('TowerBossDefeatFlag')]
     qarr = ((sd.get('OrderedQuestArray_FullRelease', {}) or {}).get('value', {}) or {}).get('values') or []
     active = [str((e.get('QuestName', {}) or {}).get('value') or '') for e in qarr if isinstance(e, dict)]
     return {
         "paldeck": _count_true('PaldeckUnlockFlag'),
+        "paldeck_ids": _true_keys('PaldeckUnlockFlag'),
         "fasttravel": _count_true('FastTravelPointUnlockFlag'),
+        "fasttravel_ids": _true_keys('FastTravelPointUnlockFlag'),
         "tower_bosses": tower,
         "field_bosses": _count_true('NormalBossDefeatFlag'),
+        "field_boss_ids": _true_keys('NormalBossDefeatFlag'),
         "dungeon_normal": _scalar('NormalDungeonClearCount'),
         "dungeon_fixed": _scalar('FixedDungeonClearCount'),
         "relics": _count_true('RelicObtainForInstanceFlag'),
+        "relic_ids": _true_keys('RelicObtainForInstanceFlag'),
         "areas_found": _count_true('FindAreaFlagMap'),
+        "area_ids": _true_keys('FindAreaFlagMap'),
         "active_quests": [q for q in active if q],
     }
 

@@ -40,13 +40,13 @@
     "type": "int",
     "default": 10,
     "description": "查询指令冷却(秒)",
-    "hint": "同一用户两次查询指令的最小间隔，防一个人连续刷图拖慢渲染。硬下限 5 秒；设为 0 关闭冷却(私人小群可关)。"
+    "hint": "同一用户两次查询指令的最小间隔，防一个人连续刷图拖慢渲染。硬下限 5 秒，低于 5 会按 5 生效。"
   },
   "confirm_timeout": {
     "type": "int",
     "default": 60,
     "description": "危险操作二次确认超时(秒)",
-    "hint": "封禁/关服 发起后，管理员需在此时间内回复「帕鲁 确认」执行，超时作废。"
+    "hint": "封禁/关服/重启/回档/重置/恢复等高危操作发起后，管理员需在此时间内回复「帕鲁 确认」执行，超时作废。"
   },
   "card_theme_color": {
     "type": "string",
@@ -136,7 +136,7 @@
     "type": "bool",
     "default": true,
     "description": "检测服务端新版本并通知",
-    "hint": "后台定时查 Steam 是否有帕鲁服务端新版本：检测到先通知 QQ 群，自动发送本次官方中文完整更新公告，并在镜像计划更新前约 5 分钟发游戏公告。实际更新/重启仍由镜像 AUTO_UPDATE/UPDATE_ON_BOOT 完成。"
+    "hint": "后台精确比较 Steam 服务端 depot 2394012 的远端与本地 manifest；差异稳定复核 60 秒后才通知 QQ、发送本次官方中文完整公告，并在镜像计划更新前约 5 分钟发游戏公告。实际更新/重启仍由镜像 AUTO_UPDATE/UPDATE_ON_BOOT 完成。"
   },
   "update_check_hours": {
     "type": "int",
@@ -190,7 +190,7 @@
     "type": "bool",
     "default": true,
     "description": "状态卡显示容器 CPU/内存",
-    "hint": "需把宿主机 docker.sock 只读挂载进 AstrBot 容器(docker-compose 加 - /var/run/docker.sock:/var/run/docker.sock:ro)。未挂载时自动不显示。"
+    "hint": "需把宿主机 docker.sock 挂载进 AstrBot 容器(示例：- /var/run/docker.sock:/var/run/docker.sock:ro)。未挂载时自动不显示。注意 :ro 不限制 Docker API 写操作，挂载后仍近似宿主 root 权限。"
   },
   "docker_container": {
     "type": "string",
@@ -249,6 +249,6 @@
       "pixel",
       "ingame"
     ],
-    "hint": "fantasy=二次元奇幻玻璃，pixel=像素羊皮纸复古，ingame=游戏原生(开发中，部分卡片暂沿用奇幻布局，图标逐步替换为游戏原图)。也可用 /帕鲁皮肤 指令实时切换。"
+    "hint": "三套正式主题：fantasy=二次元奇幻玻璃，pixel=像素羊皮纸复古，ingame=游戏原生。三主题模板功能一致，并共享属性/工作适性/货币等真实游戏语义图标；在 WebUI 修改后保存，必要时重载插件。"
   }
 }
