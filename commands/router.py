@@ -114,7 +114,8 @@ COMMANDS: list[CommandSpec] = [
     CommandSpec("绑定", "_cmd_bind", ("bind",), pass_args=True, description="绑定你的游戏角色,才能查个人数据", category="player"),
     CommandSpec("我的战力", "_cmd_my_power", ("个人战力", "我的最强帕鲁", "我的帕鲁战力", "mypower"), cooldown=True, pass_args=True, description="你捕获的全部帕鲁按战力排名", category="player"),
     CommandSpec("养成", "_cmd_growth", ("培养", "养成进度", "养成路线", "growth"), cooldown=True, pass_args=True, description="你某只帕鲁的浓缩/魂/觉醒/词条差距(加名字)", category="player"),
-    CommandSpec("小队进度", "_cmd_squad", ("小队", "squad", "team_progress"), cooldown=True, description="群内小队探索/收集的当前、总量与剩余进度", category="player"),
+    CommandSpec("小队进度", "_cmd_squad", ("小队", "squad", "team_progress"), cooldown=True,
+                description="群内小队探索/收集进度；稳定 ID 可核验完成度，地牢显示累计清理次数", category="player"),
     CommandSpec("据点体检", "_cmd_basecamp_health", ("基地体检", "据点健康", "基地健康", "basehealth"), cooldown=True, pass_args=True, description="据点工人/适性缺口/伤病汇总(可加据点号)", category="player"),
     CommandSpec("小队勾选", "_cmd_squad_check", ("勾选", "squadcheck"), pass_args=True, description="手动勾选/记录一个小队探索目标", category="player"),
     CommandSpec("小队重置", "_cmd_squad_reset", ("squadreset",), admin=True, pass_args=True, log_denied=True, description="清空本群小队手动勾选清单(管理)", category="admin"),
@@ -149,18 +150,18 @@ COMMANDS: list[CommandSpec] = [
     # ---------------- 管理类（白名单，拒绝写警告日志） ----------------
     CommandSpec("重置存档", "_cmd_reset", ("删档重开", "删档", "重开", "重置世界", "resetworld", "reset"), admin=True, pass_args=True, confirm=True, log_denied=True, description="删档重开:清空世界存档(管理,需确认)", category="admin"),
     CommandSpec("恢复存档", "_cmd_restore", ("还原存档", "恢复", "还原", "restore"), admin=True, pass_args=True, confirm=True, log_denied=True, description="从备份恢复世界存档(管理,需确认)", category="admin"),
-    CommandSpec("重启服务器", "_cmd_restart", ("重启服务", "重启", "restart", "reboot"), admin=True, pass_args=True, confirm=True, log_denied=True, description="重启游戏服务器(管理,需确认)", category="admin"),
+    CommandSpec("重启服务器", "_cmd_restart", ("重启服务", "重启", "restart", "reboot"), admin=True, pass_args=True, confirm=True, log_denied=True, description="重启运行中的服务器或启动已停止容器(管理,需确认)", category="admin"),
     CommandSpec("备份列表", "_cmd_backups", ("备份", "备份管理", "backups", "backup"), admin=True, pass_args=True, log_denied=True, description="查看世界存档备份列表(管理)", category="admin"),
     CommandSpec("回档", "_cmd_rollback", ("回滚", "rollback"), admin=True, pass_args=True, confirm=True, log_denied=True, description="回滚到指定备份存档(管理,需确认)", category="admin"),
     CommandSpec("解绑", "_cmd_unbind", ("unbind",), admin=True, pass_args=True, log_denied=True, description="解除某玩家的角色绑定(管理)", category="admin"),
     CommandSpec("批准绑定", "_cmd_bind_approve", ("批准", "approvebind"), admin=True, pass_args=True, log_denied=True, description="批准挂起的角色绑定申请(管理)", category="admin"),
     CommandSpec("拒绝绑定", "_cmd_bind_reject", ("拒绝", "rejectbind"), admin=True, pass_args=True, log_denied=True, description="拒绝挂起的角色绑定申请(管理)", category="admin"),
     CommandSpec("公告", "_cmd_announce", admin=True, pass_args=True, log_denied=True, description="在游戏内发布服务器公告(管理,加内容)", category="admin"),
-    CommandSpec("踢", "_cmd_kick", admin=True, pass_args=True, log_denied=True, description="把某玩家踢下线(管理,加名字)", category="admin"),
-    CommandSpec("封", "_cmd_ban", admin=True, pass_args=True, log_denied=True, description="封禁某玩家(管理,加名字)", category="admin"),
-    CommandSpec("解封", "_cmd_unban", admin=True, pass_args=True, log_denied=True, description="解除某玩家封禁(管理,加名字)", category="admin"),
+    CommandSpec("踢", "_cmd_kick", admin=True, pass_args=True, log_denied=True, description="按userId把玩家踢下线(管理)", category="admin"),
+    CommandSpec("封", "_cmd_ban", admin=True, pass_args=True, confirm=True, log_denied=True, description="封禁某玩家(管理,需确认,加userId)", category="admin"),
+    CommandSpec("解封", "_cmd_unban", admin=True, pass_args=True, log_denied=True, description="按userId解除玩家封禁(管理)", category="admin"),
     CommandSpec("存档", "_cmd_save", admin=True, pass_args=True, log_denied=True, description="立即强制保存世界存档(管理)", category="admin"),
-    CommandSpec("关服", "_cmd_shutdown", admin=True, pass_args=True, log_denied=True, description="关闭游戏服务器(管理)", category="admin"),
+    CommandSpec("关服", "_cmd_shutdown", admin=True, pass_args=True, confirm=True, log_denied=True, description="存档并停止游戏服务器容器(管理,需确认)", category="admin"),
 ]
 
 

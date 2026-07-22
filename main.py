@@ -472,22 +472,53 @@ class PalworldPlugin(Star):
                 self._bosses = json.loads(_f.read())
         except Exception:  # noqa: BLE001
             pass
-        # 玩家探索/收集进度总量。来源与稳定 ID 见 data/progress_catalog.json；
-        # 存档只有累计数的类别会按当前 build 总量封顶，避免旧版本残留标记显示为超额完成。
+        # 玩家探索/收集进度目录。只有当前 build 的完整稳定 ID 集合才能计算“当前/总量/还差”。
         self._progress_catalog: dict = {}
+        self._progress_catalog_valid = False
         try:
             with open(os.path.join(base, "progress_catalog.json"), encoding="utf-8") as _f:
                 catalog = json.loads(_f.read())
             categories = catalog.get("categories") if isinstance(catalog, dict) else None
             required = {"paldeck", "fasttravel", "towers", "story_bosses", "field_bosses",
                         "dungeons", "relics", "areas"}
-            if not isinstance(categories, dict) or not required.issubset(categories) or not all(
-                    isinstance(value, dict) and isinstance(value.get("total"), int) and value["total"] > 0
-                    for value in categories.values()):
+            if (
+                not isinstance(catalog, dict)
+                or int(catalog.get("schema_version") or 0) < 2
+                or not str(catalog.get("steam_build_id") or "").isdigit()
+                or not isinstance(categories, dict)
+                or not required.issubset(categories)
+            ):
                 raise ValueError("categories 结构或 total 非法")
+            expected_totals = {
+                "paldeck": 287, "fasttravel": 152, "towers": 8, "story_bosses": 5,
+                "field_bosses": 122, "dungeons": 170, "relics": 407, "areas": 123,
+            }
+            for key in required - {"dungeons"}:
+                value = categories[key]
+                total, ids = value.get("total"), value.get("ids")
+                normalized = {
+                    str(item).translate(str.maketrans("", "", "-{}()")).casefold()
+                    for item in (ids or []) if item
+                }
+                if (
+                    value.get("progress_mode") != "id_set"
+                    or not isinstance(total, int)
+                    or total != expected_totals[key]
+                    or not isinstance(ids, list)
+                    or len(ids) != total
+                    or len(normalized) != total
+                ):
+                    raise ValueError(f"{key} 缺少完整稳定 ID 集合")
+            dungeon = categories["dungeons"]
+            if (
+                dungeon.get("progress_mode") != "cumulative_clear_count_only"
+                or dungeon.get("total") != expected_totals["dungeons"]
+            ):
+                raise ValueError("dungeons progress_mode 非法")
             self._progress_catalog = catalog
+            self._progress_catalog_valid = True
         except Exception as e:  # noqa: BLE001
-            logger.warning(f"{LOG_PREFIX} 进度总量 data/progress_catalog.json 加载失败，将使用内置安全口径: {e}")
+            logger.warning(f"{LOG_PREFIX} 进度目录 data/progress_catalog.json 校验失败，不会显示完成度: {e}")
         # 主动技能 [{name,element,power,cooldown,effect,desc,is_fruit}]（/帕鲁技能）
         self._skills: list = []
         self._skill_full: dict = {}
@@ -5232,7 +5263,7 @@ class PalworldPlugin(Star):
         return str(u or "").replace("-", "").upper()
 
     _PROGRESS_DEFAULTS = {
-        "paldeck": {"label": "图鉴", "total": 287},
+        "paldeck": {"label": "图鉴解锁", "total": 287},
         "fasttravel": {"label": "传送点", "total": 152},
         "towers": {
             "label": "高塔", "total": 8,
@@ -5244,38 +5275,91 @@ class PalworldPlugin(Star):
             "ids": ["KingWhaleBoss", "WorldTreeMiddleBoss1", "WorldTreeMiddleBoss2",
                     "WorldTreeMiddleBoss3", "WorldTreeBoss"],
         },
-        "field_bosses": {"label": "头目", "total": 125},
+        "field_bosses": {"label": "头目", "total": 122},
         "dungeons": {"label": "地牢入口", "total": 170},
-        "relics": {"label": "遗物", "total": 155},
+        "relics": {"label": "遗物", "total": 407},
         "areas": {"label": "区域", "total": 123},
     }
 
     def _progress_categories(self) -> dict:
         loaded = (getattr(self, "_progress_catalog", {}) or {}).get("categories") or {}
-        return {key: loaded.get(key) or fallback for key, fallback in self._PROGRESS_DEFAULTS.items()}
+        verified = bool(getattr(self, "_progress_catalog_valid", False))
+        result = {}
+        for key, fallback in self._PROGRESS_DEFAULTS.items():
+            value = dict(loaded.get(key) or fallback)
+            value["_verified"] = bool(verified and key in loaded)
+            result[key] = value
+        return result
 
     @staticmethod
-    def _progress_stat(category: dict, progress: dict, count_key: str,
-                       ids_key: str = "", raw_ids: Optional[list] = None) -> dict:
-        """生成统一的 当前/总数/还差；有稳定 ID 时用交集排除旧版本残留。"""
-        total = max(0, int(category.get("total") or 0))
-        valid_ids = {str(value).casefold() for value in (category.get("ids") or []) if value}
-        ids = raw_ids if raw_ids is not None else progress.get(ids_key) if ids_key else None
-        if ids is not None and valid_ids:
-            current = len({str(value).casefold() for value in ids if value} & valid_ids)
-        else:
-            try:
-                current = int(progress.get(count_key) or 0)
-            except (TypeError, ValueError):
-                current = 0
-        current = min(max(0, current), total)
+    def _progress_stat(category_key: str, category: dict, progress: dict, count_key: str,
+                       ids_key: str = "", *, raw_ids=None, raw_ids_given: bool = False,
+                       source_key: str = "", known_ids=None) -> dict:
+        """稳定 ID 可比时才计算完成度；其它情况保留已记录值但不伪造“已完成”。"""
+        label = str(category.get("label") or category_key)
+        try:
+            catalog_total = max(0, int(category.get("total") or 0))
+        except (TypeError, ValueError):
+            catalog_total = 0
+        ids = raw_ids if raw_ids_given else progress.get(ids_key) if ids_key else None
+        available_map = progress.get("available") if isinstance(progress.get("available"), dict) else {}
+        availability_key = source_key or category_key
+        available = available_map.get(availability_key)
+        if available is None:
+            available = ids is not None or count_key in progress
+
+        def normalize(values):
+            return {
+                str(value).translate(str.maketrans("", "", "-{}()")).casefold()
+                for value in (values or []) if value
+            }
+
+        valid_ids = normalize(category.get("ids"))
+        comparable = bool(
+            available
+            and isinstance(ids, list)
+            and category.get("_verified")
+            and category.get("progress_mode") == "id_set"
+            and catalog_total > 0
+            and len(valid_ids) == catalog_total
+        )
+        if comparable:
+            raw_set = normalize(ids)
+            current = len(raw_set & valid_ids)
+            missing = catalog_total - current
+            complete = current == catalog_total
+            known_set = normalize(known_ids) if known_ids is not None else valid_ids
+            unknown_count = len(raw_set - known_set)
+            summary = f"{label} {current}/{catalog_total} · {'已完成' if complete else f'还差 {missing}'}"
+            return {
+                "key": category_key, "label": label, "status": "comparable", "summary": summary,
+                "current": current, "total": catalog_total, "missing": missing, "complete": complete,
+                "catalog_total": catalog_total, "raw_count": len(raw_set), "unknown_count": unknown_count,
+            }
+
+        if available:
+            if isinstance(ids, list):
+                raw_count = len(normalize(ids))
+            else:
+                try:
+                    raw_count = max(0, int(progress.get(count_key) or 0))
+                except (TypeError, ValueError):
+                    raw_count = None
+            summary = f"{label}"
+            if raw_count is not None:
+                summary += f" 已记录 {raw_count} 个"
+            summary += " · 无法核验完成度"
+            return {
+                "key": category_key, "label": label, "status": "recorded_only", "summary": summary,
+                "current": raw_count, "total": None, "missing": None, "complete": None,
+                "catalog_total": catalog_total or None, "raw_count": raw_count, "unknown_count": None,
+            }
+
         return {
-            "key": count_key,
-            "label": str(category.get("label") or count_key),
-            "current": current,
-            "total": total,
-            "missing": max(0, total - current),
-            "complete": bool(total and current >= total),
+            "key": category_key, "label": label, "status": "unavailable",
+            "summary": f"{label} · 存档不可用", "current": None, "total": None,
+            "missing": None, "complete": None, "catalog_total": catalog_total or None,
+            "raw_count": None, "unknown_count": None,
         }
 
     def _squad_roster_qq(self, gid: str) -> list:
@@ -5311,34 +5395,77 @@ class PalworldPlugin(Star):
                 m = self._mission_by_id.get(qid)
                 nexts.append(m["name"] if m else qid)
             cats = self._progress_categories()
-            tower_flags = pr.get("tower_bosses") or []
+            tower_flags = pr.get("tower_bosses")
+            tower_domain = list(cats["towers"].get("ids") or []) + list(cats["story_bosses"].get("ids") or [])
             stats = [
-                self._progress_stat(cats["paldeck"], pr, "paldeck", "paldeck_ids"),
-                self._progress_stat(cats["fasttravel"], pr, "fasttravel", "fasttravel_ids"),
-                self._progress_stat(cats["towers"], pr, "towers", raw_ids=tower_flags),
-                self._progress_stat(cats["story_bosses"], pr, "story_bosses", raw_ids=tower_flags),
-                self._progress_stat(cats["field_bosses"], pr, "field_bosses", "field_boss_ids"),
-                self._progress_stat(cats["relics"], pr, "relics", "relic_ids"),
-                self._progress_stat(cats["areas"], pr, "areas_found", "area_ids"),
+                self._progress_stat("paldeck", cats["paldeck"], pr, "paldeck", "paldeck_ids"),
+                self._progress_stat("fasttravel", cats["fasttravel"], pr, "fasttravel", "fasttravel_ids"),
+                self._progress_stat(
+                    "towers", cats["towers"], pr, "towers", raw_ids=tower_flags, raw_ids_given=True,
+                    source_key="tower_bosses", known_ids=tower_domain,
+                ),
+                self._progress_stat(
+                    "story_bosses", cats["story_bosses"], pr, "story_bosses",
+                    raw_ids=tower_flags, raw_ids_given=True, source_key="tower_bosses", known_ids=tower_domain,
+                ),
+                self._progress_stat(
+                    "field_bosses", cats["field_bosses"], pr, "field_bosses", "field_boss_ids"
+                ),
+                self._progress_stat("relics", cats["relics"], pr, "relics", "relic_ids"),
+                self._progress_stat("areas", cats["areas"], pr, "areas_found", "area_ids"),
             ]
             stat_by_key = {stat["key"]: stat for stat in stats}
-            dungeon_normal = max(0, int(pr.get("dungeon_normal") or 0))
-            dungeon_fixed = max(0, int(pr.get("dungeon_fixed") or 0))
+            available_map = pr.get("available") if isinstance(pr.get("available"), dict) else {}
+
+            def dungeon_count(key: str):
+                available = available_map.get(key, key in pr)
+                if not available:
+                    return None
+                try:
+                    return max(0, int(pr.get(key) or 0))
+                except (TypeError, ValueError):
+                    return None
+
+            dungeon_normal = dungeon_count("dungeon_normal")
+            dungeon_fixed = dungeon_count("dungeon_fixed")
+            dungeon_total = (
+                dungeon_normal + dungeon_fixed
+                if dungeon_normal is not None and dungeon_fixed is not None
+                else None
+            )
+            dungeon_entrances = cats["dungeons"].get("total")
+            if dungeon_normal is None and dungeon_fixed is None:
+                dungeon_summary = "地牢 · 存档不可用；入口完成度不可计算"
+            elif dungeon_total is None:
+                normal_text = f"普通 {dungeon_normal}" if dungeon_normal is not None else "普通存档不可用"
+                fixed_text = f"固定 {dungeon_fixed}" if dungeon_fixed is not None else "固定存档不可用"
+                dungeon_summary = f"地牢累计：{normal_text} · {fixed_text}；合计不可核验，入口完成度不可计算"
+            else:
+                dungeon_summary = (
+                    f"地牢累计清理 {dungeon_total} 次（普通 {dungeon_normal} · 固定 {dungeon_fixed}）"
+                )
+                dungeon_summary += f"；入口完成度不可计算，当前目录收录 {dungeon_entrances} 个入口"
+
+            def stat_value(key: str) -> int:
+                value = stat_by_key[key].get("current")
+                return value if isinstance(value, int) else 0
+
             members.append({
                 "name": _esc(b.get("name", "玩家")),
                 "stats": stats,
                 # 保留扁平字段供排序及旧模板/第三方主题兼容；数值已按当前 build 口径修正。
-                "paldeck": stat_by_key["paldeck"]["current"],
-                "fasttravel": stat_by_key["fasttravel"]["current"],
-                "towers": stat_by_key["towers"]["current"],
-                "story_bosses": stat_by_key["story_bosses"]["current"],
-                "field_bosses": stat_by_key["field_bosses"]["current"],
-                "dungeon": dungeon_normal + dungeon_fixed,
+                "paldeck": stat_value("paldeck"),
+                "fasttravel": stat_value("fasttravel"),
+                "towers": stat_value("towers"),
+                "story_bosses": stat_value("story_bosses"),
+                "field_bosses": stat_value("field_bosses"),
+                "dungeon": dungeon_total or 0,
                 "dungeon_normal": dungeon_normal,
                 "dungeon_fixed": dungeon_fixed,
-                "dungeon_entrances": cats["dungeons"]["total"],
-                "relics": stat_by_key["relics"]["current"],
-                "areas": stat_by_key["areas_found"]["current"],
+                "dungeon_entrances": dungeon_entrances,
+                "dungeon_summary": dungeon_summary,
+                "relics": stat_value("relics"),
+                "areas": stat_value("areas"),
                 "next": nexts[:3],
             })
         members.sort(key=lambda m: (-m["towers"], -m["paldeck"]))
@@ -5348,11 +5475,14 @@ class PalworldPlugin(Star):
         for item, whos in (squad.get("checklist") or {}).items():
             names = [self.state.get("bindings", {}).get(q, {}).get("name") or f"QQ{q}" for q in whos]
             checklist.append({"item": _esc(item), "done_by": [_esc(n) for n in names], "count": len(whos)})
-        dex_total = self._progress_categories()["paldeck"]["total"]
+        categories = self._progress_categories()
+        dex_total = categories["paldeck"]["total"]
+        build_id = str((getattr(self, "_progress_catalog", {}) or {}).get("steam_build_id") or "未知")
         return {"members": members, "count": len(members),
                 "dex_total": dex_total, "checklist": checklist,
-                "hint": "总量来自 Palworld 1.0 build 24181105 游戏数据。地牢存档只保存普通/固定累计次数，"
-                        "不保存逐入口完成集合，因此不虚构还差入口数；手动目标用 /帕鲁小队勾选 <目标>。"}
+                "catalog_verified": bool(getattr(self, "_progress_catalog_valid", False)),
+                "hint": f"可比较总量来自 Palworld 1.0 build {build_id} 当前稳定 ID；旧版本残留标记会忽略。"
+                        "地牢只保存累计清理次数，不保存逐入口完成集合；手动目标用 /帕鲁小队勾选 <目标>。"}
 
     async def _cmd_squad(self, event: AstrMessageEvent):
         gid = str(event.get_group_id() or "")
@@ -6748,16 +6878,33 @@ class PalworldPlugin(Star):
         return await self._fail_card(event, err)
 
     async def _cmd_shutdown(self, event: AstrMessageEvent, args: list[str]):
-        # 危险操作：二次确认
-        if not args or not args[0].isdigit():
+        """持久关服：存档、公告后由 Docker 明确停止容器，避免重启策略自动拉起。"""
+        sock = str(self.config.get("docker_sock", "/var/run/docker.sock"))
+        if not os.path.exists(sock):
+            return await self._msg_card(
+                event, "🚫", "无法关服",
+                desc="该操作需要容器挂载 docker.sock。当前未检测到，已中止。",
+                color="#E5484D")
+        if not args or not re.fullmatch(r"[0-9]+", args[0]):
             return await self._msg_card(event, "✏️", "请提供等待秒数",
-                                        desc="用法：/帕鲁关服 <秒数> [提示语]", color="#E5484D")
+                                        desc="用法：/帕鲁关服 <0-300秒> [提示语]", color="#E5484D")
         waittime = int(args[0])
-        message = " ".join(args[1:]).strip() or "服务器即将关闭"
-        self._set_pending(event, "关服", "/v1/api/shutdown",
-                          {"waittime": waittime, "message": message},
-                          f"{waittime}秒后关服")
-        return await self._confirm_card(event, f"即将在 {waittime} 秒后关服", message)
+        if waittime > 300:
+            return await self._msg_card(
+                event, "⏱️", "等待时间过长",
+                desc="关服倒计时只允许 0-300 秒，请缩短后重试。",
+                color="#E5484D")
+        message = _security.clip(" ".join(args[1:]).strip(), _security.MAX_ANNOUNCE) or "服务器即将关闭"
+        self._pending[str(event.get_sender_id())] = {
+            "action": "关服", "kind": "shutdown", "ts": time.time(),
+            "waittime": waittime, "message": message,
+            "desc": f"{waittime}秒后停止服务器容器",
+        }
+        return await self._confirm_card(
+            event,
+            f"即将在 {waittime} 秒后停止服务器容器",
+            f"{message}\n\n将先保存世界并向在线玩家公告，倒计时结束后明确停止 Docker 容器。",
+        )
 
     async def _cmd_reset(self, event: AstrMessageEvent, args: list[str]):
         """删档重开（极危险）：备份→停服→清空世界→以新档重启。需二次确认。"""
@@ -7635,7 +7782,7 @@ depot && $1 == "}" { exit }
             head="⏪ 存档回档", color="#30A46C")
 
     async def _cmd_restart(self, event: AstrMessageEvent, args: list[str]):
-        """重启服务器（admin + 二次确认）：存档后 docker restart，约 1 分钟恢复。"""
+        """重启服务器：运行中先存档再重启，已停止则直接启动。"""
         sock = str(self.config.get("docker_sock", "/var/run/docker.sock"))
         if not os.path.exists(sock):
             return await self._msg_card(
@@ -7650,18 +7797,77 @@ depot && $1 == "}" { exit }
         return await self._img(event, self._t("message"), {
             "icon": "🔄", "title": "重启服务器",
             "head": "⚠️ 危险操作 · 需确认",
-            "desc": ("将重启帕鲁服务器（存档不变，只是重新启动）。\n\n"
-                     "• 会先存档，再停机重启\n"
-                     "• 在线玩家会断线，约 1 分钟后可重新进服\n\n"
+            "desc": ("将重启或启动帕鲁服务器（存档不变）。\n\n"
+                     "• 服务器运行中：先存档，再停机重启\n"
+                     "• 服务器已关服：直接启动容器\n"
+                     "• 约 1 分钟后可重新进服\n\n"
                      f"确认请在 {n} 秒内回复「/帕鲁确认」，超时作废。"),
             "color": "#F5A623",
         })
 
+    async def _do_shutdown_server(self, event: AstrMessageEvent, pending: dict):
+        """执行持久关服：预存档 → 公告/等待 → 最终存档 → Docker stop。"""
+        sock = str(self.config.get("docker_sock", "/var/run/docker.sock"))
+        container = await self._resolve_container(sock) or str(self.config.get("docker_container", "palworld-server"))
+        waittime = max(0, min(int(pending.get("waittime", 0) or 0), 300))
+        message = _security.clip(str(pending.get("message") or "服务器即将关闭"), _security.MAX_ANNOUNCE)
+        try:
+            save_ok, save_err = await self._api_post("/v1/api/save", {})
+            if not save_ok:
+                self._log_admin(event, "关服", f"前置存档失败: {str(save_err)[:60]}", False)
+                return await self._fail_card(
+                    event, f"前置存档失败，关服已中止，服务器未停机。\n{save_err}")
+
+            notice = message if waittime == 0 else f"{message}（{waittime} 秒后停服）"
+            notice = _security.clip(notice, _security.MAX_ANNOUNCE)
+            announce_ok, announce_err = await self._api_post("/v1/api/announce", {"message": notice})
+            if not announce_ok:
+                self._log_admin(event, "关服", f"公告失败: {str(announce_err)[:60]}", False)
+                return await self._fail_card(
+                    event, f"关服公告发送失败，关服已中止，服务器未停机。\n{announce_err}")
+
+            if waittime:
+                await asyncio.sleep(waittime)
+                save_ok, save_err = await self._api_post("/v1/api/save", {})
+                if not save_ok:
+                    await self._api_post(
+                        "/v1/api/announce",
+                        {"message": "关服已取消：最终存档失败，服务器继续运行。"},
+                    )
+                    self._log_admin(event, "关服", f"最终存档失败: {str(save_err)[:60]}", False)
+                    return await self._fail_card(
+                        event, f"最终存档失败，关服已取消，服务器未停机。\n{save_err}")
+
+            self._enter_maint(180)
+            await self._docker_container_action(sock, container, "stop", timeout=90)
+            self._save.invalidate()
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"{LOG_PREFIX} 关服失败: {e}")
+            self._log_admin(event, "关服", str(e)[:60], False)
+            return await self._fail_card(event, f"关服过程中出错：{e}")
+        self._log_admin(event, "关服", f"{waittime}秒后停止容器", True)
+        return await self._msg_card(
+            event, "⏹️", "服务器已停止",
+            desc=("世界已保存，Docker 容器已明确停止，不会被 unless-stopped 自动拉起。\n"
+                  "重新开服可发送 /帕鲁重启服务器，或在服务器面板中启动容器。"),
+            head="⏹️ 关服完成", color="#30A46C")
+
     async def _do_restart_server(self, event: AstrMessageEvent, pending: dict):
-        """执行重启：存档 → docker restart → 报告。"""
+        """执行重启：已停止则 start；运行中存档 → docker restart。"""
         sock = str(self.config.get("docker_sock", "/var/run/docker.sock"))
         container = await self._resolve_container(sock) or str(self.config.get("docker_container", "palworld-server"))
         try:
+            info = await docker_api.inspect_container(sock, container)
+            running = (info.get("State", {}) or {}).get("Running") if isinstance(info, dict) else None
+            if running is False:
+                self._enter_maint(180)
+                await self._docker_container_action(sock, container, "start", timeout=60)
+                self._save.invalidate()
+                self._log_admin(event, "重启服务器", "从停止状态启动", True)
+                return await self._msg_card(
+                    event, "▶️", "服务器正在启动",
+                    desc="已启动停止状态的服务器容器，约 1 分钟后可进入游戏。",
+                    head="▶️ 启动服务器", color="#30A46C")
             save_ok, save_err = await self._api_post("/v1/api/save", {})
             if not save_ok:
                 self._log_admin(event, "重启服务器", f"前置存档失败: {str(save_err)[:60]}", False)
@@ -7734,6 +7940,8 @@ depot && $1 == "}" { exit }
                 return await self._do_restore_save(event, pending)
             if pending.get("kind") == "restart":
                 return await self._do_restart_server(event, pending)
+            if pending.get("kind") == "shutdown":
+                return await self._do_shutdown_server(event, pending)
             if pending.get("kind") == "rollback":
                 return await self._do_rollback(event, pending)
             ok, err = await self._api_post(pending["path"], pending["payload"])

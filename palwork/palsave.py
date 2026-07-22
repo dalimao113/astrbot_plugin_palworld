@@ -446,7 +446,8 @@ def _parse_guild_1_0(b):
 
 def extract_player_progress(sav_path):
     """从玩家 <uid>.sav 读**可靠**进度记录(RecordData + 当前活动任务)。真实 1.0 存档已验证字段。
-    字段缺失一律安全降级为 0/[]。返回 dict 或 None(解析失败)。**只读,不臆造完成状态**。
+    RecordData 有效时，UE 省略的默认字段安全降级为 0/[]；RecordData 整体缺失或字段结构畸形会标记不可用。
+    返回 dict 或 None(整份进度解析失败)。**只读,不臆造完成状态**。
 
     可靠可读(1.0 实测存在):
     - paldeck        图鉴解锁数(PaldeckUnlockFlag,true 计数)
@@ -454,7 +455,7 @@ def extract_player_progress(sav_path):
     - tower_bosses   已击败塔主名列表(TowerBossDefeatFlag,去 BOSS_BATTLE_NAME_ 前缀)
     - field_bosses   野外/地牢 boss 击败数(NormalBossDefeatFlag)
     - dungeon_normal / dungeon_fixed  普通/固定地牢清理次数
-    - relics         已获遗物数(RelicObtainForInstanceFlag)
+    - relics         已获遗物数（旧 CapturePower 字段 + 1.0 按类型遗物字段，按 GUID 去重）
     - areas_found    已发现区域数(FindAreaFlagMap)
     - active_quests  **当前进行中**的任务 id 列表(OrderedQuestArray_FullRelease;完成的会移除,故只反映"下一步")
     同时返回上述集合对应的 ``*_ids``，供当前游戏数据目录做稳定 ID 交集，排除旧版本残留标记。
@@ -464,39 +465,105 @@ def extract_player_progress(sav_path):
         sd = j['properties']['SaveData']['value']
     except Exception:  # noqa: BLE001
         return None
-    rd = (sd.get('RecordData', {}) or {}).get('value', {}) or {}
+    record_node = sd.get('RecordData')
+    if not isinstance(record_node, dict) or not isinstance(record_node.get('value'), dict):
+        return None
+    rd = record_node['value']
 
-    def _list(k):
-        return (rd.get(k, {}) or {}).get('value') or []
+    def _map_true_keys_from_node(node):
+        if not isinstance(node, dict) or 'value' not in node or not isinstance(node.get('value'), list):
+            return None
+        values = node['value']
+        if any(
+            not isinstance(kv, dict) or 'key' not in kv or kv.get('key') is None or 'value' not in kv
+            for kv in values
+        ):
+            return None
+        return [str(kv['key']) for kv in values if kv.get('value')]
 
     def _true_keys(k):
-        return [str(kv.get('key', '')) for kv in _list(k)
-                if isinstance(kv, dict) and kv.get('value') and kv.get('key') is not None]
-
-    def _count_true(k):
-        return len(_true_keys(k))
+        # UE SaveGame 省略默认空 MapProperty；字段不存在是合法 0，节点存在但结构异常才是不可用。
+        if k not in rd:
+            return []
+        return _map_true_keys_from_node(rd.get(k))
 
     def _scalar(k):
-        v = (rd.get(k, {}) or {}).get('value')
-        return v if isinstance(v, int) else 0
+        # UE SaveGame 省略默认 0 IntProperty。
+        if k not in rd:
+            return 0
+        node = rd.get(k)
+        if not isinstance(node, dict) or 'value' not in node:
+            return None
+        value = node.get('value')
+        return value if isinstance(value, int) and not isinstance(value, bool) else None
 
-    tower = [key.replace('BOSS_BATTLE_NAME_', '') for key in _true_keys('TowerBossDefeatFlag')]
+    def _relic_groups():
+        """1.0 按 EPalRelicType 保存遗物；结构非法返回 None，空数组是合法 0。"""
+        node = rd.get('RelicObtainForInstanceFlagByType')
+        if node is None:
+            return {}
+        values = (node.get('value') or {}).get('values') if isinstance(node, dict) else None
+        if not isinstance(values, list):
+            return None
+        groups = {}
+        for entry in values:
+            if not isinstance(entry, dict):
+                return None
+            type_value = (((entry.get('Type') or {}).get('value') or {}).get('value'))
+            relic_type = str(type_value or '').removeprefix('EPalRelicType::')
+            flags = _map_true_keys_from_node(entry.get('Flags'))
+            if not relic_type or flags is None:
+                return None
+            groups.setdefault(relic_type, []).extend(flags)
+        return {key: sorted(set(value)) for key, value in groups.items()}
+
+    paldeck_ids = _true_keys('PaldeckUnlockFlag')
+    fasttravel_ids = _true_keys('FastTravelPointUnlockFlag')
+    tower_raw = _true_keys('TowerBossDefeatFlag')
+    tower = None if tower_raw is None else [
+        key[len('BOSS_BATTLE_NAME_'):] if key.startswith('BOSS_BATTLE_NAME_') else key
+        for key in tower_raw
+    ]
+    field_boss_ids = _true_keys('NormalBossDefeatFlag')
+    legacy_relic_ids = _true_keys('RelicObtainForInstanceFlag')
+    relic_by_type = _relic_groups()
+    if relic_by_type is not None and legacy_relic_ids is not None:
+        relic_by_type['CapturePower'] = sorted(set(
+            relic_by_type.get('CapturePower', []) + legacy_relic_ids
+        ))
+    relic_ids = None
+    if relic_by_type is not None and legacy_relic_ids is not None:
+        relic_ids = sorted({value for values in relic_by_type.values() for value in values})
+    area_ids = _true_keys('FindAreaFlagMap')
+    dungeon_normal = _scalar('NormalDungeonClearCount')
+    dungeon_fixed = _scalar('FixedDungeonClearCount')
     qarr = ((sd.get('OrderedQuestArray_FullRelease', {}) or {}).get('value', {}) or {}).get('values') or []
     active = [str((e.get('QuestName', {}) or {}).get('value') or '') for e in qarr if isinstance(e, dict)]
     return {
-        "paldeck": _count_true('PaldeckUnlockFlag'),
-        "paldeck_ids": _true_keys('PaldeckUnlockFlag'),
-        "fasttravel": _count_true('FastTravelPointUnlockFlag'),
-        "fasttravel_ids": _true_keys('FastTravelPointUnlockFlag'),
+        "paldeck": len(paldeck_ids) if paldeck_ids is not None else None,
+        "paldeck_ids": paldeck_ids,
+        "fasttravel": len(fasttravel_ids) if fasttravel_ids is not None else None,
+        "fasttravel_ids": fasttravel_ids,
         "tower_bosses": tower,
-        "field_bosses": _count_true('NormalBossDefeatFlag'),
-        "field_boss_ids": _true_keys('NormalBossDefeatFlag'),
-        "dungeon_normal": _scalar('NormalDungeonClearCount'),
-        "dungeon_fixed": _scalar('FixedDungeonClearCount'),
-        "relics": _count_true('RelicObtainForInstanceFlag'),
-        "relic_ids": _true_keys('RelicObtainForInstanceFlag'),
-        "areas_found": _count_true('FindAreaFlagMap'),
-        "area_ids": _true_keys('FindAreaFlagMap'),
+        "field_bosses": len(field_boss_ids) if field_boss_ids is not None else None,
+        "field_boss_ids": field_boss_ids,
+        "dungeon_normal": dungeon_normal,
+        "dungeon_fixed": dungeon_fixed,
+        "relics": len(relic_ids) if relic_ids is not None else None,
+        "relic_ids": relic_ids,
+        "relic_by_type": relic_by_type,
+        "areas_found": len(area_ids) if area_ids is not None else None,
+        "area_ids": area_ids,
+        "available": {
+            "paldeck": paldeck_ids is not None,
+            "fasttravel": fasttravel_ids is not None,
+            "tower_bosses": tower is not None,
+            "field_bosses": field_boss_ids is not None,
+            "dungeon_normal": dungeon_normal is not None,
+            "dungeon_fixed": dungeon_fixed is not None,
+            "relics": relic_ids is not None,
+            "areas": area_ids is not None,
+        },
         "active_quests": [q for q in active if q],
     }
 

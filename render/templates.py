@@ -5227,7 +5227,7 @@ MUTATION_PIX = _PH + """</style></head><body><div class="page">
 </div></body></html>"""
 
 
-# ---------------- 小队进度(首选1)。变量:members[{name,stats[{label,current,total,missing,complete}],dungeon_*,next[]}] + checklist[{item,done_by[],count}] + hint ----------------
+# ---------------- 小队进度(首选1)。stats.summary 已区分精确进度、仅记录和存档不可用；地牢仅显示累计次数 ----------------
 
 SQUAD_TMPL = _HEAD + """</style></head><body><div class="page">
   <div class="head"><div>
@@ -5239,9 +5239,9 @@ SQUAD_TMPL = _HEAD + """</style></head><body><div class="page">
     <div style="padding:11px 13px;margin-bottom:9px;border-radius:13px;background:rgba(12,8,38,.42);border:1px solid rgba(232,198,106,.18)">
       <div style="font-size:16px;font-weight:800;color:#f3ecd2">{{ m.name }}</div>
       <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">
-        {% for s in m.stats %}<span class="pill soft" style="font-size:11.5px;{% if s.complete %}color:#9effb6{% endif %}">{{ s.label }} {{ s.current }}/{{ s.total }}{% if s.complete %} · 已完成{% else %} · 还差 {{ s.missing }}{% endif %}</span>{% endfor %}
+        {% for s in m.stats %}<span class="pill soft" style="font-size:11.5px;{% if s.status == 'comparable' and s.complete %}color:#9effb6{% endif %}">{{ s.summary }}</span>{% endfor %}
       </div>
-      <div style="font-size:11.5px;color:#b9a9d6;margin-top:6px">🚪 地牢累计 {{ m.dungeon }} 次（普通 {{ m.dungeon_normal }} · 固定 {{ m.dungeon_fixed }}）· 当前地图收录 {{ m.dungeon_entrances }} 个入口</div>
+      <div style="font-size:11.5px;color:#b9a9d6;margin-top:6px">🚪 {{ m.dungeon_summary }}</div>
       {% if m.next %}<div style="font-size:12.5px;color:#9effb6;margin-top:6px">🎯 下一步：{{ m.next|join('、') }}</div>{% endif %}
     </div>
     {% endfor %}
@@ -5264,9 +5264,9 @@ SQUAD_PIX = _PH + """</style></head><body><div class="page">
     <div style="padding:10px 11px;margin-bottom:8px;border:2px solid #6b4a24;background:rgba(221,198,149,.4)">
       <div style="font-size:15px;font-weight:700;color:#2c1a0a">{{ m.name }}</div>
       <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:5px">
-        {% for s in m.stats %}<span class="pill" style="font-size:11px;{% if s.complete %}color:#1d7a36{% endif %}">{{ s.label }} {{ s.current }}/{{ s.total }}{% if s.complete %} · 已完成{% else %} · 还差 {{ s.missing }}{% endif %}</span>{% endfor %}
+        {% for s in m.stats %}<span class="pill" style="font-size:11px;{% if s.status == 'comparable' and s.complete %}color:#1d7a36{% endif %}">{{ s.summary }}</span>{% endfor %}
       </div>
-      <div style="font-size:11px;color:#574012;margin-top:5px">地牢累计 {{ m.dungeon }} 次（普通 {{ m.dungeon_normal }} · 固定 {{ m.dungeon_fixed }}）· 当前地图 {{ m.dungeon_entrances }} 个入口</div>
+      <div style="font-size:11px;color:#574012;margin-top:5px">{{ m.dungeon_summary }}</div>
       {% if m.next %}<div style="font-size:12px;color:#1d7a36;margin-top:5px">下一步：{{ m.next|join('、') }}</div>{% endif %}
     </div>
     {% endfor %}
@@ -5282,9 +5282,9 @@ SQUAD_ING = _IH + """</style></head><body><div class="page">
   {% for m in members %}
   <div class="ig-panel hi"><div style="font-size:16px;font-weight:800;color:var(--pal-text)">{{ m.name }}</div>
     <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">
-      {% for s in m.stats %}<span class="ig-pill"{% if s.complete %} style="color:var(--pal-good)"{% endif %}>{{ s.label }} {{ s.current }}/{{ s.total }}{% if s.complete %} · 已完成{% else %} · 还差 {{ s.missing }}{% endif %}</span>{% endfor %}
+      {% for s in m.stats %}<span class="ig-pill"{% if s.status == 'comparable' and s.complete %} style="color:var(--pal-good)"{% endif %}>{{ s.summary }}</span>{% endfor %}
     </div>
-    <div style="font-size:11.5px;color:var(--pal-sub);margin-top:6px">地牢累计 {{ m.dungeon }} 次（普通 {{ m.dungeon_normal }} · 固定 {{ m.dungeon_fixed }}）· 当前地图 {{ m.dungeon_entrances }} 个入口</div>
+    <div style="font-size:11.5px;color:var(--pal-sub);margin-top:6px">{{ m.dungeon_summary }}</div>
     {% if m.next %}<div style="font-size:12.5px;color:var(--pal-good);margin-top:6px">下一步：{{ m.next|join('、') }}</div>{% endif %}
   </div>
   {% endfor %}
