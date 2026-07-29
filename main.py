@@ -67,7 +67,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.48.0",
+    "1.48.1",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -7321,7 +7321,14 @@ class PalworldPlugin(Star):
         if not self.config.get("notify_server_update", True):
             return
         now = time.time()
-        pending_patchnote = str(self.state.get("update_notified", "") or "")
+        pending_update = str(self.state.get("update_notified", "") or "")
+        pending_applied = str(self.state.get("update_applied_notified", "") or "")
+        if pending_update and self.state.get("update_confirmed") == pending_update:
+            pending_patchnote = pending_update
+        elif pending_applied and self.state.get("update_installed_manifest") == pending_applied:
+            pending_patchnote = pending_applied
+        else:
+            pending_patchnote = ""
         try:
             patchnote_retry_after = float(self.state.get("update_patchnote_retry_after", 0) or 0)
         except (TypeError, ValueError):
@@ -7330,7 +7337,6 @@ class PalworldPlugin(Star):
         # 这样即使历史误判已写入 state.json，也会先发现本地/远端其实一致并清除旧标记。
         pending_patchnote_due = bool(
             pending_patchnote
-            and self.state.get("update_confirmed") == pending_patchnote
             and self.state.get("update_patchnote_notified") != pending_patchnote
             and now >= patchnote_retry_after
         )
@@ -7394,7 +7400,8 @@ class PalworldPlugin(Star):
             logger.debug(f"{LOG_PREFIX} 查 Steam 版本失败: {e}")
             defer_retry()
             return
-        if not latest:
+        if not re.fullmatch(r"\d{1,20}", latest):
+            logger.debug(f"{LOG_PREFIX} Steam manifest 格式无效: {latest[:80]!r}")
             defer_retry()
             return
         # 2) 精确读取服务端 depot 2394012 的 manifest。
@@ -7402,21 +7409,80 @@ class PalworldPlugin(Star):
         # 重建过程中的 depot 顺序/完整性不稳定，曾把公共运行库 depot 误当成服务端版本。
         container = await self._resolve_container(sock) or str(self.config.get("docker_container", "palworld-server"))
         try:
-            _, out = await self._docker_exec(sock, container, ["/bin/sh", "-c",
-                r"""awk '
+            code, out = await self._docker_exec(sock, container, ["/bin/sh", "-c",
+                r"""test -r /palworld/steamapps/appmanifest_2394010.acf || exit 2
+awk '
 $1 == "\"InstalledDepots\"" { installed = 1; next }
 installed && $1 == "\"2394012\"" { depot = 1; next }
 depot && $1 == "\"manifest\"" { gsub(/\"/, "", $2); print $2; exit }
 depot && $1 == "}" { exit }
 ' /palworld/steamapps/appmanifest_2394010.acf"""])
-            current = (out or "").strip().split("\n")[-1].strip()
+            current = (out or "").strip()
         except Exception as e:  # noqa: BLE001
             logger.debug(f"{LOG_PREFIX} 读当前版本失败: {e}")
             defer_retry()
             return
-        if not current:
+        if code != 0 or not re.fullmatch(r"\d{1,20}", current):
+            logger.debug(
+                f"{LOG_PREFIX} 当前 manifest 暂不可读，10 分钟后重试："
+                f"exit={code}，输出={(out or '')[:120]!r}"
+            )
             defer_retry()
             return
+
+        # 记录“实际已安装”的稳定 manifest。镜像每小时会自行检查更新，如果 Steam
+        # 恰好在插件预检后的几分钟内发布版本，镜像可能先完成更新；仅比较远端/本地是否
+        # 相同会漏掉这类更新。这里连续两次读取同一新值（间隔至少 60 秒）后再确认，
+        # 同时避免 appmanifest 重建期间的临时值被当成真实更新。
+        installed = str(self.state.get("update_installed_manifest", "") or "")
+        installed_candidate = str(self.state.get("update_installed_candidate", "") or "")
+        try:
+            installed_candidate_since = float(
+                self.state.get("update_installed_candidate_since", 0) or 0
+            )
+        except (TypeError, ValueError):
+            installed_candidate_since = 0
+        if current != installed:
+            if installed_candidate != current:
+                self.state["update_installed_candidate"] = current
+                self.state["update_installed_candidate_since"] = now
+                self.state["update_retry_after"] = now + 60
+                self._save_state()
+                logger.debug(f"{LOG_PREFIX} 已安装 manifest 变化，60 秒后复核：{installed or '未建立基线'} -> {current}")
+                return
+            if now < installed_candidate_since + 60:
+                self.state["update_retry_after"] = installed_candidate_since + 60
+                self._save_state()
+                return
+
+            self.state["update_installed_manifest"] = current
+            self.state.pop("update_installed_candidate", None)
+            self.state.pop("update_installed_candidate_since", None)
+            self.state.pop("update_retry_after", None)
+            if installed:
+                # 已确认服务器实际切换到新 manifest。清掉尚未完成的“等待更新”状态，
+                # 避免下一维护窗口仍播报“即将更新”。
+                self.state.pop("update_candidate", None)
+                self.state.pop("update_candidate_current", None)
+                self.state.pop("update_candidate_since", None)
+                self.state.pop("update_notified", None)
+                self.state.pop("update_confirmed", None)
+                self.state.pop("update_game_warned", None)
+                self.state["update_applied_notified"] = current
+                self.state["update_patchnote_version"] = current
+                self.state["update_patchnote_groups"] = []
+                self.state.pop("update_patchnote_retry_after", None)
+                self._save_state()
+                logger.info(f"{LOG_PREFIX} 已确认服务器完成版本更新：{installed} -> {current}")
+                await self._broadcast_text("✅ 帕鲁服务器已完成版本更新。")
+                await self._broadcast_update_patchnote(current, now)
+                return
+            # 首次启用新逻辑只建立基线，不把当前已安装版本误报成一次新更新。
+            self._save_state()
+        else:
+            self.state.pop("update_installed_candidate", None)
+            self.state.pop("update_installed_candidate_since", None)
+
         self.state["update_checked"] = now
         if aligned_slot:
             self.state["update_check_slot"] = aligned_slot
@@ -7431,14 +7497,22 @@ depot && $1 == "}" { exit }
             self.state.pop("update_notified", None)
             self.state.pop("update_confirmed", None)
             self.state.pop("update_game_warned", None)
-            self.state.pop("update_patchnote_version", None)
-            self.state.pop("update_patchnote_groups", None)
-            self.state.pop("update_patchnote_retry_after", None)
-            self.state.pop("update_patchnote_notified", None)
-            self.state.pop("update_patchnote_url", None)
+            if self.state.get("update_applied_notified") != current:
+                self.state.pop("update_patchnote_version", None)
+                self.state.pop("update_patchnote_groups", None)
+                self.state.pop("update_patchnote_retry_after", None)
+                self.state.pop("update_patchnote_notified", None)
+                self.state.pop("update_patchnote_url", None)
             self._save_state()
             if had_candidate:
                 logger.info(f"{LOG_PREFIX} 服务端版本复核后已一致，取消更新候选 {latest}")
+            applied = str(self.state.get("update_applied_notified", "") or "")
+            if (
+                applied == current
+                and self.state.get("update_patchnote_notified") != current
+                and now >= patchnote_retry_after
+            ):
+                await self._broadcast_update_patchnote(current, now)
             return
 
         # 3) 差异至少稳定 60 秒才认定为新版本。每日重启的 appmanifest 重建通常不足 1 分钟；

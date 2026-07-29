@@ -9,7 +9,7 @@
 QQ 群查询状态 / 在线 / 存档档案与图鉴配种，管理员可管理服务器；<br>
 支持三主题卡片、Docker / REST 监控、自动维护预告和 Steam 官方中文更新公告，附一键部署脚本。
 
-![version](https://img.shields.io/badge/version-1.48.0-6366F1?style=flat-square)
+![version](https://img.shields.io/badge/version-1.48.1-6366F1?style=flat-square)
 ![AstrBot](https://img.shields.io/badge/AstrBot-4.25%2B-8B5CF6?style=flat-square)
 ![OneBot](https://img.shields.io/badge/OneBot-v11-4ade80?style=flat-square)
 ![NapCat](https://img.shields.io/badge/adapter-NapCat-22c55e?style=flat-square)
