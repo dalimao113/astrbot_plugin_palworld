@@ -67,7 +67,7 @@ from .render.assets import AssetResolver
     "astrbot_plugin_palworld",
     "dalimao113",
     "帕鲁(Palworld)服务器查询与管理插件，所有回复输出精美卡片图片",
-    "1.48.1",
+    "1.48.2",
     "https://github.com/dalimao113/astrbot_plugin_palworld",
 )
 class PalworldPlugin(Star):
@@ -5363,14 +5363,69 @@ class PalworldPlugin(Star):
         }
 
     def _squad_roster_qq(self, gid: str) -> list:
-        """本群小队名单:已绑定 且 在本群用过指令的 QQ;群成员记录为空时回退到全部已绑定(私人小队)。"""
+        """本群小队名单：优先使用 OneBot 同步的真实群成员，旧状态继续兼容指令活动记录。"""
         bindings = self.state.get("bindings", {}) or {}
         gm = (self.state.get("group_members", {}) or {}).get(str(gid), {}) or {}
-        qqs = [q for q in bindings if str(q) in gm] if gm else list(bindings)
+        synced = str(gid) in (self.state.get("group_members_synced", {}) or {})
+        # 已成功同步过的空名单代表当前群确实没有已绑定成员，不能再回退到全服绑定。
+        qqs = [q for q in bindings if str(q) in gm] if gm or synced else list(bindings)
         return qqs
+
+    async def _sync_squad_roster(self, gid: str) -> bool:
+        """从 OneBot 同步当前群内的已绑定成员；失败保留旧名单，不影响非 OneBot 平台。
+
+        旧逻辑只记录“在本群发过插件指令的人”。群解散后重新建群时，第一次查询会
+        先写入当前发言者，导致名单从“回退全部绑定”立即缩成一人。实时群成员列表
+        可以在不要求所有人重新发指令的前提下恢复正确名单，同时继续保持群间隔离。
+        """
+        gid = str(gid or "").strip()
+        if not gid.isdecimal():
+            return False
+        now = time.time()
+        synced_at = (self.state.get("group_members_synced", {}) or {}).get(gid, 0)
+        try:
+            if now - float(synced_at or 0) < 60:
+                return True
+        except (TypeError, ValueError):
+            pass
+        try:
+            cli = await self._get_client()
+            if not cli:
+                return False
+            rows = await asyncio.wait_for(
+                cli.api.call_action(
+                    "get_group_member_list",
+                    group_id=int(gid),
+                    no_cache=True,
+                ),
+                timeout=5,
+            )
+            if not isinstance(rows, list):
+                logger.debug(f"{LOG_PREFIX} 群 {gid} 成员同步返回格式无效，保留旧小队名单")
+                return False
+            live_qq = {
+                str(row.get("user_id"))
+                for row in rows
+                if isinstance(row, dict) and str(row.get("user_id") or "").isdecimal()
+            }
+            bindings = self.state.get("bindings", {}) or {}
+            roster = {
+                str(qq): int(now)
+                for qq in bindings
+                if str(qq) in live_qq
+            }
+            self.state.setdefault("group_members", {})[gid] = roster
+            self.state.setdefault("group_members_synced", {})[gid] = int(now)
+            self._save_state()
+            logger.debug(f"{LOG_PREFIX} 已同步群 {gid} 小队名单：{len(roster)} 名已绑定成员")
+            return True
+        except Exception as e:  # noqa: BLE001
+            logger.debug(f"{LOG_PREFIX} 群 {gid} 成员同步失败，保留旧小队名单: {e}")
+            return False
 
     async def _squad_progress_data(self, gid: str) -> Optional[dict]:
         """聚合本群小队进度。返回渲染 data 或 None(读不到存档)。存档只读,不改。"""
+        await self._sync_squad_roster(gid)
         self._last_save_use = time.time()
         data = await self._fetch_save_data(force_save=False)
         if not data:
@@ -5544,6 +5599,7 @@ class PalworldPlugin(Star):
 
     async def _basecamp_health_data(self, gid: str) -> Optional[dict]:
         """聚合本群小队据点工作帕鲁的体检数据(公会共享,按 iid 去重)。存档只读。读不到→None。"""
+        await self._sync_squad_roster(gid)
         self._last_save_use = time.time()
         data = await self._fetch_save_data(force_save=False)
         if not data:
@@ -7346,35 +7402,67 @@ class PalworldPlugin(Star):
             check_hours = 1
         interval = max(check_hours, 1) * 3600
 
-        # 默认一小时检测时，与镜像更新倒计时前沿对齐。插件重载后仍会立即检查一次，
-        # 到下一个对齐分钟再校正相位，避免长期在镜像更新之后才发现新版本。
+        # 默认一小时检测时，在镜像更新前的整个预告窗口逐分钟检查，并在计划更新分钟
+        # 再检查一次。Steam 可能恰好在窗口开始后才发布版本，只检查窗口第一个分钟会
+        # 让镜像先完成更新、插件直到下一小时才发现。
         maintenance = {}
         aligned_slot = None
+        planned_fast_retry_until = 0.0
         if check_hours == 1:
             maintenance = await self._maintenance_schedule()
             update_hourly = maintenance.get("update_hourly")
             if isinstance(update_hourly, int):
                 update_warn = min(max(int(maintenance.get("update_warn", 5) or 5), 1), 60)
-                check_minute = (update_hourly - update_warn) % 60
                 local_now = datetime.now()
-                if local_now.minute == check_minute:
-                    aligned_slot = local_now.strftime("%Y-%m-%dT%H")
+                minutes_until_update = (update_hourly - local_now.minute) % 60
+                if 0 < minutes_until_update <= update_warn or minutes_until_update == 0:
+                    aligned_slot = local_now.strftime("%Y-%m-%dT%H:%M")
+                    # 更新下载期间 appmanifest 可能暂不可读。进入计划窗口后允许最多
+                    # 15 分钟的一分钟快速重试，避免一次失败把完成公告拖到下一小时。
+                    planned_fast_retry_until = now + (minutes_until_update + 15) * 60
 
-        retry_after = float(self.state.get("update_retry_after", 0) or 0)
-        if now < retry_after:
+        try:
+            retry_after = float(self.state.get("update_retry_after", 0) or 0)
+        except (TypeError, ValueError):
+            retry_after = 0
+        try:
+            fast_retry_until = float(self.state.get("update_fast_retry_until", 0) or 0)
+        except (TypeError, ValueError):
+            fast_retry_until = 0
+        recovery_due = bool(self.state.get("update_recovery_probe"))
+        if now < retry_after and not recovery_due:
             return
         retry_due = retry_after > 0
         aligned_due = bool(aligned_slot and self.state.get("update_check_slot") != aligned_slot)
         if (
             not retry_due
             and not aligned_due
+            and not recovery_due
             and not pending_patchnote_due
             and now - self.state.get("update_checked", 0) < interval
         ):
             return
+        if planned_fast_retry_until > 0 or recovery_due:
+            fast_retry_until = max(
+                fast_retry_until,
+                planned_fast_retry_until,
+                now + 15 * 60 if recovery_due else 0,
+            )
+            self.state["update_fast_retry_until"] = fast_retry_until
+        if recovery_due:
+            # 恢复探针只负责绕过一次旧的退避时间；后续失败由一分钟快速重试节流，
+            # 避免 poll_interval 较短时每轮都请求 Steam。
+            self.state.pop("update_recovery_probe", None)
 
         def defer_retry() -> None:
-            self.state["update_retry_after"] = now + 600
+            rapid = recovery_due or planned_fast_retry_until > 0 or now < fast_retry_until
+            if rapid:
+                self.state["update_fast_retry_until"] = max(
+                    fast_retry_until,
+                    planned_fast_retry_until,
+                    now + 15 * 60 if recovery_due else 0,
+                )
+            self.state["update_retry_after"] = now + (60 if rapid else 600)
             self._save_state()
 
         sock = str(self.config.get("docker_sock", "/var/run/docker.sock"))
@@ -7423,13 +7511,15 @@ depot && $1 == "}" { exit }
             defer_retry()
             return
         if code != 0 or not re.fullmatch(r"\d{1,20}", current):
+            retry_seconds = 60 if (
+                recovery_due or planned_fast_retry_until > 0 or now < fast_retry_until
+            ) else 600
             logger.debug(
-                f"{LOG_PREFIX} 当前 manifest 暂不可读，10 分钟后重试："
+                f"{LOG_PREFIX} 当前 manifest 暂不可读，{retry_seconds // 60} 分钟后重试："
                 f"exit={code}，输出={(out or '')[:120]!r}"
             )
             defer_retry()
             return
-
         # 记录“实际已安装”的稳定 manifest。镜像每小时会自行检查更新，如果 Steam
         # 恰好在插件预检后的几分钟内发布版本，镜像可能先完成更新；仅比较远端/本地是否
         # 相同会漏掉这类更新。这里连续两次读取同一新值（间隔至少 60 秒）后再确认，
@@ -7459,6 +7549,7 @@ depot && $1 == "}" { exit }
             self.state.pop("update_installed_candidate", None)
             self.state.pop("update_installed_candidate_since", None)
             self.state.pop("update_retry_after", None)
+            self.state.pop("update_fast_retry_until", None)
             if installed:
                 # 已确认服务器实际切换到新 manifest。清掉尚未完成的“等待更新”状态，
                 # 避免下一维护窗口仍播报“即将更新”。
@@ -7497,6 +7588,7 @@ depot && $1 == "}" { exit }
             self.state.pop("update_notified", None)
             self.state.pop("update_confirmed", None)
             self.state.pop("update_game_warned", None)
+            self.state.pop("update_fast_retry_until", None)
             if self.state.get("update_applied_notified") != current:
                 self.state.pop("update_patchnote_version", None)
                 self.state.pop("update_patchnote_groups", None)
@@ -8335,9 +8427,11 @@ depot && $1 == "}" { exit }
                 if self._enable_broadcast():
                     async with self._lock:
                         await self._poll_once()
+                        # 先更新版本状态，再在同一轮发送游戏内维护预告；否则会平白
+                        # 多等一个轮询周期，甚至错过只剩 1 分钟的更新窗口。
+                        await self._check_server_update()  # 检测服务端新版本→QQ通知(节流)
                         await self._check_schedules()   # 定时早晚报 / 周肝帝结算
                         await self._check_backup_prune()  # 备份份数上限清理(每小时节流)
-                        await self._check_server_update()  # 检测服务端新版本→QQ通知(节流)
             except asyncio.CancelledError:
                 raise
             except Exception as e:  # noqa: BLE001
@@ -8407,6 +8501,10 @@ depot && $1 == "}" { exit }
         recovered = self.state.get("server_up") is False
         self.state["fail_count"] = 0
         self.state["server_up"] = True
+        if recovered:
+            # 服务器恢复通常意味着镜像刚完成重启或更新。留下持久化探针，让同一轮
+            # 版本检测绕过一小时节流；实际 manifest 仍需稳定 60 秒才会通知。
+            self.state["update_recovery_probe"] = time.time()
 
         okm, metrics, _ = await self._api_get("/v1/api/metrics")
         days = None
